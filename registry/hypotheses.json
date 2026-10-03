@@ -237,7 +237,7 @@
       "id": "H43",
       "rank": 1,
       "title": "Drainage-network organization: stream-power residual and knickpoint excess",
-      "status": "proposed in the v4 slate (knowledge/25) with a written implementation plan; not implemented. Still the top unbuilt candidate after H41's line closed on the bar protocol in session 5 (knowledge/28).",
+      "status": "proposed in the v4 slate (knowledge/25); implemented and screened on draws 32/33 (40 cells): G1 PASS on A3_knick (+0.01419) and A4_union (+0.01287); confirmed on draws 34/35 (40 cells): A3 +0.01674 / A4 +0.01568 replicate, G3 withholds promotion on the SGMC secondary proxy in both stages. No candidate, no slot. Results: knowledge/30_h43_drainage_results_2026-10-03.md, evidence/h43_screen/. Registry status corrected in session 6 (IR-29-H43-REGISTRY-STALE).",
       "layers": [
         "det_elev (cached 100 m grid)",
         "det_elev_slope",

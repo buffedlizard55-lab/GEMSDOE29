@@ -1,0 +1,85 @@
+{
+  "items": [
+    {
+      "cost": "~0.5 day; front extraction + Smf + mask + synthetic tests; zero downloads",
+      "difference": "No range-front, sinuosity, Smf or faceted-spur computation exists in src/, scripts/ or tests/ (session-6 grep: zero hits). H27/H30 filter scarp pixels; H35 pairs catalogue tips; H43 routes water. H50 is the first segment-scale tectonic-geomorphology index: its unit is the front, not the pixel or the catchment.",
+      "external_data": "none required; all inputs are cached 100 m bands",
+      "id": "H50",
+      "layers": [
+        "det_elev (cached 100 m grid)",
+        "det_elev_slope",
+        "family-B curvature (front extraction)",
+        "supplied-catalogue off-mask"
+      ],
+      "planning_delta_dti": "0 to +0.012 (low-confidence judgement bracket, never a gate)",
+      "rank": 1,
+      "signature": "Mountain-front sinuosity Smf = Lmf/Ls per range-front segment plus segment relief: straight high-relief segments (Smf ~1.0-1.4) with no catalogue trace are fault-controlled fronts missing their strand.",
+      "slate": "v5 (knowledge/35_candidates_v5_2026-10-03.md)",
+      "status": "proposed in the v5 slate (knowledge/35); not implemented; validation plan frozen in the slate (5 arms, 4 folds, fresh draws 36/37, same gates as knowledge/19/24/29)",
+      "title": "Range-front segmentation (mountain-front sinuosity per front segment)",
+      "validation": "frozen four-fold blocked screen on fresh draws 36/37, confirmation 38/39 only on G1 pass; slot discussion only if the method beats holdout_best 0.14479018210246675 plus the exact-file audit",
+      "why_unmapped": "The catalogue maps strands, not front activity. A straight 5-15 km front with no mapped trace is 'newly mapped geometry of an existing system': the hidden labels add the strand the front shape already implies."
+    },
+    {
+      "cost": "~0.5-1 day; threshold + object build + skeletonization; zero downloads",
+      "difference": "The only 'alteration' hit in src/ is a one-line families.py comment placing MT in family D. No K-enrichment thresholding, halo-object building or corridor skeletonization exists. H35 used D_ThK/D_UK as raw corroboration pixels; H49 tests objects, isolating object-ness from ratio-ness.",
+      "external_data": "none required; both radiometric mirrors already restored by scripts/restore_h31_data.py",
+      "id": "H49",
+      "layers": [
+        "geodawn_rad_u8 (K, Th, U, TC; mirrored)",
+        "geodawn_extensions_u8 (Th/K, U/K, U/Th; mirrored)",
+        "supplied-catalogue off-mask"
+      ],
+      "planning_delta_dti": "0 to +0.010 (low confidence; judgement bracket, never a gate)",
+      "rank": 2,
+      "signature": "Thresholded K-enrichment / Th-normalized anomaly objects (connected hydrothermal clay-alteration halos) skeletonized to corridors, restricted off-catalogue; frozen percentile rule declared before any fit.",
+      "slate": "v5 (knowledge/35_candidates_v5_2026-10-03.md)",
+      "status": "proposed in the v5 slate (knowledge/35); not implemented; screened after H50 has a verdict",
+      "title": "Radiometric alteration corridors (K-enrichment anomaly objects)",
+      "validation": "same frozen gate structure (mean >= +0.005, >=3/4 folds per draw, worst fold >= -0.010, 0.75-1.25x budget, SGMC reported)",
+      "why_unmapped": "Alteration halos survive burial and cover that erase scarps and mute magnetics; the supplied catalogue has no alteration channel."
+    },
+    {
+      "cost": "~0.5 day; both parent fields exist, only the agreement transform + screen are new; zero downloads",
+      "difference": "Every union tested so far (H35 A2, H41 A4, H43 A4) concatenates columns inside one model. No screen has tested an explicit cross-family agreement field as its own arm, and none has used the SGMC-conflict question as the design criterion.",
+      "external_data": "none required; parent columns are frozen implementations (src/gemsdoe/h41.py, src/gemsdoe/h43.py)",
+      "id": "H51",
+      "layers": [
+        "five frozen H41 columns (slip-rate corridors)",
+        "five frozen H43 columns (drainage/knickpoint)",
+        "supplied-catalogue off-mask"
+      ],
+      "planning_delta_dti": "-0.005 to +0.010 (widest bracket in the slate: both parents are G3-vetoed and the conjunction can inherit both vetoes)",
+      "rank": 3,
+      "signature": "Per-pixel normalized rank-agreement plus a both-high conjunction mask between two input-independent structural priors (INGENIOUS corridors vs drainage knickpoints), restricted off-catalogue.",
+      "slate": "v5 (knowledge/35_candidates_v5_2026-10-03.md)",
+      "status": "proposed in the v5 slate (knowledge/35); not implemented; methods experiment: tests whether cross-family agreement resolves the SGMC proxy conflict or inherits it",
+      "title": "H41xH43 cross-family agreement (conjunction of two vetoed-but-replicated fields)",
+      "validation": "same frozen gate structure on fresh draws never touched by either parent (36/37 per the current ledger; re-confirm at preregistration)",
+      "why_unmapped": "Both parents are off-catalogue-restricted and share no input; agreement re-ranks shared unmapped corridors above single-family noise. Honest ceiling is re-ranking, not new mass."
+    },
+    {
+      "cost": "1-2 days after an owner-side fetch; mirrored-vents-only subset screenable immediately at a tiny ceiling",
+      "difference": "vents_in_footprint / volcanic vent / paleo return zero hits in src/, scripts/ and tests/: the mirrored vents CSV was never read as a predictor and the paleo/volcanics archives were never fetched here. H37 works spring chemistry, D_* works well/spring density; nothing works vent alignments.",
+      "external_data": "TWO owner-side fetches required for the full test: https://gdr.openei.org/files/1391/paleo_geothermal_regional.zip (pin faffcf69.../84,008 bytes) and https://gdr.openei.org/files/1391/great_basin_q_volcanics.zip (pin c4a2d2df.../9,898,770 bytes); gdr.openei.org unreachable from the sandbox, so obtainability is NOT verified here - owner must fetch and the pins verify the bytes. Vents CSV already mirrored (free, official GDR 1391).",
+      "id": "H48",
+      "layers": [
+        "ext_gdr_volcanic_vents_in_footprint.csv (mirrored, 672 bytes)",
+        "paleo_geothermal_regional.zip (GDR 1391, NOT mirrored)",
+        "great_basin_q_volcanics.zip (GDR 1391, NOT mirrored)"
+      ],
+      "planning_delta_dti": "0 to +0.006 (very low confidence; sparse-point ceiling - the H31 failure mode)",
+      "rank": 4,
+      "signature": "Vent/paleo-site kernel density plus alignment corridors (structure-tensor/Hough orientations of the point sets): aligned vents mark the fault that plumbed them.",
+      "slate": "v5 (knowledge/35_candidates_v5_2026-10-03.md)",
+      "status": "proposed in the v5 slate (knowledge/35); blocked on the owner-side fetch of the two GDR 1391 archives (pins in data/manifest.json); lowest priority (sparse ceiling)",
+      "title": "Volcanic-vent / paleo-geothermal alignment corridors",
+      "validation": "same frozen gate structure; full test only after the fetched bytes match their pins",
+      "why_unmapped": "Vents and paleo-sites are point observations independent of fault mapping; an alignment with no mapped trace is a blind structure with a surface fluid witness."
+    }
+  ],
+  "novelty_boundary": "Session-6 grep verification over src/, scripts/ and tests/ (commands in knowledge/35 section 6). Excluded by collision: 2 m probes (screened, H29 B2 FAIL), tilt-angle transform (A_mag_tilt/A_grav_tilt in the static block), spring-chemistry residual (H37 territory), any worming/persistence variant (0-for-4, knowledge/34 section 4), re-emission tuning (optimum measured). Novelty claims apply only to the reviewed repositories, not all competitors.",
+  "rank_rationale": "Expected catalogue-hidden DTI gain per unit cost; cost = new-data dependency x implementation risk x cells implied; prior is the family base rate (most feature screens -0.014...+0.006, two replicated passes H41 +0.0077 / H43 +0.0167, both G3-vetoed). Brackets are judgement, never gates.",
+  "review_date": "2026-10-03",
+  "schema_version": 1
+}

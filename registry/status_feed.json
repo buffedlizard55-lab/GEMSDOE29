@@ -47,7 +47,7 @@
       "date": "2026-10-03",
       "type": "preregistration",
       "title": "H31 spatial screen preregistered",
-      "detail": "Screen draws 10–11; confirmation draws 12–13 only if the raw-cell analyzer independently verifies all screen gates. No model fit or DTI evaluation has yet occurred."
+      "detail": "Screen draws 10\u201311; confirmation draws 12\u201313 only if the raw-cell analyzer independently verifies all screen gates. No model fit or DTI evaluation has yet occurred."
     },
     {
       "date": "2026-10-03",
@@ -176,7 +176,7 @@
       "date": "2026-10-03",
       "type": "screen",
       "title": "H41 frozen screen: two arms PASS G1 - the first passes in this family",
-      "detail": "40 cells (draws 28/29 x four blocked folds x five arms), 1,470 s, clean tree at a9d880e, preregistration sha256 2f25c06f… pinned before the fit. A1_h41_off +0.0066173 and A4_h41_union +0.0073436 pass the ±0.005 mean-gain, 3-of-4 positive-fold, -0.010 worst-fold and 0.75-1.25 budget gates; A2 (+0.0047673) and A3 (+0.0038133) fail. Holdout AUC 0.8037 -> 0.8159; sparse-column guard passed by 17-150x. The SGMC second proxy is negative for every arm (-0.0009 to -0.0023), so the preregistered confirmation on draws 30/31 was authorized but no slot is implied."
+      "detail": "40 cells (draws 28/29 x four blocked folds x five arms), 1,470 s, clean tree at a9d880e, preregistration sha256 2f25c06f\u2026 pinned before the fit. A1_h41_off +0.0066173 and A4_h41_union +0.0073436 pass the \u00b10.005 mean-gain, 3-of-4 positive-fold, -0.010 worst-fold and 0.75-1.25 budget gates; A2 (+0.0047673) and A3 (+0.0038133) fail. Holdout AUC 0.8037 -> 0.8159; sparse-column guard passed by 17-150x. The SGMC second proxy is negative for every arm (-0.0009 to -0.0023), so the preregistered confirmation on draws 30/31 was authorized but no slot is implied."
     },
     {
       "date": "2026-10-03",
@@ -230,7 +230,7 @@
       "date": "2026-10-03",
       "type": "screen",
       "title": "H41 confirmation complete: A4 replicates (+0.0077283), G3 withholds promotion for every arm",
-      "detail": "40 fresh cells on draws 30/31 under the frozen protocol, clean tree at 2568dc0d, 2,005.8 s, scripts/analyze_h41_screen.py re-derived every gate from raw cells with problems: none. A4_h41_union passed G1+G2 (screen +0.0073436, confirm +0.0077283, worst fold +0.0043033, budgets 0.974-0.997x, holdout AUC 0.7918 -> 0.7997); A1_h41_off missed the mean bar at +0.0044157, so the minimal two-column arm does not replicate while the five-column union does. Promotion is blocked by knowledge/19 §4 G3 — inherited by knowledge/24 §4's identical-gates clause — because the SGMC off-catalogue class gained on only 1/4 folds in both stages (A4 -0.00226/-0.00211), the pattern knowledge/19 §5 pre-declared as 'proxy conflict, no promotion'. No candidate built, no weekly slot used. New register entries: IR-29-H41-G3-OMISSION (the frozen text omitted the G3 SGMC clause while claiming identity with knowledge/19; the stricter reading was applied and it cost this session its own best result). New artifact: evidence/h41_screen/promotion_gate.json, and the ledger now shows h41_confirmation at 40 cells with next free draw pair 32/33."
+      "detail": "40 fresh cells on draws 30/31 under the frozen protocol, clean tree at 2568dc0d, 2,005.8 s, scripts/analyze_h41_screen.py re-derived every gate from raw cells with problems: none. A4_h41_union passed G1+G2 (screen +0.0073436, confirm +0.0077283, worst fold +0.0043033, budgets 0.974-0.997x, holdout AUC 0.7918 -> 0.7997); A1_h41_off missed the mean bar at +0.0044157, so the minimal two-column arm does not replicate while the five-column union does. Promotion is blocked by knowledge/19 \u00a74 G3 \u2014 inherited by knowledge/24 \u00a74's identical-gates clause \u2014 because the SGMC off-catalogue class gained on only 1/4 folds in both stages (A4 -0.00226/-0.00211), the pattern knowledge/19 \u00a75 pre-declared as 'proxy conflict, no promotion'. No candidate built, no weekly slot used. New register entries: IR-29-H41-G3-OMISSION (the frozen text omitted the G3 SGMC clause while claiming identity with knowledge/19; the stricter reading was applied and it cost this session its own best result). New artifact: evidence/h41_screen/promotion_gate.json, and the ledger now shows h41_confirmation at 40 cells with next free draw pair 32/33."
     },
     {
       "date": "2026-10-03",
@@ -243,6 +243,12 @@
       "type": "confirmation",
       "title": "H43 confirmation complete: both knickpoint arms replicate on draws 34/35 (+0.01674 / +0.01568), G3 secondary proxy withholds promotion",
       "detail": "40/40 cells on fresh draws 34/35 under the frozen design (design_confirm.json, clean tree bd6811e); the independent analyzer re-derived every gate from the raw rows with integrity_problems 0 and its screen section matches the pre-confirmation report exactly. A3_knick +0.01674 (3/4 folds on both draws, worst 0.0) and A4_union +0.01568 (3/4, 4/4; worst -0.000533) both replicate and grow; A1_off -0.00060 and A2_network +0.00408 fail. The SGMC second proxy is negative in both stages for both passing arms, so the inherited G3 requirement withholds promotion - the same structure as H41. No candidate file, no weekly slot, no download."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "review",
+      "title": "Session-6 intake: D2.8/leader-gap analysis published, v5 slate ranked, H43 register defect fixed",
+      "detail": "knowledge/34 explains the owner-reported D2.8 lead as emission-redundancy removal (73% of parent kernel credit at 36% of pixels; the H28-conditional optimum of its family) and sizes the reported number-one gap as needing new habitat mass rather than new emission; knowledge/35 ranks four grep-verified-new hypotheses (H50 range-front segmentation first) with a frozen H50 validation plan on fresh draws 36/37 and no slot until it beats the holdout best; hypotheses.json wrongly called H43 unbuilt after its 80-cell screen+confirmation (IR-29-H43-REGISTRY-STALE, fixed). Template restored and hash-verified here; verify_downloads 7/7 pass; zeros-variant remains the recommended download. No experiment ran, no slot used."
     }
   ]
 }
