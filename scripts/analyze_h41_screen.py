@@ -161,8 +161,13 @@ def main() -> int:
             vguard = summary.get("viability_guard", {})
             if vguard.get("min_nonzero_fraction") != MIN_NONZERO_FRACTION:
                 problems.append(f"{stage}: summary guard floor {vguard.get('min_nonzero_fraction')} != frozen {MIN_NONZERO_FRACTION}")
-            if bool(vguard.get("problems")) != bool(vguard.get("passed", not vguard.get("problems"))):
-                problems.append(f"{stage}: viability_guard passed flag inconsistent with its problem list")
+            # consistent means: passed is true exactly when the problem list is empty. (An earlier version of
+            # this line compared the two booleans with != and so flagged every clean run; found and corrected
+            # on 2026-10-03 after the screen finished. It checks a bookkeeping flag only - no gate, threshold
+            # or cell value is involved, and the correction is disclosed as IR-29-H41-ANALYZER-GUARD-BUG.)
+            if bool(vguard.get("problems", [])) == bool(vguard.get("passed", True)):
+                problems.append(f"{stage}: viability_guard passed={vguard.get('passed')} is inconsistent with "
+                                f"{len(vguard.get('problems', []))} recorded problem(s)")
         report[stage] = {"draws": list(draws), "n_cells": len(rows), "arms": mine, "summary_cross_check": cross}
     design = base / "design_screen.json"
     design_check: dict[str, object] = {}

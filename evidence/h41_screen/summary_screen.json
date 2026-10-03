@@ -1,0 +1,105 @@
+{
+  "stage": "screen",
+  "draws": [
+    28,
+    29
+  ],
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "arms": {
+    "A1_h41_off": {
+      "mean_gain": 0.006617295866467202,
+      "fold_gains": [
+        0.009987367800371544,
+        -0.009107821219790285,
+        0.013188075276739167,
+        0.012401561608548384
+      ],
+      "positive_folds_per_draw": [
+        3,
+        3
+      ],
+      "worst_fold_gain": -0.009107821219790285,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": -0.0010629164652157484,
+      "sgmc_positive_folds": 2,
+      "mean_dti": 0.15297066435466056,
+      "G1_SCREEN_PASS": true
+    },
+    "A2_h41_support": {
+      "mean_gain": 0.0047673494426785055,
+      "fold_gains": [
+        0.005925196896554269,
+        0.001652344126269023,
+        0.009999404235365564,
+        0.0014924525125251664
+      ],
+      "positive_folds_per_draw": [
+        4,
+        2
+      ],
+      "worst_fold_gain": 0.0014924525125251664,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": -0.0008865372638723196,
+      "sgmc_positive_folds": 1,
+      "mean_dti": 0.15112071793087187,
+      "G1_SCREEN_PASS": false
+    },
+    "A3_h41_corridor": {
+      "mean_gain": 0.0038132544268094405,
+      "fold_gains": [
+        0.0054722050029156755,
+        -0.0011314750870251022,
+        0.0018306786366220767,
+        0.009081609154725112
+      ],
+      "positive_folds_per_draw": [
+        3,
+        2
+      ],
+      "worst_fold_gain": -0.0011314750870251022,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": -0.0016719500962752848,
+      "sgmc_positive_folds": 1,
+      "mean_dti": 0.15016662291500282,
+      "G1_SCREEN_PASS": false
+    },
+    "A4_h41_union": {
+      "mean_gain": 0.0073435756263382675,
+      "fold_gains": [
+        0.007702540070306935,
+        -0.0016553600174617489,
+        0.012215890837630347,
+        0.011111231614877537
+      ],
+      "positive_folds_per_draw": [
+        4,
+        3
+      ],
+      "worst_fold_gain": -0.0016553600174617489,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": -0.002260492912006997,
+      "sgmc_positive_folds": 1,
+      "mean_dti": 0.15369694411453164,
+      "G1_SCREEN_PASS": true
+    },
+    "C0_base": {
+      "mean_dti": 0.14635336848819336
+    }
+  },
+  "n_cells": 40,
+  "viability_guard": {
+    "min_nonzero_fraction": 0.002,
+    "problems": [],
+    "passed": true
+  },
+  "note": "DTI proxies on blocked holdout folds; gates frozen in knowledge/24 \u00a74. The qfaults mirror carries trace centroids only, so any pass is corridor ranking near mapped young faults, never dot placement on a trace."
+}

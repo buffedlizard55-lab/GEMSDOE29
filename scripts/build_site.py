@@ -354,14 +354,28 @@ def render_home() -> str:
         '<p><a href="sources.html">Review sources and caveats →</a></p></article></section>'
         + feed_card
     )
-    buttons = a("executive-summary.html", "Submission guide", class_name="button") + a("research.html", "Explore research", class_name="button secondary")
+    # The single-click download is placed in the hero itself, not only further down the page, so that a
+    # visitor sees the actual file within the first screen (standing owner requirement, 2026-10-03).
+    primary = next((row for row in submissions.get("files", []) if row.get("role") == "candidate_review"
+                    and has_local_artifact(row)), None)
+    hero_download = (
+        a(artifact_href(primary), "Download the .tif in one click", class_name="button cta")
+        + a("executive-summary.html", "Submission guide", class_name="button")
+        + a("research.html", "Explore research", class_name="button secondary")
+        if primary else
+        a("executive-summary.html", "Submission guide", class_name="button")
+        + a("research.html", "Explore research", class_name="button secondary")
+    )
+    buttons = hero_download
     return page(
         "Overview",
         "Auditable, spatially validated research for the DOE GEMS Prize. No slot-approved submission is currently available.",
         "index",
         "DOE GEMS Prize · GeoDAWN · evidence before entry",
         "Find faults worth believing.",
-        "A transparent research workflow for predicting unmapped faults—built around spatial holdouts, exact-file validation, official sources, and honest uncertainty.",
+        "A transparent research workflow for predicting unmapped faults, built around spatial holdouts, exact-file "
+        "validation, official sources and honest uncertainty. The download in the banner is one click and needs no login; "
+        "its paste-ready submission note sits with it. Nothing here is a score claim.",
         body,
         buttons,
     )
@@ -508,6 +522,39 @@ def render_research() -> str:
         'centroids, data already mirrored) to rank 1, with H36 (MT edges), H37 (geothermometry residuals), H42 (measured-period line audit) and the H38/H39 filter-role pair behind it.</p></article></section>'
     )
 
+    strategy_card = (
+        "<section class=\"grid\"><article class=\"card span-6\"><p class=\"kicker\">Metric analysis</p>"
+        "<h2>Why a sparser emission scored better, and what beating the leaderboard best requires</h2>"
+        "<p>The repository\u2019s read of the published metric: credit is granted per true-positive pixel within a "
+        "300 m triangular kernel, and a false positive costs a fraction of what a miss costs, so once a dot sits "
+        "inside a neighbouring dot\u2019s kernel it adds nothing while still risking a false-positive charge. Under "
+        "those conditions the optimal move is to emit only where the expected credit per emitted pixel clears a "
+        "threshold the metric itself fixes, and to space dots so each one earns its own kernel. That is arithmetic "
+        "about the scoring rule, not a tuning preference, and it explains why a thinned, catalogue-free emission can "
+        "outrank a dense one from the same model.</p>"
+        "<p>Closing the remaining gap therefore needs either more true-positive mass per emitted pixel, or a habitat "
+        "that puts dots on structure the current model never ranks highly. The derivation, the measured "
+        "credit-per-pixel ladder for the repository\u2019s own files and the resulting three-part system (habitat, "
+        "emission rule, admission rule) live in <code>knowledge/07_metric_emission_analysis_2026-10-03.md</code> and "
+        "<code>knowledge/13_strategy_system_2026-10-03.md</code>. The score figures are not republished here: they are "
+        "unverified owner-reported claims, and these pages carry only locally recomputable proxies.</p></article>"
+        "<article class=\"card span-6\"><p class=\"kicker\">Owner question</p>"
+        "<h2>Are there new competition results to read?</h2>"
+        "<p>This project deliberately does not answer that by fetching the competition site. The platform\u2019s terms "
+        "prohibit automated access for any purpose including monitoring, and the project charter repeats the ban "
+        "(<code>AGENTS.md</code> rule 3, <code>knowledge/03_drivendata_terms_access_policy.md</code>), so no leaderboard "
+        "row, rank or feed item is scraped, embedded or cached here. The repository instead reports its own state "
+        "continuously and leaves the competition page for the owner to open in a browser.</p>"
+        "<ul class=\"list-clean\">"
+        "<li><a href=\"https://www.drivendata.org/competitions/306/competition-doe-gems/\" target=\"_blank"
+        " rel=\"noopener noreferrer\">Open the official competition page manually</a></li>"
+        "<li><a href=\"https://docs.nlr.gov/docs/fy26osti/96647.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">"
+        "Official rules (submission limits, final selection, AI disclosure)</a></li></ul>"
+        "<p>No weekly slot has been used by this repository, so nothing was submitted that could be scored; "
+        "<code>evidence/candidate_scoreboard.json</code> and the submission register are the authoritative local "
+        "record.</p></article></section>"
+    )
+
     cards = []
     for item in hypotheses.get("items", []):
         layers = ", ".join(item.get("layers", []))
@@ -530,7 +577,7 @@ def render_research() -> str:
         'screened in three distinct formulations on identical folds, and the slate carries an explicit decision not to run it a fourth time: a third '
         'retry would be silent fishing, not science. “Not found” is limited to the reviewed repositories, not all competitors. '
         'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H41 was promoted from the v3 slate and screened this session.</section>'
-        f'{h35_card}{h41_screen_card()}<section class="grid" aria-label="Ranked hypotheses">{"".join(cards)}</section>'
+        f'{h35_card}{h41_screen_card()}{strategy_card}<section class="grid" aria-label="Ranked hypotheses">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
         f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
         f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'
