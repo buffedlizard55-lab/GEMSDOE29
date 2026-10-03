@@ -17,6 +17,13 @@ def test_full_owner_brief_is_preserved_in_readme() -> None:
     assert embedded.rstrip("\n") == original.rstrip("\n")
 
 
+def test_download_entrypoint_uses_current_template_resolver() -> None:
+    """The documented restore command must not call the retired gems29 package."""
+    script = (ROOT / "scripts" / "download_competition_data.sh").read_text()
+    assert "from gemsdoe.paths import template_path" in script
+    assert "from gems29.paths import template_path" not in script
+
+
 def test_hypothesis_slate_has_frozen_ranked_statuses() -> None:
     registry = json.loads((ROOT / "registry" / "hypotheses.json").read_text())
     items = registry["items"]

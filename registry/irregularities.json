@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "updated_local_date": "2026-10-03",
-  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits. 2026-10-03 (session 4): +IR-29-CHECK-TEMPLATE-ROOT, +IR-29-QFAULTS-RECENCY-BIN, +IR-29-H41-SMOKE-OVERLAP; IR-29-SANDBOX-NET re-probed; IR-CHECK-SUBMISSION-TEMPLATE-PATH superseded. 2026-10-03 (session 4): +IR-29-UNVERIFIED-HOSTS (self-reported, corrected same day). 2026-10-03: +IR-29-H41-PREREG-STAT-CORRECTIONS. 2026-10-03: +IR-29-H41-DANGLING-CANDIDATE-SCORE-RULE (self-reported fabrication of a citation/formula). 2026-10-03: +IR-29-H41-ANALYZER-GUARD-BUG (post-result, non-gating).",
+  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits. 2026-10-03 (session 4): +IR-29-CHECK-TEMPLATE-ROOT, +IR-29-QFAULTS-RECENCY-BIN, +IR-29-H41-SMOKE-OVERLAP; IR-29-SANDBOX-NET re-probed; IR-CHECK-SUBMISSION-TEMPLATE-PATH superseded. 2026-10-03 (session 4): +IR-29-UNVERIFIED-HOSTS (self-reported, corrected same day). 2026-10-03: +IR-29-H41-PREREG-STAT-CORRECTIONS. 2026-10-03: +IR-29-H41-DANGLING-CANDIDATE-SCORE-RULE (self-reported fabrication of a citation/formula). 2026-10-03: +IR-29-H41-ANALYZER-GUARD-BUG (post-result, non-gating); IR-29-DOWNLOAD-RESOLVER (resolved before data restore claim).",
   "items": [
     {
       "id": "IR-DATA-01",
@@ -432,6 +432,18 @@
         "registry/score_claims.json",
         "knowledge/03_drivendata_terms_access_policy.md",
         "AGENTS.md"
+      ]
+    },
+    {
+      "id": "IR-29-DOWNLOAD-RESOLVER",
+      "status": "resolved",
+      "severity": "high",
+      "date": "2026-10-03",
+      "summary": "The documented one-command competition-data wrapper called the retired gems29.paths resolver after restoring data, so it could fail before printing the template path.",
+      "detail": "The repository's active checker and shared resolver live in gemsdoe.paths; the wrapper's final Python probe still imported gems29.paths. This was found in an offline implementation review before claiming the command worked. The import was corrected to gemsdoe.paths, shell syntax and the import were checked locally, and a project-integrity regression test now prevents the retired import from returning. No organizer endpoint was contacted and no data restore was claimed.",
+      "affected_artifacts": [
+        "scripts/download_competition_data.sh",
+        "tests/test_project_integrity.py"
       ]
     },
     {
