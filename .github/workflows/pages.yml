@@ -30,6 +30,8 @@ jobs:
           python-version: "3.11"
       - name: Validate checked-in static site
         run: python scripts/build_site.py --check
+      - name: Check published-site invariants
+        run: python scripts/check_site.py
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact

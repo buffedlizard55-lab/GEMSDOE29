@@ -25,5 +25,7 @@ jobs:
         run: ruff check src scripts tests
       - name: Validate generated Pages HTML
         run: python scripts/build_site.py --check
+      - name: Check published-site invariants
+        run: python scripts/check_site.py
       - name: Validate checked-in JSON registers
         run: python -c 'import json, pathlib; files=list(pathlib.Path("registry").glob("*.json")); [json.loads(p.read_text()) for p in files]; print(f"validated {len(files)} JSON registers")'
