@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "src"))
 import numpy as np  # noqa: E402
 import rasterio  # noqa: E402
 
-from gems29.submission import sha256_file, verify_files  # noqa: E402
+from gems29.submission import verify_files  # noqa: E402
 
 
 def main() -> int:

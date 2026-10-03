@@ -51,7 +51,6 @@ def write_submission(mask: np.ndarray, out_dir: Path, stem: str, *, note: str) -
         raise ValueError("emission extends outside the template footprint")
     vals = np.where(mask, np.float32(1.0), np.float32(0.0))
     prof.update(dtype="float32", count=1)
-    files = {}
     nan_arr = np.where(foot, vals, np.float32(np.nan))
     zero_arr = np.where(foot, vals, np.float32(0.0))
     p_nan = out_dir / f"{stem}-nan.tif"

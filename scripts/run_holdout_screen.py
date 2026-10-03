@@ -3,8 +3,9 @@
 
 Frozen gate (knowledge/01): PASS iff mean paired quadrant ΔDTI >= +0.005 and >= 3/4 quadrants
 positive in both screen draws (0,1), replicated in >= 1 confirmation draw (2,3). Writes
-evidence/h29_holdout.json and evidence/h29_gate.json. Compute-saving deviation (documented):
-arms far below +0.002 across both screen draws do not receive confirmation fits.
+evidence/h29_holdout.json and evidence/h29_gate.json. The full runner computes draws 0–3 in one pass;
+draws 2–3 count as confirmation only for an arm that passes both screen draws. Quick mode runs
+only fold 0 and screen draws, so it cannot authorize a confirmation or a pass.
 
 Usage: python scripts/run_holdout_screen.py [--quick]   (--quick = fold 0, draws 0-1 only)
 """
@@ -79,6 +80,51 @@ def score_arm_paired(res, base_res):
     return res["dti"] - base_res["dti"]
 
 
+def summarize_gate(results: list[dict], *, quick: bool = False) -> dict:
+    """Summarize paired quadrant deltas; draws 2/3 qualify only after a complete screen passes."""
+    gate = {}
+    for family, arms in (("A", ("A1", "A2")), ("B", ("B1", "B2"))):
+        for arm in arms:
+            per_draw = {}
+            draw_ids = sorted({int(row["draw"]) for row in results if family in row and arm in row[family]})
+            for draw in draw_ids:
+                deltas = [float(row[family][arm]["paired_delta"]) for row in results
+                          if int(row["draw"]) == draw and family in row and arm in row[family]]
+                per_draw[f"draw{draw}"] = {
+                    "mean_delta": float(np.mean(deltas)),
+                    "positive_folds": int(np.sum(np.asarray(deltas) > 0)),
+                    "n_folds": len(deltas),
+                    "deltas": deltas,
+                }
+            if quick:
+                gate[arm] = {"screen_pass": "quick-mode", "confirm_draw": None,
+                             "confirmation_eligible": False, "per_draw": per_draw, "PASS": None}
+                continue
+
+            screen = [per_draw.get(f"draw{draw}") for draw in (0, 1)]
+            screen_pass = all(
+                cell is not None and cell["n_folds"] == 4
+                and cell["mean_delta"] + 1e-12 >= 0.005 and cell["positive_folds"] >= 3
+                for cell in screen
+            )
+            confirm_draw = None
+            if screen_pass:
+                for draw in (2, 3):
+                    cell = per_draw.get(f"draw{draw}")
+                    if (cell is not None and cell["n_folds"] == 4
+                            and cell["mean_delta"] + 1e-12 >= 0.005 and cell["positive_folds"] >= 3):
+                        confirm_draw = f"draw{draw}"
+                        break
+            gate[arm] = {
+                "screen_pass": bool(screen_pass),
+                "confirm_draw": confirm_draw,
+                "confirmation_eligible": bool(screen_pass),
+                "per_draw": per_draw,
+                "PASS": bool(screen_pass and confirm_draw is not None),
+            }
+    return gate
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true")
@@ -127,7 +173,6 @@ def main() -> int:
             row = {"draw": draw, "fold": fid, "name": sp.name,
                    "n_hidden": int((sp.hidden & quadrant).sum()),
                    "n_pos_rows": int(posf.size), "n_neg_rows": int(negf.size)}
-            base = {}
             A0 = A["A0"]
             emit_info = {}
             for arm in ("A0", "A1", "A2"):
@@ -167,27 +212,7 @@ def main() -> int:
         if args.quick:
             break
 
-    gate = {}
-    for family, key in (("A", "A"), ("B", "B")):
-        for arm in ([a for a in ("A1", "A2")] if family == "A" else ["B1", "B2"]):
-            per_draw = {}
-            for d in (0, 1) if not args.quick else (0,):
-                deltas = [r[f"{{fam}}".format(fam=family)][arm]["paired_delta"]
-                          for r in results if r["draw"] == d]
-                per_draw[f"draw{d}"] = {"mean_delta": float(np.mean(deltas)),
-                                        "positive_folds": int(np.sum(np.array(deltas) > 0)),
-                                        "deltas": [float(x) for x in deltas]}
-            ok_screen = all(v["mean_delta"] >= 0.005 and v["positive_folds"] >= 3
-                             for v in per_draw.values()) if not args.quick else None
-            confirm = None
-            for d in (2, 3):
-                k = f"draw{d}"
-                if k in per_draw:
-                    if per_draw[k]["mean_delta"] >= 0.005 and per_draw[k]["positive_folds"] >= 3:
-                        confirm = k
-            gate[arm] = {"screen_pass": bool(ok_screen) if ok_screen is not None else "quick-mode",
-                          "confirm_draw": confirm, "per_draw": per_draw,
-                          "PASS": (bool(ok_screen) and confirm is not None) if not args.quick else None}
+    gate = summarize_gate(results, quick=args.quick)
     out = {"generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
            "runtime_s": time.time() - t0, "rows": results, "gate": gate,
            "protocol": "knowledge/01_preregistration_h29_worming_2026-10-03.md",

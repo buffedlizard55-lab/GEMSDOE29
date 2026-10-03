@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-03",
+  "source": "evidence/h29_holdout.json",
+  "source_sha256": "c851c42b705884047b31cf9505dc93d4fd89b2ccc2f7252b30b73f113bb5ca32",
+  "original_gate": "evidence/h29_gate.json",
+  "original_gate_sha256": "b7f1f2fba2ed1d941aa105ff1efd4d61cc37e51893e250e2cab2779106c650c2",
+  "raw_row_count": 16,
+  "raw_draws": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "gate_code_review": "The original runner populated per_draw with screen draws 0 and 1, then searched per_draw for draws 2 and 3; those keys were absent, so confirm_draw was always null. The raw evidence and run log contain all four draws for all four folds.",
+  "protocol_interpretation": "All screen draws fail the frozen gate. Draws 2 and 3 were nevertheless computed for every arm; because no screen passed, do not present those extra draws as eligible confirmation. They are exploratory additional catalogue-gap proxy draws. The no-slot decision is unchanged.",
+  "reconciled_gate": {
+    "A1": {
+      "screen_pass": false,
+      "confirm_draw": null,
+      "confirmation_eligible": false,
+      "per_draw": {
+        "draw0": {
+          "mean_delta": -0.00016060963212019552,
+          "positive_folds": 1,
+          "n_folds": 4,
+          "deltas": [
+            0.00028465779412584213,
+            -0.00016901127316439057,
+            -0.00029810245767798726,
+            -0.0004599825917642464
+          ]
+        },
+        "draw1": {
+          "mean_delta": -0.00012074211546957148,
+          "positive_folds": 1,
+          "n_folds": 4,
+          "deltas": [
+            0.001020673703529748,
+            -0.00012774894561573547,
+            -0.0011171614866487961,
+            -0.0002587317331435024
+          ]
+        },
+        "draw2": {
+          "mean_delta": 6.270965526693553e-05,
+          "positive_folds": 3,
+          "n_folds": 4,
+          "deltas": [
+            0.00035532911624718,
+            0.000587916418494025,
+            -0.0007320980747103911,
+            3.969116103692827e-05
+          ]
+        },
+        "draw3": {
+          "mean_delta": -7.940805070159179e-05,
+          "positive_folds": 2,
+          "n_folds": 4,
+          "deltas": [
+            0.0006990766152106948,
+            9.16361210727551e-05,
+            -0.0009190986236080612,
+            -0.00018924631548175586
+          ]
+        }
+      },
+      "PASS": false
+    },
+    "A2": {
+      "screen_pass": false,
+      "confirm_draw": null,
+      "confirmation_eligible": false,
+      "per_draw": {
+        "draw0": {
+          "mean_delta": -0.000978664632826004,
+          "positive_folds": 2,
+          "n_folds": 4,
+          "deltas": [
+            0.0033076095107189424,
+            -0.004511274580623795,
+            0.0004348197763432565,
+            -0.0031458132377424203
+          ]
+        },
+        "draw1": {
+          "mean_delta": 0.0002440140113817678,
+          "positive_folds": 3,
+          "n_folds": 4,
+          "deltas": [
+            0.00024547305558064725,
+            0.0007454194416615934,
+            0.0003425131695580369,
+            -0.00035734962127320635
+          ]
+        },
+        "draw2": {
+          "mean_delta": 0.000762626244905331,
+          "positive_folds": 4,
+          "n_folds": 4,
+          "deltas": [
+            0.001223162722587448,
+            0.0002792852504824861,
+            0.001019778279309727,
+            0.0005282787272416628
+          ]
+        },
+        "draw3": {
+          "mean_delta": -0.0017672275717652841,
+          "positive_folds": 2,
+          "n_folds": 4,
+          "deltas": [
+            0.0012729905916481488,
+            -0.005187602023487642,
+            0.0006193183846636696,
+            -0.003773617239885313
+          ]
+        }
+      },
+      "PASS": false
+    },
+    "B1": {
+      "screen_pass": false,
+      "confirm_draw": null,
+      "confirmation_eligible": false,
+      "per_draw": {
+        "draw0": {
+          "mean_delta": 0.00037651303644569475,
+          "positive_folds": 2,
+          "n_folds": 4,
+          "deltas": [
+            -0.0007313063003919935,
+            -0.0003931534541631032,
+            0.0005989094525041677,
+            0.002031602447833708
+          ]
+        },
+        "draw1": {
+          "mean_delta": 0.0003496061708836754,
+          "positive_folds": 3,
+          "n_folds": 4,
+          "deltas": [
+            -0.00015055463766432825,
+            0.0006221452971931964,
+            0.000683010938419916,
+            0.00024382308558591748
+          ]
+        },
+        "draw2": {
+          "mean_delta": 0.00032936276062237426,
+          "positive_folds": 2,
+          "n_folds": 4,
+          "deltas": [
+            -0.000144820665994725,
+            0.00038574324698474084,
+            -0.0003712910903510558,
+            0.001447819551850537
+          ]
+        },
+        "draw3": {
+          "mean_delta": -0.0013477782128899578,
+          "positive_folds": 0,
+          "n_folds": 4,
+          "deltas": [
+            -0.0003189037337553227,
+            -0.0015538375985556432,
+            -0.0006777447515500523,
+            -0.002840626767698813
+          ]
+        }
+      },
+      "PASS": false
+    },
+    "B2": {
+      "screen_pass": false,
+      "confirm_draw": null,
+      "confirmation_eligible": false,
+      "per_draw": {
+        "draw0": {
+          "mean_delta": 0.0004967905083177728,
+          "positive_folds": 2,
+          "n_folds": 4,
+          "deltas": [
+            -0.0009385008898951039,
+            0.0010354032082468372,
+            -0.0014249939220456927,
+            0.003315253636965051
+          ]
+        },
+        "draw1": {
+          "mean_delta": 0.0012323539435678426,
+          "positive_folds": 4,
+          "n_folds": 4,
+          "deltas": [
+            0.0005779442321002456,
+            0.0008459516933006731,
+            0.0008507538898643342,
+            0.0026547659590061175
+          ]
+        },
+        "draw2": {
+          "mean_delta": 0.0003030844436789082,
+          "positive_folds": 1,
+          "n_folds": 4,
+          "deltas": [
+            -0.0009640103620698788,
+            -0.0005643385376823094,
+            0.003564901001676248,
+            -0.0008242143272084272
+          ]
+        },
+        "draw3": {
+          "mean_delta": -0.00029154676076245233,
+          "positive_folds": 2,
+          "n_folds": 4,
+          "deltas": [
+            -0.001030554372060833,
+            0.00020898043779579711,
+            3.420342672685872e-06,
+            -0.0003480334514574593
+          ]
+        }
+      },
+      "PASS": false
+    }
+  }
+}

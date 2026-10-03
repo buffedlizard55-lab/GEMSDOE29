@@ -27,8 +27,7 @@ receipts; marked as such), or (C) claim carried from owner-reported text (never 
 - (V) End date: Dec. 3, 2026, 11:59 p.m. UTC; prize pool $300k ($50k initial top-5; $250k final
   100/70/40/25/15k). External data encouraged with licenses permitting sponsor use.
   Source: https://www.drivendata.org/competitions/306/competition-doe-gems/ (read 2026-10-03T09:14Z).
-- (C) 3 submissions per rolling 7 days — from the official rules PDF (www.nlr.gov/docs/fy26osti/96647.pdf),
-  NOT re-readable in this sandbox (IR-29-RULES-URL); multiple sibling sessions behaved consistently with it.
+- (V) The September 2026 Official Rules PDF at https://docs.nlr.gov/docs/fy26osti/96647.pdf was fetched and sections 3.2–3.5 reviewed in the current source register. It permits up to three weekly feedback submissions, requires selection of one final submission for both prize rounds, and requires generative-AI use disclosure in the narrative when applicable. Check the linked current rules and timeline before acting.
 
 ## 2. The geography and data, from official sources
 
@@ -58,7 +57,7 @@ receipts; marked as such), or (C) claim carried from owner-reported text (never 
 ## 3. Worming ("multiscale edge" line tracking) — the method used here
 
 - (V/S) Hornby, P., Boschetti, F., Horowitz, F.G., 1999. Analysis of potential field data in the wavelet
-  domain. Geophysical Journal International 137(1):175–196 — doi:10.1046/j.1365-246X.1999.00793.x.
+  domain. Geophysical Journal International 137(1):175–196 — doi:10.1046/j.1365-246X.1999.00788.x.
   Upward continuation of a potential field is a wavelet scale change; the modulus maxima of the
   horizontal gradient at each continued height are the multiscale edges; their decay with height
   classifies the source singularity (Lipschitz exponent); "worm" tracks connect the maxima across scales.
@@ -82,35 +81,34 @@ receipts; marked as such), or (C) claim carried from owner-reported text (never 
   is a weak lever; (iii) no evidence that worming is FALSE science — evidence that this proxy + this
   emission surface cannot adjudicate it in a weekend. H29-3/H29-5 register the sharper versions.
 
-## 4. The metric arithmetic that decides strategy (live-score inversion, siblings + this repo's check)
+## 4. Metric arithmetic and local proxy calibration (no leaderboard snapshot)
 
 - (V) Masking semantics: catalogue pixels are removed from both credit and FP (sibling live-coincidence
   evidence; 8GEMSDOE == GEMSDOE 0.1563 after adding all catalogue pixels).
 - (V, reproduced here) dot_thin(H19-5_solid, 1.5) == the 0.2477 file's mask bit-for-bit;
   dot_thin(·, 2.8) → exactly 44,090 px (the 0.2600 file's count). Geometry is reproducible, not folklore.
-- (S) Retention identity: DTI = TPw/(0.2·TPw·(1−ρ) + 0.2·N + 0.8·|G|); credit of a subset ≈ credit_solid ×
-  c(subset)/c_solid; validated to −0.1 % (h19-5→d1.5) and +4.0 % (h25-ctx→h28) against live anchors;
-  |G| ≈ 12.2–12.8 k truth px; emission geometry exhausted at ≈0.255–0.260 on this surface.
-- (V, 2026-10-03 leaderboard read) Public #1 = DARD 0.3195 (12 subs); #2 = nchuzhoy 0.3128 with only
-  2 submissions → materially better detector, not schedule luck; our 0.2600 sits at public #15.
-- (S) Concentration ceiling: every group emission ever measured ≤ 5.7× blind; beating 0.3195 at
-  ≤ 60k px needs > 0.570·|G| credit — "only new information that ranks fault-proximal truth better".
+- (S/C) Retention identity: DTI = TPw/(0.2·TPw·(1−ρ) + 0.2·N + 0.8·|G|); prior calculations estimated a 12.2–12.8k-pixel truth scale and an approximately 0.255–0.260 geometry range for one historical surface. These are owner/sibling-derived estimates, not verified competition results; no live leaderboard arithmetic is retained here.
+- (C) A prior main-branch commit contained a manually copied public leaderboard snapshot. This PR removes the snapshot and rank/team details under the current Terms policy. The historical user-provided prompt is preserved as source text, but those claims are not independently verified, used as targets, or shown in the status site.
+- (S/C) Concentration arithmetic in earlier sibling notes was conditional on those owner-reported anchors and is not a competition-score forecast. Do not use it to decide whether to spend a weekly slot.
 
-## 5. What has been tried across GEMSDOE…27 (dedupe table — do not re-derive)
+## 5. Older experiment inventory (historical owner/sibling reports; not independently verified)
 
-| lever | live outcome | lesson |
+The figures below are preserved as qualitative project-history context from prior repositories and the owner's materials. No organizer receipts, account identity, or score-to-file mapping were independently verified for them. They are not used as training targets, promotion gates, or a live-score feed.
+
+| lever | historical reported outcome (unverified) | lesson / limit |
 |---|---|---|
-| U-Net-style ensemble + hedge (GEMSDOE, 8) | 0.1563 | raw ML on supplied bands plateaus |
-| pindrop thermal/geochem nodes (3) | 0.083–0.119 | point-evidence emission alone is weak |
-| LiDAR scarp top-2 % (7) | 0.1461 | 1 m DEM scarps are good habitat, bad budget |
-| dotted ridge surfaces (10) | 0.0921→0.1839 by dotting alone | +44 % from geometry |
-| multi-line corroboration h19-4/5 (19) | 0.1894/0.1922 | 4-line gate beats single-layer matches |
-| d1.5 → d2.8 dotting (24→25) | 0.2477 → 0.2600 | spacing optimum ≈ 2.8 px, confirmed live |
-| +1,259 far-field topology dots (27) | 0.2449 (vs 0.2477) | far-field dot ADDITION lost live — needs ≥1.62× blind |
-| SGMC bedrock-gap habitat (16 h18-4) | 0.0360 | bedrock-map gap ≠ hidden-fault habitat |
-| XEDGE scale-persistence features (26) | blocked +0.0014/+0.005 | Gaussian scale-persistence as feature: no |
-| DILCOND dilatation×conductivity (26) | blocked +0.0032/+0.005 | coincidence feature without edges: no |
-| blind lattice (13) | 0.0904 | pure-geometry |G| calibration anchor |
+| U-Net-style ensemble + hedge (GEMSDOE / GEMSDOE8) | 0.1563 reported | raw ML on supplied bands was reported to plateau |
+| thermal/geochemical point evidence | 0.083–0.119 reported | point-evidence emission alone was reported weak |
+| LiDAR scarp top-2% emission | 0.1461 reported | terrain scarps may be useful habitat but can be inefficient at a strict budget |
+| dotted ridge surfaces | 0.0921→0.1839 reported | spacing changes can alter emission geometry; historical score mapping is unverified |
+| multi-line corroboration H19-4/5 | 0.1894/0.1922 reported | a multi-line gate was explored; values are owner reports |
+| d1.5 → d2.8 thinning variants | 0.2477→0.2600 reported | local mask/count reproduction does not authenticate the score relationship |
+| far-field topology additions | 0.2449 vs. a 0.2477 reported anchor | one owner-reported comparison was negative; not a leaderboard-derived claim here |
+| SGMC bedrock-gap emission | 0.0360 reported | a geologic-map gap is not itself evidence of hidden-fault habitat |
+| XEDGE scale-persistence features (GEMSDOE26) | proxy gate reportedly failed | Gaussian scale-persistence was tried; H31 must not be described as the first persistence test |
+| DILCOND dilation×conductivity (GEMSDOE26) | proxy gate reportedly failed | this earlier conjunction is not evidence for any new interaction without a fresh test |
+| blind lattice | 0.0904 reported | retained only as prior project context |
+
 
 ## 6. Free official data NOT yet used by anyone in this family (leads for next sessions)
 

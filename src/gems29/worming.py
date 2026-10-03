@@ -30,8 +30,6 @@ USGS ScienceBase item 657e1d85d34e23d3533209f7, DOI 10.5066/P93LGLVQ).
 
 from __future__ import annotations
 
-import json
-
 import numpy as np
 from scipy import fft as spfft
 from scipy.ndimage import distance_transform_edt
@@ -203,7 +201,6 @@ def run_field(field_name: str, values: np.ndarray, valid: np.ndarray, *, out_dir
             gx0, gy0 = gx.astype(np.float32), gy.astype(np.float32)
         edges.append(e & mask)
         mags.append(mag.astype(np.float32))
-    gxs, gys = [gx0], [gy0]
     yy0, xx0 = np.nonzero(edges[0])
     stats = worm_persistence(edges, mags, yy0, xx0, mask)
 
@@ -219,7 +216,6 @@ def run_field(field_name: str, values: np.ndarray, valid: np.ndarray, *, out_dir
     # orientation of each level-0 edge: strike = gradient direction + 90 deg, degrees from north
     strike = np.full(mask.shape, np.nan, np.float32)
     gxn, gyn = gx0[edges[0]], gy0[edges[0]]
-    nn = np.maximum(np.hypot(gxn, gyn), 1e-12)
     strike[edges[0]] = ((np.degrees(np.arctan2(gyn, gxn)) + 90.0) % 180.0).astype(np.float32)
 
     tag = out_dir / f"worm_{field_name}"

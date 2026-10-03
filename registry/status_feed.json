@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "updated_local_date": "2026-10-03",
+  "feed_type": "project-local research and release status; not a DrivenData leaderboard feed",
+  "current": {
+    "research_stage": "H29 catalogue-gap screen: no arm passed; post-screen draws are exploratory, not eligible confirmations; H31 pseudogravity/drift prototype remains unfitted and unscored",
+    "screen_status": "H29: no arm passed; H31 real-data screen not run",
+    "confirmation_status": "H29: no arm passed screen; extra draws 2–3 are exploratory, not eligible confirmations; H31 confirmation blocked until a future screen passes",
+    "data_status": "All 11 H31 manifest pins were verified in an earlier run, but temporary inputs/caches do not persist and must be restored; owner mirrors are not organizer-authenticated",
+    "holdout_best": null,
+    "competition_score": null,
+    "weekly_slot_used": false,
+    "slot_approved_artifact": null
+  },
+  "events": [
+    {
+      "date": "2026-10-03",
+      "type": "policy",
+      "title": "DrivenData access policy checked",
+      "detail": "The Terms prohibit automatic monitoring and manual monitoring/copying without prior written consent. No leaderboard polling, scraping, embedding, or score-copy feed is implemented."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "research",
+      "title": "Three new hypotheses ranked before fitting",
+      "detail": "H31 multiscale potential-field edge persistence selected; H32 terrain-profile asymmetry and H33 survey-line artifact control remain unimplemented candidates. Planning ranges are not observed results."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "preregistration",
+      "title": "H31 spatial screen preregistered",
+      "detail": "Screen draws 10–11; confirmation draws 12–13 only if the raw-cell analyzer independently verifies all screen gates. No model fit or DTI evaluation has yet occurred."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "engineering",
+      "title": "Owner-mirror data restored and verified",
+      "detail": "All 11 manifest entries were restored to temporary /tmp paths and matched pinned SHA-256 values; aligned raster arrays were prepared outside Git. That scratch data is not persistent and must be restored again before the frozen run. The bytes remain owner mirrors, not organizer-authenticated downloads."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "engineering",
+      "title": "H31 feature-only smoke test completed",
+      "detail": "A non-frozen feature-construction diagnostic completed on the restored mirrors (4,349 magnetic-proxy edge seeds, 2,520 gravity edge seeds, 51 nonzero joint-support pixels). This is not a model result, DTI score, or holdout outcome; the frozen cache will be rebuilt from the clean source commit."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "format",
+      "title": "Historical D2.8 GeoTIFF rechecked locally",
+      "detail": "The archived TIFF matches the restored owner-mirror template's EPSG:32611 grid, shape, geotransform, one float32 band, finite [0,1] footprint values, and NaNs outside. It remains unscored and not slot-approved; do not submit."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "verification",
+      "title": "61 tests pass; static site and lint checks pass",
+      "detail": "Synthetic/registry tests cover the H31 prototype and fail-closed analyzer, submission validation, prompt preservation, source/status registers, and generated Pages. No real-data model fit, holdout DTI, confirmation, or weekly slot is claimed."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "prior-result-review",
+      "title": "H29 spatial screen reviewed and carried forward",
+      "detail": "The prior main-branch H29 run tested worm gating, worm-ranked emission, persistence-as-head-features and thermal-probe features. No arm passed the frozen +0.005 catalogue-gap proxy screen. Draws 2–3 were nevertheless computed for all arms; because the screens failed they are exploratory extras, not eligible confirmations. The original gate snapshot also omitted those draws due a serialization bug; the raw cells are reconciled in knowledge/06_h29_gate_reconciliation_2026-10-03.md. No weekly slot was recommended or used. This is not a competition score. See knowledge/02_h29_results_2026-10-03.md and evidence/h29_gate_reconciled.json. H31 remains unfit and unscored."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "novelty-review",
+      "title": "Candidate ranking revised after H29 prior-work review",
+      "detail": "The pre-sync H31 slate predated discovery of H29 on the advanced main branch. H29 already tested raw-RTP/gravity worm persistence; all four arms failed the registered +0.005 catalogue-gap screen. Draws 2–3 were run for all arms but are exploratory, not valid conditional confirmations, and the original gate snapshot had a serialization bug. H31 remains only an unfitted regularized pseudogravity-transform plus edge-drift extension; H32 terrain-shape asymmetry is now the first unimplemented candidate, and H33 stays blocked pending official flight-path data validation. See knowledge/01_candidates_ranked_2026-10-03.md, knowledge/04_prior_work_audit.md and knowledge/06_h29_gate_reconciliation_2026-10-03.md."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "verification",
+      "title": "82 tests pass; rebase and site checks pass",
+      "detail": "After reconciling with the advanced main branch, 82 tests pass and 2 owner-mirror reproduction tests are skipped because temporary inputs are absent. Ruff passes, all six generated Pages match the site builder, and JSON registers/evidence parse. No new model fit, DTI result, competition score, or weekly slot is claimed."
+    }
+  ]
+}

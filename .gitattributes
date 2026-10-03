@@ -1,0 +1,3 @@
+# The user's verbatim prompt intentionally retains Markdown hard-break spaces.
+README.md whitespace=-blank-at-eol
+knowledge/owner_brief_verbatim.txt whitespace=-blank-at-eol
