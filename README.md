@@ -2,8 +2,42 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
-> **Current decision (2026-10-03, session 4): H41 became the first candidate in this family to clear a frozen
-> gate — on two arms — and the preregistered confirmation, not the screen, decides what happens next.** Session 4
+> **Current decision (2026-10-03, session 5): the data blocker is cleared, the published headline candidate was
+> found to be a distance-to-catalogue look-up, and the fix is a cross-fitted builder whose two arms are now
+> genuinely different.** Three things happened. **(1) Data placement — done, in this checkout.**
+> `bash scripts/download_competition_data.sh` fetched all 11 hash-pinned owner-mirror files through `gh api`
+> (`scripts/restore_h31_data.py --verify` → **11/11 present and hash-correct**), `scripts/restore_data.py` →
+> **ALL VERIFIED** for the core-group layout, and the caches were then built for real: `prepare_data.py`
+> (footprint 5,167,373 px, labels 60,988 px, 19 bands), `build_features.py` (64 static columns),
+> `build_addons.py` (5 add-ons). With the core group present, `tests/test_sibling_reproduction.py` no longer
+> skips: `dot_thin(solid_h19_5, 2.8)` reproduces the original D2.8 mask bit-for-bit at 44,090 px. The suite is
+> **155 passed, 0 skipped**. **(2) A real defect in the artifact path.** Building an `A4_h41_union` file with the
+> existing recipe produced something **byte-identical** to the published repo-c0 candidate (sha256
+> `3537e9fc47a46503…`, content id `a4d439b07426`), i.e. the H41 physics changed nothing. The cause is measured,
+> not guessed: `scripts/build_repo_candidate.py` builds catalogue family `E` from the same full catalogue its
+> positives come from, and `E`'s first column `log1p(min(dist_to_catalogue, 60))` is **exactly 0.0 on all 60,988
+> positives** and **≥ 1.098612 on all 300,000 negatives** — train AUC **1.0**, tree-1 root split `E_dist` at
+> threshold `0.0`, and only **2 of 81** columns ever used across all 100 trees (`E_dist` 100 splits, `mag_anom`
+> 200). Corroboration: that artifact put **65.95 %** of its dots within 300 m of the known catalogue.
+> Registered `IR-29-ARTIFACT-LEAK`; the screens in `evidence/` are **unaffected** because `Cell` builds `E` from
+> `draw.visible` with the hidden components removed. **(3) The fix.** `scripts/build_crossfit_candidate.py`
+> trains per (fold, draw) exactly as the validated cells do — features from `draw.visible`, positives =
+> `draw.hidden_train`, negatives ≤300 k at >1.5 px, seed `777+31·fold+draw` — then applies the models to the
+> whole footprint with `E` from the full catalogue (legitimate at prediction time), averages over 4 folds ×
+> draws 30/31, and runs the unchanged frozen emission. It now uses **78–86 columns per cell with 1,207 H41
+> splits**, catalogue-hugging falls to **≈15 %**, and it emits two distinct masks: `C0_base` 33,766 dots
+> (`ca879db0089a`) and `A4_h41_union` 33,739 dots (`9edb34b99e3a`). It **aborts** if no split lands on an H41
+> column or if the two arms come out identical — the guard the old path lacked. Both files ship in NaN-outside
+> **and** zero-outside variants, because the owner's reported `Predicted values must be in range [0, 1]`
+> rejection is reproduced exactly: `((a>=0)&(a<=1)).all()` over the **whole** array is **False** for every
+> `-nan.tif` and **True** for every `-zeros.tif`, so the site's hero button now targets the zero-outside file.
+> `A4_h41_union` remains **G3-vetoed** (SGMC secondary proxy 1/4 folds in both stages); it is published for
+> owner review with the veto printed next to it, and no weekly slot is approved. Full write-up:
+> [`knowledge/27_artifact_leakage_and_crossfit_2026-10-03.md`](knowledge/27_artifact_leakage_and_crossfit_2026-10-03.md).
+>
+> **Session 4 decision (superseded as the current state, kept for the record): H41 became the first candidate
+> in this family to clear a frozen gate — on two arms — and the preregistered confirmation, not the screen,
+> decides what happens next.** Session 4
 > implemented `src/gemsdoe/h41.py`, the first use anywhere in this project of the hash-pinned INGENIOUS Quaternary
 > fault attribute table for prediction (slip-rate × recency weighted trace-centroid support, restricted to centroids
 > ≥500 m from the visible catalogue, plus an anisotropic scarp-strike corridor, a scarp product and an off-support
@@ -82,6 +116,10 @@
 - **[H41 results (read first)](knowledge/26_h41_results_2026-10-03.md)** — the screen table, why the two passing
   arms are a ranking gain rather than an emission fluke, the SGMC conflict, and every disclosed process defect.
   Its frozen protocol is **[knowledge/24](knowledge/24_preregistered_h41_screen_2026-10-03.md)**.
+- **[Session 5 — artifact leakage and the cross-fitted fix](knowledge/27_artifact_leakage_and_crossfit_2026-10-03.md)** —
+  the measured defect in the single-fit artifact path (`E_dist` separates the training labels perfectly, 2 of 81
+  columns used), why the screens are unaffected, the cross-fitted protocol, and the `-nan` vs `-zeros` answer to
+  the `Predicted values must be in range [0, 1]` rejection.
 - **[Session-4 brief, frozen screen and slate](knowledge/25_candidates_v4_2026-10-03.md)** — the
   v4 candidate slate (H43 drainage organization, H44 discharge chain, H45 seismicity strands, H46 1-m LiDAR
   scarp template, H47 map-unit adjacency), each with layers / expected signature / why off-catalogue /

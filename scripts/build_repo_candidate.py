@@ -1,6 +1,20 @@
 #!/usr/bin/env python3
 """Build the repository's own candidate submission GeoTIFF.
 
+.. warning::
+   **Do not use this script to produce a new artifact.** Measured on the restored data (2026-10-03),
+   the model it fits separates its own training labels perfectly: it builds catalogue family ``E`` from
+   the same full catalogue its positives come from, and ``E``'s first column
+   ``log1p(min(distance_to_nearest_catalogue_pixel, 60))`` is exactly ``0.0`` on all 60,988 positives and
+   ``>= 1.098612`` on all sampled negatives. Train AUC is 1.0, tree 1's root split is that column at
+   threshold 0.0, and only **2 of 81** columns are ever used across all 100 trees. Appending new physics
+   columns changes nothing: 0 splits land on them and the emitted mask stays byte-identical
+   (sha256 ``3537e9fc47a46503…``). The screens in ``evidence/`` are unaffected because ``Cell`` builds
+   ``E`` from ``draw.visible`` with the hidden components removed. Use
+   ``scripts/build_crossfit_candidate.py`` instead, which trains the way the validated cells do and
+   guards against an inert feature block. See ``knowledge/27_artifact_leakage_and_crossfit_2026-10-03.md``
+   and ``IR-29-ARTIFACT-LEAK``.
+
 The candidate implements the method that is validated on the spatially blocked hide-and-recover
 holdout by the H34 screen controls (`evidence/h34_coverage_screen/`, draws 20/21, four quadrants):
 a HistGradientBoosting habitat model over the full feature matrix used in that screen, followed by

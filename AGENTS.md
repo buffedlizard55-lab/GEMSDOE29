@@ -12,3 +12,9 @@
    frozen holdout gate before any file is labelled slot-recommended. Proxy pass ≠ live evidence (documented).
 6. Irregularities go to `registry/irregularities.json` with severity + action, and are surfaced on the site.
 7. Three-pass review before finishing any task (implement → bug-review → full recheck).
+8. Never build a submission artifact with `scripts/build_repo_candidate.py`: it separates its own training
+   labels perfectly through a distance-to-catalogue column and uses 2 of 81 features (`IR-29-ARTIFACT-LEAK`,
+   `knowledge/27`). Use `scripts/build_crossfit_candidate.py`, which trains the way the validated cells do and
+   aborts if a new feature block turns out to be inert.
+9. Publish the zero-outside variant as the recommended download. A strict whole-array `[0, 1]` check rejects
+   NaN, which is the owner's reported `Predicted values must be in range [0, 1]` failure (`IR-PORTAL-01`).
