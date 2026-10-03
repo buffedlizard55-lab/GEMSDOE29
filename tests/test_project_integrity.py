@@ -36,7 +36,9 @@ def test_hypothesis_slate_has_frozen_ranked_statuses() -> None:
     assert [by_id[k]["rank"] for k in v4] == [1, 2, 3, 4, 5]
     assert all("v4 slate" in by_id[k]["status"] for k in v4)
     assert all(by_id[k]["slate"].startswith("v4") for k in v4)
-    assert all(set(by_id[k]) >= set(by_id["H41"]) for k in v4)  # same field coverage as the older items
+    required = {"id", "rank", "title", "status", "layers", "signature", "why_unmapped", "difference",
+                "planning_delta_dti", "cost", "external_data", "validation"}
+    assert all(set(item) >= required for item in items)  # every registered candidate answers the same questions
     # every v4 candidate must state obtainability: a free/public/CC marker plus where the fetch has to happen
     for k in v4:
         e = by_id[k]["external_data"].lower()
