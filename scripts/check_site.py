@@ -29,8 +29,11 @@ for p in pages:
     if re.search(r"\bTODO\b|\bFIXME\b|lorem ipsum", html, re.I):
         print(f"PLACEHOLDER TEXT in {p.name}")
         fail += 1
-for j in ((ROOT / "data" / "manifest.json"), (ROOT / "registry" / "live_scores.json"),
+# No registry/live_scores.json exists by design: this project stores no leaderboard or live-score feed
+# (DrivenData terms prohibit automated monitoring/copying). Register files checked below.
+for j in ((ROOT / "data" / "manifest.json"),
           (ROOT / "registry" / "sources.json"), (ROOT / "registry" / "irregularities.json"),
+          (ROOT / "registry" / "submissions.json"), (ROOT / "registry" / "status_feed.json"),
           (ROOT / "registry" / "hypotheses_h29.json"), (ROOT / "registry" / "artifact_ledger.json")):
     try:
         json.loads(j.read_text())

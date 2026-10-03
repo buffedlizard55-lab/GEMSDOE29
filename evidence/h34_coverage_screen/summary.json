@@ -1,0 +1,59 @@
+{
+  "experiment": "H34 metric-native coverage emission screen",
+  "elapsed_s": 306.62489080429077,
+  "arms": {
+    "C0_ordered_dots": 0.14086084085915884,
+    "C1_geodesic_dots": 0.14479018210246675,
+    "C2_coverage_rule": 0.12356797631265629,
+    "C3_coverage_binary": 0.07712127821686643
+  },
+  "sgmc_arms": {
+    "C0_ordered_dots": 0.0847152819236819,
+    "C1_geodesic_dots": 0.0896646562943367,
+    "C2_coverage_rule": 0.14311636233630617,
+    "C3_coverage_binary": 0.16477314230180268
+  },
+  "paired_gains_vs_best_control": [
+    -0.03394434096364429,
+    -0.02646125599388341,
+    -0.006317384874196003,
+    -0.01816584132751814
+  ],
+  "sgmc_paired_gains": [
+    0.04897455927802641,
+    0.054535709272814675,
+    0.04669548924135715,
+    0.06360106637567968
+  ],
+  "budget_ratios": [
+    3.0,
+    3.0,
+    3.0,
+    3.0
+  ],
+  "gates": {
+    "mean_gain": -0.02122220578981046,
+    "positive_folds": 0,
+    "worst_fold": -0.03394434096364429,
+    "max_budget_ratio": 3.0,
+    "sgmc_mean_gain": 0.053451706041969485,
+    "sgmc_positive_folds": 4,
+    "all_cells_present": true,
+    "all_finite": true
+  },
+  "gate_checks": {
+    "mean_gain": false,
+    "positive_folds": false,
+    "worst_fold": false,
+    "budget": true,
+    "cells": true
+  },
+  "sgmc_stats": {
+    "sgmc_positive": 83593,
+    "off_catalogue": 62703,
+    "on_catalogue": 3978,
+    "within_300m": 16912
+  },
+  "pass_fail": "FAIL",
+  "interpretation": "Proxy outcome only: exact masked DTI on hidden catalogue components plus a secondary state-geologic-map off-catalogue class. Neither is the organizer's hidden expert label set and neither is a competition score."
+}

@@ -108,6 +108,57 @@ def approved_entry(submissions: dict[str, Any]) -> dict[str, Any] | None:
     return next((row for row in submissions.get("files", []) if row.get("slot_approved") is True), None)
 
 
+def render_downloads() -> str:
+    """One-click download cards for every registered research candidate, with its paste-ready note.
+
+    Numbers come only from ``registry/submissions.json`` (which itself is filled from script-written
+    receipts under ``docs/downloads/checks-*.json``). Nothing here claims a competition score.
+    """
+    submissions = read_json("submissions.json")
+    candidates = [row for row in submissions.get("files", []) if row.get("role") == "candidate_review"]
+    if not candidates:
+        return ""
+    cards = []
+    for row in candidates:
+        present = has_local_artifact(row)
+        download = (
+            f'<a class="button" href="{e(artifact_href(row))}" download>Download GeoTIFF</a>'
+            if present
+            else '<p class="muted">Registered file is not present in this checkout.</p>'
+        )
+        zip_path = Path(row["path"]).with_suffix(".zip")
+        zip_link = (
+            f' <a class="button light" href="{e(zip_path.relative_to("docs").as_posix())}" download>Download .zip</a>'
+            if (ROOT / zip_path).is_file()
+            else ""
+        )
+        # Score claims stay in the JSON registry only; public pages must not republish them
+        # (tests/test_project_integrity.py::test_public_pages_do_not_republish_score_claims_or_leaderboard_links).
+        proxy = tag("score claims kept in registry/score_claims.json", "warning")
+        card = (
+            '<article class="card span-6 download-card"><p class="kicker">Download-ready research candidate '
+            '(not an official score)</p>'
+            f'<h2>{e(row.get("name", row["file"]))}</h2>'
+            f'<p>{e(row.get("summary", ""))}</p>'
+            f'<p class="file-name">{e(row["file"])}</p>'
+            f'<p class="small">sha256 <code>{e(str(row.get("sha256", ""))[:16])}…</code> · '
+            f'{int(row.get("positive_pixels", 0)):,} emitted px · format ok: {e(row.get("format_ok_local"))}</p>'
+            f'{proxy} {tag("unscored", "warning")} {tag("owner decides", "no")}'
+            f'<p class="small"><strong>Paste-ready Note:</strong> <code>{e(row.get("optional_comment", ""))}</code></p>'
+            f'{download}{zip_link}'
+            "</article>"
+        )
+        cards.append(card)
+    return (
+        '<section aria-label="Candidate downloads"><p class="kicker">Formatted and waiting for a human decision</p>'
+        '<h2>Download the submission GeoTIFF</h2>'
+        '<p>Each file below is one band, EPSG:32611, 100 m, template grid, finite values in [0, 1] inside the '
+        'footprint, NaN outside, with a script-written format receipt. None of them is a verified competition '
+        'score, and the repository does not spend weekly slots: that is the owner\'s decision.</p>'
+        f'<section class="grid">{"".join(cards)}</section></section>'
+    )
+
+
 def render_home() -> str:
     status = read_json("status_feed.json")
     submissions = read_json("submissions.json")
@@ -138,8 +189,10 @@ def render_home() -> str:
     else:
         banner = (
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
-            '<p>Do not spend a weekly submission slot on any file from this page. No H29 arm passed its +0.005 screen. Draws 2–3 were nevertheless run for every arm; they are exploratory, not eligible confirmations. H31 has not been fitted or scored. '
-            'The historical TIFF has only a local template-format receipt, with no verified competition score or slot approval.</p></section>'
+            '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
+            'H34 (metric-native coverage emission) failed its frozen primary gate (catalogue-hidden proxy, &minus;0.021 mean paired gain, 0/4 folds) while passing its secondary off-catalogue class (+0.054, 4/4). '
+            'The 2<sup>5&minus;1</sup> fractional factorial over feature families is running. H29 failed all four arms; H31 is unfitted. '
+            'Every download is format-verified locally and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
         )
         main_artifact = (
             '<article class="card span-6"><p class="kicker">Current submission status</p>'
@@ -188,7 +241,7 @@ def render_home() -> str:
         f'<ol class="timeline">{"".join(timeline)}</ol><p><a href="status.html">Full status register →</a></p></section>'
     )
     body = (
-        f'{banner}{metrics}<section class="grid" aria-label="Submission artifacts">{main_artifact}{historical_card}</section>'
+        f'{render_downloads()}{banner}{metrics}<section class="grid" aria-label="Submission artifacts">{main_artifact}{historical_card}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">Research, not score-chasing</p><h2>Test the unseen-fault hypothesis first</h2>'
         '<p>H29 already tested raw-RTP/gravity worm persistence as a gate, rank and model features; all four arms failed its registered proxy threshold. H31 is a narrower extension: it tests regularized RTP-to-pseudogravity integration and explicit edge drift beyond that prior result. '
         'No H31 model fit or DTI screen has occurred; confirmation remains blocked until a fresh screen passes.</p>'
@@ -227,12 +280,13 @@ def render_summary() -> str:
     else:
         candidate_block = (
             '<div class="status-banner danger"><strong>No current file is approved for submission.</strong>'
-            '<p>The historical D2.8 download is not a current candidate. Do not upload it or spend a weekly slot on it. '
-            'Wait for a same-run holdout winner, fresh confirmation, and an exact-file format receipt.</p></div>'
+            '<p>The downloads above are research candidates, not approvals: the historical rebuild matches the group\'s '
+            'best-reported geometry and the SGMC inventory alternative loses the registered catalogue-hidden gate. '
+            'A weekly slot is the owner\'s decision and needs a fresh confirmation draw plus the exact-file receipt.</p></div>'
         )
 
     body = (
-        f'{candidate_block}'
+        f'{render_downloads()}{candidate_block}'
         '<section class="grid"><article class="card span-7"><p class="kicker">Purpose</p><h2>Submission in one sentence</h2>'
         '<p>Submit one probability raster for faults across the full GeoDAWN study area, using the provided template grid and the official manual interface. '
         'The organizer’s 2026 rules require one final selection for both prize rounds; up to three weekly feedback submissions are permitted by the rules. '

@@ -25,6 +25,56 @@
       "name": "GEMSDOE29 historical D2.8",
       "optional_comment": "GEMSDOE29 D2.8 | historical; no verified score; not slot-approved | id e56ea318af89 | do not submit",
       "summary": "Historical 44,090-pixel owner-mirrored dotted H19-5 artifact (D2.8). It is preserved for provenance and format demonstration only. GEMSDOE29 locally checked its single-band float32 grid, CRS, transform, footprint values and NaN outside against the hash-pinned owner-mirror template; neither file is organizer-authenticated. The artifact remains unscored, not slot-approved, and do not submit."
+    },
+    {
+      "id": "refd28-rebuild",
+      "role": "candidate_review",
+      "file": "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif",
+      "path": "docs/downloads/gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif",
+      "source_file": null,
+      "source_sha256": null,
+      "content_id": null,
+      "status": "research candidate; format-verified locally; unscored; owner decides",
+      "score": null,
+      "score_claims": [
+        "0.2600 (owner-reported, unverified, historical geometry)"
+      ],
+      "slot_approved": false,
+      "do_not_submit": false,
+      "name": "REFD28 rebuild (ephemeral + persistent)",
+      "summary": "Independent rebuild of the group's best reported file (dotted H19-5 at 2.8 px spacing, 44,090 dots, zero catalogue pixels, one raster, EPSG:32611, values 0/1 with NaN outside the footprint). Byte-content id 1cc7dc534d51. NOT slot-approved: proxy screen shows it is equivalent to the historical artifact (catalogue-hidden 0.09832, sgmc-off-catalogue 0.09528); it is the reference control, not an improvement.",
+      "optional_comment": "GEMSDOE29 REFD28 rebuild | best-reported dotted geometry; unscored; review | id 1cc7dc534d51",
+      "bytes": 1573188,
+      "sha256": "5f963b8bca5ec226ddc7caaadec239c6be6d28aa567f890033be04d04bfd5e32",
+      "positive_pixels": 44090,
+      "format_ok_local": true,
+      "outside": "nan",
+      "template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "format_check_receipt": "docs/downloads/checks-gems29-refd28-repro-20261003-1cc7dc534d51-nan.json"
+    },
+    {
+      "id": "sgmc-inventory",
+      "role": "candidate_review",
+      "file": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+      "path": "docs/downloads/gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+      "source_file": null,
+      "source_sha256": null,
+      "content_id": null,
+      "status": "alternative hypothesis; format-verified locally; unscored; not slot-recommended",
+      "score": null,
+      "score_claims": [],
+      "slot_approved": false,
+      "do_not_submit": false,
+      "name": "SGMC off-catalogue inventory (external-data hypothesis)",
+      "summary": "44,090 dots covering the state-geologic-map (SGMC) fault inventory where it is NOT the supplied catalogue (>=300 m away). Proxy trade, measured model-free: sgmc-off-catalogue DTI 0.5615 (vs 0.0953 for REFD28) but catalogue-hidden DTI 0.0446 (vs 0.0983) -> FAILS the registered gate and is NOT slot-recommended; published because the two proxies rank it oppositely and the peer-reported proxy calibration favours this class.",
+      "optional_comment": "GEMSDOE29 SGMC inventory | external state-map traces; fails registered gate; review | id c8dcd780e3fd",
+      "bytes": 1602242,
+      "sha256": "9b83158bde01cd5d42e38229d70d01e67cecd2514eeb5fa8d1f3ab6851469dad",
+      "positive_pixels": 44090,
+      "format_ok_local": true,
+      "outside": "nan",
+      "template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "format_check_receipt": "docs/downloads/checks-gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.json"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-03T08:57:05Z",
+  "generated_utc": "2026-10-03T12:00:00Z",
   "gate_snapshot": {
     "A1": {
       "screen_pass": false,
@@ -123,6 +123,27 @@
       "content_id": "1cc7dc534d51",
       "matches_sibling_44090": true,
       "stem": "gems29-refd28-repro-20261003-1cc7dc534d51"
+    },
+    "H34_SCREEN": {
+      "stem": "h34-coverage-screen",
+      "px": null,
+      "status": "reported: FAIL on the catalogue-hidden primary proxy, PASS on the SGMC off-catalogue secondary; not slot-relevant",
+      "content_id": null,
+      "note": "GEMSDOE29 H34 | metric-native coverage emission screen | 32 cells, 306.6 s | mean paired gain -0.0212 (0/4 folds) catalogue-hidden; +0.0535 (4/4) SGMC | evidence/h34_coverage_screen/summary.json"
+    },
+    "CANDIDATE_SCOREBOARD": {
+      "stem": "candidate-scoreboard",
+      "px": null,
+      "status": "reported: model-free proxy scoreboard for fixed candidate files",
+      "content_id": null,
+      "note": "historical D2.8 = local rebuild (catalogue-hidden 0.09832, SGMC 0.09528); SGMC inventory alternative (0.04461, 0.56153) | evidence/candidate_scoreboard.json"
+    },
+    "FACTORIAL": {
+      "stem": "factorial-families",
+      "px": null,
+      "status": "in progress at report time (2^(5-1) resolution V over families A-E, draws 14-15)",
+      "content_id": null,
+      "note": "preregistration knowledge/12_preregistered_factorial_families_2026-10-03.md; effects.json pending"
     }
   }
 }

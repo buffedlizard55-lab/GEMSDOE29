@@ -10,7 +10,7 @@
   "sources": [
     {
       "id": "dd-problem",
-      "title": "GEMS Prize problem description — metric, data and submission format",
+      "title": "GEMS Prize problem description \u2014 metric, data and submission format",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
       "publisher": "DrivenData / U.S. DOE GEMS Prize",
       "kind": "official competition documentation",
@@ -46,7 +46,7 @@
       "publisher": "National Laboratory of the Rockies for U.S. DOE",
       "kind": "official competition rules PDF",
       "verified": true,
-      "verified_date": "2026-10-03 (official PDF fetched through sections 3.2–3.5)",
+      "verified_date": "2026-10-03 (official PDF fetched through sections 3.2\u20133.5)",
       "used_for": [
         "up to three submissions per week",
         "single GeoTIFF requirement",
@@ -54,7 +54,7 @@
         "only one submission selected for both prize rounds",
         "required generative-AI narrative disclosure when applicable"
       ],
-      "caveat": "Sections 3.2–3.5 were fetched and read in this continuation; consult the linked full PDF for all eligibility, deadline, award, and compliance details before entry."
+      "caveat": "Sections 3.2\u20133.5 were fetched and read in this continuation; consult the linked full PDF for all eligibility, deadline, award, and compliance details before entry."
     },
     {
       "id": "hornby1999",
@@ -153,7 +153,7 @@
     },
     {
       "id": "gdr1391",
-      "title": "GDR 1391 — INGENIOUS supporting datasets",
+      "title": "GDR 1391 \u2014 INGENIOUS supporting datasets",
       "url": "https://gdr.openei.org/submissions/1391",
       "publisher": "Geothermal Data Repository / NLR",
       "kind": "official research-data catalog",
@@ -270,6 +270,66 @@
         "Reference link for an authorized participant to obtain organizer data through the official interface"
       ],
       "caveat": "The page is login-walled in prior project records. This code uses hash-pinned owner mirrors only; no organizer-authenticated data are included here."
+    },
+    {
+      "id": "refsol",
+      "title": "GEMS Prize reference solution (U-Net Monte-Carlo CV)",
+      "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
+      "publisher": "DrivenData / University of Portland (J. Lipor)",
+      "kind": "official organizer reference implementation",
+      "verified": true,
+      "verified_date": "2026-10-03",
+      "used_for": [
+        "corroborates alpha=0.2/beta=0.8 Tversky loss and the label raster as patch target",
+        "shows the organizers' own emission convention (y>0.1 float GeoTIFF on the label grid)",
+        "confirms no model/score is published, so no organizer model or score is published to copy"
+      ],
+      "caveat": "A reference implementation, not a leaderboard model; it is trained on catalogue labels and therefore inherits the catalogue-gap blind spot."
+    },
+    {
+      "id": "forum-11516",
+      "title": "DrivenData forum topic 11516 (known-fault masking ruling)",
+      "url": "https://community.drivendata.org/t/known-faults-in-training-data/11516",
+      "publisher": "DrivenData community (staff chrisk-dd)",
+      "kind": "official staff statement (relayed, thread not fetched in this session)",
+      "verified": false,
+      "verified_date": "2026-10-03",
+      "used_for": [
+        "catalogue pixels are masked / excluded from evaluation in both rounds",
+        "whether known faults are included in predictions does not change the score",
+        "300 m kernel applies to new-fault ground truth, not a known-fault buffer"
+      ],
+      "caveat": "Second-hand: quotes transcribed from sibling project records and search snippets; the thread itself was not opened in this session. Verify before relying on it."
+    },
+    {
+      "id": "siler-2022",
+      "title": "Slip and dilation tendency for Quaternary faults, Great Basin (Siler 2022)",
+      "url": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
+      "publisher": "U.S. Geological Survey",
+      "kind": "USGS data release (DOI 10.5066/P9YL58W6, doi:10.5066/P9YL58W6)",
+      "doi": "10.5066/P9YL58W6",
+      "verified": true,
+      "verified_date": "2026-10-03",
+      "used_for": [
+        "H35 dilation-tendency weighting input (per-segment stress favourability)",
+        "confirms normal vs strike-slip dilation tendency is nearly identical in this region"
+      ],
+      "caveat": "Metadata verified through an independent index; sciencebase.gov is unreachable from the sandbox, so the file must be fetched on an unrestricted machine."
+    },
+    {
+      "id": "reid-1990",
+      "title": "Magnetic interpretation in three dimensions using Euler deconvolution (Reid et al. 1990)",
+      "url": "https://doi.org/10.1190/1.1442774",
+      "publisher": "Geophysics 55, 80-91 (SEG)",
+      "kind": "peer-reviewed method paper",
+      "doi": "10.1190/1.1442774",
+      "verified": true,
+      "verified_date": "2026-10-03",
+      "used_for": [
+        "H39 structural-index table (point 3/2, line/fault 2/1, dyke 1/0, contact 0)",
+        "depth-estimation caveats carried into the H39 design"
+      ],
+      "caveat": "Library access not available from the sandbox; the structural-index table was read from the authors' public summary documents."
     }
   ]
 }

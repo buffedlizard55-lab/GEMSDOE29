@@ -1,0 +1,227 @@
+{
+  "experiment": "2^(5-1) resolution V fractional factorial over feature families A-E",
+  "preregistration": "knowledge/12_preregistered_factorial_families_2026-10-03.md",
+  "generator": "E = A*B*C*D",
+  "runs": [
+    {
+      "id": "run00_ABCDE",
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      }
+    },
+    {
+      "id": "run01_ABCde",
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "D": -1,
+        "E": -1
+      }
+    },
+    {
+      "id": "run02_ABcDe",
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": -1,
+        "D": 1,
+        "E": -1
+      }
+    },
+    {
+      "id": "run03_ABcdE",
+      "levels": {
+        "A": 1,
+        "B": 1,
+        "C": -1,
+        "D": -1,
+        "E": 1
+      }
+    },
+    {
+      "id": "run04_AbCDe",
+      "levels": {
+        "A": 1,
+        "B": -1,
+        "C": 1,
+        "D": 1,
+        "E": -1
+      }
+    },
+    {
+      "id": "run05_AbCdE",
+      "levels": {
+        "A": 1,
+        "B": -1,
+        "C": 1,
+        "D": -1,
+        "E": 1
+      }
+    },
+    {
+      "id": "run06_AbcDE",
+      "levels": {
+        "A": 1,
+        "B": -1,
+        "C": -1,
+        "D": 1,
+        "E": 1
+      }
+    },
+    {
+      "id": "run07_Abcde",
+      "levels": {
+        "A": 1,
+        "B": -1,
+        "C": -1,
+        "D": -1,
+        "E": -1
+      }
+    },
+    {
+      "id": "run08_aBCDe",
+      "levels": {
+        "A": -1,
+        "B": 1,
+        "C": 1,
+        "D": 1,
+        "E": -1
+      }
+    },
+    {
+      "id": "run09_aBCdE",
+      "levels": {
+        "A": -1,
+        "B": 1,
+        "C": 1,
+        "D": -1,
+        "E": 1
+      }
+    },
+    {
+      "id": "run10_aBcDE",
+      "levels": {
+        "A": -1,
+        "B": 1,
+        "C": -1,
+        "D": 1,
+        "E": 1
+      }
+    },
+    {
+      "id": "run11_aBcde",
+      "levels": {
+        "A": -1,
+        "B": 1,
+        "C": -1,
+        "D": -1,
+        "E": -1
+      }
+    },
+    {
+      "id": "run12_abCDE",
+      "levels": {
+        "A": -1,
+        "B": -1,
+        "C": 1,
+        "D": 1,
+        "E": 1
+      }
+    },
+    {
+      "id": "run13_abCde",
+      "levels": {
+        "A": -1,
+        "B": -1,
+        "C": 1,
+        "D": -1,
+        "E": -1
+      }
+    },
+    {
+      "id": "run14_abcDe",
+      "levels": {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": 1,
+        "E": -1
+      }
+    },
+    {
+      "id": "run15_abcdE",
+      "levels": {
+        "A": -1,
+        "B": -1,
+        "C": -1,
+        "D": -1,
+        "E": 1
+      }
+    }
+  ],
+  "run_order": [
+    "run03_ABcdE",
+    "run14_abcDe",
+    "run00_ABCDE",
+    "run07_Abcde",
+    "run02_ABcDe",
+    "run09_aBCdE",
+    "run13_abCde",
+    "run15_abcdE",
+    "run06_AbcDE",
+    "run12_abCDE",
+    "run01_ABCde",
+    "run05_AbCdE",
+    "run04_AbCDe",
+    "run11_aBcde",
+    "run08_aBCDe",
+    "run10_aBcDE"
+  ],
+  "order_seed": 20261003,
+  "fit_seed": 0,
+  "contrasts": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "AB",
+    "AC",
+    "AD",
+    "AE",
+    "BC",
+    "BD",
+    "BE",
+    "CD",
+    "CE",
+    "DE"
+  ],
+  "response": "masked hide-and-recover holdout DTI via Cell.evaluate on the standard screen emission",
+  "emission": "cell.emit: ridge NMS -> drop known -> top K=0.0245*domain -> dot_thin(1.5)",
+  "draws": [
+    14,
+    15
+  ],
+  "folds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "analysis": {
+    "estimator": "per-cell (fold, draw) paired contrast mean(+1) - mean(-1) for each term",
+    "se": "sample standard deviation of the 8 cell contrasts / sqrt(8), Student t on 7 df",
+    "support_rule": {
+      "min_abs_effect": 0.001,
+      "min_sign_agreement": 6,
+      "n_cells": 8,
+      "max_cell_loss": -0.01
+    },
+    "note": "the 16-run design is saturated, so error comes from fold-block replication, not from unused design columns"
+  }
+}
