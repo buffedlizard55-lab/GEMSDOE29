@@ -1,0 +1,197 @@
+{
+  "arms": {
+    "C0_base": 0.14086084085915884,
+    "C1_geodesic_dots": 0.14479018210246675,
+    "A4_h41_union": 0.14597315837721453
+  },
+  "controls": {
+    "0": 0.16401750243268381,
+    "1": 0.1348995415995732,
+    "2": 0.12774497034805157,
+    "3": 0.1524987140295584
+  },
+  "gates": {
+    "mean_gain": 0.0011829762747477962,
+    "fold_gains": [
+      0.005622000358811663,
+      0.0063703621671269695,
+      -0.00920202488484076,
+      0.0019415674578933118
+    ],
+    "worst_fold": -0.00920202488484076,
+    "positive_folds": 3,
+    "budget_ok": true,
+    "budget_ratio_min": 0.956778889899909,
+    "budget_ratio_max": 1.0065137739177636,
+    "a4_mean_dti": 0.14597315837721453,
+    "bar_mean": 0.16401750243268381,
+    "bar_from_stored": 0.14479018210246675,
+    "sgmc_mean_gain": -0.00717983400776254,
+    "sgmc_fold_gains": [
+      -0.006390659875697355,
+      -0.00945241508652668,
+      -0.0036881752031661524,
+      -0.009188085865659973
+    ],
+    "sgmc_positive_folds": 0,
+    "cells_present": true,
+    "all_finite": true,
+    "reproduction_max_abs_delta": 0.0,
+    "reproduction_cells": [
+      {
+        "fold_name": "NW",
+        "draw": 20,
+        "arm": "C0_base",
+        "rebuilt": 0.15844282402158233,
+        "stored": 0.15844282402158233,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "NW",
+        "draw": 20,
+        "arm": "C1_geodesic_dots",
+        "rebuilt": 0.16455969355029598,
+        "stored": 0.16455969355029598,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "NW",
+        "draw": 21,
+        "arm": "C0_base",
+        "rebuilt": 0.16125053923319685,
+        "stored": 0.16125053923319685,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "NW",
+        "draw": 21,
+        "arm": "C1_geodesic_dots",
+        "rebuilt": 0.16347531131507162,
+        "stored": 0.16347531131507162,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "NE",
+        "draw": 20,
+        "arm": "C0_base",
+        "rebuilt": 0.13825190508512086,
+        "stored": 0.13825190508512086,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "NE",
+        "draw": 20,
+        "arm": "C1_geodesic_dots",
+        "rebuilt": 0.14239209212555312,
+        "stored": 0.14239209212555312,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "NE",
+        "draw": 21,
+        "arm": "C0_base",
+        "rebuilt": 0.12368306461664387,
+        "stored": 0.12368306461664387,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "NE",
+        "draw": 21,
+        "arm": "C1_geodesic_dots",
+        "rebuilt": 0.1274069910735933,
+        "stored": 0.1274069910735933,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "SW",
+        "draw": 20,
+        "arm": "C0_base",
+        "rebuilt": 0.1443070201100771,
+        "stored": 0.1443070201100771,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "SW",
+        "draw": 20,
+        "arm": "C1_geodesic_dots",
+        "rebuilt": 0.14749487859680374,
+        "stored": 0.14749487859680374,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "SW",
+        "draw": 21,
+        "arm": "C0_base",
+        "rebuilt": 0.10509291121527896,
+        "stored": 0.10509291121527896,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "SW",
+        "draw": 21,
+        "arm": "C1_geodesic_dots",
+        "rebuilt": 0.10799506209929942,
+        "stored": 0.10799506209929942,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "SE",
+        "draw": 20,
+        "arm": "C0_base",
+        "rebuilt": 0.1605483474838944,
+        "stored": 0.1605483474838944,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "SE",
+        "draw": 20,
+        "arm": "C1_geodesic_dots",
+        "rebuilt": 0.16832143487289203,
+        "stored": 0.16832143487289203,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "SE",
+        "draw": 21,
+        "arm": "C0_base",
+        "rebuilt": 0.13531011510747643,
+        "stored": 0.13531011510747643,
+        "delta": 0.0
+      },
+      {
+        "fold_name": "SE",
+        "draw": 21,
+        "arm": "C1_geodesic_dots",
+        "rebuilt": 0.13667599318622475,
+        "stored": 0.13667599318622475,
+        "delta": 0.0
+      }
+    ]
+  },
+  "gate_checks": {
+    "G1": false,
+    "G2": true,
+    "G3": false,
+    "G4": true
+  },
+  "verdict": "NO PROMOTION: the H41 union arm does not clear the frozen gates on the bar protocol.",
+  "stage": "h41a4_h34protocol",
+  "elapsed_s": 595.7,
+  "n_cells": 24,
+  "draws": [
+    20,
+    21
+  ],
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "viability_guard": {
+    "min_nonzero_fraction": 0.002,
+    "problems": [],
+    "passed": true
+  },
+  "note": "Both proxies are local and neither is the organizer metric. Draws 20/21 are the spent draws that define the recorded bar; this stage re-measures on them and spends no fresh randomness."
+}

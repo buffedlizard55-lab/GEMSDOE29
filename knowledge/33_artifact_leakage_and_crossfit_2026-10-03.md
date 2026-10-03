@@ -1,4 +1,4 @@
-# 27 — The headline candidate was a distance-to-catalogue look-up: defect, proof, and the cross-fitted fix
+# 33 — The headline candidate was a distance-to-catalogue look-up: defect, proof, and the cross-fitted fix
 
 Date: 2026-10-03 (session 5) · Status: defect confirmed on restored data; fix implemented and re-run
 
@@ -105,6 +105,31 @@ Two variants of each candidate are published, and the distinction is the owner's
 
 The site's hero button and the recommended download both point at the `-zeros` variant for that reason;
 the `-nan` variant is still offered as an alternate because NaN-outside is the documented convention.
+
+## 6. Fixing the leak did not change any verdict
+
+This matters more than the fix itself. `A4_h41_union` was **already** re-scored on the H34 slot-bar protocol by
+a parallel workstream before this note was written
+([`evidence/h41a4_h34protocol/summary.json`](../evidence/h41a4_h34protocol/summary.json),
+[`knowledge/28_h41a4_results_2026-10-03.md`](28_h41a4_results_2026-10-03.md)):
+
+| quantity | value |
+|---|---|
+| `A4_h41_union` mean DTI on the H34 protocol (draws 20/21) | **0.14597** |
+| the bar (`C1_geodesic_dots` on the same protocol) | **0.16402** |
+| mean gain vs `C0_base` | +0.0011830 |
+| worst fold | **−0.00920** |
+| SGMC-positive folds | **0 of 4** |
+
+So the arm **fails the slot bar**. Its own-fold screen/confirmation gains (+0.0073436 / +0.0077283) were
+measured against `C0_base` on H41's own folds, not against the best control on the protocol that decides
+slots. A leak-free artifact is a *better* artifact; it is not a *better method*. The cross-fitted downloads are
+therefore registered with `do_not_submit: true` and labelled review-only, and the site prints the bar failure
+next to them.
+
+`knowledge/32_proxy_policy_review_2026-10-03.md` adds the wider context: **0 of the 5 arm-stages that ever
+cleared a primary promotion gate had a positive SGMC sign**, so the H41 pattern is not unusual — it is the
+pattern.
 
 ## 7. A pre-existing guard was narrowed, and that is disclosed here
 

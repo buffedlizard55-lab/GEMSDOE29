@@ -1,4 +1,4 @@
-"""Regression tests for IR-29-ARTIFACT-LEAK (knowledge/27).
+"""Regression tests for IR-29-ARTIFACT-LEAK (knowledge/33).
 
 The published repo-c0 artifact model separated its own training labels perfectly through a
 distance-to-catalogue column, so it used 2 of 81 features and any new physics column was inert. These
@@ -82,7 +82,7 @@ def test_deprecated_single_fit_builder_is_marked() -> None:
     src = REPO_CANDIDATE.read_text()
     assert "Do not use this script to produce a new artifact" in src
     assert "IR-29-ARTIFACT-LEAK" in src
-    assert "knowledge/27_artifact_leakage_and_crossfit_2026-10-03.md" in src
+    assert "knowledge/33_artifact_leakage_and_crossfit_2026-10-03.md" in src
 
 
 def test_irregularity_is_registered_with_its_measurements() -> None:

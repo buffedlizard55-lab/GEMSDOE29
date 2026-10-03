@@ -39,4 +39,14 @@ def test_h41_used_the_fresh_pairs_the_preregistration_froze() -> None:
     # the session-4 pairs were not spent by any earlier stage, and 26/27 stay released-but-unused
     assert 26 not in d["stages"]["h35_h40_screen"]["draws_fitted"]
     assert d["stages"]["h35_h40_screen"]["draws_fitted"] == [24, 25]
-    assert d["next_free_draw"] == 32
+
+
+def test_h43_spent_32_33_and_reserved_34_35_for_its_confirmation() -> None:
+    d = json.loads(LEDGER.read_text())
+    assert d["stages"]["h43_screen"]["draws_fitted"] == [32, 33]
+    assert d["stages"]["h43_screen"]["raw_cells"] == 40
+    # the confirmation's row count is deliberately not pinned while its note says IN FLIGHT (a live process appends
+    # to it); the draws and the status note referencing them are the invariants that must hold either way
+    assert d["stages"]["h43_confirmation"]["draws_fitted"] == [34, 35]
+    assert "34/35" in str(d["stages"]["h43_confirmation"].get("status_note", ""))
+    assert d["next_free_draw"] == 36

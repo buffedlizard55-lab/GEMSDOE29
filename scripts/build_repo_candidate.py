@@ -12,7 +12,7 @@
    (sha256 ``3537e9fc47a46503…``). The screens in ``evidence/`` are unaffected because ``Cell`` builds
    ``E`` from ``draw.visible`` with the hidden components removed. Use
    ``scripts/build_crossfit_candidate.py`` instead, which trains the way the validated cells do and
-   guards against an inert feature block. See ``knowledge/27_artifact_leakage_and_crossfit_2026-10-03.md``
+   guards against an inert feature block. See ``knowledge/33_artifact_leakage_and_crossfit_2026-10-03.md``
    and ``IR-29-ARTIFACT-LEAK``.
 
 The candidate implements the method that is validated on the spatially blocked hide-and-recover

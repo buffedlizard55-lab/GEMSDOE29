@@ -1,0 +1,94 @@
+{
+  "experiment": "emission-density sweep on the frozen H19-5 habitat",
+  "preregistration": {
+    "path": "knowledge/27_preregistered_emission_density_sweep_2026-10-03.md",
+    "sha256": "3e8f7be697b95adf54f1458394d40e3ec212ab1caaa8d0e314807062abec351c"
+  },
+  "frozen": {
+    "thin_spacings": [
+      2.0,
+      2.4,
+      2.8,
+      3.2,
+      3.6,
+      4.0,
+      4.8,
+      5.6,
+      6.4
+    ],
+    "aware_spacings": [
+      2.8,
+      3.6,
+      4.8
+    ],
+    "aware_sigma_px": 2.0,
+    "reference_spacing": 2.8,
+    "sgmc_tolerance": 0.98,
+    "boundary_spacing": 6.4
+  },
+  "protocol": {
+    "folds": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "draws": [
+      20,
+      21
+    ],
+    "source": "src/gemsdoe/proxies.py (same code path as scripts/score_candidates.py)"
+  },
+  "inputs": {
+    "inputs/h19_5_nan.tif": {
+      "path": "data/inputs/h19_5_nan.tif",
+      "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d",
+      "bytes": 1712322
+    },
+    "inputs/dotted_h19_5_d2_8_nan.tif": {
+      "path": "data/inputs/dotted_h19_5_d2_8_nan.tif",
+      "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+      "bytes": 1603424
+    },
+    "inputs/dotted_h19_5_d1_5_nan.tif": {
+      "path": "data/inputs/dotted_h19_5_d1_5_nan.tif",
+      "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
+      "bytes": 1632732
+    },
+    "sample_submission.tif": {
+      "path": "data/sample_submission.tif",
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "bytes": 1599597
+    },
+    "labels.tif": {
+      "path": "data/labels.tif",
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "bytes": 425830
+    },
+    "external/derived_sgmc_faults_100m_u8.tif": {
+      "path": "data/external/derived_sgmc_faults_100m_u8.tif",
+      "sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+      "bytes": 198602
+    }
+  },
+  "modules": {
+    "gemsdoe/proxies.py": "39d000c75367bd755ca546c479243b243baef378061d5dc076e651e331f39f75",
+    "gemsdoe/thinning.py": "63bdfd1c11455e18446f0e1be0fbf7c93ae94c49f98624d3f4ef4ef76f79c55e",
+    "gemsdoe/metric.py": "c0be2a023b413309561138c9eee64a81e07bb0df6ab4841c9f0c55d37ea2afd3",
+    "gemsdoe/holdout.py": "693bcdfbb9ab0e72d1570b7a9858195c74c100255c15e5da07cd24a4d289fede"
+  },
+  "git": {
+    "revision": "14ad38111094535189467d7c398674aa1c34da3d",
+    "branch": "arena/01a10342-gemsdoe29",
+    "dirty_worktree": false
+  },
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6",
+    "packages": {
+      "scipy": "1.17.1",
+      "rasterio": "1.4.4"
+    }
+  },
+  "seed_spend": "none: fixed-file screen on the registered proxy draws 20/21 (no model fitted)"
+}

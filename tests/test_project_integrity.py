@@ -183,7 +183,7 @@ def test_h41_promotion_gate_veto_is_pinned_by_the_evidence() -> None:
     assert confirm["arms"]["A4_h41_union"]["worst_fold_gain"] > 0
     # An H41 artifact may be published for owner review, but never as an approval: the veto must be
     # disclosed next to the download, the slot decision stays with the owner, and the file must be
-    # present and format-receipted. Knowledge/27 section 7 records this narrowing of the old blanket ban.
+    # present and format-receipted. knowledge/33 section 7 records this narrowing of the old blanket ban.
     subs = json.loads((ROOT / "registry" / "submissions.json").read_text())
     h41_rows = [x for x in subs["files"] if "h41" in x["id"].lower()]
     assert h41_rows, "the cross-fitted A4_h41_union candidate should be registered for owner review"
@@ -192,6 +192,10 @@ def test_h41_promotion_gate_veto_is_pinned_by_the_evidence() -> None:
         assert row["slot_approved"] is False, row["id"]
         assert row["g3_veto"] is True, row["id"]
         assert "G3" in row["gate_evidence"] and "1 of 4 folds" in row["gate_evidence"], row["id"]
+        # the H34 slot-bar re-score is the decisive negative result and must be disclosed, not omitted
+        assert "H34 slot bar" in row["gate_evidence"], row["id"]
+        assert "0.14597" in row["gate_evidence"] and "0.16402" in row["gate_evidence"], row["id"]
+        assert row["do_not_submit"] is True, row["id"]
         assert (ROOT / row["path"]).is_file(), row["id"]
         assert (ROOT / row["format_check_receipt"]).is_file(), row["id"]
     # the control arm carries no gate claim of its own, but must never be slot-approved either
