@@ -87,7 +87,8 @@ def build_branch(
     )
     from scipy.ndimage import distance_transform_edt
 
-    spectrum, radial_k, safe, foot, diag = _prepare_spectrum(field, footprint, config=cfg)
+    field = np.asarray(field, np.float32)
+    spectrum, radial_k, safe16, foot, diag = _prepare_spectrum(field, footprint, config=cfg)
     # Margin-zero band: the cosine taper used as an FFT boundary condition creates artificial
     # HGM rings up to `taper_px` from the footprint boundary, so outputs inside
     # `taper_px + 4` px of the boundary are zeroed and excluded from threshold statistics
@@ -95,9 +96,11 @@ def build_branch(
     padded_foot = np.pad(foot, 1, mode="constant", constant_values=False)
     edge_distance = distance_transform_edt(padded_foot)[1:-1, 1:-1]
     margin = cfg.taper_px + 4
-    interior = foot & (edge_distance >= margin)
+    finite = foot & np.isfinite(field)
+    interior = finite & (edge_distance >= margin)  # statistics domain: observed data only
+    out_dom = foot & (edge_distance >= margin)  # output domain (value/NaN); margin band -> 0
     if int(interior.sum()) < 100:
-        raise ValueError(f"too few interior pixels after the {margin}-px margin-zero band")
+        raise ValueError(f"too few observed interior pixels after the {margin}-px margin-zero band")
     p = cfg.pad_px
     out_shape = (field.shape[0] + 2 * p, field.shape[1] + 2 * p)
     heights = cfg.heights_m
@@ -121,12 +124,18 @@ def build_branch(
         last = np.maximum(last, np.where(sig, h / max_h, 0.0).astype(np.float32))
         del e_h, sig
 
-    mask_f = interior.astype(np.float32)
+    def place(v: np.ndarray) -> np.ndarray:
+        """Value on the output domain; NaN where the input band is nodata; exactly 0 in the
+        margin band and outside the footprint (A-family re-masking convention, HGB-native NaN)."""
+        out = np.where(out_dom, np.asarray(v, np.float32), np.nan).astype(np.float32)
+        out = np.where(foot & (edge_distance < margin), 0.0, out)
+        return out
+
     cols = np.stack([
-        frac * mask_f,
-        last * mask_f,
-        _scale(e0, interior) * mask_f,
-        _scale(deep, interior) * mask_f,
+        place(frac),
+        place(last),
+        place(_scale(e0, interior)),
+        place(_scale(deep, interior)),
     ])
     diag = {
         **diag,
@@ -134,7 +143,8 @@ def build_branch(
         "upward_heights_m": upward,
         "edge_percentile": EDGE_PERCENTILE,
         "margin_zero_band_px": int(margin),
-        "interior_pixels": int(interior.sum()),
+        "observed_interior_pixels": int(interior.sum()),
+        "input_finite_fraction_in_footprint": float(finite.sum() / max(foot.sum(), 1)),
         "per_height_thresholds": thresholds,
     }
     return cols, diag
@@ -154,7 +164,7 @@ def build_w_features(
     (12, H, W) float32 in ``W_NAMES`` order plus metadata.
     """
     cfg = config or WormConfig()
-    config.validate()
+    cfg.validate()
     foot = np.asarray(footprint, bool)
     branches: dict[str, tuple[np.ndarray, dict]] = {
         "RTP": build_branch(rtp, foot, config=cfg, pseudogravity=False),
@@ -167,17 +177,19 @@ def build_w_features(
         cols, _ = branches[b]
         for ci in range(len(_PER_BRANCH)):
             out[bi * 4 + ci] = np.asarray(cols[ci], np.float32).ravel()[fi]
-    stats = {
-        n: {
-            "nonzero_fraction": float((out[i] != 0.0).mean()),
-            "mean": float(out[i].mean()),
-            "p50": float(np.percentile(out[i], 50)),
-            "p95": float(np.percentile(out[i], 95)),
-            "max": float(out[i].max()),
-            "finite": bool(np.isfinite(out[i]).all()),
+    stats = {}
+    for i, n in enumerate(W_NAMES):
+        v = out[i]
+        fin = v[np.isfinite(v)]
+        stats[n] = {
+            "nonzero_fraction": float(np.sum(np.isfinite(v) & (v != 0.0)) / max(v.size, 1)),
+            "nan_fraction": float(np.sum(~np.isfinite(v)) / max(v.size, 1)),
+            "mean": float(fin.mean()) if fin.size else 0.0,
+            "p50": float(np.percentile(fin, 50)) if fin.size else 0.0,
+            "p95": float(np.percentile(fin, 95)) if fin.size else 0.0,
+            "max": float(fin.max()) if fin.size else 0.0,
+            "no_infinite": bool(not np.isinf(v).any()),
         }
-        for i, n in enumerate(W_NAMES)
-    }
     metadata = dict(
         names=list(W_NAMES),
         config=asdict(cfg),

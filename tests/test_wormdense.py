@@ -47,9 +47,23 @@ def test_branch_shape_finite_and_masked():
     cols, diag = build_branch(field, foot, config=_test_config())
     assert cols.shape == (4, *foot.shape)
     assert cols.dtype == np.float32
-    assert np.isfinite(cols).all()
+    assert not np.isinf(cols).any()
     assert (cols[:, ~foot] == 0.0).all()
+    # fully finite input -> no NaN anywhere in the footprint
+    assert np.isfinite(cols[:, foot]).all()
     assert diag["per_height_thresholds"] and len(diag["per_height_thresholds"]) == 5
+
+
+def test_nan_input_becomes_nan_output():
+    """A-family re-masking convention: nodata in the input band is NaN in the W columns
+    (HGB-native missing values), except the margin band which is exactly zero."""
+    field, foot = _step_grid()
+    block = np.zeros_like(foot)
+    block[60:80, 60:80] = True  # 20x20 nodata block well inside the margin band
+    field[foot & block] = np.nan
+    cols, _ = build_branch(field, foot, config=_test_config())
+    assert np.isnan(cols[:, foot & block]).all()
+    assert np.isfinite(cols[:, foot & ~block]).all()
 
 
 def test_margin_band_is_zero():

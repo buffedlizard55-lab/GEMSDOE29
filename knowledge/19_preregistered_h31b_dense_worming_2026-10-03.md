@@ -74,8 +74,16 @@ harmonic upward-continuation filter `exp(−2π k h)` to the precomputed spectru
 transform, and compute the horizontal-gradient modulus `E_h = |∇F_h|` with `np.gradient` at
 100 m spacing. Let `safe` be the H31 safe domain (finite footprint ≥ 16 px from the boundary).
 
-Per-branch columns (4 each, 12 total), all float32, defined on the finite footprint, zero
-elsewhere:
+**Column mask convention (frozen here before any fit):** a W column carries its value where the
+corresponding input band is finite and ≥ 68 px from the footprint boundary; it is **exactly 0**
+in the 68-px margin band and outside the template footprint; and it is **NaN where the input
+band is nodata** (the A-family re-masking convention; HistGradientBoosting consumes NaN natively
+as a missing-value split, so the model can route "no magnetic data here" distinctly from "no
+edge here"). The per-height p90 thresholds and the (1,99) amplitude scalings are computed over
+**observed** interior pixels only (finite input, ≥ 68 px from the boundary), never over the
+nearest-filled FFT boundary regions.
+
+Per-branch columns (4 each, 12 total), all float32:
 
 | Column | Definition |
 |---|---|
