@@ -1,128 +1,156 @@
 {
-  "generated_utc": "2026-10-03T08:57:05Z",
-  "gate_snapshot": {
-    "A1": {
-      "screen_pass": false,
-      "confirm_draw": null,
-      "per_draw": {
-        "draw0": {
-          "mean_delta": -0.00016060963212019552,
-          "positive_folds": 1,
-          "deltas": [
-            0.00028465779412584213,
-            -0.00016901127316439057,
-            -0.00029810245767798726,
-            -0.0004599825917642464
-          ]
-        },
-        "draw1": {
-          "mean_delta": -0.00012074211546957148,
-          "positive_folds": 1,
-          "deltas": [
-            0.001020673703529748,
-            -0.00012774894561573547,
-            -0.0011171614866487961,
-            -0.0002587317331435024
-          ]
-        }
-      },
-      "PASS": false
+ "generated_utc": "2026-10-03T12:00:00Z",
+ "gate_snapshot": {
+  "A1": {
+   "screen_pass": false,
+   "confirm_draw": null,
+   "per_draw": {
+    "draw0": {
+     "mean_delta": -0.00016060963212019552,
+     "positive_folds": 1,
+     "deltas": [
+      0.00028465779412584213,
+      -0.00016901127316439057,
+      -0.00029810245767798726,
+      -0.0004599825917642464
+     ]
     },
-    "A2": {
-      "screen_pass": false,
-      "confirm_draw": null,
-      "per_draw": {
-        "draw0": {
-          "mean_delta": -0.000978664632826004,
-          "positive_folds": 2,
-          "deltas": [
-            0.0033076095107189424,
-            -0.004511274580623795,
-            0.0004348197763432565,
-            -0.0031458132377424203
-          ]
-        },
-        "draw1": {
-          "mean_delta": 0.0002440140113817678,
-          "positive_folds": 3,
-          "deltas": [
-            0.00024547305558064725,
-            0.0007454194416615934,
-            0.0003425131695580369,
-            -0.00035734962127320635
-          ]
-        }
-      },
-      "PASS": false
-    },
-    "B1": {
-      "screen_pass": false,
-      "confirm_draw": null,
-      "per_draw": {
-        "draw0": {
-          "mean_delta": 0.00037651303644569475,
-          "positive_folds": 2,
-          "deltas": [
-            -0.0007313063003919935,
-            -0.0003931534541631032,
-            0.0005989094525041677,
-            0.002031602447833708
-          ]
-        },
-        "draw1": {
-          "mean_delta": 0.0003496061708836754,
-          "positive_folds": 3,
-          "deltas": [
-            -0.00015055463766432825,
-            0.0006221452971931964,
-            0.000683010938419916,
-            0.00024382308558591748
-          ]
-        }
-      },
-      "PASS": false
-    },
-    "B2": {
-      "screen_pass": false,
-      "confirm_draw": null,
-      "per_draw": {
-        "draw0": {
-          "mean_delta": 0.0004967905083177728,
-          "positive_folds": 2,
-          "deltas": [
-            -0.0009385008898951039,
-            0.0010354032082468372,
-            -0.0014249939220456927,
-            0.003315253636965051
-          ]
-        },
-        "draw1": {
-          "mean_delta": 0.0012323539435678426,
-          "positive_folds": 4,
-          "deltas": [
-            0.0005779442321002456,
-            0.0008459516933006731,
-            0.0008507538898643342,
-            0.0026547659590061175
-          ]
-        }
-      },
-      "PASS": false
+    "draw1": {
+     "mean_delta": -0.00012074211546957148,
+     "positive_folds": 1,
+     "deltas": [
+      0.001020673703529748,
+      -0.00012774894561573547,
+      -0.0011171614866487961,
+      -0.0002587317331435024
+     ]
     }
+   },
+   "PASS": false
   },
-  "artifacts": {
-    "WORMRANK": {
-      "stem": "gems29-wormrank-d28-20261003-73a8c4d12139",
-      "px": 41349,
-      "status": "research artifact \u2014 frozen gate NOT passed; do not spend a weekly slot on this unless the owner accepts the risk",
-      "content_id": "73a8c4d12139",
-      "note": "GEMSDOE29 WORMRANK | d2.8 spacing, worm-persistence+ridge ranked order | gate=FAIL proxy \u0394DTI see repo | 73a8c4d12139 | live-unverified"
+  "A2": {
+   "screen_pass": false,
+   "confirm_draw": null,
+   "per_draw": {
+    "draw0": {
+     "mean_delta": -0.000978664632826004,
+     "positive_folds": 2,
+     "deltas": [
+      0.0033076095107189424,
+      -0.004511274580623795,
+      0.0004348197763432565,
+      -0.0031458132377424203
+     ]
     },
-    "REFD28": {
-      "px": 44090,
-      "content_id": "1cc7dc534d51",
-      "matches_sibling_44090": true,
-      "stem": "gems29-refd28-repro-20261003-1cc7dc534d51"
+    "draw1": {
+     "mean_delta": 0.0002440140113817678,
+     "positive_folds": 3,
+     "deltas": [
+      0.00024547305558064725,
+      0.0007454194416615934,
+      0.0003425131695580369,
+      -0.00035734962127320635
+     ]
     }
+   },
+   "PASS": false
+  },
+  "B1": {
+   "screen_pass": false,
+   "confirm_draw": null,
+   "per_draw": {
+    "draw0": {
+     "mean_delta": 0.00037651303644569475,
+     "positive_folds": 2,
+     "deltas": [
+      -0.0007313063003919935,
+      -0.0003931534541631032,
+      0.0005989094525041677,
+      0.002031602447833708
+     ]
+    },
+    "draw1": {
+     "mean_delta": 0.0003496061708836754,
+     "positive_folds": 3,
+     "deltas": [
+      -0.00015055463766432825,
+      0.0006221452971931964,
+      0.000683010938419916,
+      0.00024382308558591748
+     ]
+    }
+   },
+   "PASS": false
+  },
+  "B2": {
+   "screen_pass": false,
+   "confirm_draw": null,
+   "per_draw": {
+    "draw0": {
+     "mean_delta": 0.0004967905083177728,
+     "positive_folds": 2,
+     "deltas": [
+      -0.0009385008898951039,
+      0.0010354032082468372,
+      -0.0014249939220456927,
+      0.003315253636965051
+     ]
+    },
+    "draw1": {
+     "mean_delta": 0.0012323539435678426,
+     "positive_folds": 4,
+     "deltas": [
+      0.0005779442321002456,
+      0.0008459516933006731,
+      0.0008507538898643342,
+      0.0026547659590061175
+     ]
+    }
+   },
+   "PASS": false
   }
+ },
+ "artifacts": {
+  "WORMRANK": {
+   "stem": "gems29-wormrank-d28-20261003-73a8c4d12139",
+   "px": 41349,
+   "status": "research artifact \u2014 frozen gate NOT passed; do not spend a weekly slot on this unless the owner accepts the risk",
+   "content_id": "73a8c4d12139",
+   "note": "GEMSDOE29 WORMRANK | d2.8 spacing, worm-persistence+ridge ranked order | gate=FAIL proxy \u0394DTI see repo | 73a8c4d12139 | live-unverified"
+  },
+  "REFD28": {
+   "px": 44090,
+   "content_id": "1cc7dc534d51",
+   "matches_sibling_44090": true,
+   "stem": "gems29-refd28-repro-20261003-1cc7dc534d51"
+  },
+  "H34_SCREEN": {
+   "stem": "h34-coverage-screen",
+   "px": null,
+   "status": "reported: FAIL on the catalogue-hidden primary proxy, PASS on the SGMC off-catalogue secondary; not slot-relevant",
+   "content_id": null,
+   "note": "GEMSDOE29 H34 | metric-native coverage emission screen | 32 cells, 306.6 s | mean paired gain -0.0212 (0/4 folds) catalogue-hidden; +0.0535 (4/4) SGMC | evidence/h34_coverage_screen/summary.json"
+  },
+  "CANDIDATE_SCOREBOARD": {
+   "stem": "candidate-scoreboard",
+   "px": null,
+   "status": "reported: model-free proxy scoreboard for fixed candidate files",
+   "content_id": null,
+   "note": "historical D2.8 = local rebuild (catalogue-hidden 0.09832, SGMC 0.09528); SGMC inventory alternative (0.04461, 0.56153) | evidence/candidate_scoreboard.json"
+  },
+  "FACTORIAL": {
+   "stem": "factorial-families",
+   "px": null,
+   "status": "complete at report time (2^(5-1) resolution V over families A-E, draws 14-15 x 4 folds, 128 fits, 1276.5 s); supported effects B, E, AB, AC, AD, BD, CD",
+   "content_id": "e0ba3904372a",
+   "note": "preregistration knowledge/12_preregistered_factorial_families_2026-10-03.md; results knowledge/14_factorial_results_2026-10-03.md; raw effects.json sha256 prefix e0ba3904372a"
+  },
+  "REPO_CANDIDATE": {
+   "stem": "repo-c0-habitat-emission",
+   "px": 37913,
+   "status": "built 2026-10-03; format ok locally; method proxy-screened (0.1409 catalogue-hidden, H34 C0 protocol) but never live-scored; not slot-approved",
+   "content_id": "a4d439b07426",
+   "note": "docs/downloads/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif + zip; build record evidence/repo_candidate_build.json; receipt evidence/format_checks/...a4d439b07426-nan.json"
+  }
+ }
 }

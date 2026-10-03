@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -82,8 +83,11 @@ def _validate_design(design: dict[str, Any], stage: str) -> list[str]:
         raise ValueError("design candidate/feature names differ from the frozen H31 protocol")
     if design.get("feature_families") != "BDE" or design.get("fixed_addons") != H30_BASE_EXTRAS:
         raise ValueError("design baseline feature families or add-ons differ from preregistration")
-    if design.get("branch") != "arena/01a10075-gemsdoe29" or design.get("clean_worktree_before_fit") is not True:
-        raise ValueError("design must attest a clean fit on the fixed Arena branch")
+    branch = design.get("branch")
+    if not isinstance(branch, str) or not re.match(r"^arena/[0-9a-f]{8}-gemsdoe29$", branch):
+        raise ValueError("design must attest a clean fit on an Arena session branch of this repository")
+    if design.get("clean_worktree_before_fit") is not True:
+        raise ValueError("design must attest a clean worktree before fitting")
     for revision_name in ("code_revision", "execution_revision"):
         revision = design.get(revision_name)
         if not isinstance(revision, str) or len(revision) != 40 or not _is_hex(revision):

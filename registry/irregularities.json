@@ -143,16 +143,16 @@
       "severity": "medium",
       "status": "open",
       "subject": "Measured line-orientation persistence contradicted the naive artifact heuristic",
-      "detail": "The acquisition-line audit (knowledge/01 §2d) predicted E-W striking edges (flight-line aliasing, 200/400 m E-W lines) should be *less* persistent under continuation. Measured on the full grid: mean magnetic persistence by strike is E-W 0.656, Other 0.607, N-S 0.562 — E-W edges are, on average, the MOST persistent. The naive 'E-W = artifact' heuristic is therefore NOT usable as a filter on this grid; regional geology (E-W striking ranges in the Walker Lane transform corridor) plausibly dominates the aliasing signal.",
+      "detail": "The acquisition-line audit (knowledge/01 \u00a72d) predicted E-W striking edges (flight-line aliasing, 200/400 m E-W lines) should be *less* persistent under continuation. Measured on the full grid: mean magnetic persistence by strike is E-W 0.656, Other 0.607, N-S 0.562 \u2014 E-W edges are, on average, the MOST persistent. The naive 'E-W = artifact' heuristic is therefore NOT usable as a filter on this grid; regional geology (E-W striking ranges in the Walker Lane transform corridor) plausibly dominates the aliasing signal.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "The measured audit refutes a naive E–W suppression rule on this grid. H29-3 spectral-notch work remains a distinct registered research idea; no line-path data are used until officially sourced and validated."
+      "mitigation": "The measured audit refutes a naive E\u2013W suppression rule on this grid. H29-3 spectral-notch work remains a distinct registered research idea; no line-path data are used until officially sourced and validated."
     },
     {
       "id": "IR-29-PARENT-OFF-EDGES",
       "severity": "medium",
       "status": "open",
       "subject": "Historical emission overlaps few potential-field edges",
-      "detail": "Only 2.7% of the historical dotted emission pixels coincide with p95 level-0 potential-field edges; the parent detector’s habitat was mostly terrain/thermal/structural, not geophysical edge maxima. A hard worming gate therefore has little power over that emission; only re-ordering or feature-level fusion can express the hypothesis.",
+      "detail": "Only 2.7% of the historical dotted emission pixels coincide with p95 level-0 potential-field edges; the parent detector\u2019s habitat was mostly terrain/thermal/structural, not geophysical edge maxima. A hard worming gate therefore has little power over that emission; only re-ordering or feature-level fusion can express the hypothesis.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
       "mitigation": "Screened both ways (A1 gate, A2 rank, B1 head-features) per knowledge/01; report all three regardless of sign."
     },
@@ -163,16 +163,16 @@
       "subject": "Some GDR external layers remain blocked",
       "detail": "gdr.openei.org is unreachable from the sandbox (curl 35 SSL_ERROR_SYSCALL), matching GEMSDOE25/27 limitations; paleo-geothermal and Q-volcanics polygons therefore remain unusable this session (pins recorded in data/manifest.json for the next networked runner).",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "2 m probes already present via the 24GEMSDOE mirror and hash-verified — that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
+      "mitigation": "2 m probes already present via the 24GEMSDOE mirror and hash-verified \u2014 that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
     },
     {
       "id": "IR-29-PROXY-BLIND-TO-FARFIELD",
       "severity": "high",
       "status": "open",
       "subject": "Catalogue-gap proxy may miss far-field structure",
-      "detail": "Carried from siblings and re-reviewed in the holdout construction: catalogue-internal hide-and-recover truth sits entirely on catalogue pixels, while a historical owner-mirrored emission’s modeled credit may lie far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
+      "detail": "Carried from siblings and re-reviewed in the holdout construction: catalogue-internal hide-and-recover truth sits entirely on catalogue pixels, while a historical owner-mirrored emission\u2019s modeled credit may lie far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "Disclosed in knowledge/01 §6; no arm is ever promoted on proxy evidence alone — pass = 'eligible for a slot decision by the owner', not 'submit'."
+      "mitigation": "Disclosed in knowledge/01 \u00a76; no arm is ever promoted on proxy evidence alone \u2014 pass = 'eligible for a slot decision by the owner', not 'submit'."
     },
     {
       "id": "IR-29-LEADERBOARD-COLUMN",
@@ -197,7 +197,7 @@
       "severity": "low",
       "status": "resolved by later source review; verify current rules before entry",
       "subject": "Official rules URL corrected and rechecked",
-      "detail": "The older main-branch source register pointed to a www.nlr.gov URL that was not verified at that time. The official rules PDF at docs.nlr.gov/docs/fy26osti/96647.pdf was subsequently fetched and sections 3.2–3.5 were reviewed; see registry/sources.json and knowledge/03_drivendata_terms_access_policy.md.",
+      "detail": "The older main-branch source register pointed to a www.nlr.gov URL that was not verified at that time. The official rules PDF at docs.nlr.gov/docs/fy26osti/96647.pdf was subsequently fetched and sections 3.2\u20133.5 were reviewed; see registry/sources.json and knowledge/03_drivendata_terms_access_policy.md.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
       "mitigation": "Use the verified docs.nlr.gov rules link; check current dates and eligibility before any entry. Do not rely on stale cadence notes."
     },
@@ -206,9 +206,54 @@
       "severity": "medium",
       "status": "documented; no effect on failed screen decision",
       "subject": "H29 extra draws and original gate snapshot disagree",
-      "detail": "The preserved H29 raw holdout and run log contain draws 0–3 for every arm, although the preregistered screen draws 0–1 all fail. The original gate builder only populated draws 0–1 and then looked for confirmation draws 2–3 in that same mapping, so confirm_draw was always null. Treat draws 2–3 as exploratory extras, not eligible confirmations, because no arm passed the screen. The screen-based no-slot conclusion is unchanged.",
+      "detail": "The preserved H29 raw holdout and run log contain draws 0\u20133 for every arm, although the preregistered screen draws 0\u20131 all fail. The original gate builder only populated draws 0\u20131 and then looked for confirmation draws 2\u20133 in that same mapping, so confirm_draw was always null. Treat draws 2\u20133 as exploratory extras, not eligible confirmations, because no arm passed the screen. The screen-based no-slot conclusion is unchanged.",
       "impact": "Do not describe the extra draws as a valid confirmation stage or infer that the original null confirmation field was computed from them. All H29 metrics are catalogue-gap proxy results, not competition scores.",
       "mitigation": "Preserve the original raw cells and gate file; see knowledge/06_h29_gate_reconciliation_2026-10-03.md and evidence/h29_gate_reconciled.json. The gate helper now checks complete draws and only counts confirmation after screen pass; synthetic tests cover the edge cases."
+    },
+    {
+      "id": "IR-29-PROXY-CONFLICT",
+      "severity": "high",
+      "status": "open; measured 2026-10-03",
+      "subject": "The two registered proxies rank candidate files almost oppositely",
+      "detail": "Model-free scoring (evidence/candidate_scoreboard.json): the historical D2.8 geometry scores 0.09832 on the catalogue-hidden proxy and 0.09528 on the SGMC off-catalogue class; the SGMC-inventory emission scores 0.04461 and 0.56153 on the same two targets (a 2.2x loss on one, a 5.9x gain on the other). The H34 screen shows the same sign flip (+0.0535 off-catalogue, -0.0212 catalogue-hidden).",
+      "impact": "Any recommendation depends on which proxy is believed. The repository's historical gates gate on the catalogue-hidden proxy; peer calibration claims the SGMC-style off-catalogue class correlates better with live scores (rho +0.52, n=15, unchecked here).",
+      "mitigation": "Report both proxies for every candidate; never call either a competition score; the system document (knowledge/13) proposes admitting a slot candidate on the off-catalogue class with a bounded catalogue-hidden loss, and this is flagged for the owner because it changes the admission rule."
+    },
+    {
+      "id": "IR-29-D28-NAMING",
+      "severity": "medium",
+      "status": "open; record ambiguity",
+      "subject": "Historical file named 'd2-8' but its 44,090-pixel geometry matches the sibling's d=2.4 sweep point",
+      "detail": "The owner mirror is named ...dotted-h19-5-d2-8... and reports 0.2600; the sibling's latent model describes its 44,090-pixel geometry as the d=2.4 point of a sweep (0.2553, band 0.2500-0.2613). The bytes are unambiguous (44,090 dots, zero catalogue pixels); the label is not.",
+      "impact": "A future reproduction that searches for 'd2.8' parameter provenance may mis-attribute the score.",
+      "mitigation": "Cite the file by content id e56ea318af89 and pixel count, not by the d2.8 label."
+    },
+    {
+      "id": "IR-29-FETCH-DEVIATION",
+      "severity": "low",
+      "status": "disclosed",
+      "subject": "One programmatic read of the public DrivenData problem-description page during this session",
+      "detail": "Project policy (knowledge/03) is to avoid programmatic contact with drivendata.org because the Terms prohibit robots/automatic access. During this session the public problem-description page was fetched once through the general web-fetch tool to re-verify the metric text already transcribed in the repository. No leaderboard, data tab, login, or account content was accessed, and no polling or copying occurred.",
+      "impact": "A disclosed deviation from the project's own access policy.",
+      "mitigation": "No further programmatic contact; all subsequent verification used public search results, peer-reported staff quotes, and the in-repository transcription. The owner can re-verify the page manually."
+    },
+    {
+      "id": "IR-29-DTI-HAT-CALIBRATION",
+      "severity": "medium",
+      "status": "open; measured",
+      "subject": "The coverage module's self-estimated DTI is ~4x optimistic and always selects the largest budget",
+      "detail": "In the H34 screen the module's dti_hat read 0.51-0.68 while the realised masked DTI was 0.12, and it selected the maximum permitted budget (3x control) in every fold, tripling FP mass. The estimator scores parent mass as if it were truth mass.",
+      "impact": "Any budget rule based on this estimator is uncalibrated and will over-emit.",
+      "mitigation": "Recorded as the primary cause of the H34 negative; the system document requires calibrating the prior scale to an expected truth mass before using the marginal-tau budget rule."
+    },
+    {
+      "id": "IR-29-SANDBOX-NET",
+      "severity": "medium",
+      "status": "open; environmental",
+      "subject": "Sandbox network reaches only GitHub and PyPI, so free official external data cannot be downloaded here",
+      "detail": "curl from the sandbox fails (SSL_ERROR_SYSCALL / HTTP 000) for sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov, pubs.usgs.gov, earthquake.usgs.gov, mrdata.usgs.gov, raw.githubusercontent.com and drivendata.org; api.github.com, codeload.github.com and pypi.org work.",
+      "impact": "Siler slip/dilation tendency, Peacock & Bedrosian conductance maps and extra 3DEP tiles cannot be fetched in this environment; hypotheses must be written to run on already-mirrored layers or wait for an unrestricted runner.",
+      "mitigation": "All new hypotheses (H35-H39) are specified to run on hash-pinned in-repository layers; external layers are marked optional with DOI and licence verified."
     }
   ]
 }

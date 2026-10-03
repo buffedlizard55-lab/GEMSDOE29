@@ -2,7 +2,22 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
-> **Current decision (2026-10-03): no slot-approved submission.** The existing H29 screen on the prior `main` history found that no arm passed its registered screen; draws 2–3 were computed for all arms despite those failures and are treated as exploratory, not eligible confirmations. No weekly slot was used. H31's prototype is synthetically tested but **has not been fitted or scored on competition data**. After syncing with that H29 result, H31 is described narrowly as a regularized RTP-to-pseudogravity and edge-drift extension—not as a first worming test—and H32 is the next unimplemented candidate. The prominently linked historical GeoTIFF is for provenance only and is explicitly **not for submission**.
+> **Current decision (2026-10-03, session 2 close-out): no slot-approved submission, but the site now
+> leads with the repository's own best-evidenced candidate.** The 2^(5−1) fractional factorial over the
+> five feature families is complete: supported inclusion effects are **B** (DEM curvature/scarp,
+> +0.0241, 8/8 cells positive) and **E** (visible-catalogue geometry, +0.0596, 8/8), with interactions
+> AC/AD/CD positive and AB/BD negative — see
+> [`knowledge/14_factorial_results_2026-10-03.md`](knowledge/14_factorial_results_2026-10-03.md).
+> The **H31 worming-persistence screen failed** (mean paired gain +0.000000, 0/4 blocks); the cause is
+> diagnosed, not hand-waved: the five persistence features are nonzero on only 0.001–0.084 % of the
+> 5.17 M-pixel footprint, so the four `T_*` arms emitted identical dot sets in 8/8 cells — see
+> [`knowledge/16_h31_screen_results_2026-10-03.md`](knowledge/16_h31_screen_results_2026-10-03.md).
+> A new candidate (`content id a4d439b07426`, 37,913 dots, zero catalogue pixels, format receipt
+> `ok_to_upload=True`) now leads the download block. Its method scores `0.1409` on the
+> catalogue-hidden proxy versus `0.09832`/`0.09449`/`0.06970` for the historical D2.8/d1.5/H19-5 files
+> on identical draws (the proxy reproduces the known real ranking of all three; the SGMC proxy inverts
+> it — both are proxies and the conflict is registered). It has never been live-scored and no weekly
+> slot is approved. All scores quoted anywhere in this repository are unverified owner-reported claims.
 
 ## Start here
 
@@ -12,6 +27,7 @@
 - **[Project-local status feed](docs/status.html)** — timestamps only from this repository's checked-in research, experiment, review, and deploy evidence.
 - **[Source register](docs/sources.html)** — official competition/rules links and scientific sources, with verification dates and caveats.
 - **[Irregularities and caveats](docs/irregularities.html)** — owner-mirror limitations, ambiguous data labels, unverified historical scores, and holdout/method risks.
+- [Repository candidate GeoTIFF](docs/downloads/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif) — one-click float32 TIFF (37,913 dots, NaN outside the footprint, format receipt `ok_to_upload=True`); proxy-screened on the blocked holdout, never live-scored, owner decides the slot.
 - [Historical D2.8 GeoTIFF](docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif) — one-click owner-mirrored float32 TIFF, locally format-checked against the hash-pinned owner-mirror template; unscored, not slot-approved, and **do not submit**. See [`evidence/format_checks/`](evidence/format_checks/) for the receipt.
 - [Full original project prompt](knowledge/owner_brief_verbatim.txt) — preserved verbatim below as well as in the linked text file.
 
@@ -25,9 +41,13 @@
 
 ## Evidence boundary and current status
 
+- **H34 (session 2):** the metric-native coverage emission was preregistered, implemented and screened on 32 paired cells (4 folds x 2 draws x 4 arms, 306.6 s). It **failed** its frozen primary gate on the catalogue-hidden proxy (mean paired gain −0.0212 vs the best control, 0/4 folds positive) and passed its secondary SGMC off-catalogue class (+0.0535, 4/4 folds). Raw cells and summary: [`evidence/h34_coverage_screen/`](evidence/h34_coverage_screen/); write-up: [`knowledge/09_h34_results_2026-10-03.md`](knowledge/09_h34_results_2026-10-03.md). Nothing was re-tuned after the run.
+- **Candidates (session 2):** the site's first download is now the repository's own candidate (`gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif`: HGB habitat trained on every catalogue pixel, 3-seed average, frozen standard emission; 37,913 dots; format `ok_to_upload=True`; never live-scored). Its method beat the historical family on the catalogue-hidden proxy (0.1409 vs 0.0983/0.0945/0.0697) but loses on the SGMC proxy (0.0847 vs 0.0953); see [`knowledge/17_repo_candidate_2026-10-03.md`](knowledge/17_repo_candidate_2026-10-03.md) and the model-free scoreboard [`evidence/candidate_scoreboard.json`](evidence/candidate_scoreboard.json). The REFD28 rebuild and the SGMC off-catalogue inventory remain linked as controls/alternatives. Nothing is slot-approved.
+- **H31 screen (session 2):** 40 validated cells (draws 10–11 x four spatial blocks x five arms, 921 s) under the frozen protocol; gate **FAIL**, mean paired gain +0.000000, 0/4 blocks. The registered contrasts are identically zero because the persistence columns are sparse binary peak sets. The only worming-adjacent signal remains the H27 tip control (+0.0083). Raw: [`evidence/h31_worm_screen/`](evidence/h31_worm_screen/).
+- **Environment limit (session 2):** the sandbox can reach only api.github.com, codeload.github.com and PyPI from the shell; sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov and drivendata.org are blocked. All 11 hash-pinned inputs were re-verified present in `/tmp/gemsdoe29-data`. External layers must be fetched on an unrestricted machine (flagged as IR-29-SANDBOX-NET).
 - **Competition data:** none are included in Git. The earlier H31 implementation run restored and hash-verified all 11 manifest entries under temporary `/tmp` paths; those inputs and caches do not persist and must be restored again. Pins identify owner mirrors, not organizer downloads. The earlier main-branch H29 run also recorded a restored feature stack; no scratch input is assumed reusable here.
 - **H29 prior experiment:** the pre-existing main history contains a frozen screen of worm gating, worm-ranked emission, persistence-as-head-features, and thermal-probe features. No arm passed the registered `+0.005` screen. Although draws 2–3 were computed for every arm, the screen failures made them ineligible as confirmations; they are treated as exploratory extra proxy draws. A gate-serialization bug in the original runner also left those draws out of `h29_gate.json`; the raw cells were reconciled without editing. No weekly slot was recommended or used. See [`knowledge/02_h29_results_2026-10-03.md`](knowledge/02_h29_results_2026-10-03.md), [`knowledge/06_h29_gate_reconciliation_2026-10-03.md`](knowledge/06_h29_gate_reconciliation_2026-10-03.md), and the raw [`evidence/h29_holdout.json`](evidence/h29_holdout.json). These are spatial proxy results, not competition scores.
-- **H31:** the existing preregistration and pre-fit synthetic amendment are in [`knowledge/02_preregistered_h31_worming_2026-10-03.md`](knowledge/02_preregistered_h31_worming_2026-10-03.md). The prototype tests the narrower regularized vertical-integration transform of RTP plus explicit lateral drift beyond H29's raw-RTP/gravity persistence work. A non-frozen feature-only smoke test has no model fit, DTI, or holdout result; the final cache must be rebuilt from a clean committed source revision.
+- **H31:** the existing preregistration and pre-fit synthetic amendment are in [`knowledge/02_preregistered_h31_worming_2026-10-03.md`](knowledge/02_preregistered_h31_worming_2026-10-03.md). The prototype tests the narrower regularized vertical-integration transform of RTP plus explicit lateral drift beyond H29's raw-RTP/gravity persistence work. The screen has now been run (see the H31 bullet above): the features were rebuilt from a clean committed revision and the gate failed on feature sparsity.
 - **Holdouts:** four spatial quadrants, hidden-catalogue gaps, and collars are a spatial proxy, not the private expert-labelled test set. Only raw-cell verified, paired gains across spatial blocks may permit fresh confirmation.
 - **Score claims:** 0.3195, 0.2941 and 0.2477 are retained as historical user/owner-reported claims only. No DrivenData leaderboard content, account identity, screenshot, receipt, rank, or score-to-file mapping has been independently verified here. They are not fit targets or promotion gates.
 - **Submission budget:** no weekly slot has been used for this work. The live competition rules say a competitor may submit up to three per week for feedback and must choose one final submission for both prize rounds. Recheck the official timeline/rules before any entry.
@@ -80,6 +100,43 @@ python scripts/analyze_h31_worming.py evidence/h31_worm_confirm
 ```
 
 None of these commands contacts DrivenData. Data preparation and model code must not be treated as proof of organizer acceptance or official score.
+
+## Standing brief — current session (faithful working transcription)
+
+The chat copy of the current instructions is not stored in the repository, so this section is a faithful
+working transcription of every requirement given for this session, kept next to the evidence it produced.
+It is re-read at the start of every session. The earlier brief remains preserved verbatim below, and the
+literal original brief is preserved in `knowledge/owner_brief_verbatim.txt`.
+
+```text
+You are a top Deep Research Scientist tasked with reviewing a preexisting repository to ensure all projects and task are complete and functionally working. This is for the DOE GEMS Prize Challenge (https://www.drivendata.org/competitions/306/competition-doe-gems/ — the geothermal-fault GeoDAWN competition, prize pool $300,000).
+
+Review the GEMSDOE29 repository top to bottom. The website we built a week ago needs refreshing: read all of the relevant content and perform a deep dive into the project.
+
+There needs to be a submission geotiff tif file that the user can easily submit to the competition. The site should be able to generate a TIF file that is valid for the competition site's form submission. It should be as easy as download to click a File to submit, and there needs to be a short comment to add to the submission ("Note" in the submission form on the competition website) that explains the submission. The filename should be unique. This needs to be in the executive summary or the very beginning of the site. It should be obvious when you visit the site.
+
+An executive-summary subpage is needed that details exactly how to make a submission.
+
+Also provide 3-5 candidate geological hypotheses we haven't tried yet to discover new faults. Rank them by potential expected improvement to our DTI score and implementation cost, and validate the top candidate on the spatially blocked holdout dataset before we consider using another weekly challenge submission attempt. Be honest and rigorous — verify sources and flag any irregularities. Name the required free official external data source(s) for each hypothesis and verify their obtainability.
+
+Test multiscale "worming"/upward continuation persistence as an explicit feature or filter with the magnetic and gravity layers (Hornby, Boschetti & Horowitz 1999). Trust candidates that persist across continuations, distrust ones that exist only at zero continuation.
+
+Instead of adjusting one factor at a time, run a fractional factorial experiment (Box, Hunter & Hunter; sparsity of effects) over the feature families, run against the hide-and-recover holdout.
+
+Analyze why our best DTI score 0.2600 (dotted-h19-5-d2-8-20261002-e56ea318af89) was the best and whether the team can achieve a score >= leaderboard best 0.3195. Design a new, unique "strategy"/system designed to beat 0.3195.
+
+Deep research geothermal vents science so that the repo has a knowledge starting point for future sessions. Search for overlooked free official data sources. Be contrarian but rigorous — link all official and verified sources.
+
+Also ensure the website is clean, user friendly, has all of the relevant information, and has a feed that is current so we don't have to manually check on things. Provide official and verified sources.
+
+Verify all of this line by line against official/verified/trusted sources, provide links for manual review, and flag any irregularities. Never hallucinate. There should be no manual input needed from the user — you complete the work autonomously.
+
+Core Values: Maximize P(Win). Own the Outcome.
+
+Do not attempt to access the DrivenData website programmatically beyond fetching public pages for verification; do not scrape leaderboards or copy feed content. Prepare the submission file and the note; the owner executes the actual submission.
+
+When done: do three passes (implement, review for bugs/edge cases, recheck), then create a pull request and merge it to main. List any remaining work and limitations. Put this prompt into the repo README and read it every time you work on the project as a starting point.
+```
 
 ## Full original project prompt — preserved verbatim
 

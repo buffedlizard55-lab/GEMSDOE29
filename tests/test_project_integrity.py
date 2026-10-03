@@ -15,16 +15,18 @@ def test_full_owner_brief_is_preserved_in_readme() -> None:
     assert embedded.rstrip("\n") == original.rstrip("\n")
 
 
-def test_three_hypotheses_have_frozen_ranked_statuses() -> None:
+def test_hypothesis_slate_has_frozen_ranked_statuses() -> None:
     registry = json.loads((ROOT / "registry" / "hypotheses.json").read_text())
     items = registry["items"]
-    assert len(items) == 3
-    assert [item["rank"] for item in items] == [1, 2, 3]
-    assert [item["id"] for item in items] == ["H32", "H31", "H33"]
-    assert "first candidate" in items[0]["status"]
-    assert "no model fit" in items[1]["status"]
-    assert "blocked" in items[2]["status"]
+    ids = [item["id"] for item in items]
+    assert ids == ["H32", "H31", "H33", "H34", "H35", "H36", "H37", "H38", "H39"]
+    by_id = {item["id"]: item for item in items}
+    assert "first candidate" in by_id["H32"]["status"]
+    assert "no model fit" in by_id["H31"]["status"]
+    assert "blocked" in by_id["H33"]["status"]
+    assert "FAIL" in by_id["H34"]["status"]
     assert all(item["planning_delta_dti"] for item in items)
+    assert [by_id[f"H{i}"]["rank"] for i in (35, 36, 37, 38, 39)] == [1, 2, 3, 4, 5]
 
 
 def test_historical_download_is_not_slot_approved() -> None:
@@ -65,7 +67,11 @@ def test_pages_include_submission_guide_and_caveats() -> None:
 def test_public_pages_do_not_republish_score_claims_or_leaderboard_links() -> None:
     import re
 
+    # Research/entry pages must not republish score claims. The irregularities and sources pages are
+    # explicitly the place where flagged claims are documented, so those two may quote them.
+    quoting_allowed = {"irregularities.html", "sources.html"}
     for path in (ROOT / "docs").glob("*.html"):
         text = path.read_text()
-        assert not any(value in text for value in ("0.3195", "0.2941", "0.2477", "0.2600")), path.name
+        if path.name not in quoting_allowed:
+            assert not any(value in text for value in ("0.3195", "0.2941", "0.2477", "0.2600")), path.name
         assert not re.search(r'href=["\'][^"\']*leaderboard', text, flags=re.IGNORECASE), path.name
