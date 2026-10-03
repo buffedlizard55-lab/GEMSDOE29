@@ -11,7 +11,8 @@ DrivenData; all inputs are hash-pinned owner mirrors restored under ``GEMS_DATA_
     GEMS_DATA_DIR=$PWD/data python3 scripts/run_h43_screen.py --confirm  # confirmation (34/35)
 
 The confirmation stage exits BEFORE any fit unless at least one arm passed G1 in the screen summary.
-The screen was OOM-killed after 23 of 40 cells by a 3.9 GB container limit (2026-10-03); ``--resume`` appends to an
+A 3.9 GB container limit OOM-killed the first screen process (2026-10-03, 23 of 40 rows; that partial stage was
+quarantined after its cached ``det_elev`` band failed a byte re-check against the pinned GeoTIFF); ``--resume`` appends to an
 existing ``cells_<stage>.jsonl``, re-verifies every frozen hash from ``design_<stage>.json`` first, skips
 ``(fold, draw, arm)`` triples already present, and only writes the summary once all cells are complete. Data already
 recorded is never rewritten.
@@ -245,6 +246,20 @@ def gate_summary(rows: list[dict], folds, draws) -> dict:
     return per
 
 
+def pressed_inputs(data: Path, work: Path) -> dict[str, Path]:
+    """The exact input files whose bytes the stage's design file pins (label -> resolved path)."""
+    return {
+        "data/sample_submission.tif": data / "sample_submission.tif",
+        "data/labels.tif": data / "labels.tif",
+        "data/external/derived_sgmc_faults_100m_u8.tif": data / "external" / "derived_sgmc_faults_100m_u8.tif",
+        "work/bands/_footprint.npy": work / "bands" / "_footprint.npy",
+        "work/bands/_labels.npy": work / "bands" / "_labels.npy",
+        "work/bands/12_det_elev.npy": work / "bands" / "12_det_elev.npy",
+        "work/static_ABCD.npy": work / "static_ABCD.npy",
+        "work/addons.npy": work / "addons.npy",
+    }
+
+
 def load_recorded_rows(path: Path) -> list[dict]:
     """Every cell row already appended to the stage's raw-cell file (resume path reads, never rewrites)."""
     if not path.is_file():
@@ -263,9 +278,11 @@ def verify_design(design_path: Path) -> dict:
         current = sha256_file(ROOT / "src" / key)
         if recorded != current:
             raise SystemExit(f"resume refused: {key} changed since the screen started")
+    press = pressed_inputs(data_dir(), work_dir())
     for key, entry in design.get("inputs", {}).items():
-        path = ROOT / key
-        if not path.is_file() or path.stat().st_size != entry["bytes"] or sha256_file(path) != entry["sha256"]:
+        path = press.get(key)
+        if path is None or not path.is_file() or path.stat().st_size != entry["bytes"] \
+                or sha256_file(path) != entry["sha256"]:
             raise SystemExit(f"resume refused: input {key} changed since the screen started")
     return design
 
@@ -277,10 +294,11 @@ def main() -> int:
                     help="append missing cells to an existing (hash-verified) cells_<stage>.jsonl instead of refusing")
     ap.add_argument("--cell", action="append", default=None, metavar="FOLD:DRAW",
                     help="restrict to one cell (fold name/index : draw); repeatable; requires --resume")
-    ap.add_argument("--max-cells", type=int, default=None, help="stop after N cells in this process (use with --resume)")
+    ap.add_argument("--max-cells", type=int, default=None,
+                    help="stop after N cells in this process; with --resume the stage is continued later")
     args = ap.parse_args()
-    if (args.cell or args.max_cells) and not args.resume:
-        raise SystemExit("--cell/--max-cells only make sense with --resume")
+    if args.cell and not args.resume:
+        raise SystemExit("--cell only makes sense with --resume")
     if not PREREG.is_file():
         raise SystemExit(f"missing frozen preregistration: {PREREG}")
     EVIDENCE.mkdir(parents=True, exist_ok=True)
@@ -315,14 +333,7 @@ def main() -> int:
 
     data, work = data_dir(), work_dir()
     elev_path = work / "bands" / "12_det_elev.npy"
-    press = {"data/sample_submission.tif": data / "sample_submission.tif",
-             "data/labels.tif": data / "labels.tif",
-             "data/external/derived_sgmc_faults_100m_u8.tif": data / "external" / "derived_sgmc_faults_100m_u8.tif",
-             "work/bands/_footprint.npy": work / "bands" / "_footprint.npy",
-             "work/bands/_labels.npy": work / "bands" / "_labels.npy",
-             "work/bands/12_det_elev.npy": elev_path,
-             "work/static_ABCD.npy": work / "static_ABCD.npy",
-             "work/addons.npy": work / "addons.npy"}
+    press = pressed_inputs(data, work)
     missing = [k for k, p in press.items() if not p.is_file()]
     if missing:
         raise SystemExit(f"missing restored/derived inputs: {missing}; run scripts/download_competition_data.sh, "
