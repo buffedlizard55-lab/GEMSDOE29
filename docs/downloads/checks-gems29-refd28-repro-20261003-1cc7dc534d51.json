@@ -1,65 +1,171 @@
 {
   "stem": "gems29-refd28-repro-20261003-1cc7dc534d51",
+  "note_to_paste": "GEMSDOE29 REFD28 | owner-mirror geometry reproduction | DO NOT RESUBMIT; reference only | 1cc7dc534d51",
+  "grid": {
+    "crs": "EPSG:32611",
+    "width": 3292,
+    "height": 3730,
+    "pixel_size_m": [
+      100.0,
+      100.0
+    ],
+    "footprint_pixels": 5167373
+  },
+  "format": {
+    "driver": "GTiff",
+    "bands": 1,
+    "dtype": "float32",
+    "inside_value_range": [
+      0.0,
+      1.0
+    ],
+    "outside": "NaN",
+    "note_max_characters": 200
+  },
+  "local_format_verified": true,
+  "organizer_portal_acceptance": "not verified; owner must upload manually",
   "checks": {
+    "foot_mask_matches_pinned_template": {
+      "pass": true,
+      "detail": "footprint pixels=5167373"
+    },
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:exists": {
+      "pass": true,
+      "detail": "1,573,188 bytes"
+    },
     "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:single_float32_band": {
       "pass": true,
-      "detail": "1 band(s) float32"
+      "detail": "1 band(s), dtype=float32"
     },
-    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:grid": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:exact_template_grid": {
       "pass": true,
-      "detail": "(3730, 3292) EPSG:32611"
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
     },
-    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:values_in_01": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:in_footprint_finite_and_01": {
       "pass": true,
-      "detail": "min=0.0, max=1.0"
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
     },
-    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:no_nan_inside_template_footprint": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:outside_nan_convention": {
       "pass": true,
-      "detail": ""
+      "detail": "outside_pixels=7111787"
     },
     "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:pixel_count": {
       "pass": true,
-      "detail": "44090 vs 44090"
+      "detail": "44090 positive pixels vs expected 44090"
     },
-    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:binary": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif:binary_01": {
       "pass": true,
-      "detail": "n_positive=44090"
+      "detail": "positive pixels=44090"
+    },
+    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:exists": {
+      "pass": true,
+      "detail": "806,758 bytes"
     },
     "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:single_float32_band": {
       "pass": true,
-      "detail": "1 band(s) float32"
+      "detail": "1 band(s), dtype=float32"
     },
-    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:grid": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:exact_template_grid": {
       "pass": true,
-      "detail": "(3730, 3292) EPSG:32611"
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
     },
-    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:values_in_01": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:in_footprint_finite_and_01": {
       "pass": true,
-      "detail": "min=0.0, max=1.0"
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
     },
-    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:no_nan_inside_template_footprint": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:outside_zero_convention": {
       "pass": true,
-      "detail": ""
+      "detail": "outside_pixels=7111787"
     },
     "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:pixel_count": {
       "pass": true,
-      "detail": "44090 vs 44090"
+      "detail": "44090 positive pixels vs expected 44090"
     },
-    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:binary": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif:binary_01": {
       "pass": true,
-      "detail": "n_positive=44090"
+      "detail": "positive pixels=44090"
+    },
+    "zip:exists": {
+      "pass": true,
+      "detail": "322,486 bytes"
     },
     "zip:exactly_one_geotiff": {
       "pass": true,
-      "detail": "['gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif']"
+      "detail": "members=['gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif']"
     },
-    "zip:content_identical": {
+    "zip:geotiff:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "zip:geotiff:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "zip:geotiff:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "zip:geotiff:outside_nan_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "zip:geotiff:pixel_count": {
+      "pass": true,
+      "detail": "44090 positive pixels vs expected 44090"
+    },
+    "zip:geotiff:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=44090"
+    },
+    "zip:content_identical_to_nan_tif": {
       "pass": true,
       "detail": ""
     },
     "__summary__": {
       "pass": true,
-      "detail": "14 checks, 0 failures"
+      "detail": "28 checks, 0 failures"
+    },
+    "sha256_receipt:gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif": {
+      "pass": true,
+      "detail": "actual=5f963b8bca5ec226ddc7caaadec239c6be6d28aa567f890033be04d04bfd5e32, build_receipt=5f963b8bca5ec226ddc7caaadec239c6be6d28aa567f890033be04d04bfd5e32"
+    },
+    "sha256_receipt:gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif": {
+      "pass": true,
+      "detail": "actual=8cf893ead5667df21d3288a9968c35fd5385c425b029d82ee71d311715b129fd, build_receipt=8cf893ead5667df21d3288a9968c35fd5385c425b029d82ee71d311715b129fd"
+    },
+    "sha256_receipt:gems29-refd28-repro-20261003-1cc7dc534d51-nan.zip": {
+      "pass": true,
+      "detail": "actual=a93d817153dea02b4b7cfb13e4c6565a2fbf1c237baf4477aeedb810b7d5fd63, build_receipt=a93d817153dea02b4b7cfb13e4c6565a2fbf1c237baf4477aeedb810b7d5fd63"
+    }
+  },
+  "files": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif": {
+      "bytes": 1573188,
+      "sha256": "5f963b8bca5ec226ddc7caaadec239c6be6d28aa567f890033be04d04bfd5e32"
+    },
+    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif": {
+      "bytes": 806758,
+      "sha256": "8cf893ead5667df21d3288a9968c35fd5385c425b029d82ee71d311715b129fd"
+    },
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.zip": {
+      "bytes": 322486,
+      "sha256": "a93d817153dea02b4b7cfb13e4c6565a2fbf1c237baf4477aeedb810b7d5fd63"
+    }
+  },
+  "independent_verification": "scripts/verify_downloads.py",
+  "independent_verification_utc": "2026-10-03T16:33:03Z",
+  "independent_verification_files": {
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif": {
+      "bytes": 1573188,
+      "sha256": "5f963b8bca5ec226ddc7caaadec239c6be6d28aa567f890033be04d04bfd5e32"
+    },
+    "gems29-refd28-repro-20261003-1cc7dc534d51-zeros.tif": {
+      "bytes": 806758,
+      "sha256": "8cf893ead5667df21d3288a9968c35fd5385c425b029d82ee71d311715b129fd"
+    },
+    "gems29-refd28-repro-20261003-1cc7dc534d51-nan.zip": {
+      "bytes": 322486,
+      "sha256": "a93d817153dea02b4b7cfb13e4c6565a2fbf1c237baf4477aeedb810b7d5fd63"
     }
   }
 }

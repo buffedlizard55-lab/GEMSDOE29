@@ -17,13 +17,19 @@ from gemsdoe.paths import data_dir  # noqa: E402
 from gemsdoe.submission import check_file, sha256_file  # noqa: E402
 
 
+def default_template_path() -> Path:
+    """Return the template's actual path in the legacy core manifest."""
+    return data_dir() / "bridge" / "sample_submission.tif"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("path", type=Path, help="GeoTIFF to check")
-    parser.add_argument("--template", type=Path, default=None, help="defaults to GEMS_DATA_DIR/sample_submission.tif")
+    parser.add_argument("--template", type=Path, default=None,
+                        help="defaults to GEMS_DATA_DIR/bridge/sample_submission.tif (or <repo>/data/bridge/sample_submission.tif)")
     parser.add_argument("--receipt", type=Path, default=None, help="optional JSON receipt path")
     args = parser.parse_args()
-    template = args.template or (data_dir() / "sample_submission.tif")
+    template = args.template or default_template_path()
     if not args.path.is_file():
         parser.error(f"GeoTIFF not found: {args.path}")
     if not template.is_file():

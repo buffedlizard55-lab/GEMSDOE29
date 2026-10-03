@@ -22,7 +22,8 @@ def test_hypothesis_slate_has_frozen_ranked_statuses() -> None:
     assert ids == ["H32", "H31", "H33", "H34", "H35", "H36", "H37", "H38", "H39"]
     by_id = {item["id"]: item for item in items}
     assert "first candidate" in by_id["H32"]["status"]
-    assert "no model fit" in by_id["H31"]["status"]
+    assert "screen ran and failed" in by_id["H31"]["status"]
+    assert "no confirmation" in by_id["H31"]["status"]
     assert "blocked" in by_id["H33"]["status"]
     assert "FAIL" in by_id["H34"]["status"]
     assert all(item["planning_delta_dti"] for item in items)
@@ -39,6 +40,27 @@ def test_historical_download_is_not_slot_approved() -> None:
     assert historical["sha256"] == "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8"
     assert (ROOT / historical["path"]).is_file()
     assert (ROOT / historical["format_check_receipt"]).is_file()
+
+
+def test_current_candidate_does_not_clear_the_holdout_best() -> None:
+    submissions = json.loads((ROOT / "registry" / "submissions.json").read_text())
+    status = json.loads((ROOT / "registry" / "status_feed.json").read_text())["current"]
+    candidate = next(item for item in submissions["files"] if item["id"] == "repo-c0-habitat")
+    proxy = candidate["proxy_evidence"]
+    assert proxy["candidate_method_mean_dti"] < proxy["current_holdout_best_method_dti"]
+    assert proxy["beats_current_holdout_best"] is False
+    assert candidate["do_not_submit"] is True
+    assert candidate["slot_approved"] is False
+    assert "0.14479" in status["holdout_best"]
+
+
+def test_corrected_h29_screen_fails_without_confirmation_cells() -> None:
+    evidence = json.loads((ROOT / "evidence" / "h29_holdout.json").read_text())
+    gates = json.loads((ROOT / "evidence" / "h29_gate.json").read_text())
+    assert {row["draw"] for row in evidence["rows"]} == {0, 1}
+    assert len(evidence["rows"]) == 8
+    assert "not_run_screen_failed" in evidence["confirmation_status"]
+    assert all(gate["screen_pass"] is False and gate["PASS"] is False for gate in gates.values())
 
 
 def test_score_claims_remain_unverified_and_unused() -> None:

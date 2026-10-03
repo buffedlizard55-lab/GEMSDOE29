@@ -143,18 +143,18 @@
       "severity": "medium",
       "status": "open",
       "subject": "Measured line-orientation persistence contradicted the naive artifact heuristic",
-      "detail": "The acquisition-line audit (knowledge/01 \u00a72d) predicted E-W striking edges (flight-line aliasing, 200/400 m E-W lines) should be *less* persistent under continuation. Measured on the full grid: mean magnetic persistence by strike is E-W 0.656, Other 0.607, N-S 0.562 \u2014 E-W edges are, on average, the MOST persistent. The naive 'E-W = artifact' heuristic is therefore NOT usable as a filter on this grid; regional geology (E-W striking ranges in the Walker Lane transform corridor) plausibly dominates the aliasing signal.",
+      "detail": "After correcting nearest-valid padding and persistence normalization, the current six-level p95 audit gives mean magnetic persistence by strike E-W 0.540, Other 0.491, N-S 0.447. This remains a descriptive strike summary: it neither proves acquisition-line contamination nor supports a simple E-W suppression rule. The current inputs are pinned owner mirrors, not organizer-authenticated.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "The measured audit refutes a naive E\u2013W suppression rule on this grid. H29-3 spectral-notch work remains a distinct registered research idea; no line-path data are used until officially sourced and validated."
+      "mitigation": "Do not use a simple E-W kill rule. H29-3 spectral-notch work remains a separate registered idea and requires a measured frequency peak first. See current evidence/worming_receipt.json."
     },
     {
       "id": "IR-29-PARENT-OFF-EDGES",
       "severity": "medium",
       "status": "open",
       "subject": "Historical emission overlaps few potential-field edges",
-      "detail": "Only 2.7% of the historical dotted emission pixels coincide with p95 level-0 potential-field edges; the parent detector\u2019s habitat was mostly terrain/thermal/structural, not geophysical edge maxima. A hard worming gate therefore has little power over that emission; only re-ordering or feature-level fusion can express the hypothesis.",
+      "detail": "On the current nearest-fill, bounded-persistence raster, 1,204/44,090 (2.731%) owner-mirrored D2.8 pixels overlap the union of level-0 p95 magnetic/gravity edges; 579 (1.313%) overlap a joint edge with P>=0.5. The historical score-to-file association remains owner-reported and unauthenticated.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "Screened both ways (A1 gate, A2 rank, B1 head-features) per knowledge/01; report all three regardless of sign."
+      "mitigation": "The corrected screen tested A1/A2/B1/B2 and H29-5; all five failed the registered +0.005 screen criterion. Do not infer that the geological mechanism is false; see current evidence/h29_holdout.json and knowledge/02_h29_results_2026-10-03.md."
     },
     {
       "id": "IR-29-GDR-BLOCKED",
@@ -163,16 +163,16 @@
       "subject": "Some GDR external layers remain blocked",
       "detail": "gdr.openei.org is unreachable from the sandbox (curl 35 SSL_ERROR_SYSCALL), matching GEMSDOE25/27 limitations; paleo-geothermal and Q-volcanics polygons therefore remain unusable this session (pins recorded in data/manifest.json for the next networked runner).",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "2 m probes already present via the 24GEMSDOE mirror and hash-verified \u2014 that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
+      "mitigation": "2 m probes already present via the 24GEMSDOE mirror and hash-verified — that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
     },
     {
       "id": "IR-29-PROXY-BLIND-TO-FARFIELD",
       "severity": "high",
       "status": "open",
       "subject": "Catalogue-gap proxy may miss far-field structure",
-      "detail": "Carried from siblings and re-reviewed in the holdout construction: catalogue-internal hide-and-recover truth sits entirely on catalogue pixels, while a historical owner-mirrored emission\u2019s modeled credit may lie far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
+      "detail": "Carried from siblings and re-reviewed in the holdout construction: catalogue-internal hide-and-recover truth sits entirely on catalogue pixels, while a historical owner-mirrored emission’s modeled credit may lie far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "Disclosed in knowledge/01 \u00a76; no arm is ever promoted on proxy evidence alone \u2014 pass = 'eligible for a slot decision by the owner', not 'submit'."
+      "mitigation": "Disclosed in knowledge/01 §6; no arm is ever promoted on proxy evidence alone — pass = 'eligible for a slot decision by the owner', not 'submit'."
     },
     {
       "id": "IR-29-LEADERBOARD-COLUMN",
@@ -197,7 +197,7 @@
       "severity": "low",
       "status": "resolved by later source review; verify current rules before entry",
       "subject": "Official rules URL corrected and rechecked",
-      "detail": "The older main-branch source register pointed to a www.nlr.gov URL that was not verified at that time. The official rules PDF at docs.nlr.gov/docs/fy26osti/96647.pdf was subsequently fetched and sections 3.2\u20133.5 were reviewed; see registry/sources.json and knowledge/03_drivendata_terms_access_policy.md.",
+      "detail": "The older main-branch source register pointed to a www.nlr.gov URL that was not verified at that time. The official rules PDF at docs.nlr.gov/docs/fy26osti/96647.pdf was subsequently fetched and sections 3.2–3.5 were reviewed; see registry/sources.json and knowledge/03_drivendata_terms_access_policy.md.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
       "mitigation": "Use the verified docs.nlr.gov rules link; check current dates and eligibility before any entry. Do not rely on stale cadence notes."
     },
@@ -206,9 +206,9 @@
       "severity": "medium",
       "status": "documented; no effect on failed screen decision",
       "subject": "H29 extra draws and original gate snapshot disagree",
-      "detail": "The preserved H29 raw holdout and run log contain draws 0\u20133 for every arm, although the preregistered screen draws 0\u20131 all fail. The original gate builder only populated draws 0\u20131 and then looked for confirmation draws 2\u20133 in that same mapping, so confirm_draw was always null. Treat draws 2\u20133 as exploratory extras, not eligible confirmations, because no arm passed the screen. The screen-based no-slot conclusion is unchanged.",
+      "detail": "The archived original H29 raw holdout contained 16 rows for draws 0-3; the screen draws failed, but draws 2-3 had nevertheless been computed and the original gate builder omitted them. Those extra rows were ineligible confirmations and are archived byte-for-byte under evidence/history/h29_holdout_pre_correction_2026-10-03.json. A later preregistered re-screen fixed persistence normalization and nearest-valid FFT padding, added H29-5, and evaluated only draws 0-1; all five arms failed and no confirmation models were fit.",
       "impact": "Do not describe the extra draws as a valid confirmation stage or infer that the original null confirmation field was computed from them. All H29 metrics are catalogue-gap proxy results, not competition scores.",
-      "mitigation": "Preserve the original raw cells and gate file; see knowledge/06_h29_gate_reconciliation_2026-10-03.md and evidence/h29_gate_reconciled.json. The gate helper now checks complete draws and only counts confirmation after screen pass; synthetic tests cover the edge cases."
+      "mitigation": "The original raw cells and derived reconciliation remain historical under knowledge/06_h29_gate_reconciliation_2026-10-03.md and evidence/h29_gate_reconciled.json. Current gate and re-screen are evidence/h29_gate.json and evidence/h29_holdout.json; synthetic tests cover complete confirmation and fail-closed cases. The command-level --confirmation-only guard was tested against the failed screen and skipped fitting."
     },
     {
       "id": "IR-29-PROXY-CONFLICT",
@@ -254,6 +254,60 @@
       "detail": "curl from the sandbox fails (SSL_ERROR_SYSCALL / HTTP 000) for sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov, pubs.usgs.gov, earthquake.usgs.gov, mrdata.usgs.gov, raw.githubusercontent.com and drivendata.org; api.github.com, codeload.github.com and pypi.org work.",
       "impact": "Siler slip/dilation tendency, Peacock & Bedrosian conductance maps and extra 3DEP tiles cannot be fetched in this environment; hypotheses must be written to run on already-mirrored layers or wait for an unrestricted runner.",
       "mitigation": "All new hypotheses (H35-H39) are specified to run on hash-pinned in-repository layers; external layers are marked optional with DOI and licence verified."
+    },
+    {
+      "id": "IR-29-PERSISTENCE-NORMALIZATION",
+      "severity": "high",
+      "status": "fixed",
+      "subject": "Original six-level persistence normalization exceeded its registered range",
+      "detail": "The old formula divided the 0-based last matched level index by n_levels-2, allowing P=1.25. This changed the A1 cutoff and saturated A2 ranks; old evidence/artifacts are not valid for the registered method.",
+      "impact": "Any screen or artifact derived from P>1.0 must not be treated as the preregistered method or a slot candidate.",
+      "mitigation": "Use last_matched_level_index/(n_levels-1), enforce [0,1] at runtime, store amplitude retention separately, and regression-test the bounds. See evidence/history/pre_correction_downloads/ and current evidence/worming_receipt.json."
+    },
+    {
+      "id": "IR-29-NEAREST-FILL",
+      "severity": "high",
+      "status": "fixed",
+      "subject": "FFT exterior fill was silently replaced with a global median",
+      "detail": "prep_field computed nearest-valid padding and then np.where replaced every invalid cell with the global valid-cell median. This contradicted the frozen H29 preregistration and changes the continued edge field.",
+      "impact": "The bounded-P screen and WORMRANK generated before this fix are not valid for the registered boundary treatment, even though their gate failed.",
+      "mitigation": "Removed the median overwrite, added a regression distinguishing nearest from median fill, and recomputed worming plus all eight screen rows. The intermediate output and hashes are archived in evidence/history/pre_nearest_fill_2026-10-03/; current values are in evidence/worming_receipt.json and evidence/h29_holdout.json."
+    },
+    {
+      "id": "IR-29-CONFIRMATION-COMPUTE-GUARD",
+      "severity": "high",
+      "status": "fixed",
+      "subject": "Confirmation model fitting must not precede a passing screen",
+      "detail": "The earlier runner computed draws 2-3 in the same pass as screen draws, so failed arms incurred confirmation fits and the gate could not enforce the staged preregistered rule.",
+      "impact": "Wasted computation and ambiguity about whether post-screen draws qualify as confirmation.",
+      "mitigation": "The safe default runs draws 0-1 only. --confirmation-only requires saved matching protocol evidence with a passing arm and exits before fitting otherwise. Current all-failed screen was tested and skipped model fitting."
+    },
+    {
+      "id": "IR-29-VERIFY-BASELINE-REBASING",
+      "severity": "high",
+      "status": "fixed",
+      "subject": "Independent download verification must preserve the build-time hash baseline",
+      "detail": "The first verifier version replaced receipt hashes with current disk hashes after checking, so a changed artifact could become the new baseline on a later run.",
+      "impact": "Corrupted or substituted download bytes might pass after an initial mismatch.",
+      "mitigation": "Keep original build-time hashes in `files`, record observed hashes separately, fail closed on missing/mismatched baselines, and regression-test repeated mismatches in tests/test_download_receipts.py."
+    },
+    {
+      "id": "IR-29-STALE-WORM-DOWNLOADS",
+      "severity": "medium",
+      "status": "fixed",
+      "subject": "Superseded WORMRANK downloads must not remain in public downloads",
+      "detail": "Both the original P>1 artifact and an intermediate bounded-P artifact with nonconforming median padding were at risk of being mistaken for current downloads.",
+      "impact": "A user could select a scientifically invalid file despite a later corrected screen.",
+      "mitigation": "Archive both sets byte-for-byte with SHA-256 records under evidence/history/pre_correction_downloads/ and evidence/history/pre_nearest_fill_2026-10-03/downloads/. Only the current nearest-fill, bounded-P artifact appears in the download registry."
+    },
+    {
+      "id": "IR-CHECK-SUBMISSION-TEMPLATE-PATH",
+      "severity": "medium",
+      "status": "fixed",
+      "subject": "Local submission checker default did not match the core data manifest path",
+      "detail": "After main-branch reconciliation, check_submission.py defaulted to GEMS_DATA_DIR/sample_submission.tif, but data/manifest.json stores the template at data/bridge/sample_submission.tif. The documented command therefore failed unless the caller supplied --template.",
+      "impact": "A user following the site instructions could get a false missing-template error despite a valid restored core dataset.",
+      "mitigation": "The default now uses data_dir()/bridge/sample_submission.tif and a unit test covers GEMS_DATA_DIR override. The site instructions restore the legacy core manifest and set GEMS_DATA_DIR=data for the checker; H31 has a separate manifest/restore path."
     }
   ]
 }

@@ -1,4 +1,4 @@
-# The system this project now recommends to attack >0.3195
+# Proposed research system to investigate beyond the user-reported 0.3195
 
 **Date:** 2026-10-03 (UTC). Companion documents: `knowledge/07_metric_emission_analysis_2026-10-03.md`
 (the arithmetic of the metric and of the 0.2600 file), `knowledge/09_h34_results_2026-10-03.md`
@@ -19,8 +19,7 @@ i.e. the existing emission is already near a local optimum for its habitat.
 
 Decomposing the published metric (knowledge/07 §4): a 0.2600 file is ≈ `TP_w 3,910` with ≈
 `FP_w 36,154` and `|G| ≈ 12,691`; 0.3195 needs **+19 % credit at the same budget**, or ~38 % more dots at
-the same average credit density. There is no way to buy +19 % from the same field — that was tested
-directly and it is negative (H34 primary gate FAIL).
+the same average credit density. The preregistered H34 coverage-emission attempt on this field failed its catalogue-hidden primary gate. That is a negative result for that method, not proof that no other emission change can help.
 
 ## 2. The system: *calibrated off-catalogue emission with two-proxy admission*
 
@@ -44,10 +43,11 @@ first N dots under τ, not "as many as allowed".
 **(c) Admission = two proxies, opposite failures, one decision rule.** Measured here
 (`evidence/candidate_scoreboard.json`): the catalogue-hidden proxy prefers the historical emission
 (0.0983 vs 0.0446) while the SGMC off-catalogue proxy prefers the off-catalogue emission by 6×
-(0.5615 vs 0.0953). The two proxies rank candidates almost oppositely, so a candidate must be *reported*
-on both and admitted to a slot only if it beats the historical control on the **off-catalogue** proxy
-(the class the competition actually scores: faults absent from the catalogue) **without** losing more
-than a registered tolerance on the catalogue-hidden proxy. This is a decision rule, not a score claim.
+(0.5615 vs 0.0953). The two proxies rank candidates differently, so report both and do not call either
+the organizer metric. An off-catalogue proxy improvement may be a research gate, but a weekly slot can
+be considered only if the candidate also beats the current comparable spatially blocked holdout best,
+passes preregistered screen and fresh confirmation, and passes exact-file checks. A proxy result alone
+never authorizes a slot. This is a decision rule, not a score claim.
 
 ## 3. Why this is a different system, not a re-tune
 
@@ -68,8 +68,10 @@ than a registered tolerance on the catalogue-hidden proxy. This is a decision ru
 
 ## 5. Honest status
 
-The system is **designed, partially implemented and partially tested**: H34 is implemented and has
-failed its primary gate; H35 is specified (knowledge/10 Rank 1) but not implemented; the emission
-calibration is specified but not fitted; the factorial over feature families (which determines which
-columns the habitat model may use) is running at the time of writing. No file here is slot-approved and
-no competition score is claimed anywhere in this document.
+The system is **proposed, partially implemented, and not slot-cleared**: H34 is implemented and failed
+its catalogue-hidden primary gate; H35 is specified (knowledge/10 Rank 1) but not implemented; the
+emission calibration is specified but not fitted; the fractional factorial is complete and supports
+families B/E under its frozen rule. The corrected H29 screen also failed all five arms. The current
+HGB C0 candidate method (0.14086) remains below H34 C1's same-report holdout best (0.14479), so no
+weekly slot is eligible under project policy. The user-reported 0.3195 is not independently verified;
+no competition score is claimed in this document.

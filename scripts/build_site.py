@@ -115,6 +115,8 @@ def render_downloads() -> str:
     receipts under ``docs/downloads/checks-*.json``). Nothing here claims a competition score.
     """
     submissions = read_json("submissions.json")
+    contract = read_json("submission_contract.json")
+    fmt = contract["format"]
     candidates = [row for row in submissions.get("files", []) if row.get("role") == "candidate_review"]
     if not candidates:
         return ""
@@ -135,15 +137,19 @@ def render_downloads() -> str:
         # Score claims stay in the JSON registry only; public pages must not republish them
         # (tests/test_project_integrity.py::test_public_pages_do_not_republish_score_claims_or_leaderboard_links).
         proxy = tag("score claims kept in registry/score_claims.json", "warning")
+        eligibility = (
+            tag("slot-approved", "yes") if row.get("slot_approved") is True else
+            tag("not slot-cleared · do not submit", "no") if row.get("do_not_submit") is True else
+            tag("not approved · holdout/confirmation required", "warning")
+        )
         card = (
-            '<article class="card span-6 download-card"><p class="kicker">Download-ready research candidate '
-            '(not an official score)</p>'
+            '<article class="card span-6 download-card"><p class="kicker">Research download · not an official score</p>'
             f'<h2>{e(row.get("name", row["file"]))}</h2>'
             f'<p>{e(row.get("summary", ""))}</p>'
             f'<p class="file-name">{e(row["file"])}</p>'
             f'<p class="small">sha256 <code>{e(str(row.get("sha256", ""))[:16])}…</code> · '
             f'{int(row.get("positive_pixels", 0)):,} emitted px · format ok: {e(row.get("format_ok_local"))}</p>'
-            f'{proxy} {tag("unscored", "warning")} {tag("owner decides", "no")}'
+            f'{proxy} {tag("local format only", "warning")} {eligibility}'
             f'<p class="small"><strong>Paste-ready Note:</strong> <code>{e(row.get("optional_comment", ""))}</code></p>'
             f'{download}{zip_link}'
             "</article>"
@@ -152,9 +158,10 @@ def render_downloads() -> str:
     return (
         '<section aria-label="Candidate downloads"><p class="kicker">Formatted and waiting for a human decision</p>'
         '<h2>Download the submission GeoTIFF</h2>'
-        '<p>Each file below is one band, EPSG:32611, 100 m, template grid, finite values in [0, 1] inside the '
-        'footprint, NaN outside, with a script-written format receipt. None of them is a verified competition '
-        'score, and the repository does not spend weekly slots: that is the owner\'s decision.</p>'
+        f'<p>Each file below is a {int(fmt["band_count"])}-band {e(fmt["dtype"])} GeoTIFF locally checked against the hash-pinned owner-mirror template '
+        f'({e(fmt["crs"])}, {int(fmt["pixel_size_m"])} m; finite [{fmt["probability_min"]}, {fmt["probability_max"]}] values inside; '
+        f'{e(fmt["outside_footprint"])} outside), with a format receipt. Format validation is not a score or approval. '
+        'None is currently slot-approved; do not use a weekly slot unless a candidate first beats the current comparable spatial holdout best and passes fresh confirmation.</p>'
         f'<section class="grid">{"".join(cards)}</section></section>'
     )
 
@@ -190,8 +197,8 @@ def render_home() -> str:
         banner = (
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
-            'H34 (metric-native coverage emission) failed its frozen primary gate (catalogue-hidden proxy, &minus;0.021 mean paired gain, 0/4 folds) while passing its secondary off-catalogue class (+0.054, 4/4). '
-            'The 2<sup>5&minus;1</sup> fractional factorial over feature families is running. H29 failed all four arms; H31 is unfitted. '
+            'H34 failed its frozen primary proxy gate while passing its secondary off-catalogue class; the fractional factorial is complete. H31 also failed its screen on feature sparsity. '
+            'The current corrected H29 screen failed every preregistered arm; no confirmation models were fit. See the local evidence feed and research report for the complete records. '
             'Every download is format-verified locally and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
         )
         main_artifact = (
@@ -224,7 +231,7 @@ def render_home() -> str:
 
     metrics = (
         '<section class="grid" aria-label="Research status metrics">'
-        f'<div class="metric span-4"><span class="label">H31 screen</span><span class="value">{e(current.get("screen_status", "unknown"))}</span><span class="label">No holdout outcome claimed</span></div>'
+        f'<div class="metric span-4"><span class="label">Research screens</span><span class="value">{e(current.get("screen_status", "unknown"))}</span><span class="label">Local proxies only—not official scores</span></div>'
         f'<div class="metric span-4"><span class="label">Weekly submission slot</span><span class="value">{"No" if not current.get("weekly_slot_used") else "Used"}</span><span class="label">None used for this research</span></div>'
         f'<div class="metric span-4"><span class="label">Official competition score</span><span class="value">Not verified</span><span class="label">No DrivenData leaderboard content copied</span></div>'
         '</section>'
@@ -243,8 +250,7 @@ def render_home() -> str:
     body = (
         f'{render_downloads()}{banner}{metrics}<section class="grid" aria-label="Submission artifacts">{main_artifact}{historical_card}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">Research, not score-chasing</p><h2>Test the unseen-fault hypothesis first</h2>'
-        '<p>H29 already tested raw-RTP/gravity worm persistence as a gate, rank and model features; all four arms failed its registered proxy threshold. H31 is a narrower extension: it tests regularized RTP-to-pseudogravity integration and explicit edge drift beyond that prior result. '
-        'No H31 model fit or DTI screen has occurred; confirmation remains blocked until a fresh screen passes.</p>'
+        '<p>H29 has now been rerun with corrected bounded persistence and preregistration-compliant nearest-valid FFT padding; every preregistered arm failed, so no confirmation fits were run. The original run is archived as history. H31 is a separate pseudogravity/edge-drift screen and also failed, with sparse persistence features diagnosed as the cause.</p>'
         '<p><strong>Holdout DTI is a catalogue-gap proxy, not the official competition score.</strong> The public competition uses expert-labelled '
         'faults unavailable to these local folds, and official private/final-round results are not observed here.</p>'
         '<p><a href="research.html">Read the ranked hypotheses and scientific caveats →</a></p></article>'
@@ -269,6 +275,10 @@ def render_home() -> str:
 def render_summary() -> str:
     submissions = read_json("submissions.json")
     status = read_json("status_feed.json")["current"]
+    contract = read_json("submission_contract.json")
+    fmt = contract["format"]
+    rules = contract["rules"]
+    rules_label = f"Official {int(rules['rules_year'])} rules"
     approved = approved_entry(submissions)
     if approved:
         candidate_block = (
@@ -280,21 +290,20 @@ def render_summary() -> str:
     else:
         candidate_block = (
             '<div class="status-banner danger"><strong>No current file is approved for submission.</strong>'
-            '<p>The downloads above are research candidates, not approvals: the historical rebuild matches the group\'s '
-            'best-reported geometry and the SGMC inventory alternative loses the registered catalogue-hidden gate. '
-            'A weekly slot is the owner\'s decision and needs a fresh confirmation draw plus the exact-file receipt.</p></div>'
+            '<p>The downloads above are research artifacts, not approvals. No weekly slot should be used unless a candidate beats the current comparable spatially blocked holdout best, passes fresh confirmation, and passes the exact-file checks; no current file meets that bar.</p></div>'
         )
 
     body = (
         f'{render_downloads()}{candidate_block}'
         '<section class="grid"><article class="card span-7"><p class="kicker">Purpose</p><h2>Submission in one sentence</h2>'
-        '<p>Submit one probability raster for faults across the full GeoDAWN study area, using the provided template grid and the official manual interface. '
-        'The organizer’s 2026 rules require one final selection for both prize rounds; up to three weekly feedback submissions are permitted by the rules. '
+        f'<p>Submit one probability raster for faults across the full GeoDAWN study area, using the provided template grid and the official manual interface. '
+        f'The organizer’s {int(rules["rules_year"])} rules allow up to {int(rules["weekly_feedback_max"])} weekly feedback submissions and require '
+        f'{int(rules["final_prediction_count"])} final selection for both {int(rules["prize_round_count"])} prize rounds. '
         'Check the current official rules and competition timeline before acting.</p>'
-        '<div class="callout"><strong>Current stop:</strong> '+ e(status.get("screen_status", "not run")) + '. No H31 holdout score is available; no competition result is claimed.</div>'
+        '<div class="callout"><strong>Current stop:</strong> '+ e(status.get("screen_status", "not run")) + '. H31 has local holdout proxy results, but no official competition result is claimed.</div>'
         '</article><article class="card span-5"><p class="kicker">Official references</p><h2>Verify before upload</h2><ul class="list-clean">'
         f'<li>{a("https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/", "Problem description and format", external=True)}</li>'
-        f'<li>{a("https://docs.nlr.gov/docs/fy26osti/96647.pdf", "September 2026 Official Rules", external=True)}</li>'
+        f'<li>{a("https://docs.nlr.gov/docs/fy26osti/96647.pdf", rules_label, external=True)}</li>'
         f'<li>{a("https://www.drivendata.org/termsofuse/", "DrivenData Terms of Use", external=True)}</li>'
         '</ul></article></section>'
         '<section class="card"><p class="kicker">Manual upload checklist</p><h2>When a future artifact is approved</h2>'
@@ -305,18 +314,23 @@ def render_summary() -> str:
         '<li><strong>Enter a unique, short submission name.</strong> Use the registered candidate name shown above when one exists. Preserve the downloadable filename and content ID so the file can be identified later.</li>'
         '<li><strong>Optionally add the exact registered comment.</strong> State the method and artifact identifier; never describe a spatial holdout proxy as a competition score.</li>'
         '<li><strong>Submit through the official manual interface.</strong> Follow the portal response for your own transaction, but do not monitor, copy, or store leaderboard content in this project without prior written consent; do not scrape or schedule page reads.</li>'
-        '<li><strong>Respect the weekly and final-selection limits.</strong> The official rules say up to three weekly feedback submissions and one selected final prediction for both prize rounds. Confirm current rules before using a slot.</li>'
+        f'<li><strong>Respect the weekly and final-selection limits.</strong> The official rules say up to {int(rules["weekly_feedback_max"])} weekly feedback submissions and '
+        f'{int(rules["final_prediction_count"])} selected final prediction for both {int(rules["prize_round_count"])} prize rounds. Confirm current rules before using a slot.</li>'
         '</ol></section>'
         '<section class="grid"><article class="card span-6"><p class="kicker">Format gate</p><h2>Exact TIFF contract</h2><ul class="list-clean">'
-        '<li>One raster band; `float32`.</li><li>CRS EPSG:32611; 100-m resolution.</li><li>Exact template dimensions, bounds, and geotransform.</li>'
-        '<li>Every in-footprint value is finite and in [0, 1].</li><li>Outside-footprint cells are null/NaN, matching the official sample template.</li>'
+        f'<li>{int(fmt["band_count"])} raster band; `{e(fmt["dtype"])}`.</li><li>CRS {e(fmt["crs"])}; {int(fmt["pixel_size_m"])}-m resolution.</li><li>Exact template dimensions, bounds, and geotransform.</li>'
+        f'<li>Every in-footprint value is finite and in [{fmt["probability_min"]}, {fmt["probability_max"]}].</li>'
+        f'<li>Outside-footprint cells are {e(fmt["outside_footprint"])}, matching the official sample template.</li>'
         '<li>Use a unique content-addressed filename and keep a SHA-256 receipt.</li></ul>'
-        '<p>After restoring the template, run the local checker from the repository root. For example:</p>'
-        '<pre><code>GEMS_DATA_DIR=/path/to/restored/data python scripts/check_submission.py \\\n  docs/downloads/&lt;candidate.tif&gt; --receipt evidence/format_checks/&lt;candidate.json&gt;</code></pre>'
+        '<p>The H29/core restore writes to &lt;repo&gt;/data and does not read GEMS_DATA_DIR. Restore and verify that manifest first; then point the local checker at that directory:</p>'
+        '<pre><code>python scripts/restore_data.py\n'
+        'python scripts/restore_data.py --verify\n'
+        'GEMS_DATA_DIR=data python scripts/check_submission.py \\\n'
+        '  docs/downloads/&lt;candidate.tif&gt; --receipt evidence/format_checks/&lt;candidate.json&gt;</code></pre>'
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/scripts/check_submission.py", "Review the checker source", external=True)}</p>'
         '<p>The local checker is necessary but cannot guarantee organizer acceptance. Review the current official problem page.</p></article>'
         '<article class="card span-6"><p class="kicker">Narrative disclosure</p><h2>Generative AI use</h2>'
-        '<p>The September 2026 official rules require a narrative disclosure of the extent and role of generative-AI use when applicable. '
+        f'<p>The official {int(rules["rules_year"])} rules require a narrative disclosure of the extent and role of generative-AI use when applicable. '
         'This project has a draft disclosure in its repository; it must be updated against the actual final work before submission.</p>'
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/05_genai_disclosure_draft.md", "Review the current disclosure draft", external=True)}</p>'
         '</article></section>'
@@ -338,6 +352,16 @@ def render_summary() -> str:
 def render_research() -> str:
     hypotheses = read_json("hypotheses.json")
     status = read_json("status_feed.json")["current"]
+    h29_gate = json.loads((ROOT / "evidence" / "h29_gate.json").read_text(encoding="utf-8"))
+    h29_holdout = json.loads((ROOT / "evidence" / "h29_holdout.json").read_text(encoding="utf-8"))
+    h29_arm_count = len(h29_gate)
+    h29_screen_draws = h29_gate["A1"]["screen_draws"]
+    h29_fitted_draws = sorted({int(row["draw"]) for row in h29_holdout.get("rows", [])})
+    h29_confirmation_draws = h29_gate["A1"]["confirmation_draws"]
+    h29_confirmation_not_run = not any(draw in h29_confirmation_draws for draw in h29_fitted_draws)
+    h31_design = json.loads((ROOT / "evidence" / "h31_worm_screen" / "design.json").read_text(encoding="utf-8"))
+    h31_gate = h31_design["promotion_gate"]
+    h31_fold_count = len(h31_design["spatial_folds"])
     cards = []
     for item in hypotheses.get("items", []):
         layers = ", ".join(item.get("layers", []))
@@ -353,11 +377,12 @@ def render_research() -> str:
             f'<p><strong>Cost:</strong> {e(item.get("cost", ""))}</p><p><strong>Data:</strong> {e(item.get("external_data", ""))}</p></aside></div></article>'
         )
     body = (
-        '<section class="status-banner"><strong>Novelty was rechecked against the latest main branch.</strong> The first H31 slate was written and implemented on a branch based at ad130c8, before main received the H29 experiment. That H29 work already tested raw-RTP/gravity worm persistence; H31 is now described only as a narrower pseudogravity-transform/drift extension, with a reduced planning range. H32 is the next unimplemented candidate. “Not found” is limited to the reviewed repositories, not all competitors.</section>'
+        '<section class="status-banner"><strong>Novelty was rechecked against the latest main branch.</strong> Every arm in the corrected H29 screen failed; H31’s separate screen also failed. H32 is the next unimplemented candidate. “Not found” is limited to the reviewed repositories, not all competitors.</section>'
         f'<section class="grid" aria-label="Ranked hypotheses">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
-        '<p>H29 already ran upward-continuation worm persistence on raw RTP and isostatic gravity, including joint persistence as gate/rank/head features. No arm passed the preregistered +0.005 screen. Draws 2–3 were computed for all arms despite screen failures, so the reconciliation treats them as exploratory extras rather than eligible confirmations. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric Euclidean 200-m cross-support (5×5 bounding window, diagonal corners excluded) allows small grid misregistration; it is a tolerance, not geological proof.</p>'
-        '<p>The first synthetic engineering test found exact-pixel multiplication produced an all-zero joint term after the distinct transforms. Before any real-data fit, the preregistered joint feature was clarified to use the fixed ±2-pixel tolerance; no model, data, scale, or gate changed.</p>'
+        f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
+        f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'
+        '<p>A synthetic engineering test found exact-pixel multiplication produced an empty joint term after the distinct transforms. Before any real-data fit, the preregistered joint feature was clarified to use a fixed small spatial tolerance; no model, data, or promotion gate changed.</p>'
         f'<p><strong>Current screen:</strong> {e(status.get("screen_status", "not run"))}. Confirmation is {e(status.get("confirmation_status", "blocked"))}.</p>'
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/02_preregistered_h31_worming_2026-10-03.md", "Read the preregistration and amendment", external=True)}</p>'
         '</article><article class="card span-5"><p class="kicker">Scientific limits</p><h2>Worming-like ≠ full inversion</h2>'
@@ -365,25 +390,28 @@ def render_research() -> str:
         '<p>Potential fields are non-unique: source interference, cultural noise, depth, remanence and misalignment can produce or hide edges. Persistence is not proof of faulting, geothermal activity, or discovery.</p>'
         '<p><a href="sources.html">Check the primary/review sources and limitations →</a></p></article></section>'
         '<section class="card"><p class="kicker">Promotion gates</p><h2>Spatial validation before any slot</h2>'
-        '<p>Four spatial quadrants are the replication units; folds and draws are paired cells, not independent extra samples. H31 must beat the strongest same-run control by a paired mean DTI gain above 0.001, be positive in at least 3/4 spatial blocks, never lose more than 0.010 in one block, and avoid a material increase in catalogue-hug share. A fresh two-draw confirmation with the same gates is required. Raw-cell hashes and screen gates are recomputed before confirmation.</p>'
+        f'<p>{h31_fold_count} spatial blocks are the replication units; folds and draws are paired cells, not independent extra samples. H31 must beat the strongest same-run control by a paired mean DTI gain {e(h31_gate["mean_paired_gain_over_best_same_run_control"])}, '
+        f'be positive in {e(h31_gate["positive_spatial_blocks"])} blocks, keep the worst-block gain {e(h31_gate["worst_spatial_block_gain"])}, and keep catalogue-hug-share increase {e(h31_gate["catalogue_hug_share_increase"])}. '
+        f'{"A fresh confirmation is required." if h31_gate["fresh_confirmation_required"] else "No fresh confirmation is required."} Raw-cell hashes and screen gates are checked before any confirmation.</p>'
         '<p>Passing these gates only permits a candidate to be considered; it does not authorize a weekly submission, guarantee the official score, or establish generalization to expert-labelled faults.</p></section>'
         '<section class="card"><p class="kicker">What came before</p><h2>Predecessor audit</h2>'
         '<p>The reviewed GEMSDOE25 code already tried fixed-scale potential-field derivatives, terrain/scarp descriptors, catalogue geometry, geothermal/context tables, thinning, single-tip continuation, and an H30 relay-bridge × scarp experiment. The predecessor A-family potential-field screen was reported inert/negative on a catalogue-gap proxy; H30-1 failed fresh-draw confirmation. These are predecessor proxy reports, not official scores and not recomputed here.</p>'
-        '<p><strong>Same-repository prior result:</strong> H29 on the prior main branch tested raw-RTP/gravity worm gating, rank order and model features, plus residualized thermal probes. No arm passed its frozen +0.005 screen. Draws 2–3 were computed for all arms anyway and are exploratory extras, not valid confirmations; see the gate reconciliation. No slot was recommended or used. This is a prior catalogue-gap proxy outcome, not a competition score. '
-        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/02_h29_results_2026-10-03.md", "Review the H29 outcome table", external=True) + ' · '
-        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/h29_gate.json", "Open the original H29 screen snapshot", external=True) + ' · '
-        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/06_h29_gate_reconciliation_2026-10-03.md", "Read the gate reconciliation", external=True) + '</p>'
+        f'<p><strong>H29 result:</strong> the corrected nearest-fill, bounded-persistence screen tested {h29_arm_count} preregistered arms; every arm failed. '
+        f'{"No confirmation fits were run" if h29_confirmation_not_run else "Confirmation status is recorded in the evidence"}; no weekly slot was recommended or used. The earlier run and gate discrepancy are archived as historical evidence, not the current screen. These are catalogue-gap proxy outcomes, not competition scores. '
+        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/02_h29_results_2026-10-03.md", "Review the corrected H29 outcome", external=True) + ' · '
+        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/h29_gate.json", "Open the current H29 gate", external=True) + ' · '
+        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/06_h29_gate_reconciliation_2026-10-03.md", "Read the archived gate reconciliation", external=True) + '</p>'
         '<p>Historical score claims remain unverified owner/user reports. No leaderboard snapshot is shown or used here. H31 is not designed or tuned to reproduce them.</p>'
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/04_prior_work_audit.md", "Review the predecessor audit", external=True)}</p></section>'
         '<section class="card"><h2>Model and emission</h2><p>The frozen screen compares a fixed BDE + X1–X3 baseline, a H27 tip control, and factorial additions of magnetic-pseudogravity persistence/drift, gravity persistence/drift, and joint cross-support. All arms share the same holdout masks, samples, classifier family, and emission budget within a cell. The output is scored by the local distance-weighted metric on held-out catalogue traces only.</p></section>'
     )
     return page(
         "Research and hypotheses",
-        "Three ranked hypotheses after the H29 prior-work review, with preregistration, prior results, and scientific limits.",
+        "Ranked hypotheses, preregistration, current negative screens, and scientific limits.",
         "research",
         "Research register · updated from local files",
-        "Three hypotheses, re-ranked against H29.",
-        "H29’s four registered arms failed the spatial catalogue-gap proxy gate. H31 is now only an unfitted pseudogravity-transform/drift extension; H32 is the first unimplemented candidate, and H33 remains blocked. No current file is slot-approved.",
+        "Hypotheses, re-ranked against H29.",
+        "Every tested H29 arm failed the corrected screen; the separate H31 screen also failed. H32 is the first unimplemented candidate, and H33 remains blocked. No current file is slot-approved.",
         body,
         a("status.html", "View the evidence feed", class_name="button") + a("sources.html", "Review scientific sources", class_name="button secondary"),
     )
@@ -446,7 +474,7 @@ def render_sources() -> str:
         '<section class="card"><p class="kicker">Official and research sources</p><h2>Open the primary source yourself</h2>' + ''.join(items) + '</section>'
         '<section class="card"><h2>Data and interpretation caveats</h2><p>Review the project irregularities register for mirror provenance, ambiguous band semantics, unverified score claims, proxy limits, and blocked data.</p><p><a href="irregularities.html">Open the irregularities page →</a></p></section>'
         '<section class="card"><p class="kicker">Terms decision</p><h2>No DrivenData polling or scraping</h2>'
-        '<p>DrivenData’s Terms of Use prohibit robots or other automatic access for any purpose, including monitoring/copying, and manual monitoring/copying without prior written consent. The reviewed terms display last modified August 7, 2014. No written consent for monitoring is present. This project includes no leaderboard link, live page content, polling, or copied score feed; local status comes only from repository evidence.</p>'
+        '<p>DrivenData’s Terms of Use prohibit robots or other automatic access for any purpose, including monitoring/copying, and manual monitoring/copying without prior written consent. No written consent for monitoring is present. This project includes no leaderboard link, live page content, polling, or copied score feed; local status comes only from repository evidence.</p>'
         f'<p>{a("https://www.drivendata.org/termsofuse/", "Read the official Terms of Use", external=True)} · {a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/03_drivendata_terms_access_policy.md", "Review the project access-policy notes", external=True)}</p></section>'
     )
     return page(

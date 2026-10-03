@@ -1,0 +1,171 @@
+{
+  "stem": "gems29-wormrank-d28-20261003-b4643d3622d5",
+  "note_to_paste": "GEMSDOE29 WORMRANK | d2.8 spacing, corrected persistence+ridge rank | A2 gate=FAIL proxy only | b4643d3622d5 | live-unverified",
+  "grid": {
+    "crs": "EPSG:32611",
+    "width": 3292,
+    "height": 3730,
+    "pixel_size_m": [
+      100.0,
+      100.0
+    ],
+    "footprint_pixels": 5167373
+  },
+  "format": {
+    "driver": "GTiff",
+    "bands": 1,
+    "dtype": "float32",
+    "inside_value_range": [
+      0.0,
+      1.0
+    ],
+    "outside": "NaN",
+    "note_max_characters": 200
+  },
+  "local_format_verified": true,
+  "organizer_portal_acceptance": "not verified; owner must upload manually",
+  "checks": {
+    "foot_mask_matches_pinned_template": {
+      "pass": true,
+      "detail": "footprint pixels=5167373"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif:exists": {
+      "pass": true,
+      "detail": "1,567,806 bytes"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif:outside_nan_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif:pixel_count": {
+      "pass": true,
+      "detail": "41335 positive pixels vs expected 41335"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=41335"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif:exists": {
+      "pass": true,
+      "detail": "801,692 bytes"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif:outside_zero_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif:pixel_count": {
+      "pass": true,
+      "detail": "41335 positive pixels vs expected 41335"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=41335"
+    },
+    "zip:exists": {
+      "pass": true,
+      "detail": "311,934 bytes"
+    },
+    "zip:exactly_one_geotiff": {
+      "pass": true,
+      "detail": "members=['gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif']"
+    },
+    "zip:geotiff:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "zip:geotiff:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "zip:geotiff:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "zip:geotiff:outside_nan_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "zip:geotiff:pixel_count": {
+      "pass": true,
+      "detail": "41335 positive pixels vs expected 41335"
+    },
+    "zip:geotiff:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=41335"
+    },
+    "zip:content_identical_to_nan_tif": {
+      "pass": true,
+      "detail": ""
+    },
+    "__summary__": {
+      "pass": true,
+      "detail": "28 checks, 0 failures"
+    },
+    "sha256_receipt:gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif": {
+      "pass": true,
+      "detail": "actual=fed135479141ac7d1e3768139fddce6dc564374b82585831f7325c8ec9e37dc0, build_receipt=fed135479141ac7d1e3768139fddce6dc564374b82585831f7325c8ec9e37dc0"
+    },
+    "sha256_receipt:gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif": {
+      "pass": true,
+      "detail": "actual=88e71d57c5792dcc8d02b7cdd913874f96bb21d2f57fc506623143ab8e591f5d, build_receipt=88e71d57c5792dcc8d02b7cdd913874f96bb21d2f57fc506623143ab8e591f5d"
+    },
+    "sha256_receipt:gems29-wormrank-d28-20261003-b4643d3622d5-nan.zip": {
+      "pass": true,
+      "detail": "actual=3e393e81c5a88f68b199b23d1c163b43a1fa2336875176c61ecc0f068fbb80c0, build_receipt=3e393e81c5a88f68b199b23d1c163b43a1fa2336875176c61ecc0f068fbb80c0"
+    }
+  },
+  "files": {
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif": {
+      "bytes": 1567806,
+      "sha256": "fed135479141ac7d1e3768139fddce6dc564374b82585831f7325c8ec9e37dc0"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif": {
+      "bytes": 801692,
+      "sha256": "88e71d57c5792dcc8d02b7cdd913874f96bb21d2f57fc506623143ab8e591f5d"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.zip": {
+      "bytes": 311934,
+      "sha256": "3e393e81c5a88f68b199b23d1c163b43a1fa2336875176c61ecc0f068fbb80c0"
+    }
+  },
+  "independent_verification": "scripts/verify_downloads.py",
+  "independent_verification_utc": "2026-10-03T14:44:46Z",
+  "independent_verification_files": {
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.tif": {
+      "bytes": 1567806,
+      "sha256": "fed135479141ac7d1e3768139fddce6dc564374b82585831f7325c8ec9e37dc0"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-zeros.tif": {
+      "bytes": 801692,
+      "sha256": "88e71d57c5792dcc8d02b7cdd913874f96bb21d2f57fc506623143ab8e591f5d"
+    },
+    "gems29-wormrank-d28-20261003-b4643d3622d5-nan.zip": {
+      "bytes": 311934,
+      "sha256": "3e393e81c5a88f68b199b23d1c163b43a1fa2336875176c61ecc0f068fbb80c0"
+    }
+  }
+}

@@ -10,12 +10,14 @@ read 2026-10-03):
     FNw   = sum_{g in G} [1 - max_{x: d(x,g)<=R} p(x) * k(d(x,g))]
     DTI   = TPw / (TPw + 0.2*FPw + 0.8*FNw + eps)
 
-One behaviour is NOT on the official page: predictions on already-catalogued (known) pixels neither
-earn credit nor cost false-positive mass, and truth excludes them. That masking semantics was
-recorded by the owner's sibling repos from live score coincidences (GEMSDOE24 `src/gems/metric.py`;
-independently supported by 8GEMSDOE scoring identically to GEMSDOE's entry after adding all
-catalogue pixels). We keep the `known` argument so both modes can be scored, and we always report
-which mode produced a number. Structure and guards follow the sibling re-implementation in
+One behaviour is NOT specified in the cited public metric definition: whether predictions on
+already-catalogued (known) pixels are excluded from credit and false-positive mass, with truth
+masked there. The owner's sibling repositories historically inferred that convention from
+unverified score comparisons, but those observations are not an official receipt and are not
+reproduced here. This implementation exposes a `known` mask for catalogue-gap holdout experiments;
+those values are explicitly local proxies and must not be presented as official scores. We keep the
+mask explicit so both modes can be inspected. Structure and guards follow the sibling
+re-implementation in
 buffedlizard55-lab/GEMSDOE27 `src/gems27/metric.py` (credited), re-written here with an added
 exhaustive brute-force cross-check test (tests/test_metric.py).
 """

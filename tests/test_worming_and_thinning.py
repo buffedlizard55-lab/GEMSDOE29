@@ -6,7 +6,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from gems29.thinning import dot_thin
 from gems29.thinning import dot_thin_ranked
-from gems29.worming import upward_continue  # noqa: E402
+from gems29.worming import prep_field, upward_continue  # noqa: E402
 
 
 def test_dot_thin_subset_and_spacing():
@@ -44,6 +44,18 @@ def test_ranked_prefers_high_priority_on_a_line():
     prio[4, 2] = 10.0                                # force the dot at column 2
     k = dot_thin_ranked(m, 3.0, prio)
     assert k[4, 2]
+
+
+def test_prep_field_preserves_nearest_valid_padding_not_median_padding():
+    values = np.full((3, 3), np.nan, np.float32)
+    valid = np.zeros((3, 3), bool)
+    values[1, 0], values[0, 0], values[0, 1] = 0.0, 100.0, 1000.0
+    valid[1, 0] = valid[0, 0] = valid[0, 1] = True
+    filled, _ = prep_field(values, valid, taper=0)
+    # The invalid center is equally close to the 0 and 1000 cells; either nearest fill is valid.
+    # Median padding would make it exactly 0 after median removal, which is neither neighbor.
+    assert filled[1, 1] in (-100.0, 900.0)
+    assert np.all(np.isfinite(filled))
 
 
 def test_upward_continuation_smooths_and_preserves_constant():
@@ -101,4 +113,41 @@ def test_worm_tracker_chains_break_and_resume_deterministically():
     mags = [np.full((24, 24), 1.0 - 0.05 * i) for i in range(len(LADDER_M))]
     st = worm_persistence(levels, mags, yy, xx, np.ones((24, 24), bool))
     assert st["level_idx"][0] == 2
-    assert abs(st["persistence"][0] - 2 / (len(LADDER_M) - 2)) < 1e-6
+    assert abs(st["persistence"][0] - 2 / (len(LADDER_M) - 1)) < 1e-6
+    assert 0.0 <= st["persistence"][0] <= 1.0
+
+
+def test_worm_persistence_is_bounded_and_uses_all_ladder_intervals():
+    from gems29.worming import worm_persistence, LADDER_M
+    shape = (16, 16)
+    full = [np.zeros(shape, bool) for _ in LADDER_M]
+    full[0][8, 8] = True
+    for lvl in range(1, len(full)):
+        full[lvl][8, 8] = True
+    mags = [np.ones(shape, np.float32) for _ in full]
+    yy, xx = np.nonzero(full[0])
+    st = worm_persistence(full, mags, yy, xx, np.ones(shape, bool))
+    assert st["level_idx"][0] == len(LADDER_M) - 1
+    assert st["persistence"][0] == 1.0
+
+    shallow = [np.zeros(shape, bool) for _ in LADDER_M]
+    shallow[0][8, 8] = True
+    yy, xx = np.nonzero(shallow[0])
+    st = worm_persistence(shallow, mags, yy, xx, np.ones(shape, bool))
+    assert st["level_idx"][0] == 0
+    assert st["persistence"][0] == 0.0
+    assert np.all((st["persistence"] >= 0) & (st["persistence"] <= 1))
+    assert np.isclose(st["h_last_m"][0], LADDER_M[0])
+
+
+def test_worm_persistence_rejects_inconsistent_ladders():
+    import pytest
+    from gems29.worming import worm_persistence, LADDER_M
+    shape = (4, 4)
+    levels = [np.zeros(shape, bool) for _ in LADDER_M]
+    mags = [np.zeros(shape, np.float32) for _ in LADDER_M]
+    with pytest.raises(ValueError):
+        worm_persistence(levels, mags[:-1], np.array([], int), np.array([], int), np.ones(shape, bool))
+    with pytest.raises(ValueError):
+        worm_persistence(levels, mags, np.array([], int), np.array([], int), np.ones(shape, bool),
+                         ladder_m=(0, 100, 100, 400, 800, 1600))

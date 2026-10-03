@@ -1,0 +1,117 @@
+{
+  "generated_utc": "2026-10-03T14:08:09+00:00",
+  "historical_correction": "Persistence uses last_level_index/(n_levels-1); pre-correction P could exceed 1 and old H29 A1/A2/B1 results are invalid. See knowledge/05_pre_run_implementation_audit_2026-10-03.md and evidence/history/.",
+  "provenance": {
+    "feature_stack_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+    "sample_template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+    "source_status": "pinned owner mirrors, not organizer-authenticated"
+  },
+  "magnetic": {
+    "field": "mag",
+    "ladder_m": [
+      0,
+      100,
+      200,
+      400,
+      800,
+      1600
+    ],
+    "edge_quantile": 0.95,
+    "tol_px": 1.0,
+    "tol_slope_px_per_100m": 0.5,
+    "persistence_definition": "last_matched_level_index / (n_levels - 1); bounded [0,1]",
+    "n_edges_level0": 86967,
+    "frac_edges_full_ladder": 0.17352559016638494,
+    "frac_edges_level0_only": 0.17815953177642094,
+    "mean_persistence": 0.48048803210258484,
+    "max_persistence": 1.0,
+    "max_strength_ratio": 1.0983387231826782
+  },
+  "gravity": {
+    "field": "grav",
+    "ladder_m": [
+      0,
+      100,
+      200,
+      400,
+      800,
+      1600
+    ],
+    "edge_quantile": 0.95,
+    "tol_px": 1.0,
+    "tol_slope_px_per_100m": 0.5,
+    "persistence_definition": "last_matched_level_index / (n_levels - 1); bounded [0,1]",
+    "n_edges_level0": 30336,
+    "frac_edges_full_ladder": 0.17958860759493672,
+    "frac_edges_level0_only": 0.5099222046413502,
+    "mean_persistence": 0.33690667152404785,
+    "max_persistence": 1.0,
+    "max_strength_ratio": 1.0092180967330933
+  },
+  "line_audit_magnetic": {
+    "mean_persist_ew_strike": 0.5248449444770813,
+    "mean_persist_ns_strike": 0.44952455163002014,
+    "mean_persist_other": 0.48545190691947937,
+    "n_ew": 8223,
+    "n_ns": 21032,
+    "n_other": 57712,
+    "interpretation_limit": "strike summaries only; no spectral line-frequency energy, no notch, and no claim that any individual E-W edge is an acquisition artifact"
+  },
+  "uc_crosscheck": {
+    "spearman_hgm_ours_vs_contractor_up150": 0.8779589867744882,
+    "n_sampled_pixels": 298649,
+    "provenance": "owner-mirrored u8 contractor band; operator agreement is not source authentication",
+    "height_m": 150.0,
+    "reference_layer": "TMI_up150"
+  },
+  "footprint_diff": {
+    "template": 5167373,
+    "features": 5165852,
+    "in_template_not_features": 3061,
+    "in_features_not_template": 1540
+  },
+  "joint": {
+    "n_joint_persistent_deep": 49053,
+    "n_level0_edges_union": 115098,
+    "max_persistence": 1.0,
+    "max_strength_ratio": 1.0983387231826782
+  },
+  "constants": {
+    "LADDER_M": [
+      0,
+      100,
+      200,
+      400,
+      800,
+      1600
+    ],
+    "EDGE_QUANTILE": 0.95,
+    "TOL_PX": 1.0,
+    "TOL_SLOPE_PX_PER_100M": 0.5,
+    "TAU_PERSIST": 0.5,
+    "persistence_definition": "last_matched_level_index / (number_of_levels - 1)",
+    "strength_ratio_bounds": [
+      0.0,
+      2.0
+    ],
+    "persistence_bounds": [
+      0.0,
+      1.0
+    ]
+  },
+  "rasters": [
+    "worm_mag_persist.tif",
+    "worm_grav_persist.tif",
+    "worm_joint_persist.tif",
+    "worm_joint_defined.tif",
+    "worm_mag_hlast_m.tif",
+    "worm_grav_hlast_m.tif",
+    "worm_mag_strength_ratio.tif",
+    "worm_grav_strength_ratio.tif",
+    "worm_joint_strength_ratio.tif",
+    "worm_mag_edge0.tif",
+    "worm_grav_edge0.tif",
+    "worm_mag_strike.tif",
+    "worm_grav_strike.tif"
+  ]
+}

@@ -68,18 +68,9 @@ receipts; marked as such), or (C) claim carried from owner-reported text (never 
   "WormE", https://docs.intrepid-geophysics.com/intrepid/topics/edge-detection-worme.html) confirms the
   industry usage: "creates many upward continuation grids", groups edge points into worms, reports
   strike/depth/structural index.
-- (V, measured here) On the official grids: 87k magnetic / 30k gravity level-0 p95 edges; 17.8 % / 51.0 %
-  exist at zero continuation only; 17.4 % / 18.0 % survive to 1600 m; our UC operator matches the
-  contractor TMI_up150 grid (Spearman 0.878 on HGM ranks). E–W-striking edges are the MOST persistent
-  (0.656 vs 0.562 N–S) — E–W lineation artifacts, if present, are not the dominant shallow population;
-  regional E–W basement fabric is the parsimonious reading. Any 'kill E–W' heuristic is refuted (V).
-- (V, this session's negative result) On the catalogue-internal hide-and-recover proxy, worming
-  persistence as gate (A1), rank (A2) or head features (B1), and thermal-probe features (B2) all move
-  sparse proxy DTI by |Δ| < 0.001 vs the +0.005 frozen gate (see evidence/h29_gate.json). Interpretation:
-  (i) the proxy cannot see the far-field habitat where worming operates (structural blind spot, disclosed);
-  (ii) at p95 edge density the parent emission is 97 % off-edge, so gating is nearly a no-op and ranking
-  is a weak lever; (iii) no evidence that worming is FALSE science — evidence that this proxy + this
-  emission surface cannot adjudicate it in a weekend. H29-3/H29-5 register the sharper versions.
+- (V, measured here on pinned owner-mirror grids; not organizer-authenticated) With nearest-valid FFT exterior padding, the current implementation finds 85,427 magnetic / 25,888 gravity level-0 p95 edges; 17.1 % / 58.7 % are level-0-only; 17.3 % / 19.1 % survive to 1600 m. Mean bounded persistence is 0.485 / 0.302. The UC operator's HGM ranks correlate with the owner-mirrored contractor-labelled TMI_up150 grid at Spearman 0.880 (298,649 sampled pixels); this is an operator check, not source authentication. E–W / other / N–S mean magnetic persistence is 0.540 / 0.491 / 0.447. It is a descriptive strike summary, not proof of line contamination or basement fabric; do not kill E–W edges without a separate spectral test.
+- (V, current preregistered negative result) The corrected nearest-fill, bounded-P screen tested A1/A2/B1/B2 and H29-5 over two screen draws × four spatial folds. All five failed. H29-5 was −0.07894/−0.08703 mean paired proxy DTI vs the best same-fold/draw control, with 0/4 positive folds on each draw. A1/A2/B1/B2 were below the +0.005 bar; no confirmation draws were fit. See `evidence/h29_gate.json` and `knowledge/02_h29_results_2026-10-03.md`. These catalogue-gap proxy results neither predict the leaderboard nor disprove a geological mechanism.
+- (V, audit correction) An earlier bounded-P implementation still replaced nearest-filled FFT padding with a global median, contrary to the frozen method; its screen and artifact are archived under `evidence/history/pre_nearest_fill_2026-10-03/` and must not be treated as current. The original P>1.0 variant is separately archived under `evidence/history/pre_correction_downloads/`.
 
 ## 4. Metric arithmetic and local proxy calibration (no leaderboard snapshot)
 
@@ -113,7 +104,7 @@ The figures below are preserved as qualitative project-history context from prio
 ## 6. Free official data NOT yet used by anyone in this family (leads for next sessions)
 
 1. Siler & Faulds slip/dilation-tendency shapefile (doi 10.5066/P9YL58W6, USGS) — stress-conditioned
-   slip tendency per Quaternary fault; registered H26-4 stalled on fetch; pairs with H29-5 corridors.
+   slip tendency per Quaternary fault; registered H26-4 stalled on fetch. H29-5's tested strain/seismicity interaction failed its registered catalogue-gap screen; any reuse needs a new hypothesis and independent evidence.
 2. GDR 1391 paleo-geothermal polygons + Great Basin Q volcanics (pins in data/manifest.json) — blocked
    by sandbox network only; one CI-runner job away (GEMSDOE27 wrote `fetch_external_layers.py` for exactly this).
 3. USGS 3DEP 1 m DEM tiles beyond the 706 already processed (the `1m_DEM_links.csv` list) for
@@ -124,7 +115,7 @@ The figures below are preserved as qualitative project-history context from prio
    H27-4's "blocked" idea; check licence on the specific DOI page before use.
 6. Earthquake phase data (ComCat) for re-located microseismicity swarms — the bands give pre-computed
    densities (deq/ieq_n100a15); raw picks at fixed radius/azimuth windows would re-shape that term.
-   Only worth it if used along persistence-selected corridors (H29-5).
+   Do not repeat the failed H29-5 feature combination without a newly preregistered physical target and stronger off-catalogue validation.
 
 ## 7. Submission-site engineering lessons (this family's own incident log, now enforced in code)
 

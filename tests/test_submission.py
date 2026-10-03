@@ -6,8 +6,14 @@ from rasterio.transform import Affine
 from gemsdoe.submission import (
     check_file, content_id, make_filename, make_note, write_submission, zip_single,
 )
+from check_submission import default_template_path
 
 TRANSFORM = Affine(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)
+
+
+def test_cli_default_template_uses_manifest_bridge_path(monkeypatch, tmp_path):
+    monkeypatch.setenv("GEMS_DATA_DIR", str(tmp_path))
+    assert default_template_path() == tmp_path / "bridge" / "sample_submission.tif"
 
 
 @pytest.fixture()

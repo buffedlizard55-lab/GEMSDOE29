@@ -1,156 +1,670 @@
 {
- "generated_utc": "2026-10-03T12:00:00Z",
- "gate_snapshot": {
-  "A1": {
-   "screen_pass": false,
-   "confirm_draw": null,
-   "per_draw": {
-    "draw0": {
-     "mean_delta": -0.00016060963212019552,
-     "positive_folds": 1,
-     "deltas": [
-      0.00028465779412584213,
-      -0.00016901127316439057,
-      -0.00029810245767798726,
-      -0.0004599825917642464
-     ]
+  "generated_utc": "2026-10-03T16:25:54Z",
+  "gate_snapshot": {
+    "A1": {
+      "family": "A",
+      "arm": "A1",
+      "delta_key": "paired_delta",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 1.4873018356658524e-05,
+          "positive_folds": 1,
+          "deltas": [
+            0.0008520507200591998,
+            -4.3549478881160786e-05,
+            -0.00036248781266022545,
+            -0.00038652135509117946
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.0003195720812453409,
+          "positive_folds": 1,
+          "deltas": [
+            0.0008537334150605091,
+            -1.1285474595557066e-05,
+            -0.0016425316285542807,
+            -0.0004782046368920351
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
     },
-    "draw1": {
-     "mean_delta": -0.00012074211546957148,
-     "positive_folds": 1,
-     "deltas": [
-      0.001020673703529748,
-      -0.00012774894561573547,
-      -0.0011171614866487961,
-      -0.0002587317331435024
-     ]
-    }
-   },
-   "PASS": false
-  },
-  "A2": {
-   "screen_pass": false,
-   "confirm_draw": null,
-   "per_draw": {
-    "draw0": {
-     "mean_delta": -0.000978664632826004,
-     "positive_folds": 2,
-     "deltas": [
-      0.0033076095107189424,
-      -0.004511274580623795,
-      0.0004348197763432565,
-      -0.0031458132377424203
-     ]
+    "A2": {
+      "family": "A",
+      "arm": "A2",
+      "delta_key": "paired_delta",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.0009676717888912091,
+          "positive_folds": 2,
+          "deltas": [
+            0.0033193096907693093,
+            -0.004640450030869742,
+            0.000460882299324214,
+            -0.003010429114788618
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.00028678803128921737,
+          "positive_folds": 3,
+          "deltas": [
+            0.00025796585783920134,
+            0.0006554877194235031,
+            0.00042063961025461116,
+            -0.00018694106236044616
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
     },
-    "draw1": {
-     "mean_delta": 0.0002440140113817678,
-     "positive_folds": 3,
-     "deltas": [
-      0.00024547305558064725,
-      0.0007454194416615934,
-      0.0003425131695580369,
-      -0.00035734962127320635
-     ]
-    }
-   },
-   "PASS": false
-  },
-  "B1": {
-   "screen_pass": false,
-   "confirm_draw": null,
-   "per_draw": {
-    "draw0": {
-     "mean_delta": 0.00037651303644569475,
-     "positive_folds": 2,
-     "deltas": [
-      -0.0007313063003919935,
-      -0.0003931534541631032,
-      0.0005989094525041677,
-      0.002031602447833708
-     ]
+    "B1": {
+      "family": "B",
+      "arm": "B1",
+      "delta_key": "paired_delta",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.00010075556270694236,
+          "positive_folds": 2,
+          "deltas": [
+            1.0504935934463333e-05,
+            -0.0013225512595466723,
+            -0.001064860904970686,
+            0.0019738849777551255
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.0007514161011072549,
+          "positive_folds": 4,
+          "deltas": [
+            0.00032211673886769696,
+            0.0004904925647531456,
+            0.00040033530768929584,
+            0.0017927197931188812
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
     },
-    "draw1": {
-     "mean_delta": 0.0003496061708836754,
-     "positive_folds": 3,
-     "deltas": [
-      -0.00015055463766432825,
-      0.0006221452971931964,
-      0.000683010938419916,
-      0.00024382308558591748
-     ]
-    }
-   },
-   "PASS": false
-  },
-  "B2": {
-   "screen_pass": false,
-   "confirm_draw": null,
-   "per_draw": {
-    "draw0": {
-     "mean_delta": 0.0004967905083177728,
-     "positive_folds": 2,
-     "deltas": [
-      -0.0009385008898951039,
-      0.0010354032082468372,
-      -0.0014249939220456927,
-      0.003315253636965051
-     ]
+    "B2": {
+      "family": "B",
+      "arm": "B2",
+      "delta_key": "paired_delta",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.0004967905083177728,
+          "positive_folds": 2,
+          "deltas": [
+            -0.0009385008898951039,
+            0.0010354032082468372,
+            -0.0014249939220456927,
+            0.003315253636965051
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.0012323539435678426,
+          "positive_folds": 4,
+          "deltas": [
+            0.0005779442321002456,
+            0.0008459516933006731,
+            0.0008507538898643342,
+            0.0026547659590061175
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
     },
-    "draw1": {
-     "mean_delta": 0.0012323539435678426,
-     "positive_folds": 4,
-     "deltas": [
-      0.0005779442321002456,
-      0.0008459516933006731,
-      0.0008507538898643342,
-      0.0026547659590061175
-     ]
+    "H29-5": {
+      "family": "B",
+      "arm": "B3",
+      "delta_key": "paired_delta_best_control",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.07893896524015044,
+          "positive_folds": 0,
+          "deltas": [
+            -0.08157620318757758,
+            -0.08363533553741817,
+            -0.045810529797325916,
+            -0.10473379243828011
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.08703222112227109,
+          "positive_folds": 0,
+          "deltas": [
+            -0.09227765328084228,
+            -0.11367486190142496,
+            -0.04733175250197047,
+            -0.09484461680484661
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
     }
-   },
-   "PASS": false
-  }
- },
- "artifacts": {
-  "WORMRANK": {
-   "stem": "gems29-wormrank-d28-20261003-73a8c4d12139",
-   "px": 41349,
-   "status": "research artifact \u2014 frozen gate NOT passed; do not spend a weekly slot on this unless the owner accepts the risk",
-   "content_id": "73a8c4d12139",
-   "note": "GEMSDOE29 WORMRANK | d2.8 spacing, worm-persistence+ridge ranked order | gate=FAIL proxy \u0394DTI see repo | 73a8c4d12139 | live-unverified"
   },
-  "REFD28": {
-   "px": 44090,
-   "content_id": "1cc7dc534d51",
-   "matches_sibling_44090": true,
-   "stem": "gems29-refd28-repro-20261003-1cc7dc534d51"
+  "artifacts": {
+    "WORMRANK": {
+      "stem": "gems29-wormrank-d28-20261003-59dcaf6dd11d",
+      "px": 41338,
+      "status": "research artifact \u2014 A2 local proxy gate FAIL; do not spend a weekly slot",
+      "content_id": "59dcaf6dd11d",
+      "note": "GEMSDOE29 WORMRANK | d2.8 spacing, corrected persistence+ridge rank | A2 gate=FAIL proxy only | 59dcaf6dd11d | live-unverified",
+      "spacing_px": 2.8,
+      "local_format_verified": true,
+      "holdout_gate": {
+        "family": "A",
+        "arm": "A2",
+        "delta_key": "paired_delta",
+        "threshold_mean_delta": 0.005,
+        "min_positive_folds": 3,
+        "expected_folds": 4,
+        "screen_draws": [
+          0,
+          1
+        ],
+        "confirmation_draws": [
+          2,
+          3
+        ],
+        "screen_pass": false,
+        "complete_confirmation_draws": [],
+        "confirm_draw": null,
+        "PASS": false,
+        "per_draw": {
+          "draw0": {
+            "complete": true,
+            "n_folds": 4,
+            "folds": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "fold_ids_valid": true,
+            "all_deltas_finite": true,
+            "mean_delta": -0.0009676717888912091,
+            "positive_folds": 2,
+            "deltas": [
+              0.0033193096907693093,
+              -0.004640450030869742,
+              0.000460882299324214,
+              -0.003010429114788618
+            ],
+            "passed_threshold": false
+          },
+          "draw1": {
+            "complete": true,
+            "n_folds": 4,
+            "folds": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "fold_ids_valid": true,
+            "all_deltas_finite": true,
+            "mean_delta": 0.00028678803128921737,
+            "positive_folds": 3,
+            "deltas": [
+              0.00025796585783920134,
+              0.0006554877194235031,
+              0.00042063961025461116,
+              -0.00018694106236044616
+            ],
+            "passed_threshold": false
+          },
+          "draw2": {
+            "complete": false,
+            "n_folds": 0,
+            "folds": [],
+            "fold_ids_valid": false,
+            "all_deltas_finite": true,
+            "mean_delta": null,
+            "positive_folds": 0,
+            "deltas": [],
+            "passed_threshold": false
+          },
+          "draw3": {
+            "complete": false,
+            "n_folds": 0,
+            "folds": [],
+            "fold_ids_valid": false,
+            "all_deltas_finite": true,
+            "mean_delta": null,
+            "positive_folds": 0,
+            "deltas": [],
+            "passed_threshold": false
+          }
+        },
+        "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+      }
+    },
+    "REFD28": {
+      "px": 44090,
+      "content_id": "1cc7dc534d51",
+      "matches_sibling_44090": true,
+      "stem": "gems29-refd28-repro-20261003-1cc7dc534d51",
+      "spacing_px": 2.8,
+      "matches_owner_mirror_mask": true,
+      "score_status": "0.2600 is an owner/user-reported claim; not authenticated by the mask file",
+      "status": "reference only \u2014 score association unverified; do not resubmit",
+      "local_format_verified": true
+    },
+    "H34_SCREEN": {
+      "stem": "h34-coverage-screen",
+      "px": null,
+      "status": "reported: FAIL on the catalogue-hidden primary proxy, PASS on the SGMC off-catalogue secondary; not slot-relevant",
+      "content_id": null,
+      "note": "GEMSDOE29 H34 | metric-native coverage emission screen | 32 cells, 306.6 s | mean paired gain -0.0212 (0/4 folds) catalogue-hidden; +0.0535 (4/4) SGMC | evidence/h34_coverage_screen/summary.json"
+    },
+    "CANDIDATE_SCOREBOARD": {
+      "stem": "candidate-scoreboard",
+      "px": null,
+      "status": "reported: model-free proxy scoreboard for fixed candidate files",
+      "content_id": null,
+      "note": "historical D2.8 = local rebuild (catalogue-hidden 0.09832, SGMC 0.09528); SGMC inventory alternative (0.04461, 0.56153) | evidence/candidate_scoreboard.json"
+    },
+    "FACTORIAL": {
+      "stem": "factorial-families",
+      "px": null,
+      "status": "complete at report time (2^(5-1) resolution V over families A-E, draws 14-15 x 4 folds, 128 fits, 1276.5 s); supported effects B, E, AB, AC, AD, BD, CD",
+      "content_id": "e0ba3904372a",
+      "note": "preregistration knowledge/12_preregistered_factorial_families_2026-10-03.md; results knowledge/14_factorial_results_2026-10-03.md; raw effects.json sha256 prefix e0ba3904372a"
+    },
+    "REPO_CANDIDATE": {
+      "stem": "repo-c0-habitat-emission",
+      "px": 37913,
+      "status": "built 2026-10-03; format ok locally; method proxy-screened (0.1409 catalogue-hidden, H34 C0 protocol) but never live-scored; not slot-approved",
+      "content_id": "a4d439b07426",
+      "note": "docs/downloads/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif + zip; build record evidence/repo_candidate_build.json; receipt evidence/format_checks/...a4d439b07426-nan.json"
+    },
+    "H29-5": {
+      "status": "not packaged as a submission candidate",
+      "screen_gate": {
+        "family": "B",
+        "arm": "B3",
+        "delta_key": "paired_delta_best_control",
+        "threshold_mean_delta": 0.005,
+        "min_positive_folds": 3,
+        "expected_folds": 4,
+        "screen_draws": [
+          0,
+          1
+        ],
+        "confirmation_draws": [
+          2,
+          3
+        ],
+        "screen_pass": false,
+        "complete_confirmation_draws": [],
+        "confirm_draw": null,
+        "PASS": false,
+        "per_draw": {
+          "draw0": {
+            "complete": true,
+            "n_folds": 4,
+            "folds": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "fold_ids_valid": true,
+            "all_deltas_finite": true,
+            "mean_delta": -0.07893896524015044,
+            "positive_folds": 0,
+            "deltas": [
+              -0.08157620318757758,
+              -0.08363533553741817,
+              -0.045810529797325916,
+              -0.10473379243828011
+            ],
+            "passed_threshold": false
+          },
+          "draw1": {
+            "complete": true,
+            "n_folds": 4,
+            "folds": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "fold_ids_valid": true,
+            "all_deltas_finite": true,
+            "mean_delta": -0.08703222112227109,
+            "positive_folds": 0,
+            "deltas": [
+              -0.09227765328084228,
+              -0.11367486190142496,
+              -0.04733175250197047,
+              -0.09484461680484661
+            ],
+            "passed_threshold": false
+          },
+          "draw2": {
+            "complete": false,
+            "n_folds": 0,
+            "folds": [],
+            "fold_ids_valid": false,
+            "all_deltas_finite": true,
+            "mean_delta": null,
+            "positive_folds": 0,
+            "deltas": [],
+            "passed_threshold": false
+          },
+          "draw3": {
+            "complete": false,
+            "n_folds": 0,
+            "folds": [],
+            "fold_ids_valid": false,
+            "all_deltas_finite": true,
+            "mean_delta": null,
+            "positive_folds": 0,
+            "deltas": [],
+            "passed_threshold": false
+          }
+        },
+        "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+      },
+      "reason": "screen failed against best same-fold/same-draw pre-existing controls; no confirmation draws were run per preregistered compute-saving rule",
+      "slot_spend": false
+    }
   },
-  "H34_SCREEN": {
-   "stem": "h34-coverage-screen",
-   "px": null,
-   "status": "reported: FAIL on the catalogue-hidden primary proxy, PASS on the SGMC off-catalogue secondary; not slot-relevant",
-   "content_id": null,
-   "note": "GEMSDOE29 H34 | metric-native coverage emission screen | 32 cells, 306.6 s | mean paired gain -0.0212 (0/4 folds) catalogue-hidden; +0.0535 (4/4) SGMC | evidence/h34_coverage_screen/summary.json"
-  },
-  "CANDIDATE_SCOREBOARD": {
-   "stem": "candidate-scoreboard",
-   "px": null,
-   "status": "reported: model-free proxy scoreboard for fixed candidate files",
-   "content_id": null,
-   "note": "historical D2.8 = local rebuild (catalogue-hidden 0.09832, SGMC 0.09528); SGMC inventory alternative (0.04461, 0.56153) | evidence/candidate_scoreboard.json"
-  },
-  "FACTORIAL": {
-   "stem": "factorial-families",
-   "px": null,
-   "status": "complete at report time (2^(5-1) resolution V over families A-E, draws 14-15 x 4 folds, 128 fits, 1276.5 s); supported effects B, E, AB, AC, AD, BD, CD",
-   "content_id": "e0ba3904372a",
-   "note": "preregistration knowledge/12_preregistered_factorial_families_2026-10-03.md; results knowledge/14_factorial_results_2026-10-03.md; raw effects.json sha256 prefix e0ba3904372a"
-  },
-  "REPO_CANDIDATE": {
-   "stem": "repo-c0-habitat-emission",
-   "px": 37913,
-   "status": "built 2026-10-03; format ok locally; method proxy-screened (0.1409 catalogue-hidden, H34 C0 protocol) but never live-scored; not slot-approved",
-   "content_id": "a4d439b07426",
-   "note": "docs/downloads/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif + zip; build record evidence/repo_candidate_build.json; receipt evidence/format_checks/...a4d439b07426-nan.json"
-  }
- }
+  "input_manifest": "data/manifest.json (all entries hash-verified locally; owner mirrors)"
 }

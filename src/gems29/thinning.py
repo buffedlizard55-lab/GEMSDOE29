@@ -1,22 +1,22 @@
 """Deterministic Poisson-disk dot thinning (+ a persistence-ranked variant) of a binary emission.
 
-Why it matters (established across the owner's group, verified against live scores): a solid 1-px
-line pays ~3x the false-positive mass of a dotted line while earning only ~1.3x the on-line credit
-under the 300 m triangular kernel, so dot-thinning a good solid emission raises DTI with no new
-geology: H19-5 solid (121,131 px, live 0.1922) -> d1.5 (60,069 px, live 0.2477) -> d2.8
-(44,090 px, live 0.2600). See registry/live_scores.json (owner-reported, unverified).
+The geometric motivation is metric-derived, not a leaderboard result: a solid one-pixel line can
+pay more false-positive mass than a spaced line under a 300 m triangular kernel, while redundant
+nearby pixels add limited credit. Historical H19-5, d1.5 and d2.8 files are associated with
+owner/user-reported score claims (0.1922, 0.2477 and 0.2600); those claims have no organizer receipt
+in this repository and are not evidence that thinning caused the differences. See the score-claim
+register and knowledge/02_h29_results_2026-10-03.md for the explicit caveats and geometric analysis.
 
 The plain `dot_thin` algorithm and determinism contract follow buffedlizard55-lab/GEMSDOE24
-`src/gems/thinning.py` (re-written here with byte-identity checked in tests against the mirrored
-0.2477 file). Guarantees: output is a subset of the input; no labels are read; FIFO breadth-first
-traversal seeded from the lowest raster index of each 8-connected component, so runs are
-byte-identical.
+`src/gems/thinning.py` (re-written here; subset, label-free behavior is regression-tested). The
+FIFO breadth-first traversal is seeded from the lowest raster index of each 8-connected component,
+so runs are byte-identical.
 
-`dot_thin_ranked` keeps exactly the same blocking geometry but chooses, among candidate pixels,
-the higher-priority pixel first (deterministic max-heap with index tie-break). H26-0 in
-buffedlizard55-lab/GEMSDOE25 measured score-ordered dots at equal spacing beating score-blind
-ordering (+0.0037 mean paired sparse DTI, 4/4 folds); the ranked variant here lets a NEW field
-(worm persistence) enter that proven lever without changing the spacing.
+`dot_thin_ranked` keeps the same blocking geometry but chooses the highest-priority candidate first
+(deterministic max-heap with index tie-break). The predecessor H26-0 local spatial proxy reported
+score-ordered dots at equal spacing beating score-blind ordering (+0.0037 mean paired sparse DTI,
+4/4 folds); that proxy result is not official-score evidence. The ranked variant here tests whether
+worm persistence changes ordering without changing spacing.
 """
 
 from __future__ import annotations

@@ -1,11 +1,9 @@
-"""Reproduction anchors against the owner-mirrored, live-scored files (skipped when data absent).
+"""Reproduction anchors against pinned owner mirrors (skipped when data absent).
 
-These are the strongest calibration checks this repo can make without credentials:
-  * `dot_thin(solid_h19_5, 1.5)` must reproduce the mirrored 0.2477 file's mask bit-for-bit;
-  * `dot_thin(solid_h19_5, 2.8)` must reproduce the 44,090-pixel count of the 0.2600 file;
-  * our DTI on the dotted files against the CATALOGUE with catalogue masking must behave
-    monotonically (dotted >= solid on the catalogue-internal proxy) — sanity only, the live
-    scores are owner-reported, not receipts.
+These local checks do not authenticate the competition portal or owner-reported scores:
+  * dot_thin(solid_h19_5, 1.5) reproduces the mirrored d1.5 mask bit-for-bit;
+  * dot_thin(solid_h19_5, 2.8) reproduces the original D2.8 pixel mask bit-for-bit and its count;
+  * local metric checks are finite sanity guards only; owner-reported live scores are not receipts.
 """
 
 import sys
@@ -24,8 +22,10 @@ from gems29.thinning import dot_thin  # noqa: E402
 P = ROOT / "data"
 
 
-@pytest.mark.skipif(not (P / "inputs" / "h19_5_nan.tif").exists(), reason="owner mirrors not restored")
-def test_d15_mask_and_d28_count_reproduced():
+@pytest.mark.skipif(not all((P / p).exists() for p in (
+    "inputs/h19_5_nan.tif", "inputs/dotted_h19_5_d1_5_nan.tif", "inputs/dotted_h19_5_d2_8_nan.tif")),
+    reason="owner mirrors not restored")
+def test_d15_and_d28_masks_reproduced():
     with rasterio.open(P / "bridge/sample_submission.tif") as ds:
         fp = np.isfinite(ds.read(1))
     parent, _ = gridio.read_band(P / "inputs/h19_5_nan.tif")
@@ -34,7 +34,11 @@ def test_d15_mask_and_d28_count_reproduced():
     ref, _ = gridio.read_band(P / "inputs/dotted_h19_5_d1_5_nan.tif")
     refm = np.isfinite(ref) & (ref > 0.5) & fp
     assert np.array_equal(d15, refm)
-    assert int(dot_thin(solid, 2.8).sum()) == 44_090
+    d28 = dot_thin(solid, 2.8)
+    ref_d28, _ = gridio.read_band(P / "inputs/dotted_h19_5_d2_8_nan.tif")
+    ref_d28m = np.isfinite(ref_d28) & (ref_d28 > 0.5) & fp
+    assert int(d28.sum()) == 44_090
+    assert np.array_equal(d28, ref_d28m), "D2.8 mask differs from the original owner-mirrored raster"
 
 
 @pytest.mark.skipif(not (P / "bridge/labels.tif").exists(), reason="owner mirrors not restored")

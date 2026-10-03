@@ -19,5 +19,5 @@ GRID = {
     "bounds_utm11n": [243350.0, 4135550.0, 572550.0, 4508550.0],
 }
 
-# Live-scored anchors (owner-reported; NOT organiser-verified receipts). See registry/live_scores.json.
-RADIUS_PX = 3.0   # 300 m triangular kernel radius at 100 m pixels
+# The official metric's spatial support is a 300 m triangular kernel at 100 m pixels.
+RADIUS_PX = 3.0

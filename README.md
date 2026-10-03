@@ -15,19 +15,20 @@
 > A new candidate (`content id a4d439b07426`, 37,913 dots, zero catalogue pixels, format receipt
 > `ok_to_upload=True`) now leads the download block. Its method scores `0.1409` on the
 > catalogue-hidden proxy versus `0.09832`/`0.09449`/`0.06970` for the historical D2.8/d1.5/H19-5 files
-> on identical draws (the proxy reproduces the known real ranking of all three; the SGMC proxy inverts
-> it — both are proxies and the conflict is registered). It has never been live-scored and no weekly
-> slot is approved. All scores quoted anywhere in this repository are unverified owner-reported claims.
+> on identical draws (it reproduces the ordering of three unverified owner/user-reported claims if those associations are accurate; the SGMC proxy differs — both are proxies and the conflict is registered). It has never been live-scored. Its 0.14086 catalogue-hidden method result is below the same-report H34 C1 control best (0.14479), so it fails the current slot-selection rule. Any claimed **competition/leaderboard score** in this repository is an unverified owner/user report; local proxy metrics are separately identified and are not official scores.
+>
+> **H29 recheck (this PR):** the prior branch's persistence normalizer could exceed 1, and its FFT padding silently replaced nearest-filled cells with a global median. Both were corrected to match the preregistration; the superseded outputs are hash-archived. The recomputed two-draw, four-fold screen failed for all five arms, including H29-5 (−0.07894/−0.08703 versus the best same-fold control). No confirmation fits were run and no weekly slot was used.
 
 ## Start here
 
+- **[Latest session handoff](knowledge/18_h29_corrected_screen_handoff_2026-10-03.md)** — current H29 gate, corrections, artifact status, and final local verification.
 - **[Executive summary and manual submission guide](docs/executive-summary.html)** — acceptance checks, current download status, file naming, optional comment, and manual upload steps.
 - **[Live project site](https://buffedlizard55-lab.github.io/GEMSDOE29/)** — research status, local evidence feed, sources, and downloads. The status page is not a DrivenData leaderboard feed.
 - **[Research and hypotheses](docs/research.html)** — ranked H31–H33 hypotheses, prior work, and holdout/confirmation policy.
 - **[Project-local status feed](docs/status.html)** — timestamps only from this repository's checked-in research, experiment, review, and deploy evidence.
 - **[Source register](docs/sources.html)** — official competition/rules links and scientific sources, with verification dates and caveats.
 - **[Irregularities and caveats](docs/irregularities.html)** — owner-mirror limitations, ambiguous data labels, unverified historical scores, and holdout/method risks.
-- [Repository candidate GeoTIFF](docs/downloads/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif) — one-click float32 TIFF (37,913 dots, NaN outside the footprint, format receipt `ok_to_upload=True`); proxy-screened on the blocked holdout, never live-scored, owner decides the slot.
+- [Repository candidate GeoTIFF](docs/downloads/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif) — one-click float32 TIFF (37,913 dots, NaN outside the footprint, format receipt `ok_to_upload=True`); local proxy only, below the current H34 C1 holdout best, not slot-cleared, and do not submit.
 - [Historical D2.8 GeoTIFF](docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif) — one-click owner-mirrored float32 TIFF, locally format-checked against the hash-pinned owner-mirror template; unscored, not slot-approved, and **do not submit**. See [`evidence/format_checks/`](evidence/format_checks/) for the receipt.
 - [Full original project prompt](knowledge/owner_brief_verbatim.txt) — preserved verbatim below as well as in the linked text file.
 
@@ -42,11 +43,11 @@
 ## Evidence boundary and current status
 
 - **H34 (session 2):** the metric-native coverage emission was preregistered, implemented and screened on 32 paired cells (4 folds x 2 draws x 4 arms, 306.6 s). It **failed** its frozen primary gate on the catalogue-hidden proxy (mean paired gain −0.0212 vs the best control, 0/4 folds positive) and passed its secondary SGMC off-catalogue class (+0.0535, 4/4 folds). Raw cells and summary: [`evidence/h34_coverage_screen/`](evidence/h34_coverage_screen/); write-up: [`knowledge/09_h34_results_2026-10-03.md`](knowledge/09_h34_results_2026-10-03.md). Nothing was re-tuned after the run.
-- **Candidates (session 2):** the site's first download is now the repository's own candidate (`gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif`: HGB habitat trained on every catalogue pixel, 3-seed average, frozen standard emission; 37,913 dots; format `ok_to_upload=True`; never live-scored). Its method beat the historical family on the catalogue-hidden proxy (0.1409 vs 0.0983/0.0945/0.0697) but loses on the SGMC proxy (0.0847 vs 0.0953); see [`knowledge/17_repo_candidate_2026-10-03.md`](knowledge/17_repo_candidate_2026-10-03.md) and the model-free scoreboard [`evidence/candidate_scoreboard.json`](evidence/candidate_scoreboard.json). The REFD28 rebuild and the SGMC off-catalogue inventory remain linked as controls/alternatives. Nothing is slot-approved.
+- **Candidates (session 2):** the site's first download is the repository's own HGB candidate (`gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif`: trained on every catalogue pixel, 3-seed average, frozen standard emission; 37,913 dots; format `ok_to_upload=True`; never live-scored). Its method scores 0.1409 on the catalogue-hidden proxy vs 0.0983/0.0945/0.0697 for the historical family, but loses on the SGMC proxy (0.0847 vs 0.0953). Crucially, it does not beat the current H34 C1 control best (0.14479 vs 0.14086 on the same 8-cell report) and is not slot-cleared. See [`knowledge/17_repo_candidate_2026-10-03.md`](knowledge/17_repo_candidate_2026-10-03.md) and [`evidence/candidate_scoreboard.json`](evidence/candidate_scoreboard.json). Nothing is slot-approved.
 - **H31 screen (session 2):** 40 validated cells (draws 10–11 x four spatial blocks x five arms, 921 s) under the frozen protocol; gate **FAIL**, mean paired gain +0.000000, 0/4 blocks. The registered contrasts are identically zero because the persistence columns are sparse binary peak sets. The only worming-adjacent signal remains the H27 tip control (+0.0083). Raw: [`evidence/h31_worm_screen/`](evidence/h31_worm_screen/).
-- **Environment limit (session 2):** the sandbox can reach only api.github.com, codeload.github.com and PyPI from the shell; sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov and drivendata.org are blocked. All 11 hash-pinned inputs were re-verified present in `/tmp/gemsdoe29-data`. External layers must be fetched on an unrestricted machine (flagged as IR-29-SANDBOX-NET).
-- **Competition data:** none are included in Git. The earlier H31 implementation run restored and hash-verified all 11 manifest entries under temporary `/tmp` paths; those inputs and caches do not persist and must be restored again. Pins identify owner mirrors, not organizer downloads. The earlier main-branch H29 run also recorded a restored feature stack; no scratch input is assumed reusable here.
-- **H29 prior experiment:** the pre-existing main history contains a frozen screen of worm gating, worm-ranked emission, persistence-as-head-features, and thermal-probe features. No arm passed the registered `+0.005` screen. Although draws 2–3 were computed for every arm, the screen failures made them ineligible as confirmations; they are treated as exploratory extra proxy draws. A gate-serialization bug in the original runner also left those draws out of `h29_gate.json`; the raw cells were reconciled without editing. No weekly slot was recommended or used. See [`knowledge/02_h29_results_2026-10-03.md`](knowledge/02_h29_results_2026-10-03.md), [`knowledge/06_h29_gate_reconciliation_2026-10-03.md`](knowledge/06_h29_gate_reconciliation_2026-10-03.md), and the raw [`evidence/h29_holdout.json`](evidence/h29_holdout.json). These are spatial proxy results, not competition scores.
+- **Environment limit (session 2):** the prior shell session reported access only to api.github.com, codeload.github.com and PyPI; sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov and drivendata.org were blocked. External layers may require an unrestricted machine (IR-29-SANDBOX-NET); do not access DrivenData programmatically.
+- **Competition data:** none are included in Git. The corrected H29 run restored and hash-verified the 11 `data/manifest.json` owner-mirror inputs under this checkout's ignored `data/` path. The separate H31 run used its own temporary path. Neither restore is assumed reusable in a fresh checkout; pins identify owner mirrors, not organizer downloads.
+- **H29 corrected re-screen:** after fixing the persistence denominator and nearest-valid FFT padding, the current frozen two-draw × four-fold screen failed all five arms. H29-5 versus the best same-fold/same-draw control was −0.07894/−0.08703 (0/4 positive folds on both draws); A1/A2/B1/B2 also missed the `+0.005` criterion. Draws 2–3 were not fit; the guarded confirmation-only command exited before fitting. The earlier 16-row run is byte-preserved under `evidence/history/` and remains historical only. See [`knowledge/02_h29_results_2026-10-03.md`](knowledge/02_h29_results_2026-10-03.md), [`knowledge/06_post_screen_review_2026-10-03.md`](knowledge/06_post_screen_review_2026-10-03.md), and current [`evidence/h29_gate.json`](evidence/h29_gate.json). All values are spatial-proxy outcomes, not competition scores.
 - **H31:** the existing preregistration and pre-fit synthetic amendment are in [`knowledge/02_preregistered_h31_worming_2026-10-03.md`](knowledge/02_preregistered_h31_worming_2026-10-03.md). The prototype tests the narrower regularized vertical-integration transform of RTP plus explicit lateral drift beyond H29's raw-RTP/gravity persistence work. The screen has now been run (see the H31 bullet above): the features were rebuilt from a clean committed revision and the gate failed on feature sparsity.
 - **Holdouts:** four spatial quadrants, hidden-catalogue gaps, and collars are a spatial proxy, not the private expert-labelled test set. Only raw-cell verified, paired gains across spatial blocks may permit fresh confirmation.
 - **Score claims:** 0.3195, 0.2941 and 0.2477 are retained as historical user/owner-reported claims only. No DrivenData leaderboard content, account identity, screenshot, receipt, rank, or score-to-file mapping has been independently verified here. They are not fit targets or promotion gates.
@@ -59,19 +60,19 @@ The [official problem page](https://www.drivendata.org/competitions/306/competit
 
 ## Repository map
 
-- `src/gems29/` and `scripts/run_holdout_screen.py` — the pre-existing H29 research pipeline and its historical screen implementation; results are in the committed `evidence/h29_*` records.
-- `src/gemsdoe/` — the H31 prototype pipeline, feature preparation, spatial holdouts, metric, experiment runner support, emission, and submission validation. It is retained as a separate experimental package; no H31 fit has run.
-- `scripts/` — the legacy `scripts/restore_data.py` for `data/manifest.json`, the separate `scripts/restore_h31_data.py` for `registry/data_manifest.json`, preparation/cache builders, frozen H31 runner/analyzer, and the current static-site builder.
+- `src/gems29/` and `scripts/run_holdout_screen.py` — the H29 research pipeline and corrected screen-only runner; the current nearest-fill, bounded-persistence results are in `evidence/h29_*`, with original nonconforming runs archived under `evidence/history/`.
+- `src/gemsdoe/` — the H31 prototype pipeline, feature preparation, spatial holdouts, metric, experiment runner support, emission, and submission validation. Its frozen screen ran and failed because the persistence feature columns were too sparse to change emission; no artifact is slot-approved.
+- `scripts/` — the legacy `scripts/restore_data.py` for `data/manifest.json`, the separate `scripts/restore_h31_data.py` for `registry/data_manifest.json`, local submission-contract/site builders, preparation/cache tools, and frozen-run analyzers.
 - `tests/` — synthetic tests for the reused core pipeline, submission writer/checker, and H31 proxy.
-- `knowledge/` — original user brief, candidate review, H31 preregistration, DrivenData access policy, predecessor audit, and draft AI disclosure.
+- `knowledge/` — original user brief, H29 corrected results and post-screen audit, ranked hypotheses, H31 preregistration, verified sources, access policy, predecessor audit, and draft AI disclosure.
 - `registry/` — machine-readable data/source/hypothesis/submission/score-claim/status and irregularity registers.
 - `evidence/` — small, hash-stamped local format receipts and (after validation) H31 raw-cell evidence; no large caches.
-- `docs/` — GitHub Pages site and the one historical GeoTIFF; no competition data cache.
+- `docs/` — GitHub Pages site and registered GeoTIFF downloads; no competition data cache.
 - `NOTICE.md` — provenance of code adapted from the same-owner predecessor. The predecessor had no root license file at the reviewed commit; this notice is not a license grant.
 
 ## Reproduce and validate
 
-Use Python 3.11 or later. Restored inputs and regenerable work should live outside the checkout; large data/cache files are ignored by Git.
+Use Python 3.11 or later. Large inputs and regenerable work are ignored by Git; restore only when reproducing local research, and verify every hash before use.
 
 ```bash
 python -m venv .venv
@@ -79,27 +80,16 @@ python -m venv .venv
 python -m pip install -e '.[dev]'
 python -m pytest -q
 ruff check src scripts tests
-
-export GEMS_DATA_DIR=/tmp/gemsdoe29-data
-export GEMS_WORK_DIR=/tmp/gemsdoe29-work
-python scripts/restore_h31_data.py --group all
-python scripts/prepare_data.py
-python scripts/build_features.py
-python scripts/build_addons.py
-python scripts/build_h31_features.py
+python scripts/build_submission_contract.py
+python scripts/build_site.py
+python scripts/check_site.py
 ```
 
-H31 fitting is intentionally more restrictive than ordinary development: the runner requires branch `arena/01a10075-gemsdoe29`, a clean committed worktree, exact input/cache hashes, and the frozen preregistration hash. Do not run it on modified code or restored/altered inputs. Run the screen first; the analyzer must validate all raw cells and gates before confirmation is allowed:
+**H29/core data:** `python scripts/restore_data.py` restores the hash-pinned `data/manifest.json` inputs under this checkout's `data/` directory; that legacy script does not honor `GEMS_DATA_DIR`. `python scripts/restore_data.py --verify` checks an existing restore without fetching missing files. These owner-mirrored bytes are not organizer-authenticated. The corrected H29 screen and current receipts are already recorded in `evidence/`; do not overwrite them just to recheck status. The corrected five-arm screen failed, so do not run confirmation.
 
-```bash
-python scripts/run_h31_worming.py --stage screen
-python scripts/analyze_h31_worming.py evidence/h31_worm_screen
-# Only if the analyzer independently reports every screen gate passing:
-python scripts/run_h31_worming.py --stage confirm
-python scripts/analyze_h31_worming.py evidence/h31_worm_confirm
-```
+**Separate H31 data group:** its manifest and restore script use `GEMS_DATA_DIR`/`GEMS_WORK_DIR`. H31's frozen screen already ran and failed due to sparse features; no confirmation is authorized. Its runner requires a clean committed Arena-session branch plus exact source, cache, input, and preregistration hashes. Do not bypass those guards or rerun the failed screen as a substitute for a new preregistration; the stored raw cells and analyzer report are the evidence.
 
-None of these commands contacts DrivenData. Data preparation and model code must not be treated as proof of organizer acceptance or official score.
+No project command contacts DrivenData or uploads a file. Data preparation and model code are not proof of organizer acceptance or an official score.
 
 ## Standing brief — current session (faithful working transcription)
 

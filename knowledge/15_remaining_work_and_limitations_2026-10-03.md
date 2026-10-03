@@ -11,10 +11,11 @@
    the Rank-1 geological candidate and gate it on the two-proxy admission rule (off-catalogue ≥3/4 folds positive,
    catalogue-hidden loss ≤0.005). Then H36 (MT conductance edges) or H37 (geothermometry residuals), both cheap
    derived layers over already-mirrored rasters.
-3. **Resolve the proxy conflict with real feedback.** The repository's own candidate is the best-evidenced file on
-   the catalogue-hidden proxy, but the SGMC proxy prefers the historical D2.8, and no proxy is the organizer metric.
-   One owner-executed weekly feedback submission of `a4d439b07426` would settle whether the catalogue-hidden proxy
-   is a usable selection criterion (see `knowledge/17`, "Which proxy to trust").
+3. **Do not spend a weekly slot on the current C0 download.** Its method mean is 0.14086 on the catalogue-hidden
+   proxy, below the current H34 C1 control best of 0.14479 in the same 8-cell report; it fails the explicit
+   beat-the-holdout-best rule. The SGMC proxy also prefers the historical D2.8, and neither proxy is the organizer
+   metric. A future artifact must beat the then-current comparable spatial holdout best and pass fresh confirmation
+   plus exact-file checks before a slot can be considered. See `knowledge/17`.
 4. **Calibrate the emission budget with a fresh preregistration.** H34's negative coverage result traces to the
    uncalibrated `dti_hat` (IR-29-DTI-HAT-CALIBRATION); re-run it with the prior scaled to an expected truth mass,
    a smaller round cap, fresh draws (22/23) and draw-level batching documented in advance.
@@ -31,10 +32,10 @@
   (DrivenData terms).
 * **All historical score numbers are unverified owner/user reports** (0.3195, 0.2941, 0.2477, 0.2600). They are
   never fit targets, never gate values, and never presented on public pages.
-* **The two proxies disagree** (IR-29-PROXY-CONFLICT). The catalogue-hidden proxy reproduces the known real ranking
-  of the three historical files (Spearman +1.0 on three points) while the SGMC proxy inverts it (−0.5); three points
-  is not a calibration curve, and the historical files' own models saw the hidden components, which inflates their
-  proxy scores.
+* **The two proxies disagree** (IR-29-PROXY-CONFLICT). Conditional on unverified owner/user score claims and file
+  associations, the catalogue-hidden proxy matches the reported ordering of three historical files (Spearman +1.0
+  on three points) while the SGMC proxy differs (−0.5). Three unauthenticated points are not a calibration curve;
+  the historical files' models also saw the hidden components, inflating their catalogue-hidden proxy scores.
 * **The new candidate is catalogue-adjacent.** 65.9 % of its dots lie within 300 m of the supplied catalogue, and it
   was trained on every catalogue pixel; its own holdout score would be contaminated, so the number that supports it
   is the per-fold screen number for the same method (0.14086), not a score of the shipped file.
@@ -44,8 +45,10 @@
   (IR-29-SANDBOX-NET); hypotheses are written so they can run on mirrored layers once restored.
 * **Compute.** Two cores, ~4 GB RAM, no GPU: the reference solution's U-Net MC-CV ensemble approach is out of reach
   in this environment; the experiments here are gradient-boosted trees on 100 m rasters.
-* **Temporary files.** Restored data, work caches and logs live under `/tmp` and do not persist between sessions;
-  rerun `scripts/restore_h31_data.py --group all`, `scripts/prepare_data.py`, `scripts/build_features.py`,
-  `scripts/build_addons.py` and `scripts/build_h31_features.py`.
+* **Temporary files.** No large raster is committed. H29/core inputs are restored under ignored `<repo>/data`
+  by `scripts/restore_data.py` (it does not honor `GEMS_DATA_DIR`); the separate H31 manifest uses
+  `scripts/restore_h31_data.py` and `GEMS_DATA_DIR`. Fresh checkouts must restore and verify the appropriate
+  manifest before local reproduction. The committed H29/H31 raw evidence remains the authoritative record of
+  the failed screens; do not rerun confirmation.
 * **Novelty.** "Not tried" means not found in the reviewed repositories (this project's history and the owner's
   sibling repositories), not a claim about other competitors' work.

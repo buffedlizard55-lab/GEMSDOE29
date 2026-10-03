@@ -79,7 +79,7 @@ def test_quick_mode_never_passes_or_claims_confirmation() -> None:
 
 
 def test_reconciled_h29_gate_matches_preserved_raw_evidence() -> None:
-    raw_path = ROOT / "evidence" / "h29_holdout.json"
+    raw_path = ROOT / "evidence" / "history" / "h29_holdout_pre_correction_2026-10-03.json"
     audit_path = ROOT / "evidence" / "h29_gate_reconciled.json"
     raw = json.loads(raw_path.read_text())
     audit = json.loads(audit_path.read_text())

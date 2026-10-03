@@ -31,3 +31,6 @@ data/work/
 
 # Local static-site build scratch
 .site-build/
+
+# Local Python environment
+.venv/

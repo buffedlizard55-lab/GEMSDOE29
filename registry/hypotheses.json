@@ -19,7 +19,7 @@
       ],
       "signature": "Compare opposing-face steepness and width at a coherent terrain step; a one-sided scarp may be more fault-like than a symmetric channel bank, ridge or bench.",
       "why_unmapped": "Fault scarps may retain terrain expression even when USGS/INGENIOUS trace layers omit the fault.",
-      "difference": "At GEMSDOE25 commit efc4be7bb3cfdf2def12a7fb83284d3311ac9220, the code dequantizes downface_max/upface_max as separate inputs; H30-1 uses a step \u00d7 cross-profile \u00d7 coherence composite and H30-3 registers cross-profile scale persistence. The raw 1-m scarp-template idea is deferred. A repository-wide search of code, tests, hypotheses and knowledge at that commit found no normalized opposing-face asymmetry ratio. H32 tests that specific derived shape ratio, not another scarp-magnitude product.",
+      "difference": "At GEMSDOE25 commit efc4be7bb3cfdf2def12a7fb83284d3311ac9220, the code dequantizes downface_max/upface_max as separate inputs; H30-1 uses a step × cross-profile × coherence composite and H30-3 registers cross-profile scale persistence. The raw 1-m scarp-template idea is deferred. A repository-wide search of code, tests, hypotheses and knowledge at that commit found no normalized opposing-face asymmetry ratio. H32 tests that specific derived shape ratio, not another scarp-magnitude product.",
       "planning_delta_dti": "0 to +0.006 (low-confidence planning bracket only; not an observed result)",
       "cost": "about 1 day; uses existing owner-derived 3DEP descriptors",
       "external_data": "none for an initial test; any new DEM tiles would require free official USGS 3DEP availability and coverage verification first",
@@ -29,7 +29,7 @@
       "id": "H31",
       "rank": 2,
       "title": "Regularized pseudogravity transform and edge-drift increment",
-      "status": "prototype implemented; preregistered; no model fit; priority reduced after H29 result",
+      "status": "prototype implemented; frozen screen ran and failed (feature sparsity); no confirmation; new continuous field requires a separate preregistration",
       "layers": [
         "rtp",
         "iso_grav_anom"
@@ -38,7 +38,7 @@
       "why_unmapped": "A buried susceptibility boundary may yield a coherent gravity-equivalent edge and scale-dependent lateral path where no surface trace is mapped in USGS/INGENIOUS; this is a structural hypothesis, not a depth/fault proof.",
       "difference": "The H29 experiment already ran raw-RTP and isostatic-gravity worming, joint persistence, and persistence as gate/rank/head features; all four arms failed its +0.005 proxy bar. H31 tests only a different magnetic transform (regularized vertical integration before continuation) and an explicit drift feature. It must not be presented as a first test of worming or persistence.",
       "planning_delta_dti": "0 to +0.003 (low-confidence planning bracket, reduced after the H29 negative proxy screen)",
-      "cost": "about 1\u20132 days for restored inputs, cache rebuild, paired screen and audit; feature code exists but no fit has run",
+      "cost": "about 1–2 days for restored inputs, cache rebuild, paired screen and audit; feature code exists but no fit has run",
       "external_data": "none required for this first test",
       "validation": "four spatial catalogue-gap folds; two screen draws; fresh confirmation draws only after all gates pass"
     },
@@ -56,9 +56,9 @@
       ],
       "signature": "Detect magnetic edge energy aligned to repeated survey flight lines and down-rank it unless it persists across continuation scales or is corroborated by another physical field.",
       "why_unmapped": "A real structural edge missed by USGS/INGENIOUS should not be systematically locked to the survey-flight geometry; geometry-aware artifact control could preserve cross-line fault evidence while suppressing acquisition imprints. This is an artifact-control test, not a direct fault detector.",
-      "difference": "H29 measured an E\u2013W/N\u2013S persistence audit and registered a spectral-notch experiment (H29-3); H33 would instead use verified spatial flight-path geometry as a per-location nuisance control. The concept is adjacent to prior line-artifact work and is lower-ranked/blocked until the official binary and its schema/CRS/coverage/licence are validated.",
+      "difference": "H29 measured an E–W/N–S persistence audit and registered a spectral-notch experiment (H29-3); H33 would instead use verified spatial flight-path geometry as a per-location nuisance control. The concept is adjacent to prior line-artifact work and is lower-ranked/blocked until the official binary and its schema/CRS/coverage/licence are validated.",
       "planning_delta_dti": "0 to +0.005 (very-low-confidence planning bracket only)",
-      "cost": "about 2\u20134 days after prerequisites",
+      "cost": "about 2–4 days after prerequisites",
       "external_data": "USGS ScienceBase DOI 10.5066/P93LGLVQ lists flight-path ZIPs, but binaries, schema, CRS, coverage and rights remain unvalidated. Do not download/use until verified.",
       "validation": "blocked until official files are obtained through permitted means and their bytes, schema, CRS, coverage and licence are independently checked"
     },

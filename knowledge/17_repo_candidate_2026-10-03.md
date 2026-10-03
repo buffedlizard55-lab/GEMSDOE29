@@ -45,11 +45,7 @@ The same draws also give the SGMC off-catalogue proxy: repo method C0 0.08472 / 
 
 ## Which proxy to trust, and why
 
-The catalogue-hidden proxy **reproduces the known real ranking of all three historical files
-exactly** (0.2600 > 0.2477 > 0.1922 ↔ 0.09832 > 0.09449 > 0.06970; Spearman +1.0 on three points),
-and its *level* is roughly 2.6× smaller than the real scores, i.e. it is a compressed but
-order-preserving map for this family. The SGMC off-catalogue proxy puts the weakest historical file
-(H19-5) level with the middle one and ranks the best last (Spearman −0.5 on the same three points).
+The catalogue-hidden proxy happens to reproduce the ordering of three **unverified owner/user-reported** historical score claims (0.2600 > 0.2477 > 0.1922 ↔ 0.09832 > 0.09449 > 0.06970; Spearman +1.0 on three points), conditional on the file/score associations and reported ordering being accurate. Three unauthenticated observations do not calibrate the proxy, prove an order-preserving relationship, or support scaling its level. The SGMC off-catalogue proxy gives a different ordering (Spearman −0.5 against those same unverified reports).
 
 Two honest caveats cut in opposite directions:
 
@@ -62,14 +58,13 @@ Two honest caveats cut in opposite directions:
    a catalogue-adjacent emitter, and the SGMC conflict is the signal that would falsify a
    "this is definitely better" claim.
 
-Because of (1) and (2) the file is offered as the **best-evidenced research candidate**, not as a
-predicted score, and the repository still approves no slot. If the owner spends a weekly slot on it,
-the outcome is informative in both directions:
-
-* real score > 0.2600 → the catalogue-hidden proxy is a usable selection criterion at this scale;
-* real score ≤ 0.2600 → the proxy is misleading for emission-level choices, the SGMC-led admission
-  rule in `knowledge/13` takes precedence, and no further catalogue-hidden-only candidates should be
-  proposed.
+Because of (1) and (2), the file is offered as a **research download**, not as a predicted score or
+slot recommendation. Its method's 0.14086 mean on the catalogue-hidden proxy does **not** beat the
+current same-report H34 C1 control best of 0.14479; it also has no fresh confirmation. Therefore it
+fails the repository's explicit weekly-slot rule. Do not spend a slot on this file. A future artifact
+must first beat the then-current comparable spatially blocked holdout best, pass its frozen screen and
+fresh confirmation, and pass exact-file checks. Neither a slot nor a reported live value is needed to
+explain the current negative result.
 
 ## Why the artifact's own holdout score is not quoted
 
@@ -77,7 +72,7 @@ The artifact trains on the full catalogue, so scoring it against hidden catalogu
 contaminated by construction. The number that supports it is the per-fold screen number for the *same
 method* (0.14086), which is the strongest form of validation available without organizer labels.
 
-## What is still missing before >0.3195 is plausible
+## What is still missing before challenging the user-reported 0.3195
 
 The factorial says the signal lives in families B (DEM curvature/scarp) and E (catalogue geometry) —
 both of which are already in this file. The gap to 0.3195 is therefore not a feature-family gap; it is
