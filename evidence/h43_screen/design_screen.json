@@ -158,9 +158,9 @@
     "H43_OFF_FRONT": 0.0,
     "H43_CHANNEL_SCARP": 0.5239795927253558
   },
-  "build_seconds": 35.12161731719971,
+  "build_seconds": 32.0365514755249,
   "git": {
-    "revision": "c89e0e27ee76ccc5de3898405b4f55d1606cf23a",
+    "revision": "ca271bae48331fd6a9f35a20badd15f0ec0feaa7",
     "branch": "arena/01a10342-gemsdoe29",
     "dirty_worktree": false
   },

@@ -74,14 +74,23 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def git_state(include_untracked: bool = True) -> dict:
+def git_state(include_untracked: bool = True, ignore_prefix: str | None = None) -> dict:
+    """Tracked-file drift check.
+
+    ``ignore_prefix`` drops status lines for one directory (the stage's own evidence dir): a resumed screen
+    appends raw rows there, and those appends are the stage's output, not code drift. Every other tracked
+    modification still marks the tree dirty.
+    """
     try:
         revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=ROOT, text=True).strip()
         cmd = ["git", "status", "--porcelain"]
         if not include_untracked:
             cmd.append("--untracked-files=no")
-        dirty = bool(subprocess.check_output(cmd, cwd=ROOT, text=True).strip())
+        lines = subprocess.check_output(cmd, cwd=ROOT, text=True).splitlines()
+        if ignore_prefix:
+            lines = [line for line in lines if ignore_prefix not in line]
+        dirty = bool(lines)
     except (OSError, subprocess.CalledProcessError) as exc:  # pragma: no cover - environment guard
         raise SystemExit(f"git state unavailable ({exc}); the screen requires a clean committed tree") from exc
     return dict(revision=revision, branch=branch, dirty_worktree=dirty)
@@ -322,7 +331,8 @@ def main() -> int:
                 raise SystemExit(f"refusing to overwrite existing {stage} evidence: {p}")
     # A resumed stage legitimately leaves its own raw-cell/design files untracked; in that mode only tracked-file
     # modifications count as drift (the design hash check above already pins every input and module).
-    state = git_state(include_untracked=not args.resume)
+    stage_evidence = str(EVIDENCE.relative_to(ROOT)) + "/"
+    state = git_state(include_untracked=not args.resume, ignore_prefix=stage_evidence)
     if state["dirty_worktree"]:
         raise SystemExit("refusing to run from a dirty worktree; commit the implementation first")
     if args.confirm:
@@ -392,8 +402,11 @@ def main() -> int:
               "mask removes information rather than adding it. det_elev is a detrended surface of unknown "
               "absolute datum, so no absolute gradient or discharge is claimed (knowledge/29 §2, §6)."),
     )
-    design_path.write_text(json.dumps(design, indent=2, default=float) + "\n")
-    print(f"design recorded: {design_path} (git {state['revision'][:8]}, {len(draws)} draws x {len(folds)} folds x {len(ARMS)} arms)", flush=True)
+    if args.resume and design_path.is_file():
+        print(f"design kept from the launch process: {design_path}", flush=True)
+    else:
+        design_path.write_text(json.dumps(design, indent=2, default=float) + "\n")
+        print(f"design recorded: {design_path} (git {state['revision'][:8]}, {len(draws)} draws x {len(folds)} folds x {len(ARMS)} arms)", flush=True)
 
     cell_filter = None
     if args.cell:
