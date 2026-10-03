@@ -237,7 +237,7 @@
       "id": "H43",
       "rank": 1,
       "title": "Drainage-network organization: stream-power residual and knickpoint excess",
-      "status": "proposed in the v4 slate (knowledge/25); implemented and screened on draws 32/33 (40 cells): G1 PASS on A3_knick (+0.01419) and A4_union (+0.01287); confirmed on draws 34/35 (40 cells): A3 +0.01674 / A4 +0.01568 replicate, G3 withholds promotion on the SGMC secondary proxy in both stages. No candidate, no slot. Results: knowledge/30_h43_drainage_results_2026-10-03.md, evidence/h43_screen/. Registry status corrected in session 6 (IR-29-H43-REGISTRY-STALE).",
+      "status": "proposed in the v4 slate (knowledge/25); implemented and screened on draws 32/33 (40 cells): G1 PASS on A3_knick (+0.01419) and A4_union (+0.01287); confirmed on draws 34/35 (40 cells): A3 +0.01674 / A4 +0.01568 replicate, G3 withholds promotion on the SGMC secondary proxy in both stages. Parallel Workstream B (src/gemsdoe/h43b.py, knowledge/27b & knowledge/37, evidence/h43b_screen/) tested full footprint-boundary priority-flood D8 (100 % mass conservation across 5,167,373 px, max_acc_px = 824,820) + 108-basin repeated-median envelopes on draws 32/33 (A4_h43_union +0.0039976 across 4/4 fold means, below +0.005 G1 bar; A3_h43_scarp_free +0.0019365 primary and +0.0013560 SGMC on 3/4 folds, passing the SGMC gate). No candidate, no slot. Results: knowledge/30_h43_drainage_results_2026-10-03.md, evidence/h43_screen/, knowledge/37_h43b_mass_conserving_drainage_results_2026-10-03.md, evidence/h43b_screen/. Registry status corrected in session 6 (IR-29-H43-REGISTRY-STALE).",
       "layers": [
         "det_elev (cached 100 m grid)",
         "det_elev_slope",

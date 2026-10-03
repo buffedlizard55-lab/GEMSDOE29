@@ -256,6 +256,12 @@
     },
     {
       "date": "2026-10-03",
+      "type": "screen",
+      "title": "H43b (Workstream B) mass-conserving priority-flood D8 & 108-basin knickpoint screen complete: A4 positive in 4/4 quadrants (+0.0040), A3 scarp-free passes SGMC gate (+0.0014, 3/4 folds)",
+      "detail": "Parallel Workstream B (src/gemsdoe/h43b.py, knowledge/27b & knowledge/37, evidence/h43b_screen/) seeded Barnes-Lehman-Mulla priority-flood at the true footprint boundary (17,865 outlets, 876,389 raised cells, 0 trapped interior cells, 100 % mass conservation across 5,167,373 pixels, max_acc_px = 824,820) and fitted 108 per-basin repeated-median log-log S-A envelopes. Across 40 cells on draws 32/33 (1,330.3 s in a single uninterrupted process, analyzer integrity_problems: none), A4_h43_union gained +0.0039976 and was positive in all 4 quadrant fold means (NW +0.00387, NE +0.00350, SW +0.00642, SE +0.00220; 3/4 and 4/4 positive folds per draw; worst fold +0.0021960), missing the +0.005 G1 bar by 0.00100; A3_h43_scarp_free (+0.0019365 primary) passed the SGMC >= 3/4 fold gate (+0.0013560, 3/4 folds positive), isolating H43_CHANNEL_SCARP as the column that trades SGMC score for primary range-front score."
+    },
+    {
+      "date": "2026-10-03",
       "session": 7,
       "kind": "screen_result",
       "title": "H52 multiscale worming: filter and feature roles both fail the frozen bar",

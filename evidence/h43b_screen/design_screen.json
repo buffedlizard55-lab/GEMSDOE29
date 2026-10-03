@@ -1,0 +1,168 @@
+{
+  "stage": "screen",
+  "experiment": "H43 drainage-network organization: stream-power residual and knickpoint excess",
+  "preregistration": {
+    "path": "knowledge/27_preregistered_h43_screen_2026-10-03.md",
+    "sha256": "f6d6b33e7ae2782fc74e73088b507f4ba04d02aa14d007ee62dd8a4f9a025fb2"
+  },
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "draws": [
+    32,
+    33
+  ],
+  "arms": [
+    "C0_base",
+    "A1_h43_off_front",
+    "A2_h43_omega_area",
+    "A3_h43_scarp_free",
+    "A4_h43_union"
+  ],
+  "gates": {
+    "mean_gain": 0.005,
+    "min_positive_folds": 3,
+    "max_fold_loss": -0.01,
+    "budget_ratio_band": [
+      0.75,
+      1.25
+    ],
+    "sgmc_min_positive_folds": 3,
+    "holdout_best": 0.14479018210246675,
+    "min_nonzero_fraction": 0.002
+  },
+  "arm_columns": {
+    "C0_base": [],
+    "A1_h43_off_front": [
+      "H43_OFF_FRONT",
+      "H43_KNICK"
+    ],
+    "A2_h43_omega_area": [
+      "H43_LNACC",
+      "H43_OMEGA",
+      "H43_CHANNEL_SCARP"
+    ],
+    "A3_h43_scarp_free": [
+      "H43_LNACC",
+      "H43_OMEGA",
+      "H43_KNICK",
+      "H43_OFF_FRONT"
+    ],
+    "A4_h43_union": [
+      "H43_LNACC",
+      "H43_OMEGA",
+      "H43_KNICK",
+      "H43_OFF_FRONT",
+      "H43_CHANNEL_SCARP"
+    ]
+  },
+  "h43_names": [
+    "H43_LNACC",
+    "H43_OMEGA",
+    "H43_KNICK",
+    "H43_OFF_FRONT",
+    "H43_CHANNEL_SCARP"
+  ],
+  "constants": {
+    "k_frac": 0.0245,
+    "min_dist_px": 2.4,
+    "emit": "frozen H34 C0 (ridge NMS -> drop visible -> topK -> score-ordered Poisson 2.4)"
+  },
+  "draw_seed_inventory": {
+    "used_before": "0-13 main/H31/H29, 14-15 factorial, 20-21 H34, 22-23 H31b, 24-27 H35/H40, 28-31 H41",
+    "this_stage": [
+      32,
+      33
+    ]
+  },
+  "drainage": {
+    "elev_band_sha256": "739d6373125abf164e0f56163b8d9d02f651eb8d622decfe0360882085a0de32",
+    "params": {
+      "pit_eps": 1e-06,
+      "slope_smooth_sigma_px": 3.0,
+      "stream_power_m": 0.5,
+      "min_channel_acc_px": 25.0,
+      "min_basin_channel_px": 200.0,
+      "knick_clip_pct": 95.0,
+      "off_catalogue_min_px": 5.0,
+      "lnacc_scale_pct": 99.9,
+      "omega_lo_pct": 1.0,
+      "omega_hi_pct": 99.0,
+      "slope_floor": 0.0001
+    },
+    "n_footprint_px": 5167373,
+    "n_elev_nan_in_footprint_filled": 3061,
+    "n_cells_raised_by_fill": 876389,
+    "n_boundary_outlets": 17865,
+    "n_interior_trapped": 0,
+    "outlet_mass_sum": 5167373.0,
+    "mass_conserved": true,
+    "max_acc_px": 824820.0,
+    "channel_px_acc25": 1367321,
+    "channel_fraction_acc25": 0.26460659991063157,
+    "n_major_basins": 108,
+    "global_log_slope_b1": -0.14458521322282306,
+    "global_concavity_theta": 0.14458521322282306,
+    "global_log_slope_b0": 0.5464867127934203,
+    "knick_p95_scale": 1.184092881706375,
+    "lnacc_p999_scale": 5.00031268334333,
+    "omega_p1": 0.19904528904983018,
+    "omega_p99": 212.5557167194461
+  },
+  "git": {
+    "revision": "09e8126413a0b4cf351930efdf5658a7efc645e5",
+    "branch": "arena/01a1035c-gemsdoe29",
+    "dirty_worktree": false
+  },
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6",
+    "packages": {
+      "scipy": "1.17.1",
+      "scikit-learn": "1.9.1",
+      "rasterio": "1.4.4"
+    }
+  },
+  "inputs": {
+    "labels.tif": {
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "bytes": 425830
+    },
+    "sample_submission.tif": {
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "bytes": 1599597
+    },
+    "training_features.tif": {
+      "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+      "bytes": 418912844
+    },
+    "external/derived_sgmc_faults_100m_u8.tif": {
+      "sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+      "bytes": 198602
+    }
+  },
+  "caches": {
+    "static_ABCD.npy": {
+      "sha256": "fe584a12ed3e1ed7d26b272c49f6da0bbe16e072d98f6b1694938d858305b084"
+    },
+    "static_ABCD.npy.names.json": {
+      "sha256": "60d48fb99c0c032e5c33a774298112104c9e1cdd15482ac58cddefc948fb85de"
+    },
+    "addons.npy": {
+      "sha256": "ad31ff14a804b6956efa13b8c3caf6b322d6942b0f57911050ba243ac92e57bc"
+    },
+    "addons.npy.names.json": {
+      "sha256": "b1562d7d1f5e57de2002f67038d6b1b4668e3ae10354fac648722f6d33db7f27"
+    }
+  },
+  "modules": {
+    "gemsdoe/h43.py": "48ba63e5efd4748ce8b8231e52ca7f2387fea4851602d69d238d350f5e6e2c04",
+    "gemsdoe/experiment.py": "1a1fcd306bc5014491fa6b6ef1c0ae0b48fb2a1b122e75da73d0381a0d331622",
+    "gemsdoe/thinning.py": "63bdfd1c11455e18446f0e1be0fbf7c93ae94c49f98624d3f4ef4ef76f79c55e",
+    "gemsdoe/metric.py": "c0be2a023b413309561138c9eee64a81e07bb0df6ab4841c9f0c55d37ea2afd3",
+    "gemsdoe/features.py": "3bb3079a4b15c5a1c77bfe9e46a0af5129907bbd69818b9ab9c81e00ecc86910"
+  }
+}

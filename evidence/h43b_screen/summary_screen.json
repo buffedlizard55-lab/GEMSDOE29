@@ -1,0 +1,110 @@
+{
+  "stage": "screen",
+  "draws": [
+    32,
+    33
+  ],
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "arms": {
+    "A1_h43_off_front": {
+      "mean_gain": -0.0011044367906921267,
+      "fold_gains": [
+        -0.0030606401147285633,
+        -0.0003594110798025296,
+        -0.0015973906273306776,
+        0.0005996946590932639
+      ],
+      "positive_folds_per_draw": [
+        2,
+        2
+      ],
+      "worst_fold_gain": -0.0030606401147285633,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": -0.0003671061473847874,
+      "sgmc_positive_folds": 2,
+      "sgmc_gate_pass": false,
+      "mean_dti": 0.14206320169828834,
+      "G1_SCREEN_PASS": false
+    },
+    "A2_h43_omega_area": {
+      "mean_gain": 0.001880797981656579,
+      "fold_gains": [
+        0.002201705683937849,
+        -0.00031836232454071633,
+        0.0018249262823518964,
+        0.003814922284877287
+      ],
+      "positive_folds_per_draw": [
+        3,
+        3
+      ],
+      "worst_fold_gain": -0.00031836232454071633,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": 0.00019906978872305178,
+      "sgmc_positive_folds": 2,
+      "sgmc_gate_pass": false,
+      "mean_dti": 0.1450484364706371,
+      "G1_SCREEN_PASS": false
+    },
+    "A3_h43_scarp_free": {
+      "mean_gain": 0.0019364547676775576,
+      "fold_gains": [
+        -0.0024504506860089093,
+        0.002741423386241393,
+        -0.0034098586715613777,
+        0.010864705042039124
+      ],
+      "positive_folds_per_draw": [
+        2,
+        3
+      ],
+      "worst_fold_gain": -0.0034098586715613777,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": 0.001356049286285247,
+      "sgmc_positive_folds": 3,
+      "sgmc_gate_pass": true,
+      "mean_dti": 0.14510409325665805,
+      "G1_SCREEN_PASS": false
+    },
+    "A4_h43_union": {
+      "mean_gain": 0.00399757323447706,
+      "fold_gains": [
+        0.0038727702287451593,
+        0.003498764177031821,
+        0.0064227890901391305,
+        0.0021959694419921294
+      ],
+      "positive_folds_per_draw": [
+        3,
+        4
+      ],
+      "worst_fold_gain": 0.0021959694419921294,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": -0.001125235989455211,
+      "sgmc_positive_folds": 2,
+      "sgmc_gate_pass": false,
+      "mean_dti": 0.14716521172345753,
+      "G1_SCREEN_PASS": false
+    },
+    "C0_base": {
+      "mean_dti": 0.1431676384889805
+    }
+  },
+  "n_cells": 40,
+  "elapsed_s": 1330.27,
+  "viability_guard": {
+    "min_nonzero_fraction": 0.002,
+    "problems": [],
+    "passed": true
+  },
+  "note": "DTI proxies on blocked holdout folds; gates frozen in knowledge/27 \u00a74 (G1 screen, G2 confirmation, G3 promotion requiring both holdout_best and SGMC >= 3/4 positive folds in both stages)."
+}
