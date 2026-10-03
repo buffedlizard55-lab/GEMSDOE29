@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "updated_local_date": "2026-10-03",
-  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits.",
+  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits. 2026-10-03 (session 4): +IR-29-CHECK-TEMPLATE-ROOT, +IR-29-QFAULTS-RECENCY-BIN, +IR-29-H41-SMOKE-OVERLAP; IR-29-SANDBOX-NET re-probed; IR-CHECK-SUBMISSION-TEMPLATE-PATH superseded.",
   "items": [
     {
       "id": "IR-DATA-01",
@@ -163,16 +163,16 @@
       "subject": "Some GDR external layers remain blocked",
       "detail": "gdr.openei.org is unreachable from the sandbox (curl 35 SSL_ERROR_SYSCALL), matching GEMSDOE25/27 limitations; paleo-geothermal and Q-volcanics polygons therefore remain unusable this session (pins recorded in data/manifest.json for the next networked runner).",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "2 m probes already present via the 24GEMSDOE mirror and hash-verified — that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
+      "mitigation": "2 m probes already present via the 24GEMSDOE mirror and hash-verified \u2014 that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
     },
     {
       "id": "IR-29-PROXY-BLIND-TO-FARFIELD",
       "severity": "high",
       "status": "open",
       "subject": "Catalogue-gap proxy may miss far-field structure",
-      "detail": "Carried from siblings and re-reviewed in the holdout construction: catalogue-internal hide-and-recover truth sits entirely on catalogue pixels, while a historical owner-mirrored emission’s modeled credit may lie far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
+      "detail": "Carried from siblings and re-reviewed in the holdout construction: catalogue-internal hide-and-recover truth sits entirely on catalogue pixels, while a historical owner-mirrored emission\u2019s modeled credit may lie far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "Disclosed in knowledge/01 §6; no arm is ever promoted on proxy evidence alone — pass = 'eligible for a slot decision by the owner', not 'submit'."
+      "mitigation": "Disclosed in knowledge/01 \u00a76; no arm is ever promoted on proxy evidence alone \u2014 pass = 'eligible for a slot decision by the owner', not 'submit'."
     },
     {
       "id": "IR-29-LEADERBOARD-COLUMN",
@@ -197,7 +197,7 @@
       "severity": "low",
       "status": "resolved by later source review; verify current rules before entry",
       "subject": "Official rules URL corrected and rechecked",
-      "detail": "The older main-branch source register pointed to a www.nlr.gov URL that was not verified at that time. The official rules PDF at docs.nlr.gov/docs/fy26osti/96647.pdf was subsequently fetched and sections 3.2–3.5 were reviewed; see registry/sources.json and knowledge/03_drivendata_terms_access_policy.md.",
+      "detail": "The older main-branch source register pointed to a www.nlr.gov URL that was not verified at that time. The official rules PDF at docs.nlr.gov/docs/fy26osti/96647.pdf was subsequently fetched and sections 3.2\u20133.5 were reviewed; see registry/sources.json and knowledge/03_drivendata_terms_access_policy.md.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
       "mitigation": "Use the verified docs.nlr.gov rules link; check current dates and eligibility before any entry. Do not rely on stale cadence notes."
     },
@@ -251,7 +251,7 @@
       "severity": "medium",
       "status": "open; environmental",
       "subject": "Sandbox network reaches only GitHub and PyPI, so free official external data cannot be downloaded here",
-      "detail": "curl from the sandbox fails (SSL_ERROR_SYSCALL / HTTP 000) for sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov, pubs.usgs.gov, earthquake.usgs.gov, mrdata.usgs.gov, raw.githubusercontent.com and drivendata.org; api.github.com, codeload.github.com and pypi.org work.",
+      "detail": "curl from the sandbox fails (SSL_ERROR_SYSCALL / HTTP 000) for sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov, pubs.usgs.gov, earthquake.usgs.gov, mrdata.usgs.gov, raw.githubusercontent.com and drivendata.org; api.github.com, codeload.github.com and pypi.org work. Re-probed 2026-10-03 (session 4): TLS completes only to api.github.com and pypi.org; additionally maps.usgs.gov, waterdata.usgs.gov, zenodo.org, huggingface.co, doi.org, api.crossref.org, opentopography.org, ornl.gov and scripts.umd.edu fail with SSLZeroReturnError, and usgs.gov, www.nrel.gov, gx.osti.gov, scijournals.usgs.gov, topoinfo.usgs.gov do not resolve.",
       "impact": "Siler slip/dilation tendency, Peacock & Bedrosian conductance maps and extra 3DEP tiles cannot be fetched in this environment; hypotheses must be written to run on already-mirrored layers or wait for an unrestricted runner.",
       "mitigation": "All new hypotheses (H35-H39) are specified to run on hash-pinned in-repository layers; external layers are marked optional with DOI and licence verified."
     },
@@ -303,11 +303,38 @@
     {
       "id": "IR-CHECK-SUBMISSION-TEMPLATE-PATH",
       "severity": "medium",
-      "status": "fixed",
+      "status": "superseded by IR-29-CHECK-TEMPLATE-ROOT",
       "subject": "Local submission checker default did not match the core data manifest path",
       "detail": "After main-branch reconciliation, check_submission.py defaulted to GEMS_DATA_DIR/sample_submission.tif, but data/manifest.json stores the template at data/bridge/sample_submission.tif. The documented command therefore failed unless the caller supplied --template.",
       "impact": "A user following the site instructions could get a false missing-template error despite a valid restored core dataset.",
-      "mitigation": "The default now uses data_dir()/bridge/sample_submission.tif and a unit test covers GEMS_DATA_DIR override. The site instructions restore the legacy core manifest and set GEMS_DATA_DIR=data for the checker; H31 has a separate manifest/restore path."
+      "mitigation": "The default now uses data_dir()/bridge/sample_submission.tif and a unit test covers GEMS_DATA_DIR override. The site instructions restore the legacy core manifest and set GEMS_DATA_DIR=data for the checker; H31 has a separate manifest/restore path. SUPERSEDED 2026-10-03: the bridge path is right for the legacy core manifest but the H31-group restore (the one the site's reproduce commands use) puts the template at the data root; see IR-29-CHECK-TEMPLATE-ROOT."
+    },
+    {
+      "id": "IR-29-CHECK-TEMPLATE-ROOT",
+      "severity": "medium",
+      "status": "fixed",
+      "subject": "check_submission.py still could not find the template after an H31-group restore",
+      "detail": "IR-CHECK-SUBMISSION-TEMPLATE-PATH hard-coded data/bridge/sample_submission.tif. scripts/restore_h31_data.py restores the template to data/sample_submission.tif and creates no data/bridge directory, so the documented one-liner (GEMS_DATA_DIR=$PWD/data python3 scripts/check_submission.py <file>) failed with 'template not found' even on a fully restored tree. Verified in this session: data/bridge does not exist.",
+      "impact": "Owner-facing instruction on the site was broken; a valid submission looked un-checkable locally.",
+      "mitigation": "default_template_path() now prefers whichever of data/bridge/sample_submission.tif or data/sample_submission.tif exists and falls back to the bridge path (the one data/manifest.json names) when neither is present; tests/test_submission.py covers both orders of existence."
+    },
+    {
+      "id": "IR-29-QFAULTS-RECENCY-BIN",
+      "severity": "low",
+      "status": "open; disclosed",
+      "subject": "pinned qfaults mirror contains one truncated recency age bin and an embedded comma in an unquoted string",
+      "detail": "data/external/gdr_qfaults_traces.csv (sha256 9702f2e5c382...) line for trace_id 439 (\"Hot Springs fault zone\", slip_rate 0.1) carries recency \"<130,00\" - a truncated \"<130,000\" - and the recency strings contain commas, quoted on most rows. 1 of the 376 in-footprint rows is affected.",
+      "impact": "A naive comma-split mis-parses 1,098 of 1,126 rows; the truncated bin silently maps to the fallback weight, changing one centroid weight out of 376 (0.15 instead of 0.60).",
+      "mitigation": "src/gemsdoe/h41.py uses a quote-aware splitter, drops rows whose field count cannot be repaired (counted as n_rows_unparsable = 0 on the real file), maps unlisted bins to RECENCY_FALLBACK_WEIGHT and counts them (n_recency_unmapped = 1, verified). Not corrected upstream: the mirror is hash-pinned."
+    },
+    {
+      "id": "IR-29-H41-SMOKE-OVERLAP",
+      "severity": "medium",
+      "status": "disclosed; no gate or parameter changed",
+      "subject": "the H41 implementation smoke test executed one frozen-screen cell before the formal run",
+      "detail": "To validate the runner end-to-end, fold 0 (NW) draw 28 with all five arms was computed once at 2026-10-03T2x UTC into /tmp/smoke_cells.jsonl. Draw 28 fold NW is also part of the frozen H41 screen. The preregistration and the implementation were already written and frozen before that run, and the formal screen recomputes all 40 cells from scratch with the frozen gates.",
+      "impact": "A single pre-run cell outcome was visible before the formal screen started (A1 +0.0065, A2 +0.0041, A3 +0.0091, A4 +0.0125 relative to C0_base in that one cell). It creates a temptation to stop early; the gate requires all 8 cells per draw and 3-of-4 positive folds in each draw, and no parameter, arm, or gate was edited afterwards.",
+      "mitigation": "Recorded here and in knowledge/26 before the screen summary was written. Future smokes must use a draw outside the frozen draw set (e.g. 99)."
     }
   ]
 }

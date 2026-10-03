@@ -16,6 +16,16 @@ def test_cli_default_template_uses_manifest_bridge_path(monkeypatch, tmp_path):
     assert default_template_path() == tmp_path / "bridge" / "sample_submission.tif"
 
 
+def test_cli_default_template_falls_back_to_h31_restore_location(monkeypatch, tmp_path):
+    """The H31 group restore puts the template at the data root; the documented command must find it."""
+    monkeypatch.setenv("GEMS_DATA_DIR", str(tmp_path))
+    (tmp_path / "sample_submission.tif").write_bytes(b"not-a-tiff")
+    assert default_template_path() == tmp_path / "sample_submission.tif"
+    (tmp_path / "bridge").mkdir()
+    (tmp_path / "bridge" / "sample_submission.tif").write_bytes(b"legacy")
+    assert default_template_path() == tmp_path / "bridge" / "sample_submission.tif"
+
+
 @pytest.fixture()
 def template(tmp_path):
     H, W = 40, 50

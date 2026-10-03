@@ -19,7 +19,8 @@ def test_hypothesis_slate_has_frozen_ranked_statuses() -> None:
     registry = json.loads((ROOT / "registry" / "hypotheses.json").read_text())
     items = registry["items"]
     ids = [item["id"] for item in items]
-    assert ids == ["H32", "H31", "H33", "H34", "H35", "H36", "H37", "H38", "H39", "H40", "H41", "H42"]
+    assert ids == ["H32", "H31", "H33", "H34", "H35", "H36", "H37", "H38", "H39", "H40", "H41", "H42",
+                   "H43", "H44", "H45", "H46", "H47"]
     by_id = {item["id"]: item for item in items}
     assert "priority superseded" in by_id["H32"]["status"]
     assert "screen ran and failed" in by_id["H31"]["status"]
@@ -30,6 +31,17 @@ def test_hypothesis_slate_has_frozen_ranked_statuses() -> None:
     assert by_id["H40"]["rank"] == "screened" and "G1 FAIL" in by_id["H40"]["status"]
     assert all(item["planning_delta_dti"] for item in items)
     assert [by_id[k]["rank"] for k in ("H41", "H36", "H37", "H42", "H38", "H39")] == [1, 2, 3, 4, 5, 5]
+    # the v4 slate (session 4) ranks inside its own document, so ids are unique but ranks restart
+    v4 = ["H43", "H44", "H45", "H46", "H47"]
+    assert [by_id[k]["rank"] for k in v4] == [1, 2, 3, 4, 5]
+    assert all("v4 slate" in by_id[k]["status"] for k in v4)
+    assert all(by_id[k]["slate"].startswith("v4") for k in v4)
+    assert all(set(by_id[k]) >= set(by_id["H41"]) for k in v4)  # same field coverage as the older items
+    # every v4 candidate must state obtainability: a free/public/CC marker plus where the fetch has to happen
+    for k in v4:
+        e = by_id[k]["external_data"].lower()
+        assert any(t in e for t in ("free", "public", "cc by", "none required")), k
+        assert any(t in e for t in ("owner-side", "unreachable from the sandbox", "none required")), k
 
 
 def test_h35_h40_screen_evidence_is_internally_consistent() -> None:

@@ -17,16 +17,33 @@ from gemsdoe.paths import data_dir  # noqa: E402
 from gemsdoe.submission import check_file, sha256_file  # noqa: E402
 
 
+TEMPLATE_CANDIDATES = ("bridge/sample_submission.tif", "sample_submission.tif")
+
+
 def default_template_path() -> Path:
-    """Return the template's actual path in the legacy core manifest."""
-    return data_dir() / "bridge" / "sample_submission.tif"
+    """Return the template path, honouring whichever restore set is actually on disk.
+
+    The legacy core manifest restores the template to ``GEMS_DATA_DIR/bridge/sample_submission.tif``
+    (``scripts/restore_data.py``), while the H31 group manifest restores it to
+    ``GEMS_DATA_DIR/sample_submission.tif`` (``scripts/restore_h31_data.py``) - the path every current
+    screen and the site's reproduce commands actually use. Prefer an existing file, so the documented
+    one-liner works after either restore; with neither present return the legacy bridge path because it is
+    the one ``data/manifest.json`` names in its ``path`` field.
+    """
+    data = data_dir()
+    for rel in TEMPLATE_CANDIDATES:
+        p = data / rel
+        if p.is_file():
+            return p
+    return data / TEMPLATE_CANDIDATES[0]
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("path", type=Path, help="GeoTIFF to check")
     parser.add_argument("--template", type=Path, default=None,
-                        help="defaults to GEMS_DATA_DIR/bridge/sample_submission.tif (or <repo>/data/bridge/sample_submission.tif)")
+                        help="defaults to GEMS_DATA_DIR/bridge/sample_submission.tif when present, else "
+                             "GEMS_DATA_DIR/sample_submission.tif (the H31-group restore location)")
     parser.add_argument("--receipt", type=Path, default=None, help="optional JSON receipt path")
     args = parser.parse_args()
     template = args.template or default_template_path()
