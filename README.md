@@ -183,6 +183,9 @@ entry point the original prompt asked for ("run `bash scripts/download_competiti
 It does **not** contact DrivenData (that is prohibited by `AGENTS.md` rule 3); it wraps the two hash-pinned
 owner-mirror restorers, defaults to the H31-group set that the current screens and caches expect, accepts
 `--group core|h31|all` and `--verify`, and ends by printing which template path the local checker will use.
+A review pass on 2026-10-03 corrected its final resolver probe from the retired `gems29.paths` package to the
+active `gemsdoe.paths` package; this was checked with shell syntax validation and a regression test, but no
+restore is claimed in this sandbox because competition authentication/data access is unavailable.
 `check_submission.py` and `verify_downloads.py` now resolve `data/bridge/sample_submission.tif` *or*
 `data/sample_submission.tif` through one shared helper, which fixes the documented command that previously
 failed on an H31-group restore (`IR-29-CHECK-TEMPLATE-ROOT`; the verifier's third copy of the same bug was

@@ -49,7 +49,7 @@ else
   fi
 fi
 
-TEMPLATE="$("$PY" -c 'import sys; sys.path.insert(0, "src"); from gems29.paths import template_path; print(template_path())')"
+TEMPLATE="$("$PY" -c 'import sys; sys.path.insert(0, "src"); from gemsdoe.paths import template_path; print(template_path())')"
 if [[ -f "$TEMPLATE" ]]; then
   echo "template resolved for the local checker: ${TEMPLATE#"$ROOT"/}"
 else
