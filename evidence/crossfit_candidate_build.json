@@ -1,0 +1,696 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-03T20:59:33.835556+00:00",
+  "purpose": "Leak-free cross-fitted artifacts. Replaces the degenerate single-fit path in scripts/build_repo_candidate.py, whose E_dist column separated the training labels perfectly (train AUC 1.0) and used 2 of 81 columns.",
+  "protocol": {
+    "training": "per (fold, draw): E/tip/H41 from draw.visible, positives = draw.hidden_train, negatives <= 300k non-catalogue pixels > 1.5 px away, rng seed 777+31*fold+draw",
+    "prediction": "whole footprint with E/tip/H41 built from the FULL supplied catalogue, then averaged over all cells",
+    "folds": [
+      "NW",
+      "NE",
+      "SW",
+      "SE"
+    ],
+    "draws": [
+      30,
+      31
+    ],
+    "cells_per_arm": 8,
+    "model": "HistGradientBoostingClassifier",
+    "parameters": {
+      "max_iter": 100,
+      "learning_rate": 0.12,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 50,
+      "l2_regularization": 1.0,
+      "class_weight": {
+        "0": 1,
+        "1": 5
+      },
+      "early_stopping": false
+    },
+    "emission": {
+      "ridge_nms_sigma_px": 1.0,
+      "k_fraction_of_footprint": 0.0245,
+      "min_distance_px": 2.4,
+      "policy": "score-ordered Poisson disk (frozen H34 C0 / H41 standard emission)"
+    },
+    "h41_params": {
+      "decay_px": 25.0,
+      "cutoff_px": 50.0,
+      "off_catalogue_min_px": 5.0,
+      "corridor_half_len_px": 12.0,
+      "n_orientations": 8.0,
+      "purity_eps": 1e-06
+    },
+    "h41_diagnostics_full_catalogue": {
+      "params": {
+        "decay_px": 25.0,
+        "cutoff_px": 50.0,
+        "off_catalogue_min_px": 5.0,
+        "corridor_half_len_px": 12.0,
+        "n_orientations": 8.0,
+        "purity_eps": 1e-06
+      },
+      "n_centroids_total": 376,
+      "n_centroids_off_catalogue": 133,
+      "n_centroids_near_catalogue": 243,
+      "visible_pixels": 60988,
+      "nonzero_fraction": {
+        "H41_SUPP": 0.30132293527097814,
+        "H41_OFF": 0.13989100457814832,
+        "H41_CORR": 0.02971432486100771,
+        "H41_OFF_SCARP": 0.04608260328797631,
+        "H41_PURITY": 0.16795013636522851
+      },
+      "max_value": {
+        "H41_SUPP": 1.0,
+        "H41_OFF": 0.5775018930435181,
+        "H41_CORR": 0.5735558271408081,
+        "H41_OFF_SCARP": 0.2823391556739807,
+        "H41_PURITY": 0.9999982714653015
+      },
+      "mean_value": {
+        "H41_SUPP": 0.014914182014763355,
+        "H41_OFF": 0.003982379101216793,
+        "H41_CORR": 0.0007761548040434718,
+        "H41_OFF_SCARP": 0.00023422417871188372,
+        "H41_PURITY": 0.14025476574897766
+      },
+      "support_scale": 1.0249980688095093,
+      "scarp_nonzero_fraction": 0.31300259952635195,
+      "n_rows_read": 1126,
+      "n_in_footprint": 376,
+      "n_dropped_out_of_grid": 0,
+      "n_rows_unparsable": 0,
+      "n_slip_rate_missing": 0,
+      "n_recency_unmapped": 1,
+      "recency_counts": {
+        "<1,600,000": 149,
+        "<130,000": 62,
+        "<15,000": 128,
+        "<750,000": 7,
+        "<150": 29,
+        "<130,00": 1
+      },
+      "slip_rate_max_seen": 4.5,
+      "weight_summary": {
+        "min": 1.4664190091864183e-05,
+        "median": 0.033545195412130656,
+        "max": 0.8,
+        "n_missing_slip_fallback": 0
+      }
+    },
+    "note": "artifacts rewritten in --repackage mode; fitting diagnostics preserved"
+  },
+  "degeneracy_guard": {
+    "h41_split_total": 1207,
+    "per_cell": [
+      {
+        "fold": "NW",
+        "draw": 30,
+        "C0_base": {
+          "fit_s": 14.677777528762817,
+          "features_used": 78,
+          "h41_splits": 0,
+          "top_features": [
+            [
+              "mag_anom",
+              3181
+            ],
+            [
+              "det_elev",
+              155
+            ],
+            [
+              "cond_surf",
+              143
+            ],
+            [
+              "deq_n100a15",
+              129
+            ],
+            [
+              "geod_dilaterate",
+              128
+            ]
+          ]
+        },
+        "A4_h41_union": {
+          "fit_s": 15.310872793197632,
+          "features_used": 85,
+          "h41_splits": 155,
+          "top_features": [
+            [
+              "mag_anom",
+              3201
+            ],
+            [
+              "det_elev",
+              143
+            ],
+            [
+              "cond_surf",
+              141
+            ],
+            [
+              "geod_dilaterate",
+              115
+            ],
+            [
+              "ieq_n100a15",
+              111
+            ]
+          ]
+        }
+      },
+      {
+        "fold": "NW",
+        "draw": 31,
+        "C0_base": {
+          "fit_s": 14.766292810440063,
+          "features_used": 78,
+          "h41_splits": 0,
+          "top_features": [
+            [
+              "mag_anom",
+              3180
+            ],
+            [
+              "geod_dilaterate",
+              142
+            ],
+            [
+              "ieq_n100a15",
+              141
+            ],
+            [
+              "det_elev",
+              138
+            ],
+            [
+              "cond_surf",
+              120
+            ]
+          ]
+        },
+        "A4_h41_union": {
+          "fit_s": 16.127150535583496,
+          "features_used": 85,
+          "h41_splits": 169,
+          "top_features": [
+            [
+              "mag_anom",
+              3182
+            ],
+            [
+              "ieq_n100a15",
+              127
+            ],
+            [
+              "geod_dilaterate",
+              117
+            ],
+            [
+              "E_dist",
+              115
+            ],
+            [
+              "D_gdr_kde2km",
+              113
+            ]
+          ]
+        }
+      },
+      {
+        "fold": "NE",
+        "draw": 30,
+        "C0_base": {
+          "fit_s": 14.882489919662476,
+          "features_used": 80,
+          "h41_splits": 0,
+          "top_features": [
+            [
+              "mag_anom",
+              3194
+            ],
+            [
+              "cond_surf",
+              137
+            ],
+            [
+              "det_elev",
+              136
+            ],
+            [
+              "E_coh20",
+              130
+            ],
+            [
+              "geod_dilaterate",
+              127
+            ]
+          ]
+        },
+        "A4_h41_union": {
+          "fit_s": 15.518839359283447,
+          "features_used": 82,
+          "h41_splits": 136,
+          "top_features": [
+            [
+              "mag_anom",
+              3194
+            ],
+            [
+              "det_elev",
+              142
+            ],
+            [
+              "ieq_n100a15",
+              128
+            ],
+            [
+              "geod_dilaterate",
+              124
+            ],
+            [
+              "deq_n100a15",
+              122
+            ]
+          ]
+        }
+      },
+      {
+        "fold": "NE",
+        "draw": 31,
+        "C0_base": {
+          "fit_s": 14.630556344985962,
+          "features_used": 78,
+          "h41_splits": 0,
+          "top_features": [
+            [
+              "mag_anom",
+              3172
+            ],
+            [
+              "geod_dilaterate",
+              158
+            ],
+            [
+              "deq_n100a15",
+              140
+            ],
+            [
+              "ieq_n100a15",
+              138
+            ],
+            [
+              "det_elev",
+              131
+            ]
+          ]
+        },
+        "A4_h41_union": {
+          "fit_s": 15.456600189208984,
+          "features_used": 85,
+          "h41_splits": 207,
+          "top_features": [
+            [
+              "mag_anom",
+              3175
+            ],
+            [
+              "deq_n100a15",
+              142
+            ],
+            [
+              "det_elev",
+              137
+            ],
+            [
+              "E_dist",
+              129
+            ],
+            [
+              "geod_dilaterate",
+              118
+            ]
+          ]
+        }
+      },
+      {
+        "fold": "SW",
+        "draw": 30,
+        "C0_base": {
+          "fit_s": 13.696778774261475,
+          "features_used": 80,
+          "h41_splits": 0,
+          "top_features": [
+            [
+              "mag_anom",
+              3173
+            ],
+            [
+              "deq_n100a15",
+              153
+            ],
+            [
+              "geod_dilaterate",
+              142
+            ],
+            [
+              "det_elev",
+              140
+            ],
+            [
+              "cond_surf",
+              125
+            ]
+          ]
+        },
+        "A4_h41_union": {
+          "fit_s": 14.939433097839355,
+          "features_used": 86,
+          "h41_splits": 148,
+          "top_features": [
+            [
+              "mag_anom",
+              3172
+            ],
+            [
+              "det_elev",
+              141
+            ],
+            [
+              "iso_grav_anom",
+              124
+            ],
+            [
+              "deq_n100a15",
+              121
+            ],
+            [
+              "geod_dilaterate",
+              121
+            ]
+          ]
+        }
+      },
+      {
+        "fold": "SW",
+        "draw": 31,
+        "C0_base": {
+          "fit_s": 14.872718334197998,
+          "features_used": 79,
+          "h41_splits": 0,
+          "top_features": [
+            [
+              "mag_anom",
+              3169
+            ],
+            [
+              "cond_surf",
+              163
+            ],
+            [
+              "geod_dilaterate",
+              136
+            ],
+            [
+              "E_dens50",
+              131
+            ],
+            [
+              "det_elev",
+              127
+            ]
+          ]
+        },
+        "A4_h41_union": {
+          "fit_s": 16.001359939575195,
+          "features_used": 82,
+          "h41_splits": 136,
+          "top_features": [
+            [
+              "mag_anom",
+              3180
+            ],
+            [
+              "cond_surf",
+              129
+            ],
+            [
+              "E_dens50",
+              125
+            ],
+            [
+              "geod_dilaterate",
+              124
+            ],
+            [
+              "E_dist",
+              120
+            ]
+          ]
+        }
+      },
+      {
+        "fold": "SE",
+        "draw": 30,
+        "C0_base": {
+          "fit_s": 13.905410528182983,
+          "features_used": 79,
+          "h41_splits": 0,
+          "top_features": [
+            [
+              "mag_anom",
+              3191
+            ],
+            [
+              "iso_grav_anom",
+              133
+            ],
+            [
+              "det_elev",
+              128
+            ],
+            [
+              "geod_dilaterate",
+              125
+            ],
+            [
+              "cond_surf",
+              124
+            ]
+          ]
+        },
+        "A4_h41_union": {
+          "fit_s": 14.587846755981445,
+          "features_used": 84,
+          "h41_splits": 143,
+          "top_features": [
+            [
+              "mag_anom",
+              3198
+            ],
+            [
+              "E_dist",
+              117
+            ],
+            [
+              "iso_grav_anom",
+              113
+            ],
+            [
+              "det_elev",
+              112
+            ],
+            [
+              "ieq_n100a15",
+              105
+            ]
+          ]
+        }
+      },
+      {
+        "fold": "SE",
+        "draw": 31,
+        "C0_base": {
+          "fit_s": 13.417000532150269,
+          "features_used": 79,
+          "h41_splits": 0,
+          "top_features": [
+            [
+              "mag_anom",
+              3189
+            ],
+            [
+              "cond_surf",
+              138
+            ],
+            [
+              "E_dist",
+              135
+            ],
+            [
+              "det_elev",
+              134
+            ],
+            [
+              "iso_grav_anom",
+              121
+            ]
+          ]
+        },
+        "A4_h41_union": {
+          "fit_s": 14.973736047744751,
+          "features_used": 84,
+          "h41_splits": 113,
+          "top_features": [
+            [
+              "mag_anom",
+              3181
+            ],
+            [
+              "iso_grav_anom",
+              137
+            ],
+            [
+              "E_dist",
+              131
+            ],
+            [
+              "det_elev",
+              128
+            ],
+            [
+              "cond_surf",
+              123
+            ]
+          ]
+        }
+      }
+    ],
+    "rule": "abort if no tree split in any cell lands on an H41 column"
+  },
+  "evidence_for_method": {
+    "screen": "evidence/h41_screen/ (draws 28/29, 40 cells)",
+    "confirmation": "evidence/h41_screen/ (draws 30/31, 40 cells)",
+    "preregistration": "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+    "results_writeup": "knowledge/26_h41_results_2026-10-03.md",
+    "screen_mean_paired_dti_gain": {
+      "C0_base": 0.0,
+      "A4_h41_union": 0.0073436
+    },
+    "confirmation_mean_paired_dti_gain": {
+      "C0_base": 0.0,
+      "A4_h41_union": 0.0077283
+    },
+    "holdout_best": 0.14479018210246675,
+    "G1_screen_pass": true,
+    "G2_confirmation_pass": true,
+    "g3_secondary_proxy": {
+      "rule": "knowledge/19 \u00a74 G3 (inherited verbatim by knowledge/24 \u00a74) plus its \u00a75 pre-declared fork: an arm that beats C0 on the catalogue-hidden proxy while the SGMC secondary gain is negative on >=3/4 folds is reported as a proxy conflict with NO promotion. The summary and report fields G1_PASS / G1_SCREEN_PASS / above_holdout_best cover the primary-proxy gates only.",
+      "G3_ELIGIBLE": false,
+      "sgmc_positive_folds_screen": 1,
+      "sgmc_positive_folds_confirm": 1,
+      "sgmc_mean_gain_screen": -0.002260493,
+      "sgmc_mean_gain_confirm": -0.002106949
+    },
+    "proxy_caveat": "DTI values are catalogue-gap proxies on spatially blocked folds, not official competition scores. This artifact is cross-fitted, so no proxy score is quoted for the artifact itself."
+  },
+  "artifacts": {
+    "C0_base": {
+      "stem": "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a",
+      "file": "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif",
+      "path": "docs/downloads/gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif",
+      "zeros_file": "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif",
+      "zeros_path": "docs/downloads/gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif",
+      "zip": "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.zip",
+      "files": {
+        "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif": {
+          "bytes": 1552469,
+          "sha256": "b9ca8c093d3b0812112f2c62b06e2047a48156e71136c735962ececfb20372bf"
+        },
+        "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.zip": {
+          "bytes": 271029,
+          "sha256": "07135ec320c6ccd7179232ed2b06af64d23c60cce546a5d6d578bf720071e588"
+        },
+        "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif": {
+          "bytes": 788833,
+          "sha256": "ac4ebc913a172f3415f14a3b47b169af03798cff3a643ffd0a89451b869259be"
+        }
+      },
+      "bytes": 1552469,
+      "sha256": "b9ca8c093d3b0812112f2c62b06e2047a48156e71136c735962ececfb20372bf",
+      "content_id": "ca879db0089a",
+      "positive_pixels": 33766,
+      "note": "GEMSDOE29 C0 habitat xfit | cross-fitted leak-free control arm; comparison baseline | id ca879db0089a | unscored",
+      "note_characters": 112,
+      "format_receipt": "docs/downloads/checks-gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a.json",
+      "on_catalogue_pixels": 0,
+      "hug_share_within_300m_of_catalogue": 0.14650832198069064
+    },
+    "A4_h41_union": {
+      "stem": "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a",
+      "file": "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif",
+      "path": "docs/downloads/gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif",
+      "zeros_file": "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif",
+      "zeros_path": "docs/downloads/gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif",
+      "zip": "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.zip",
+      "files": {
+        "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif": {
+          "bytes": 1552576,
+          "sha256": "d34ad9224ccbd7c7c2bad4382272c80afc2f1850daf46ae7b1f9c6edcf1939f4"
+        },
+        "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.zip": {
+          "bytes": 270771,
+          "sha256": "ed7e6347a7f9a0f45cfcb6356a2ffd271b26d9ccdd09b867780c82b3fc56864f"
+        },
+        "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif": {
+          "bytes": 788810,
+          "sha256": "ab9076de63bd76fd8857b0dba81f6c19be4a95377cb52802f71ccf177cf9b9ce"
+        }
+      },
+      "bytes": 1552576,
+      "sha256": "d34ad9224ccbd7c7c2bad4382272c80afc2f1850daf46ae7b1f9c6edcf1939f4",
+      "content_id": "9edb34b99e3a",
+      "positive_pixels": 33739,
+      "note": "GEMSDOE29 H41 union xfit | cross-fitted, leak-free; G1+G2 pass, G3 proxy conflict | id 9edb34b99e3a | unscored",
+      "note_characters": 110,
+      "format_receipt": "docs/downloads/checks-gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a.json",
+      "on_catalogue_pixels": 0,
+      "hug_share_within_300m_of_catalogue": 0.15530987877530456
+    }
+  },
+  "inputs": {
+    "labels.tif": {
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "bytes": 425830
+    },
+    "sample_submission.tif": {
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "bytes": 1599597
+    },
+    "gdr_qfaults_traces.csv": {
+      "sha256": "9702f2e5c382a4f472ae834d22b94990983b059677a37adfafd51c50f75e643c",
+      "bytes": 126177
+    }
+  },
+  "git": {
+    "revision": "2aaa46fa89c78f282f1d99cab18ab00f00978275",
+    "branch": "arena/01a1036e-gemsdoe29",
+    "dirty_worktree": true
+  },
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6"
+  },
+  "total_seconds": 1205.6717507839203,
+  "provenance_warning": "Owner-mirror inputs are byte-verified but not organizer-authenticated; these are research candidates, not official scores, and no weekly slot is approved.",
+  "repackaged_utc": "2026-10-03T21:03:10.441797+00:00",
+  "repackaged_from": {
+    "C0_base": "/tmp/xfitsrc/gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif",
+    "A4_h41_union": "/tmp/xfitsrc/gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif"
+  }
+}

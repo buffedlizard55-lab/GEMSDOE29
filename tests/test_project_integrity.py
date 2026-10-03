@@ -17,6 +17,13 @@ def test_full_owner_brief_is_preserved_in_readme() -> None:
     assert embedded.rstrip("\n") == original.rstrip("\n")
 
 
+def test_download_entrypoint_uses_current_template_resolver() -> None:
+    """The documented restore command must not call the retired gems29 package."""
+    script = (ROOT / "scripts" / "download_competition_data.sh").read_text()
+    assert "from gemsdoe.paths import template_path" in script
+    assert "from gems29.paths import template_path" not in script
+
+
 def test_hypothesis_slate_has_frozen_ranked_statuses() -> None:
     registry = json.loads((ROOT / "registry" / "hypotheses.json").read_text())
     items = registry["items"]
@@ -174,10 +181,27 @@ def test_h41_promotion_gate_veto_is_pinned_by_the_evidence() -> None:
     assert screen["arms"]["A1_h41_off"]["mean_gain"] >= 0.005 > confirm["arms"]["A1_h41_off"]["mean_gain"]
     assert confirm["arms"]["A4_h41_union"]["mean_gain"] >= 0.005
     assert confirm["arms"]["A4_h41_union"]["worst_fold_gain"] > 0
-    # and no H41 candidate or slot receipt may exist while the veto stands
+    # An H41 artifact may be published for owner review, but never as an approval: the veto must be
+    # disclosed next to the download, the slot decision stays with the owner, and the file must be
+    # present and format-receipted. knowledge/33 section 7 records this narrowing of the old blanket ban.
     subs = json.loads((ROOT / "registry" / "submissions.json").read_text())
-    assert not [x for x in subs["files"] if "h41" in json.dumps(x).lower()], \
-        "no H41 submission file may exist while the G3 veto stands"
+    h41_rows = [x for x in subs["files"] if "h41" in x["id"].lower()]
+    assert h41_rows, "the cross-fitted A4_h41_union candidate should be registered for owner review"
+    for row in h41_rows:
+        assert row["role"] == "candidate_review", row["id"]
+        assert row["slot_approved"] is False, row["id"]
+        assert row["g3_veto"] is True, row["id"]
+        assert "G3" in row["gate_evidence"] and "1 of 4 folds" in row["gate_evidence"], row["id"]
+        # the H34 slot-bar re-score is the decisive negative result and must be disclosed, not omitted
+        assert "H34 slot bar" in row["gate_evidence"], row["id"]
+        assert "0.14597" in row["gate_evidence"] and "0.16402" in row["gate_evidence"], row["id"]
+        assert row["do_not_submit"] is True, row["id"]
+        assert (ROOT / row["path"]).is_file(), row["id"]
+        assert (ROOT / row["format_check_receipt"]).is_file(), row["id"]
+    # the control arm carries no gate claim of its own, but must never be slot-approved either
+    ctrl = [x for x in subs["files"] if x["id"] == "xfit-c0-habitat"]
+    assert ctrl and ctrl[0]["g3_veto"] is False and ctrl[0]["slot_approved"] is False
+    assert not any(x.get("slot_approved") is True for x in subs["files"])
     assert not [x for x in subs["files"] if x.get("role") == "candidate_review" and "slot-approved" in str(x.get("status", ""))]
     assert "no file is slot-approved" in json.loads((ROOT / "registry" / "status_feed.json").read_text())["current"]["confirmation_status"]
 
@@ -283,14 +307,14 @@ def test_public_pages_do_not_republish_score_claims_or_leaderboard_links() -> No
         assert not re.search(r'href=["\'][^"\']*leaderboard', text, flags=re.IGNORECASE), path.name
 
 
-def test_h43_screen_evidence_is_internally_consistent() -> None:
+def test_h43b_screen_evidence_is_internally_consistent() -> None:
     import hashlib
     import subprocess
     import sys
 
-    base = ROOT / "evidence" / "h43_screen"
-    prereg = ROOT / "knowledge" / "27_preregistered_h43_screen_2026-10-03.md"
-    results = ROOT / "knowledge" / "28_h43_results_2026-10-03.md"
+    base = ROOT / "evidence" / "h43b_screen"
+    prereg = ROOT / "knowledge" / "27b_preregistered_h43b_screen_2026-10-03.md"
+    results = ROOT / "knowledge" / "34_h43b_mass_conserving_drainage_results_2026-10-03.md"
     assert prereg.is_file() and results.is_file()
     design = json.loads((base / "design_screen.json").read_text())
     summary = json.loads((base / "summary_screen.json").read_text())
@@ -312,7 +336,7 @@ def test_h43_screen_evidence_is_internally_consistent() -> None:
     assert not (base / "cells_confirm.jsonl").exists()
     assert all(v["G3_ELIGIBLE"] is False for v in gate["arms"].values())
     out = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "run_h43_screen.py"), "--confirm"],
+        [sys.executable, str(ROOT / "scripts" / "run_h43b_screen.py"), "--confirm"],
         cwd=ROOT,
         capture_output=True,
         text=True,
@@ -321,5 +345,4 @@ def test_h43_screen_evidence_is_internally_consistent() -> None:
     assert out.returncode == 0, out.stdout + out.stderr
     assert "No arm passed G1 on the screen; confirmation exits before any fit." in out.stdout
     assert not (base / "cells_confirm.jsonl").exists()
-
 

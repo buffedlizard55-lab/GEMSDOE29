@@ -1,166 +1,159 @@
-"""Synthetic unit tests for the H43 drainage-network organization fields (no competition data required)."""
+"""Synthetic tests for the H43 drainage-network features (``src/gemsdoe/h43.py``).
+
+Every test builds a surface whose drainage is analytically known, so a routing bug cannot hide behind a
+plausible-looking number. The real-band smoke test (pit count, channel fraction) is deliberately left to
+the screen runner, which records it as evidence.
+"""
 
 from __future__ import annotations
 
-import numpy as np
-import pytest
+import sys
+from pathlib import Path
 
-from gemsdoe.h43 import (
-    H43_NAMES,
-    build_h43_fields,
-    d8_order,
-    degenerate_fields,
-    fill_dem,
-    prepare_drainage,
-    repeated_median_log_fit,
-    smoothed_slope,
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from gemsdoe.h43 import (  # noqa: E402
+    build_h43_columns,
+    check_strict_descent,
+    count_strict_pits,
+    d8_receivers,
+    fill_and_route,
+    fill_depressions,
+    flow_accumulation,
+    knickpoint_excess,
+    robust_loglog_fit,
     stream_power,
 )
 
 
-def test_fill_dem_plane_with_circular_pit_is_monotone_and_never_below_input():
-    # Synthetic plane tilted downhill along +x (west to east): z(r, c) = 200.0 - 1.5 * c
-    H, W = 50, 60
-    rr, cc = np.mgrid[0:H, 0:W]
-    plane = (200.0 - 1.5 * cc).astype(np.float64)
-    # Carve a closed circular depression in the middle of the plane
-    pit_mask = (rr - 25) ** 2 + (cc - 30) ** 2 <= 8 ** 2
-    elev = plane.copy()
-    elev[pit_mask] -= 25.0
-
-    filled = fill_dem(elev)
-    assert np.isfinite(filled).all()
-    # Filled surface must never be below the input anywhere
-    assert (filled >= elev - 1e-12).all()
-    # Outside the pit, the plane was already monotone to the boundary and must be unchanged
-    assert np.allclose(filled[~pit_mask], plane[~pit_mask], atol=1e-9)
-    # Inside the pit below the downhill spill rim (z = 200 - 1.5*39 = 141.5), every cell is raised above its carved value
-    sub_spill = pit_mask & (elev < 141.5)
-    assert sub_spill.any()
-    assert (filled[sub_spill] > elev[sub_spill]).all()
-    assert (filled[sub_spill] >= 141.5).all()
-    # Along the central row across the pit toward the downhill outlet (+x), filled elevation is non-increasing
-    row_profile = filled[25, 15:50]
-    assert (np.diff(row_profile) <= 1e-5).all()
-    # Routing on the filled DEM leaves zero trapped interior cells and conserves mass at the boundary
-    acc, _, outlets = d8_order(filled, return_basins=True)
-    assert float(acc[outlets].sum()) == pytest.approx(float(H * W), rel=1e-6)
+def tilted_plane(h=12, w=16, dy=0.0, dx=0.75):
+    y, x = np.mgrid[0:h, 0:w]
+    return -(dy * y + dx * x)
 
 
-def test_d8_order_tilted_plane_grows_linearly_along_x():
-    # Plane tilted downhill along +x: every interior cell (r, c) drains strictly to (r, c + 1)
-    H, W = 30, 45
-    _, cc = np.mgrid[0:H, 0:W]
-    elev = (500.0 - 2.0 * cc).astype(np.float64)
-    acc, _, outlets = d8_order(elev, return_basins=True)
-    # For any interior row (1 <= r <= H - 2) and column c >= 1:
-    # col 0 is a boundary outlet (drains off-grid), while col 1..W-1 accumulate along +x with slope 1 cell/col
-    for r in range(1, H - 1):
-        expected = np.arange(1, W, dtype=np.float64)
-        assert np.allclose(acc[r, 1:], expected, atol=1e-6)
-        assert np.allclose( np.diff(acc[r, 1:]), 1.0, atol=1e-6 )
-    assert float(acc[outlets].sum()) == pytest.approx(float(H * W), rel=1e-6)
+def test_receivers_on_a_plane_are_strictly_descending_and_point_east():
+    elev = tilted_plane()
+    valid = np.ones_like(elev, bool)
+    receiver, drop = d8_receivers(elev, valid)
+    rec = receiver.reshape(elev.shape)
+    assert check_strict_descent(elev, receiver, valid) == 0.0
+    # every cell except the last column drains to its +x neighbour; last column has no lower neighbour
+    assert np.array_equal(rec[:, :-1], np.arange(elev.size).reshape(elev.shape)[:, 1:])
+    assert (rec[:, -1] == -1).all()
+    assert np.allclose(drop.reshape(elev.shape)[:, :-1], 0.75)
 
 
-def test_d8_order_v_valley_peaks_on_thalweg_and_is_symmetric():
-    # Symmetric V-valley draining south (+r) with thalweg at mid-column x_mid = 20
-    H, W = 40, 41
-    x_mid = 20
-    rr, cc = np.mgrid[0:H, 0:W]
-    # Make cross-valley slope steeper than down-valley slope so side walls route toward the thalweg
-    elev = (400.0 - 1.0 * rr + 3.0 * np.abs(cc - x_mid)).astype(np.float64)
-    filled = fill_dem(elev)
-    acc, _, outlets = d8_order(filled, return_basins=True)
-
-    # Symmetry about the thalweg column x_mid across the entire grid
-    for offset in range(1, x_mid + 1):
-        assert np.allclose(acc[:, x_mid - offset], acc[:, x_mid + offset], atol=1e-6)
-
-    # In the lower half of the valley, accumulation peaks strictly on the thalweg column x_mid
-    for r in range(15, H - 1):
-        assert int(np.argmax(acc[r, :])) == x_mid
-        assert acc[r, x_mid] > acc[r, x_mid - 1]
-        assert acc[r, x_mid] > acc[r, x_mid + 1]
-
-    # Exact mass conservation at boundary outlets
-    assert float(acc[outlets].sum()) == pytest.approx(float(H * W), rel=1e-6)
+def test_accumulation_on_a_plane_is_linear_and_conserves_mass():
+    elev = tilted_plane(h=12, w=16)
+    valid = np.ones_like(elev, bool)
+    r = fill_and_route(elev, valid)
+    acc = r["acc"]
+    assert np.array_equal(acc[:, 0], np.ones(elev.shape[0], np.int64))
+    assert np.array_equal(acc[:, -1], np.full(elev.shape[0], elev.shape[1], np.int64))
+    assert acc.sum() == 12 * (np.arange(1, 17).sum())  # each column c holds c+1 cells
+    outlets = r["receiver"] < 0
+    assert int(acc.ravel()[outlets].sum()) == int(valid.sum())  # mass conservation
 
 
-def test_stream_power_and_repeated_median_fit_detect_knickpoint():
-    rng = np.random.default_rng(42)
-    area = np.geomspace(25.0, 50_000.0, 600)
-    # Equilibrium concave profile: S = 10^0.6 * A^(-0.45)
-    true_slope = (10.0 ** 0.6) * (area ** -0.45)
-    # Inject a synthetic range-front knickpoint anomaly on 20 channel segments (5x steeper)
-    slope = true_slope.copy()
-    knick_idx = np.arange(250, 270)
-    slope[knick_idx] *= 5.0
-    # Add tiny background multiplicative jitter
-    slope *= np.exp(rng.normal(0.0, 0.01, size=area.size))
-
-    b1, b0 = repeated_median_log_fit(np.log10(area), np.log10(slope), n_bins=16)
-    assert b1 == pytest.approx(-0.45, abs=0.03)
-    assert b0 == pytest.approx(0.60, abs=0.08)
-
-    omega = stream_power(area.reshape(20, 30), slope.reshape(20, 30), m=0.5).ravel()
-    assert (omega[knick_idx] > np.median(omega)).all()
+def test_v_valley_concentrates_flow_on_the_thalweg():
+    h, w, xc = 20, 21, 10.5
+    y, x = np.mgrid[0:h, 0:w]
+    elev = 2.0 * np.abs(xc - x) - 0.5 * y
+    valid = np.ones_like(elev, bool)
+    r = fill_and_route(elev, valid)
+    acc = r["acc"]
+    # the axis is the only place where column-wise maxima may sit (ties are broken deterministically)
+    assert set(np.unique(np.argmax(acc, axis=1)).tolist()) <= {10, 11}
+    # flow concentrates down-valley: the two axis columns carry nearly all of the mass
+    axis_mass = acc[:, 10].sum() + acc[:, 11].sum()
+    assert axis_mass > 0.5 * acc.sum()
+    assert acc[-1, 10] + acc[-1, 11] > acc[0, 10] + acc[0, 11]
+    outlets = r["receiver"] < 0
+    assert int(acc.ravel()[outlets].sum()) == int(valid.sum())  # mass conservation
 
 
-def test_prepare_drainage_and_build_h43_fields_bounds_and_leak_free():
-    H, W = 80, 80
-    rr, cc = np.mgrid[0:H, 0:W]
-    foot = np.ones((H, W), bool)
-    foot[:4, :] = False
-    foot[:, :4] = False
-    # Concave valley draining toward +r, with a sharp fault-scarp step at r = 45
-    elev = 300.0 - 1.2 * rr + 2.5 * np.abs(cc - 42) + np.where(rr < 45, 18.0, 0.0)
-    elev = elev.astype(np.float32)
-    # Inject a few internal NaNs inside the footprint to exercise nearest-valid repair
-    elev[20, 20] = np.nan
-    elev[35, 50] = np.nan
-
-    drainage = prepare_drainage(elev, foot)
-    assert drainage.diagnostics["mass_conserved"] is True
-    assert drainage.diagnostics["n_interior_trapped"] == 0
-    assert drainage.diagnostics["n_elev_nan_in_footprint_filled"] == 2
-
-    fi = np.flatnonzero(foot.ravel())
-    visible = np.zeros((H, W), bool)
-    visible[45, 42] = True  # place a visible catalogue fault right on the knickpoint
-    scarp = np.full(fi.size, 0.6, np.float32)
-
-    fields_vis, diag_vis = build_h43_fields(
-        drainage, visible=visible, footprint=foot, footprint_idx=fi, scarp_vec=scarp
-    )
-    assert fields_vis.shape == (len(H43_NAMES), fi.size)
-    assert fields_vis.dtype == np.float32
-    assert np.isfinite(fields_vis).all()
-    assert float(fields_vis.min()) >= 0.0 and float(fields_vis.max()) <= 1.0
-    assert degenerate_fields(fields_vis) == []
-
-    # When the entire footprint is marked visible, H43_OFF_FRONT (row 3) must vanish identically while
-    # the draw-independent columns (0, 1, 2, 4) remain unchanged.
-    fields_all_vis, diag_all = build_h43_fields(
-        drainage, visible=foot, footprint=foot, footprint_idx=fi, scarp_vec=scarp
-    )
-    assert diag_all["off_catalogue_footprint_fraction"] == 0.0
-    assert float(fields_all_vis[3].max()) == 0.0
-    assert np.array_equal(fields_vis[0], fields_all_vis[0])
-    assert np.array_equal(fields_vis[1], fields_all_vis[1])
-    assert np.array_equal(fields_vis[2], fields_all_vis[2])
-    assert np.array_equal(fields_vis[4], fields_all_vis[4])
-
-    # Smoothed slope helper returns zero outside valid mask and finite values inside
-    sl = smoothed_slope(elev, foot)
-    assert (sl[~foot] == 0.0).all() and np.isfinite(sl).all()
+def test_depression_filling_removes_pits_and_never_lowers_the_surface():
+    elev = tilted_plane(h=10, w=12)
+    elev[5, 5] = elev[5, 5] - 3.0  # a closed pit
+    valid = np.ones_like(elev, bool)
+    assert count_strict_pits(elev, valid) == 1
+    filled = fill_depressions(elev, valid)
+    assert count_strict_pits(filled, valid) == 0
+    assert (filled[valid] >= elev[valid] - 1e-12).all()
+    changed = filled != elev
+    assert changed.sum() == 1 and changed[5, 5]
+    r = fill_and_route(elev, valid)
+    assert r["pits"] == 1 and r["fill_changed"] is True
+    outlets = r["receiver"] < 0
+    assert int(r["acc"].ravel()[outlets].sum()) == int(valid.sum())  # every cell drains to a boundary outlet
 
 
-def test_degenerate_fields_flags_sparse_columns():
-    fields = np.zeros((5, 50_000), np.float32)
-    fields[0, :10] = 0.8
-    problems = degenerate_fields(fields)
-    assert len(problems) == 5
-    assert any(p.startswith("H43_LNACC") for p in problems)
-    assert any(p.startswith("H43_OFF_FRONT") for p in problems)
-    dense = np.full((5, 1000), 0.25, np.float32)
-    assert degenerate_fields(dense) == []
+def test_flow_accumulation_requires_a_topological_order_when_given_one():
+    elev = tilted_plane(h=6, w=8)
+    valid = np.ones_like(elev, bool)
+    receiver, _ = d8_receivers(elev, valid)
+    order = np.argsort(elev.ravel(), kind="stable")[::-1]  # high to low = topological for this plane
+    acc = flow_accumulation(receiver, valid, order=order)
+    assert np.array_equal(acc[:, -1], np.full(6, 8, np.int64))
+
+
+def test_robust_fit_recovers_a_known_concavity():
+    rng = np.random.default_rng(0)
+    log_a = rng.uniform(1.4, 5.5, 40_000)
+    log_s = -1.2 - 0.45 * log_a + rng.normal(0, 0.05, log_a.size)
+    fit = robust_loglog_fit(log_a, log_s)
+    assert abs(fit["theta"] - 0.45) < 0.02
+    assert abs(fit["intercept"] - (-1.2)) < 0.1
+
+
+def test_knickpoint_excess_is_zero_on_a_perfect_profile_and_positive_on_a_step():
+    h = w = 120
+    acc = np.zeros((h, w), np.float64)
+    acc[:] = np.power(10.0, np.linspace(1.6, 5.0, w))[None, :]
+    slope = np.power(10.0, -1.0 - 0.45 * np.log10(acc))
+    valid = np.ones((h, w), bool)
+    knick, diag = knickpoint_excess(acc, slope, valid)
+    assert knick.max() == 0.0  # an exact power-law profile has no knickpoints
+    bumped = slope.copy()
+    bumped[60, 60] *= 50.0
+    knick2, diag2 = knickpoint_excess(acc, bumped, valid)
+    assert knick2[60, 60] == 1.0  # the only positive-residual pixel maps to the top of the scale
+    assert knick2.sum() - knick2[60, 60] == 0.0  # localised: exactly one pixel has a positive residual
+    assert diag2["positive_residual_pixels"] == 1
+    assert diag["fit"]["theta"] == diag2["fit"]["theta"]  # the fit is median-based, robust to one outlier
+    assert diag2["channel_pixels"] == h * w
+    assert np.all(0.0 <= knick2) and np.all(knick2 <= 1.0)
+
+
+def test_stream_power_is_monotone_in_both_inputs():
+    acc = np.array([[10.0, 100.0], [10.0, 100.0]])
+    slope = np.array([[0.1, 0.1], [0.2, 0.2]])
+    om = stream_power(acc, slope)
+    assert om[0, 0] < om[0, 1] and om[0, 0] < om[1, 0] < om[1, 1]
+
+
+def test_build_h43_columns_is_bounded_deterministic_and_off_support_blind():
+    h, w = 80, 90
+    y, x = np.mgrid[0:h, 0:w]
+    elev = 2.0 * np.abs(45.5 - x) - 0.5 * y  # a V-valley: a real channel network with large catchments
+    valid = np.ones((h, w), bool)
+    scarp = np.linspace(0.0, 1.0, w)[None, :].repeat(h, axis=0)
+    cols, diag = build_h43_columns(elev, valid, scarp, off_mask=None)
+    assert set(cols) == {"H43_LNACC", "H43_OMEGA", "H43_KNICK", "H43_OFF_FRONT", "H43_CHANNEL_SCARP"}
+    for name, v in cols.items():
+        assert v.shape == elev.shape
+        assert np.isfinite(v).all(), name
+        assert v.min() >= 0.0 and v.max() <= 1.0, name
+    assert cols["H43_OFF_FRONT"].max() == 0.0  # never built without an explicit off-catalogue mask
+    assert set(diag["nonzero_fraction"]) == set(cols)
+    cols2, diag2 = build_h43_columns(elev, valid, scarp, off_mask=None)
+    assert all(np.array_equal(cols[k], cols2[k]) for k in cols)
+    assert diag["pits"] == diag2["pits"]
+
+    half = np.zeros((h, w), bool)
+    half[:, : w // 2] = True
+    cols3, _ = build_h43_columns(elev, valid, scarp, off_mask=half)
+    assert np.all(cols3["H43_OFF_FRONT"][:, w // 2 :] == 0.0)
+    assert np.allclose(cols3["H43_OFF_FRONT"][:, : w // 2], cols3["H43_KNICK"][:, : w // 2])

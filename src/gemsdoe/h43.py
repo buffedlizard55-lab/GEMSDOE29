@@ -1,487 +1,322 @@
-"""H43: drainage-network organization — stream-power residual and knickpoint excess.
+"""H43 — drainage-network organization of the 100 m surface (stream power, knickpoint excess).
 
-Frozen in ``knowledge/27_preregistered_h43_screen_2026-10-03.md``; designed in
-``knowledge/25_candidates_v4_2026-10-03.md`` (rank 1 of the v4 slate).
+The physical claim under test (frozen protocol: ``knowledge/29``): in an extending range, the locus of
+active faulting is also the locus of the topographic boundary condition — water leaves along the front —
+and the *network* statistics of that surface (contributing area and its residual steepness) carry structural
+information that no local window of the supplied 100 m bands can reproduce.
 
-Object
-------
-Every existing topographic channel in this repository (`B_*`, `L_*`, `S_*`, `H27`, `H30`) is a *local-window*
-operator on the 100 m or derived LiDAR grids. Drainage organization is a *catchment-network* property:
-whether a pixel carries a channel (`A >= 25` cells = 2.5 km^2), its unit stream power (`Omega = A^m S`), and
-whether its local gradient exceeds the smooth concave equilibrium profile (`S propto A^-theta`) of its
-drainage basin (a knickpoint / range-front steepness anomaly) depend on the entire upslope catchment. In
-extending Basin-and-Range half-grabens, active range-front and relay faults pin knickpoints and focus stream
-power along footwall/hanging-wall transitions that local curvature filters cannot separate from short hillslope
-roughness.
+Everything in this module is derived from the cached ``det_elev`` band plus the *visible* catalogue only.
+Nothing here reads labels, probabilities or truth masks; the single label-dependent column (``H43_OFF_FRONT``)
+is built by the caller from the per-draw visible catalogue, exactly as H41's off-catalogue restriction is.
 
-Pipeline
---------
-1. ``fill_dem(elev, valid)`` — priority-flood depression filling (Barnes, Lehman & Mulla 2014, *Computers &
-   Geosciences* 62:117-127, doi:10.1016/j.cageo.2013.04.024) using a binary min-heap for rising terrain and a
-   FIFO queue (guarded by ``pit[0] <= heap[0]``) for depressions, with a 1-pixel sentinel ring so flat-index
-   8-neighbour steps never wrap across rows. Internal non-finite pixels inside ``valid`` (3,061 pixels in
-   ``12_det_elev.npy``, ``IR-29-FOOTPRINT-DIFF``) are nearest-valid filled before flooding; only the outer
-   boundary of ``valid`` seeds the outlets, without touching the fault catalogue.
-2. ``d8_order(elev_filled, valid)`` — D8 steepest-descent routing (`(z_c - z_n) / dist` across 8 neighbours,
-   cardinal distance 1, diagonal distance sqrt(2)) ordered by descending filled elevation (`np.argsort`),
-   accumulating 1.0 cell per valid pixel downslope to the boundary outlets and propagating each outlet's
-   basin ID upslope in a single reverse pass.
-3. ``stream_power(acc, slope, m=0.5)`` on a 3-pixel Gaussian pre-smoothed gradient magnitude (nearest-valid
-   padded outside ``valid`` so the footprint edge has no artificial cliff), plus a per-basin Theil-Sen /
-   repeated-median log-log fit of ``log10(slope)`` on ``log10(area)`` over channel pixels (``acc >= 25``
-   cells; basins with ``>= 200`` channel pixels get their own fit, smaller edge basins use the global
-   footprint channel fit).
-4. Five footprint-aligned columns in ``[0, 1]``:
-   - ``H43_LNACC``: ``log10(acc)`` scaled by its 99.9th footprint percentile.
-   - ``H43_OMEGA``: stream power ``A^0.5 * S`` scaled between its 1st and 99th footprint percentiles.
-   - ``H43_KNICK``: positive log-slope residual above the basin envelope on ``acc >= 25`` channels, clipped
-     at its 95th positive percentile and scaled to ``[0, 1]``.
-   - ``H43_OFF_FRONT``: ``H43_KNICK`` restricted to pixels ``>= 500 m`` (5 px) from every *visible* catalogue
-     pixel for the current draw (an active knickpoint front with no mapped fault trace).
-   - ``H43_CHANNEL_SCARP``: ``H43_OMEGA * h27_scarp`` (stream-power anomaly co-located with a scarp step).
+Determinism: every routine is a pure function of its inputs (no RNG, no iteration count, no tolerance that
+depends on data order). Ties in the steepest-descent search are broken by a fixed neighbour order.
+
+Honest caveats carried into the docstrings rather than discovered later:
+
+* ``det_elev`` is a *detrended* surface (it spans about −590…+1470 m and its absolute datum is unknown), so
+  only relative topography is used. The routing is therefore "down the cached surface", which is a
+  topographic proxy, not a surveyed hydrologic network — stated in the preregistration and in the screen
+  summary, never upgraded to a claim about real discharge.
+* The D8 receiver graph is required to be *strictly* descending in elevation. That makes it acyclic by
+  construction, so no depression filling is needed for correctness; ``fill_depressions`` is implemented and
+  tested anyway because the frozen plan asked for it, and the screen reports the measured pit count so the
+  no-op can be verified rather than assumed (it was 0 strict pits on the real band).
 """
 
 from __future__ import annotations
 
-from collections import deque
-from dataclasses import dataclass
 import heapq
-from typing import Any
 
 import numpy as np
-from scipy.ndimage import binary_erosion, distance_transform_edt, gaussian_filter
+from scipy.ndimage import gaussian_filter
 
-H43_NAMES = ["H43_LNACC", "H43_OMEGA", "H43_KNICK", "H43_OFF_FRONT", "H43_CHANNEL_SCARP"]
+H43_NAMES = ("H43_LNACC", "H43_OMEGA", "H43_KNICK", "H43_OFF_FRONT", "H43_CHANNEL_SCARP")
 
-# Frozen parameters (knowledge/25 section H43 and knowledge/27 section 2). Grid spacing is 100 m (1 px = 100 m).
-H43_PARAMS: dict[str, float] = dict(
-    pit_eps=1e-6,                # monotone increment per step across flat/depression cells during priority-flood
-    slope_smooth_sigma_px=3.0,   # 3-pixel Gaussian pre-smoothing before np.gradient local slope
-    stream_power_m=0.5,          # area exponent m in Omega = A^m * S
-    min_channel_acc_px=25.0,     # 25 cells = 2.5 km^2 catchment threshold for channel / knickpoint validity
-    min_basin_channel_px=200.0,  # minimum channel pixels in a single outlet basin for a per-basin log-log fit
-    knick_clip_pct=95.0,         # positive log-slope residual clipped at its 95th percentile
-    off_catalogue_min_px=5.0,    # off-catalogue = >= 500 m (5 px) from every visible catalogue pixel
-    lnacc_scale_pct=99.9,        # percentile of log10(acc) used to scale H43_LNACC into [0, 1]
-    omega_lo_pct=1.0,            # lower percentile for H43_OMEGA scaling
-    omega_hi_pct=99.0,           # upper percentile for H43_OMEGA scaling
-    slope_floor=1e-4,            # numerical floor on slope before log10 in the S-A regression
-)
+NEIGHBOURS = ((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1))
+NEIGHBOUR_DIST = tuple(float(np.hypot(dy, dx)) for dy, dx in NEIGHBOURS)
+CHANNEL_MIN_CELLS = 25  # frozen in knowledge/29 §3.3 (0.25 km^2 at 100 m pixels)
+KNICK_BINS = 20
+OMEGA_M = 0.5
+SLOPE_SIGMA_PX = 1.0
 
 
-@dataclass
-class DrainageField:
-    """Draw-independent H43 grids computed once per run from the cached DEM and footprint."""
-
-    lnacc_grid: np.ndarray     # float32 (H, W) in [0, 1], zero outside footprint
-    omega_grid: np.ndarray     # float32 (H, W) in [0, 1], zero outside footprint
-    knick_grid: np.ndarray     # float32 (H, W) in [0, 1], zero outside footprint
-    diagnostics: dict[str, Any]
-
-
-def _nearest_fill_2d(arr: np.ndarray, valid_finite: np.ndarray) -> np.ndarray:
-    """Fill non-finite / outside cells from the nearest valid finite cell (no global-median step)."""
-    if valid_finite.all():
-        return np.asarray(arr, np.float64).copy()
-    if not valid_finite.any():
-        raise ValueError("cannot nearest-fill an array with zero valid finite cells")
-    idx = distance_transform_edt(~valid_finite, return_distances=False, return_indices=True)
-    return np.asarray(arr[tuple(idx)], np.float64)
+def _shift(a: np.ndarray, dy: int, dx: int, fill: float) -> np.ndarray:
+    """Shift ``a`` by (dy, dx) with constant ``fill`` at the borders (never wraps)."""
+    out = np.full_like(a, fill)
+    h, w = a.shape
+    ys = slice(max(dy, 0), h + min(dy, 0))
+    yd = slice(max(-dy, 0), h + min(-dy, 0))
+    xs = slice(max(dx, 0), w + min(dx, 0))
+    xd = slice(max(-dx, 0), w + min(-dx, 0))
+    out[yd, xd] = a[ys, xs]
+    return out
 
 
-def fill_dem(elev: np.ndarray, valid: np.ndarray | None = None, *, eps: float = H43_PARAMS["pit_eps"]) -> np.ndarray:
-    """Priority-flood depression filling over a 2-D DEM grid.
+def d8_receivers(elev: np.ndarray, valid: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Steepest-descent receiver of every valid cell.
 
-    Boundary cells of ``valid`` (8-connected erosion border) seed the priority queue so every interior cell
-    drains strictly toward the domain boundary. Internal NaNs inside ``valid`` are filled from their nearest
-    finite ``valid`` cell before flooding. Returns a ``float64`` array equal to ``np.nan`` outside ``valid``
-    and satisfying ``filled >= elev_nearest`` everywhere inside ``valid``.
+    Returns ``(receiver, drop)``: flat indices of the downstream neighbour (``-1`` where the cell has no
+    strictly lower valid neighbour) and the elevation drop per pixel of that step. A neighbour is only ever
+    accepted when it is *strictly* lower, which is what makes the graph acyclic.
     """
-    z_in = np.asarray(elev, np.float64)
-    if z_in.ndim != 2:
-        raise ValueError("elev must be a 2-D array")
-    if eps < 0 or not np.isfinite(eps):
-        raise ValueError("eps must be a non-negative finite float")
-    val = np.isfinite(z_in) if valid is None else np.asarray(valid, bool)
-    if val.shape != z_in.shape:
-        raise ValueError("valid mask must match elev shape")
-    if not val.any():
-        raise ValueError("valid mask is empty")
-
-    finite = val & np.isfinite(z_in)
-    z_nn = _nearest_fill_2d(z_in, finite)
-    z_work = np.where(val, z_nn, np.nan)
-
-    # 1-pixel sentinel ring prevents 1-D neighbour offsets from wrapping across rows or leaving the array.
-    z_pad = np.pad(z_work, 1, mode="constant", constant_values=np.nan)
-    v_pad = np.pad(val, 1, mode="constant", constant_values=False)
-    Hp, Wp = z_pad.shape
-    interior = binary_erosion(v_pad, structure=np.ones((3, 3), bool), border_value=0)
-    b_idx = np.flatnonzero(v_pad & ~interior)
-
-    out = z_pad.ravel().copy()
-    v_flat = v_pad.ravel()
-    visited = ~v_flat.copy()
-    visited[b_idx] = True
-
-    heap: list[tuple[float, int]] = [(float(out[i]), int(i)) for i in b_idx]
-    heapq.heapify(heap)
-    pit: deque[tuple[float, int]] = deque()
-    offsets = (-Wp - 1, -Wp, -Wp + 1, -1, 1, Wp - 1, Wp, Wp + 1)
-
-    heappop = heapq.heappop
-    heappush = heapq.heappush
-    pit_pop = pit.popleft
-    pit_push = pit.append
-    step_eps = float(eps)
-
-    while heap or pit:
-        if pit and (not heap or pit[0][0] <= heap[0][0]):
-            zc, c = pit_pop()
-        else:
-            zc, c = heappop(heap)
-        for off in offsets:
-            nb = c + off
-            if not visited[nb]:
-                visited[nb] = True
-                zn = out[nb]
-                if zn <= zc:
-                    zn_new = zc + step_eps
-                    out[nb] = zn_new
-                    pit_push((zn_new, nb))
-                else:
-                    heappush(heap, (zn, nb))
-
-    return out.reshape(Hp, Wp)[1:-1, 1:-1].copy()
+    elev = np.asarray(elev, np.float64)
+    valid = np.asarray(valid, bool)
+    if elev.shape != valid.shape or elev.ndim != 2:
+        raise ValueError("elev and valid must be equal-shaped 2-D arrays")
+    h, w = elev.shape
+    e = np.where(valid, elev, np.inf)
+    best_slope = np.zeros((h, w), np.float64)
+    best_idx = np.full((h, w), -1, np.int64)
+    for (dy, dx), dist in zip(NEIGHBOURS, NEIGHBOUR_DIST):
+        n = _shift(e, dy, dx, np.inf)
+        drop = e - n
+        accept = np.isfinite(n) & (drop > 0.0)
+        slope = np.where(accept, drop / dist, 0.0)
+        better = slope > best_slope
+        if better.any():
+            yy, xx = np.nonzero(better)
+            best_slope[yy, xx] = slope[yy, xx]
+            best_idx[yy, xx] = (yy + dy) * w + (xx + dx)
+    receiver = np.where(valid, best_idx, -1).ravel()
+    drop = np.where(valid, best_slope * 1.0, 0.0).ravel()
+    return receiver, drop
 
 
-def d8_order(
-    elev_filled: np.ndarray,
-    valid: np.ndarray | None = None,
-    *,
-    return_basins: bool = False,
-) -> np.ndarray | tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """D8 steepest-descent flow accumulation from a depression-filled DEM.
+def check_strict_descent(elev: np.ndarray, receiver: np.ndarray, valid: np.ndarray) -> float:
+    """Largest non-negative ``elev(receiver) - elev(cell)`` over all receivers (0.0 = strictly descending)."""
+    flat = np.asarray(elev, np.float64).ravel()
+    ok = receiver >= 0
+    if not ok.any():
+        return 0.0
+    src = np.flatnonzero(ok)
+    diff = flat[receiver[src]] - flat[src]
+    return float(max(0.0, diff.max())) if diff.size else 0.0
 
-    Each valid cell starts with 1.0 unit of area and hands its accumulated area to its steepest downslope
-    8-neighbour (`(z_c - z_n) / dist`, cardinal `dist=1`, diagonal `dist=sqrt(2)`), processed in descending
-    elevation order (`np.argsort`). Boundary cells of ``valid`` are outlets (`receiver = self`) so water never
-    leaks into invalid padding before reaching the boundary, and total area across outlets equals the number of
-    valid cells. When ``return_basins=True``, returns ``(acc, basin_id, outlet_mask)``.
+
+def count_strict_pits(elev: np.ndarray, valid: np.ndarray) -> int:
+    """Cells whose 8 neighbours are all higher-or-equal (closed depressions on the supplied surface)."""
+    elev = np.asarray(elev, np.float64)
+    valid = np.asarray(valid, bool)
+    higher = np.ones(elev.shape, bool)
+    for dy, dx in NEIGHBOURS:
+        n = _shift(elev, dy, dx, np.inf)
+        higher &= np.isfinite(n) & (n > elev)
+    return int(np.count_nonzero(valid & higher & np.isfinite(elev)))
+
+
+def fill_depressions(elev: np.ndarray, valid: np.ndarray) -> np.ndarray:
+    """Priority-flood depression filling (Barnes, Lehman & Mulla 2014) on the valid cells.
+
+    Returns a copy of ``elev`` in which every closed depression is raised to its spill elevation. The
+    algorithm is standard and deterministic: a min-heap seeded with the valid boundary cells pops the
+    lowest cell, raises each unvisited valid neighbour to at least the popped elevation and pushes it.
     """
-    zf = np.asarray(elev_filled, np.float64)
-    if zf.ndim != 2:
-        raise ValueError("elev_filled must be a 2-D array")
-    val = np.isfinite(zf) if valid is None else np.asarray(valid, bool)
-    if val.shape != zf.shape:
-        raise ValueError("valid mask must match elev_filled shape")
-    if not val.any():
-        raise ValueError("valid mask is empty")
-    if not np.isfinite(zf[val]).all():
-        raise ValueError("elev_filled contains non-finite values inside valid mask; call fill_dem first")
-
-    v_pad = np.pad(val, 1, mode="constant", constant_values=False)
-    f_pad = np.pad(np.where(val, zf, np.inf), 1, mode="constant", constant_values=np.inf)
-    Hp, Wp = f_pad.shape
-    interior = binary_erosion(v_pad, structure=np.ones((3, 3), bool), border_value=0)
-
-    dy = (-1, -1, -1, 0, 0, 1, 1, 1)
-    dx = (-1, 0, 1, -1, 1, -1, 0, 1)
-    dists = np.hypot(dy, dx)
-    offsets = (-Wp - 1, -Wp, -Wp + 1, -1, 1, Wp - 1, Wp, Wp + 1)
-
-    best_slope = np.zeros((Hp, Wp), dtype=np.float64)
-    best_off = np.zeros((Hp, Wp), dtype=np.int32)
-    center = f_pad[1:-1, 1:-1]
-    with np.errstate(invalid="ignore"):
-        for d_y, d_x, dist, off in zip(dy, dx, dists, offsets):
-            nb_z = f_pad[1 + d_y : Hp - 1 + d_y, 1 + d_x : Wp - 1 + d_x]
-            s = (center - nb_z) / dist
-            better = s > best_slope[1:-1, 1:-1]
-            best_slope[1:-1, 1:-1] = np.where(better, s, best_slope[1:-1, 1:-1])
-            best_off[1:-1, 1:-1] = np.where(better, off, best_off[1:-1, 1:-1])
-
-    # Boundary cells of valid drain off the domain and act as terminal outlets.
-    best_off[~interior] = 0
-    v_flat = v_pad.ravel()
-    f_flat = f_pad.ravel()
-    valid_idx = np.flatnonzero(v_flat)
-    # Stable mergesort preserves deterministic tie-breaking by raster order when two cells have equal z.
-    order = valid_idx[np.argsort(f_flat[valid_idx], kind="mergesort")[::-1]]
-    recv_all = np.arange(Hp * Wp, dtype=np.int32)
-    recv_all[valid_idx] = valid_idx + best_off.ravel()[valid_idx]
-
-    acc_pad = np.zeros(Hp * Wp, dtype=np.float64)
-    acc_pad[valid_idx] = 1.0
-    for c in order:
-        r = recv_all[c]
-        if r != c:
-            acc_pad[r] += acc_pad[c]
-
-    acc = acc_pad.reshape(Hp, Wp)[1:-1, 1:-1].copy()
-    if not return_basins:
-        return acc
-
-    basin_pad = np.arange(Hp * Wp, dtype=np.int32)
-    for c in order[::-1]:
-        r = recv_all[c]
-        if r != c:
-            basin_pad[c] = basin_pad[r]
-    basin = basin_pad.reshape(Hp, Wp)[1:-1, 1:-1].copy()
-    basin[~val] = -1
-    outlet_mask = (best_off[1:-1, 1:-1] == 0) & val
-    return acc, basin, outlet_mask
+    elev = np.asarray(elev, np.float64).copy()
+    valid = np.asarray(valid, bool)
+    if elev.shape != valid.shape or elev.ndim != 2:
+        raise ValueError("elev and valid must be equal-shaped 2-D arrays")
+    h, w = elev.shape
+    work = np.where(valid, elev, np.nan)
+    out = np.full((h, w), np.nan, np.float64)
+    visited = np.zeros((h, w), bool)
+    heap: list[tuple[float, int, int]] = []
+    border = np.zeros((h, w), bool)
+    border[0, :] = border[-1, :] = border[:, 0] = border[:, -1] = True
+    for y, x in zip(*np.nonzero(valid & border)):
+        out[y, x] = work[y, x]
+        visited[y, x] = True
+        heapq.heappush(heap, (float(work[y, x]), int(y), int(x)))
+    while heap:
+        level, y, x = heapq.heappop(heap)
+        for dy, dx in NEIGHBOURS:
+            ny, nx = y + dy, x + dx
+            if 0 <= ny < h and 0 <= nx < w and valid[ny, nx] and not visited[ny, nx]:
+                visited[ny, nx] = True
+                out[ny, nx] = max(float(work[ny, nx]), level)
+                heapq.heappush(heap, (float(out[ny, nx]), ny, nx))
+    if not np.isfinite(out[valid]).all():  # pragma: no cover - defensive: disconnected valid islands
+        out[valid & ~np.isfinite(out)] = work[valid & ~np.isfinite(out)]
+    return out
 
 
-def smoothed_slope(
-    elev: np.ndarray,
-    valid: np.ndarray | None = None,
-    *,
-    sigma_px: float = H43_PARAMS["slope_smooth_sigma_px"],
-) -> np.ndarray:
-    """Gradient magnitude of a Gaussian-smoothed, nearest-valid-padded elevation grid."""
-    z_in = np.asarray(elev, np.float64)
-    if z_in.ndim != 2:
-        raise ValueError("elev must be a 2-D array")
-    val = np.isfinite(z_in) if valid is None else np.asarray(valid, bool)
-    finite = val & np.isfinite(z_in)
-    z_nn = _nearest_fill_2d(z_in, finite)
-    z_sm = gaussian_filter(z_nn, sigma=float(sigma_px), mode="nearest") if sigma_px > 0 else z_nn
-    gy, gx = np.gradient(z_sm)
-    slope = np.hypot(gy, gx)
-    return np.where(val, slope, 0.0)
+def flow_accumulation(receiver: np.ndarray, valid: np.ndarray, *, order: np.ndarray | None = None) -> np.ndarray:
+    """Number of valid cells draining through each cell (itself included), in the receiver forest.
 
-
-def stream_power(acc: np.ndarray, slope: np.ndarray, *, m: float = H43_PARAMS["stream_power_m"]) -> np.ndarray:
-    """Stream-power index ``Omega = A^m * S`` with non-negative clipping."""
-    a = np.asarray(acc, np.float64)
-    s = np.asarray(slope, np.float64)
-    if a.shape != s.shape:
-        raise ValueError("acc and slope must have the same shape")
-    if m <= 0 or not np.isfinite(m):
-        raise ValueError("m must be a positive finite float")
-    return np.power(np.maximum(a, 0.0), float(m)) * np.maximum(s, 0.0)
-
-
-def repeated_median_log_fit(log_area: np.ndarray, log_slope: np.ndarray, *, n_bins: int = 16) -> tuple[float, float]:
-    """Theil-Sen / repeated-median fit ``log_slope = b0 + b1 * log_area`` across quantile bins of ``log_area``."""
-    x = np.asarray(log_area, np.float64).ravel()
-    y = np.asarray(log_slope, np.float64).ravel()
-    if x.size != y.size or x.size == 0:
-        raise ValueError("log_area and log_slope must be non-empty 1-D arrays of equal length")
-    qs = np.linspace(0.0, 100.0, int(n_bins) + 1)
-    edges = np.percentile(x, qs)
-    bx: list[float] = []
-    by: list[float] = []
-    for k in range(int(n_bins)):
-        if k == int(n_bins) - 1:
-            m = (x >= edges[k]) & (x <= edges[k + 1])
-        else:
-            m = (x >= edges[k]) & (x < edges[k + 1])
-        if int(m.sum()) >= 5:
-            bx.append(float(np.median(x[m])))
-            by.append(float(np.median(y[m])))
-    bx_arr = np.asarray(bx, np.float64)
-    by_arr = np.asarray(by, np.float64)
-    if bx_arr.size < 2 or np.allclose(bx_arr, bx_arr[0]):
-        return 0.0, float(np.median(y))
-    slopes: list[float] = []
-    for i in range(bx_arr.size):
-        dx = bx_arr - bx_arr[i]
-        dy = by_arr - by_arr[i]
-        ok = np.abs(dx) > 1e-9
-        if ok.any():
-            slopes.append(float(np.median(dy[ok] / dx[ok])))
-    b1 = float(np.median(slopes)) if slopes else 0.0
-    b0 = float(np.median(y - b1 * x))
-    return b1, b0
-
-
-def prepare_drainage(
-    elev: np.ndarray,
-    footprint: np.ndarray,
-    *,
-    params: dict[str, float] | None = None,
-) -> DrainageField:
-    """Compute the draw-independent H43 grids (`lnacc`, `omega`, `knick`) once from the DEM and footprint."""
-    p = dict(H43_PARAMS)
-    if params:
-        unknown = set(params) - set(H43_PARAMS)
-        if unknown:
-            raise ValueError(f"unknown H43 parameters: {sorted(unknown)}")
-        p.update(params)
-
-    foot = np.asarray(footprint, bool)
-    z_in = np.asarray(elev, np.float64)
-    if z_in.shape != foot.shape or z_in.ndim != 2:
-        raise ValueError("elev and footprint must be 2-D arrays of identical shape")
-    n_foot = int(foot.sum())
-    if n_foot == 0:
-        raise ValueError("empty footprint")
-
-    finite_in_foot = foot & np.isfinite(z_in)
-    n_nan_filled = int(n_foot - int(finite_in_foot.sum()))
-
-    filled = fill_dem(z_in, foot, eps=p["pit_eps"])
-    acc, basin, outlet_mask = d8_order(filled, foot, return_basins=True)
-    interior = binary_erosion(foot, structure=np.ones((3, 3), bool), border_value=0)
-    n_interior_trapped = int((outlet_mask & interior).sum())
-    outlet_mass = float(acc[outlet_mask].sum())
-
-    slope = smoothed_slope(z_in, foot, sigma_px=p["slope_smooth_sigma_px"])
-    omega_raw = stream_power(acc, slope, m=p["stream_power_m"])
-
-    # 1. H43_LNACC: log10(acc) scaled by its 99.9th percentile inside the footprint.
-    lnacc_raw = np.where(foot, np.log10(np.maximum(acc, 1.0)), 0.0)
-    lnacc_scale = float(np.percentile(lnacc_raw[foot], p["lnacc_scale_pct"]))
-    if lnacc_scale <= 0:
-        lnacc_scale = 1.0
-    lnacc_grid = np.where(foot, np.clip(lnacc_raw / lnacc_scale, 0.0, 1.0), 0.0).astype(np.float32)
-
-    # 2. H43_OMEGA: stream power scaled between p1 and p99 inside the footprint.
-    omega_lo = float(np.percentile(omega_raw[foot], p["omega_lo_pct"]))
-    omega_hi = float(np.percentile(omega_raw[foot], p["omega_hi_pct"]))
-    if omega_hi <= omega_lo:
-        omega_hi = omega_lo + 1.0
-    omega_grid = np.where(foot, np.clip((omega_raw - omega_lo) / (omega_hi - omega_lo), 0.0, 1.0), 0.0).astype(
-        np.float32
-    )
-
-    # 3. H43_KNICK: positive log10(slope) residual above the basin S-A envelope on channel cells (acc >= 25).
-    chan = foot & (acc >= float(p["min_channel_acc_px"]))
-    chan_idx = np.flatnonzero(chan.ravel())
-    knick_grid = np.zeros(foot.shape, np.float32)
-    n_major_basins = 0
-    b1_glob, b0_glob, knick_p95 = 0.0, 0.0, 1.0
-    if chan_idx.size > 0:
-        la = np.log10(np.maximum(acc.ravel()[chan_idx], 1.0))
-        ls = np.log10(np.maximum(slope.ravel()[chan_idx], float(p["slope_floor"])))
-        b1_glob, b0_glob = repeated_median_log_fit(la, ls, n_bins=32)
-        fitted = b0_glob + b1_glob * la
-
-        b_ids = basin.ravel()[chan_idx]
-        s_ord = np.argsort(b_ids, kind="mergesort")
-        b_sorted = b_ids[s_ord]
-        _, start, count = np.unique(b_sorted, return_index=True, return_counts=True)
-        min_b = int(p["min_basin_channel_px"])
-        for st, ct in zip(start, count):
-            if int(ct) >= min_b:
-                n_major_basins += 1
-                sub = s_ord[st : st + ct]
-                b1_b, b0_b = repeated_median_log_fit(la[sub], ls[sub], n_bins=16)
-                fitted[sub] = b0_b + b1_b * la[sub]
-
-        resid = np.maximum(ls - fitted, 0.0)
-        pos_resid = resid[resid > 0]
-        knick_p95 = float(np.percentile(pos_resid, p["knick_clip_pct"])) if pos_resid.size > 0 else 1.0
-        if knick_p95 <= 0:
-            knick_p95 = 1.0
-        knick_grid.ravel()[chan_idx] = np.clip(resid / knick_p95, 0.0, 1.0).astype(np.float32)
-
-    diag = dict(
-        params={k: float(v) for k, v in p.items()},
-        n_footprint_px=n_foot,
-        n_elev_nan_in_footprint_filled=n_nan_filled,
-        n_cells_raised_by_fill=int((filled[foot] > _nearest_fill_2d(z_in, finite_in_foot)[foot]).sum()),
-        n_boundary_outlets=int(outlet_mask.sum()),
-        n_interior_trapped=n_interior_trapped,
-        outlet_mass_sum=outlet_mass,
-        mass_conserved=bool(abs(outlet_mass - n_foot) <= 1e-3 and n_interior_trapped == 0),
-        max_acc_px=float(acc[foot].max()),
-        channel_px_acc25=int(chan_idx.size),
-        channel_fraction_acc25=float(chan_idx.size / n_foot),
-        n_major_basins=n_major_basins,
-        global_log_slope_b1=b1_glob,
-        global_concavity_theta=-b1_glob,
-        global_log_slope_b0=b0_glob,
-        knick_p95_scale=knick_p95,
-        lnacc_p999_scale=lnacc_scale,
-        omega_p1=omega_lo,
-        omega_p99=omega_hi,
-    )
-    return DrainageField(lnacc_grid=lnacc_grid, omega_grid=omega_grid, knick_grid=knick_grid, diagnostics=diag)
-
-
-def build_h43_fields(
-    drainage: DrainageField,
-    *,
-    visible: np.ndarray,
-    footprint: np.ndarray,
-    footprint_idx: np.ndarray,
-    scarp_vec: np.ndarray,
-    params: dict[str, float] | None = None,
-) -> tuple[np.ndarray, dict[str, Any]]:
-    """Return ``(fields, diagnostics)``; ``fields`` is ``(5, n_footprint)`` float32 with rows ``H43_NAMES``.
-
-    ``visible`` is the draw's visible catalogue grid; ``footprint`` is the template footprint; ``footprint_idx``
-    its flat indices; ``scarp_vec`` the footprint-vector H27 scarp composite in [0, 1]. The hidden holdout labels
-    never enter; ``visible`` enters only through the off-catalogue distance mask (``>= 500 m``).
+    ``order`` must be a decreasing-elevation order of the valid cells (strict descent guarantees a
+    topological order); when omitted, cells are processed in descending flat index which is *not* a
+    topological order and is only safe for tests with an explicit order.
     """
-    p = dict(H43_PARAMS)
-    if params:
-        unknown = set(params) - set(H43_PARAMS)
-        if unknown:
-            raise ValueError(f"unknown H43 parameters: {sorted(unknown)}")
-        p.update(params)
-
-    foot = np.asarray(footprint, bool)
-    vis = np.asarray(visible, bool) & foot
-    H, W = foot.shape
-    if drainage.lnacc_grid.shape != (H, W):
-        raise ValueError("drainage grids must match footprint shape")
-    fi = np.asarray(footprint_idx, np.int64)
-    if fi.size == 0:
-        raise ValueError("empty footprint")
-    if (fi < 0).any() or (fi >= H * W).any() or not foot.ravel()[fi].all():
-        raise ValueError("footprint_idx must contain only valid flat indices inside the footprint")
-    scarp = np.asarray(scarp_vec, np.float32)
-    if scarp.shape != (fi.size,):
-        raise ValueError("scarp_vec must align with footprint_idx")
-
-    dist_cat = distance_transform_edt(~vis) if vis.any() else np.full((H, W), np.inf, np.float64)
-    off_mask = (dist_cat >= float(p["off_catalogue_min_px"])) & foot
-
-    scarp_clean = np.clip(np.nan_to_num(scarp, nan=0.0, posinf=0.0, neginf=0.0), 0.0, 1.0)
-    lnacc_vec = drainage.lnacc_grid.ravel()[fi]
-    omega_vec = drainage.omega_grid.ravel()[fi]
-    knick_vec = drainage.knick_grid.ravel()[fi]
-    off_front_vec = (drainage.knick_grid * off_mask.astype(np.float32)).ravel()[fi]
-    chan_scarp_vec = np.clip(omega_vec * scarp_clean, 0.0, 1.0)
-
-    out = np.zeros((5, fi.size), np.float32)
-    out[0] = lnacc_vec
-    out[1] = omega_vec
-    out[2] = knick_vec
-    out[3] = off_front_vec
-    out[4] = chan_scarp_vec
-    out = np.clip(out, 0.0, 1.0)
-
-    diag = dict(
-        visible_pixels=int(vis.sum()),
-        off_catalogue_footprint_fraction=float(off_mask.ravel()[fi].mean()),
-        nonzero_fraction={n: float((out[i] > 1e-4).mean()) for i, n in enumerate(H43_NAMES)},
-        max_value={n: float(out[i].max()) for i, n in enumerate(H43_NAMES)},
-        mean_value={n: float(out[i].mean()) for i, n in enumerate(H43_NAMES)},
-    )
-    diag.update(drainage.diagnostics)
-    return out, diag
+    grid_shape = np.asarray(valid).shape
+    valid = np.asarray(valid, bool).ravel()
+    receiver = np.asarray(receiver, np.int64).ravel()
+    if receiver.shape != valid.shape:
+        raise ValueError("receiver and valid must share a shape")
+    if order is None:
+        order = np.flatnonzero(valid)[::-1]
+    acc = np.zeros(valid.size, np.int64)
+    acc[valid] = 1
+    acc_l = acc.tolist()
+    recv_l = receiver.tolist()
+    for i in np.asarray(order).tolist():
+        r = recv_l[i]
+        if r >= 0:
+            acc_l[r] += acc_l[i]
+    return np.asarray(acc_l, np.int64).reshape(grid_shape)
 
 
-def degenerate_fields(fields: np.ndarray, *, min_nonzero_fraction: float = 0.002) -> list[str]:
-    """Names of H43 columns too sparse to move a boosted model (the H31 failure mode).
+def fill_and_route(elev: np.ndarray, valid: np.ndarray) -> dict:
+    """Fill depressions if needed, route D8, accumulate. Returns grids plus the measured diagnostics."""
+    pits = count_strict_pits(elev, valid)
+    filled = elev if pits == 0 else fill_depressions(elev, valid)
+    receiver, drop = d8_receivers(filled, valid)
+    max_uphill = check_strict_descent(filled, receiver, valid)
+    if max_uphill > 0.0:  # pragma: no cover - guarded by construction of d8_receivers
+        raise RuntimeError(f"receiver graph is not strictly descending (max uphill step {max_uphill})")
+    order = np.argsort(np.where(valid, filled, -np.inf).ravel(), kind="stable")[::-1]
+    order = order[valid.ravel()[order]]
+    acc = flow_accumulation(receiver, valid, order=order)
+    return dict(filled=filled, receiver=receiver, drop=drop, acc=acc, pits=pits,
+                fill_changed=bool(pits > 0), max_uphill_step=max_uphill)
 
-    Pre-declared viability guard: ``min_nonzero_fraction`` = 0.2 % of footprint pixels.
+
+def masked_gaussian(field: np.ndarray, valid: np.ndarray, sigma: float) -> np.ndarray:
+    """Gaussian smoothing of a masked field with validity-normalised weights (no edge bleed)."""
+    num = gaussian_filter(np.where(valid, np.nan_to_num(field, nan=0.0), 0.0), sigma, mode="nearest")
+    den = gaussian_filter(valid.astype(np.float64), sigma, mode="nearest")
+    out = np.full(field.shape, np.nan, np.float64)
+    ok = den > 1e-9
+    out[ok] = num[ok] / den[ok]
+    out[~valid] = np.nan
+    return out
+
+
+def slope_magnitude(elev: np.ndarray, valid: np.ndarray, sigma: float = SLOPE_SIGMA_PX) -> np.ndarray:
+    """|grad| of the smoothed surface, in metres per 100 m pixel (dimensionless rise/run × 100)."""
+    sm = masked_gaussian(elev, valid, sigma)
+    filled = np.where(np.isfinite(sm), sm, np.nan)
+    gy, gx = np.gradient(np.nan_to_num(filled, nan=0.0))
+    s = np.hypot(gy, gx)
+    return np.where(valid & np.isfinite(sm), s, np.nan)
+
+
+def stream_power(acc: np.ndarray, slope: np.ndarray, m: float = OMEGA_M) -> np.ndarray:
+    """Ω ∝ A^m · S with A in cells (unit-coefficient proxy, never a discharge claim)."""
+    with np.errstate(invalid="ignore", divide="ignore"):
+        omega = np.power(acc.astype(np.float64), m) * slope
+    return omega
+
+
+def robust_loglog_fit(log_a: np.ndarray, log_s: np.ndarray, bins: int = KNICK_BINS) -> dict:
+    """Binned-median robust fit of ``log10 S`` on ``log10 A`` (deterministic, no RNG, no scipy optimiser).
+
+    Returns ``(intercept, slope, bin_centres)``: ``slope`` is the concave-profile exponent θ with the sign
+    convention ``log10 S ≈ intercept − θ · log10 A``.
     """
-    problems: list[str] = []
-    f = np.asarray(fields)
-    if f.ndim != 2 or f.shape[0] != len(H43_NAMES):
-        raise ValueError("fields must be (5, n_pixels)")
-    for i, name in enumerate(H43_NAMES):
-        frac = float((np.nan_to_num(f[i]) > 1e-4).mean())
-        if frac < min_nonzero_fraction:
-            problems.append(f"{name}: nonzero on {frac:.5%} of pixels (< {min_nonzero_fraction:.1%})")
-    if not np.isfinite(f).all():
-        problems.append("non-finite values in the H43 field block")
-    if float(np.nanmin(f)) < -1e-6 or float(np.nanmax(f)) > 1.0 + 1e-6:
-        problems.append("H43 fields violate [0, 1]")
-    return problems
+    log_a = np.asarray(log_a, np.float64)
+    log_s = np.asarray(log_s, np.float64)
+    ok = np.isfinite(log_a) & np.isfinite(log_s)
+    log_a, log_s = log_a[ok], log_s[ok]
+    if log_a.size < 4 * bins:
+        raise ValueError(f"too few finite channel pixels ({log_a.size}) for a {bins}-bin robust fit")
+    edges = np.quantile(log_a, np.linspace(0.0, 1.0, bins + 1))
+    edges = np.unique(edges)
+    if edges.size < 4:
+        raise ValueError("channel log-area distribution is too degenerate for a robust fit")
+    centres, medians = [], []
+    idx = np.clip(np.searchsorted(edges, log_a, side="right") - 1, 0, edges.size - 2)
+    for b in range(edges.size - 1):
+        sel = idx == b
+        if np.count_nonzero(sel) >= 25:
+            centres.append(float(np.median(log_a[sel])))
+            medians.append(float(np.median(log_s[sel])))
+    centres = np.asarray(centres)
+    medians = np.asarray(medians)
+    if centres.size < 3:
+        raise ValueError("not enough populated log-area bins for a robust fit")
+    slope, intercept = np.polyfit(centres, medians, 1)
+    return dict(intercept=float(intercept), slope=float(slope), theta=float(-slope),
+                bin_centres=centres.tolist(), bin_medians=medians.tolist(),
+                n_channel_pixels=int(log_a.size))
+
+
+def knickpoint_excess(acc: np.ndarray, slope: np.ndarray, valid: np.ndarray,
+                      min_cells: int = CHANNEL_MIN_CELLS) -> tuple[np.ndarray, dict]:
+    """Positive residual steepness over the fitted concave profile, clipped at its 95th percentile.
+
+    Channel pixels are ``acc >= min_cells``; the fit is a binned-median log-log fit (see
+    :func:`robust_loglog_fit`). The residual is ``log10 S − (intercept − θ log10 A)``, kept only where it is
+    positive and normalised by the 95th percentile of the *positive* residuals, so the column is in [0, 1]
+    by construction and a spatially sparse knickpoint field still maps its strongest positive residual to
+    1.0 instead of collapsing to zero (a plain q95 over all channel pixels would be 0.0 whenever fewer than
+    five per cent of channel pixels have a positive residual).
+    """
+    acc = np.asarray(acc, np.float64)
+    slope = np.asarray(slope, np.float64)
+    valid = np.asarray(valid, bool)
+    channel = valid & (acc >= min_cells) & np.isfinite(slope) & (slope > 0)
+    log_a = np.where(channel, np.log10(np.maximum(acc, 1.0)), np.nan)
+    log_s = np.where(channel, np.log10(np.maximum(slope, 1e-12)), np.nan)
+    fit = robust_loglog_fit(log_a[channel], log_s[channel])
+    resid = log_s - (fit["intercept"] + fit["slope"] * log_a)
+    pos = np.where(channel & np.isfinite(resid), np.maximum(resid, 0.0), 0.0)
+    positive = pos[channel & (pos > 0.0)]
+    q95 = float(np.quantile(positive, 0.95)) if positive.size else 0.0
+    diag = dict(fit=fit, q95=float(q95), channel_pixels=int(channel.sum()),
+                channel_fraction_of_footprint=float(channel.sum() / max(int(valid.sum()), 1)),
+                positive_residual_pixels=int(positive.size),
+                positive_residual_fraction_of_channels=float(positive.size / max(int(channel.sum()), 1)),
+                median_pos_residual=float(np.median(pos[channel])) if np.any(channel) else 0.0)
+    if q95 <= 0:
+        return np.zeros(acc.shape, np.float64), diag
+    return np.clip(pos / q95, 0.0, 1.0), diag
+
+
+def scale_unit(v: np.ndarray, valid: np.ndarray, *, log: bool = False, q: float = 0.999) -> tuple[np.ndarray, float]:
+    """Percentile scaling of a positive field into [0, 1] (log10 first when ``log``)."""
+    x = np.asarray(v, np.float64)
+    x = np.log10(np.maximum(x, 1.0)) if log else x
+    ref = x[valid & np.isfinite(x)]
+    if ref.size == 0:
+        return np.zeros(x.shape, np.float64), 0.0
+    hi = float(np.quantile(ref, q))
+    if hi <= 0:
+        return np.zeros(x.shape, np.float64), hi
+    return np.clip(np.where(np.isfinite(x), x, 0.0) / hi, 0.0, 1.0), hi
+
+
+def build_h43_columns(elev: np.ndarray, valid: np.ndarray, scarp: np.ndarray,
+                      off_mask: np.ndarray | None = None) -> tuple[dict, dict]:
+    """The five frozen H43 columns plus their diagnostics.
+
+    ``scarp`` is ``ctx.h27_scarp`` (grid-shaped) and ``off_mask`` the per-draw off-catalogue mask
+    (visible catalogue only). When ``off_mask`` is None the off-catalogue column is built entirely
+    off-support (all zeros) so callers cannot accidentally leak: it must be supplied explicitly.
+    """
+    rout = fill_and_route(elev, valid)
+    acc = rout["acc"]
+    slope = slope_magnitude(rout["filled"], valid)
+    omega = stream_power(acc, slope)
+    knick, knick_diag = knickpoint_excess(acc, slope, valid)
+    lnacc, lnacc_hi = scale_unit(acc, valid, log=True)
+    omega_scaled, omega_hi = scale_unit(omega, valid & (acc >= CHANNEL_MIN_CELLS))
+    off = np.zeros_like(knick) if off_mask is None else np.where(np.asarray(off_mask, bool), knick, 0.0)
+    scarp = np.nan_to_num(np.asarray(scarp, np.float64), nan=0.0, posinf=0.0, neginf=0.0)
+    channel_scarp = omega_scaled * np.clip(scarp, 0.0, 1.0)
+    columns = {
+        "H43_LNACC": np.where(valid, lnacc, 0.0),
+        "H43_OMEGA": np.where(valid, omega_scaled, 0.0),
+        "H43_KNICK": np.where(valid, knick, 0.0),
+        "H43_OFF_FRONT": np.where(valid, off, 0.0),
+        "H43_CHANNEL_SCARP": np.where(valid, channel_scarp, 0.0),
+    }
+    diag = dict(pits=rout["pits"], fill_changed=rout["fill_changed"],
+                max_uphill_step=rout["max_uphill_step"],
+                slope_px_median=float(np.nanmedian(slope)),
+                acc_p99_9=float(np.quantile(acc[valid], 0.999)),
+                acc_max=float(acc[valid].max()) if np.any(valid) else 0.0,
+                lnacc_ref=float(lnacc_hi), omega_ref=float(omega_hi),
+                knick=knick_diag,
+                nonzero_fraction={k: float(np.count_nonzero(v[valid])) / max(int(valid.sum()), 1)
+                                  for k, v in columns.items()})
+    return columns, diag

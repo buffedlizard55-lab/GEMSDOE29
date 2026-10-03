@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-03T20:52:22.415662+00:00",
+  "generated_by": "scripts/verify_pipeline.py",
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6"
+  },
+  "data_dir": "/home/user/GEMSDOE29/data",
+  "core_manifest": {
+    "path": "data/manifest.json",
+    "files": 11,
+    "verified": [
+      {
+        "label": "data/bridge/training_features.tif",
+        "bytes": 418912844,
+        "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5"
+      },
+      {
+        "label": "data/bridge/labels.tif",
+        "bytes": 425830,
+        "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+      },
+      {
+        "label": "data/bridge/existing_faults.tif",
+        "bytes": 425830,
+        "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+      },
+      {
+        "label": "data/bridge/sample_submission.tif",
+        "bytes": 1599597,
+        "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+      },
+      {
+        "label": "data/inputs/h19_5_nan.tif",
+        "bytes": 1712322,
+        "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d"
+      },
+      {
+        "label": "data/inputs/dotted_h19_5_d1_5_nan.tif",
+        "bytes": 1632732,
+        "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310"
+      },
+      {
+        "label": "data/external/lidar_scarp_features_u8.tif",
+        "bytes": 36943606,
+        "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568"
+      },
+      {
+        "label": "data/external/geodawn_extensions_u8.tif",
+        "bytes": 27132925,
+        "sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b"
+      },
+      {
+        "label": "data/external/geodawn_rad_u8.tif",
+        "bytes": 26612970,
+        "sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682"
+      },
+      {
+        "label": "data/gdr/2m_temperature_probe_INGENIOUS_regional_data.zip",
+        "bytes": 1080530,
+        "sha256": "1301f70d230058e616ea5d34d1c7a32fabf7d49198172f376c59c89bd652eca3"
+      },
+      {
+        "label": "data/inputs/dotted_h19_5_d2_8_nan.tif",
+        "bytes": 1603424,
+        "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8"
+      }
+    ],
+    "problems": []
+  },
+  "group_manifest": {
+    "path": "registry/data_manifest.json",
+    "files": 11,
+    "verified": [
+      {
+        "label": "training_features",
+        "bytes": 418912844,
+        "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5"
+      },
+      {
+        "label": "labels",
+        "bytes": 425830,
+        "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+      },
+      {
+        "label": "existing_faults",
+        "bytes": 425830,
+        "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+      },
+      {
+        "label": "sample_submission",
+        "bytes": 1599597,
+        "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+      },
+      {
+        "label": "ext_lidar_scarp_features_u8",
+        "bytes": 36943606,
+        "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568"
+      },
+      {
+        "label": "ext_geodawn_rad_u8",
+        "bytes": 26612970,
+        "sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682"
+      },
+      {
+        "label": "ext_geodawn_extensions_u8",
+        "bytes": 27132925,
+        "sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b"
+      },
+      {
+        "label": "ext_derived_sgmc_faults_100m_u8",
+        "bytes": 198602,
+        "sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0"
+      },
+      {
+        "label": "ext_gdr_wellspring_in_footprint",
+        "bytes": 2146771,
+        "sha256": "122718e65bdf55aab0ee12ad20d80062f0deb1de957225a61ad880dd5dc196ea"
+      },
+      {
+        "label": "ext_gdr_qfaults_traces",
+        "bytes": 126177,
+        "sha256": "9702f2e5c382a4f472ae834d22b94990983b059677a37adfafd51c50f75e643c"
+      },
+      {
+        "label": "ext_gdr_volcanic_vents_in_footprint",
+        "bytes": 672,
+        "sha256": "f91bafbaccaaf2754e71d60434fc0f9eb2c7b880c6e714883f4974542ff6a0bf"
+      }
+    ],
+    "problems": []
+  },
+  "template": {
+    "path": "data/bridge/sample_submission.tif",
+    "ok": true,
+    "problems": [],
+    "grid": {
+      "epsg": 32611,
+      "shape": [
+        3730,
+        3292
+      ],
+      "transform": [
+        100.0,
+        0.0,
+        243350.0,
+        0.0,
+        -100.0,
+        4508550.0
+      ]
+    },
+    "footprint_pixels": 5167373,
+    "template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+  },
+  "caches": {
+    "present": {
+      "static_ABCD.npy": {
+        "bytes": 1322847616,
+        "sha256": "fe584a12ed3e1ed7d26b272c49f6da0bbe16e072d98f6b1694938d858305b084"
+      },
+      "static_ABCD.npy.names.json": {
+        "bytes": 893,
+        "sha256": "60d48fb99c0c032e5c33a774298112104c9e1cdd15482ac58cddefc948fb85de"
+      },
+      "addons.npy": {
+        "bytes": 103347588,
+        "sha256": "ad31ff14a804b6956efa13b8c3caf6b322d6942b0f57911050ba243ac92e57bc"
+      },
+      "addons.npy.names.json": {
+        "bytes": 51,
+        "sha256": "b1562d7d1f5e57de2002f67038d6b1b4668e3ae10354fac648722f6d33db7f27"
+      },
+      "bands/_footprint.npy": {
+        "bytes": 12279288,
+        "sha256": "c446094771775c00802862e9ec58846fd1b278b4e608303e68811a2404dfd246"
+      },
+      "bands/_labels.npy": {
+        "bytes": 12279288,
+        "sha256": "d77fa88ad58d0a268b736b3c1d6a8939fd237d5955369944bd2b299194b2555d"
+      }
+    },
+    "missing": [],
+    "ok": true
+  },
+  "reproduction": {
+    "ok": true,
+    "seconds": 95.0,
+    "command": "/usr/bin/python3 /home/user/GEMSDOE29/scripts/build_repo_candidate.py --out-dir /tmp/gemsdoe29-verify-vbp04yya --record /tmp/gemsdoe29-verify-vbp04yya/record.json --slug verify-repro",
+    "rebuilt_sha256": "3537e9fc47a465036a8c1462b99a29b7f3449ee2e7bb94fd0a12d438a85b375d",
+    "registered_sha256": "3537e9fc47a465036a8c1462b99a29b7f3449ee2e7bb94fd0a12d438a85b375d",
+    "rebuilt_bytes": 1591482,
+    "registered_bytes": 1591482,
+    "content_id": "a4d439b07426",
+    "problems": []
+  },
+  "problems": [],
+  "ok": true
+}

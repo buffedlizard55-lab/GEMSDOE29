@@ -40,7 +40,9 @@ STAGE_SOURCES = {
     "h41_confirmation": dict(files=["evidence/h41_screen/design_confirm.json"], fitted_key="draws",
                              status_note="COMPLETE: 40 cells on draws 30/31. A4_h41_union passed G2 and was refused promotion at G3 (SGMC 1/4 folds in both stages); no candidate, no slot. See knowledge/26 section 5 and evidence/h41_screen/promotion_gate.json."),
     "h43_screen": dict(files=["evidence/h43_screen/design_screen.json"], fitted_key="draws",
-                       status_note="COMPLETE: 40 cells on draws 32/33. All four arms failed G1 (best arm A4_h43_union +0.0039976, 4/4 fold means positive, 3/4 and 4/4 per draw, below the +0.005 mean bar; A3_h43_scarp_free +0.0019365 passed the SGMC >=3/4 fold gate at +0.0013560). Reserved confirmation draws 34/35 were never authorized or fitted. See knowledge/28."),
+                       status_note="COMPLETE: 40 cells on draws 32/33 (staged into two-cell processes after the OOM kill). A3_knick +0.01419 and A4_union +0.01287 passed G1, A1_off +0.00401 and A2_network -0.00136 failed, SGMC second proxy negative on both passing arms (proxy conflict). See knowledge/30; no candidate, no slot."),
+    "h43_confirmation": dict(files=["evidence/h43_screen/design_confirm.json"], fitted_key="draws",
+                             status_note="COMPLETE: 40 cells on draws 34/35. A3_knick +0.01674 and A4_union +0.01568 replicated the primary proxy result (3/4 positive folds per draw, worst folds 0.0/-0.000533) but the SGMC second proxy is negative in both stages, so the inherited G3 requirement withheld promotion for every arm: no candidate, no slot. See knowledge/30 section 5 and evidence/h43_screen/analyzer_report.json (integrity_problems 0)."),
 
 }
 # Ranges documented in prose that predate the per-stage evidence files kept here (or whose only record is an
@@ -52,7 +54,6 @@ PROSE_CLAIMED = {
 RELEASED_UNUSED = {
     "h29_confirmation_draws_never_fit": [2, 3],
     "h35_h40_confirmation_draws_never_fit": [26, 27],
-    "h43_confirmation_draws_never_fit": [34, 35],
 }
 
 
@@ -67,6 +68,7 @@ def cell_count(stage: str) -> int | None:
         "h41_screen": "evidence/h41_screen/cells_screen.jsonl",
         "h41_confirmation": "evidence/h41_screen/cells_confirm.jsonl",
         "h43_screen": "evidence/h43_screen/cells_screen.jsonl",
+        "h43_confirmation": "evidence/h43_screen/cells_confirm.jsonl",
     }
     rel = files.get(stage)
     if not rel:

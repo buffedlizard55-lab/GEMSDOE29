@@ -2,25 +2,68 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
-> **Current decision (2026-10-03, session 5): H43 (DEM drainage-network organization, rank 1 of the v4 slate) was
-> preregistered, implemented, and screened across 40 cells on draws 32/33 — `A4_h43_union` gained `+0.0039976` across all
-> 4 quadrant fold means (`NW +0.00387, NE +0.00350, SW +0.00642, SE +0.00220`, `3/4` and `4/4` positive folds per draw,
-> worst fold `+0.0021960`, holdout AUC `0.7883 -> 0.7913`) and missed G1 solely by `0.00100` against the `+0.005` mean bar;
-> `A3_h43_scarp_free` (`+0.0019365` primary) became the first feature arm in the H35/H40/H41/H43 family to pass the
-> SGMC off-catalogue `>= 3/4` fold gate (`+0.0013560`, 3/4 folds positive). Because no arm passed G1, confirmation draws
-> `34/35` were not fit, no candidate file was built, and no weekly slot was used.** Session 5 implemented
-> `src/gemsdoe/h43.py` (Barnes-Lehman-Mulla priority-flood depression filling with `0` trapped interior cells and `100 %`
-> mass conservation across all `5,167,373` footprint pixels and `17,865` boundary outlets, D8 steepest-descent flow
-> accumulation, unit stream power $\Omega = A^{0.5}\cdot S$, and per-basin repeated-median log-log $S\text{–}A$ knickpoint
-> excess across `108` major basins), froze the protocol with explicit G1+G2+G3 gates in
-> [`knowledge/27_preregistered_h43_screen_2026-10-03.md`](knowledge/27_preregistered_h43_screen_2026-10-03.md)
-> (sha256 `f6d6b33e…`) before any fit, ran the 40-cell screen on draws `32/33` (`1,330.3 s`, clean tree at `09e81264`),
-> and verified every cell and gate independently via `scripts/analyze_h43_screen.py` (`integrity_problems: []`).
-> Full write-up: [`knowledge/28_h43_results_2026-10-03.md`](knowledge/28_h43_results_2026-10-03.md); raw cells and gates:
-> [`evidence/h43_screen/`](evidence/h43_screen/).
+> **Session 5 (2026-10-03): the standing data blocker is cleared, and its first experiment is a decisive
+> negative.** `bash scripts/download_competition_data.sh --group all` restored and hash-verified **22/22 manifest
+> entries** (11 in `data/manifest.json` + 11 in `registry/data_manifest.json` — 14 distinct files, six of
+> them pinned in both layouts) into the ignored `data/` tree; `python scripts/prepare_data.py` built the aligned
+> arrays (footprint 5,167,373 px, labels 60,988 px, 19 bands, 54.6 s); `build_features.py` / `build_addons.py`
+> produced the 64-column static block and the 5 add-on columns; and a new
+> [`scripts/verify_pipeline.py --reproduce`](scripts/verify_pipeline.py) wrote
+> [`evidence/pipeline_verification.json`](evidence/pipeline_verification.json): both manifests verify, the
+> template grid matches, the caches are complete, and the registered candidate **rebuilds byte-identically**
+> (`sha256 3537e9fc47a46503…`, 1,591,482 bytes, 37,913 dots, `ok_to_upload=true`). The full
+> train → inference → validate path therefore runs here, end to end, on the pinned bytes. The session then spent
+> that capability on the gap `knowledge/22` §4 left open: the H41 union arm was **re-scored on the H34 C0
+> protocol** whose `C1_geodesic_dots` control is the recorded slot bar (0.14479018). Under a new frozen
+> preregistration ([`knowledge/27`](knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md), sha256
+> `af1d8188…`, committed before the run) the arm measured **0.14597316** with a mean paired gain of only
+> **+0.001183** against the frozen **+0.005** bar (worst fold −0.009202; 3/4 folds positive), and the SGMC second
+> proxy **lost on all four folds** (−0.007180). The two frozen controls reproduced the stored session-2 H34 cells
+> **bit-for-bit** (max |Δ| = 0.0), so the comparison is not an environment artifact: H41's earlier +0.0073/+0.0077
+> means were **draw-specific**, the family's line is **closed for promotion**, no candidate file was built and no
+> weekly slot was used. Every number is recomputed from the raw cells by
+> [`scripts/analyze_h41a4_h34protocol.py`](scripts/analyze_h41a4_h34protocol.py) (problems: none); the write-up is
+> [`knowledge/28_h41a4_results_2026-10-03.md`](knowledge/28_h41a4_results_2026-10-03.md). Nothing is slot-approved,
+> and that stage consumed no draws: the next free draw was still 32 when it finished (the parallel H43 stage then
+> claimed 32/33 and reserved 34/35 — [`registry/draw_ledger.json`](registry/draw_ledger.json) is the only
+> authority — see the draw-ledger bullet further down). Pass 2 closed two process defects it found: the
+> documented download verifier covered only two of the five registered artifacts
+> ([`IR-29-VERIFY-DOWNLOADS-COVERAGE`](registry/irregularities.json), now **5/5 ok** plus the two H29 builds at
+> 28 checks each with 0 failures) and one register mitigation named a script that does not exist in this
+> repository (`IR-29-REGISTER-STALE-SCRIPT`). The executive-summary page now explains the historical
+> `[0, 1]` rejection from the register itself, with the honest caveat that the portal validator is not public.
+> Remaining work and limitations: [`knowledge/29`](knowledge/29_remaining_work_and_limitations_2026-10-03.md).
 >
-> **Session 4 close-out: H41 became the first candidate in this family to clear a frozen
-> gate — on two arms — and the preregistered confirmation, not the screen, decided what happened next.** Session 4
+> **Session 5, parallel workstream (2026-10-03): the published headline candidate was a distance-to-catalogue
+> look-up, and the fix is a cross-fitted builder — but fixing it did not change any verdict.** Building an
+> `A4_h41_union` artifact with the existing recipe produced a file **byte-identical** to the published repo-c0
+> candidate (sha256 `3537e9fc47a46503…`, content id `a4d439b07426`), i.e. the H41 physics changed nothing. The
+> cause is measured, not guessed: `scripts/build_repo_candidate.py` builds catalogue family `E` from the same
+> full catalogue its positives come from, and `E`'s first column `log1p(min(dist_to_catalogue, 60))` is
+> **exactly 0.0 on all 60,988 positives** and **≥ 1.098612 on all 300,000 sampled negatives** — train AUC
+> **1.0**, tree-1 root split `E_dist` at threshold `0.0`, and only **2 distinct columns used across all 100
+> trees** (`E_dist` 100 splits, `mag_anom` 200). Independent corroboration: that artifact placed **65.95 %** of
+> its dots within 300 m of the known catalogue. The screens in `evidence/` are **unaffected** — `Cell` builds
+> `E` from `draw.visible`, which has the hidden components removed. The fix,
+> `scripts/build_crossfit_candidate.py`, trains per (fold, draw) exactly as the validated cells do (features
+> from `draw.visible`, positives = `draw.hidden_train`, negatives ≤300 k at >1.5 px, seed `777+31·fold+draw`),
+> applies the models to the whole footprint with `E` from the full catalogue (legitimate at prediction time),
+> averages over 4 folds × draws 30/31, and runs the unchanged frozen emission. It now uses **78–86 columns per
+> cell with 1,207 H41 splits**, catalogue-hugging falls to **≈15 %**, and the two arms are distinct: `C0_base`
+> 33,766 dots (`ca879db0089a`) and `A4_h41_union` 33,739 dots (`9edb34b99e3a`). It **aborts** if no split lands
+> on an H41 column or if the arms come out identical — the guard the old path lacked. **The honest bottom
+> line:** the leak-free A4 artifact is still **not** slot-recommended. Re-scored on the H34 slot-bar protocol it
+> reaches **0.14597 against a bar of 0.16402** (worst fold −0.00920, SGMC positive on 0/4 folds) and G3
+> withholds promotion; its own-fold +0.0073/+0.0077 gains were measured against `C0_base`, not against the best
+> control. Fixing the leak changed the artifact, not the verdict. Separately, the owner's reported
+> `Predicted values must be in range [0, 1]` rejection is reproduced exactly: `((a>=0)&(a<=1)).all()` over the
+> **whole** array is **False** for every `-nan.tif` and **True** for every `-zeros.tif`, so both variants ship
+> and the zero-outside file is the recommended format. All four new files have **zero hard-check failures**.
+> Registered [`IR-29-ARTIFACT-LEAK`](registry/irregularities.json); full write-up and the disclosed narrowing of
+> one test assertion: [`knowledge/33`](knowledge/33_artifact_leakage_and_crossfit_2026-10-03.md).
+>
+> **Current decision (2026-10-03, session 4): H41 became the first candidate in this family to clear a frozen
+> gate — on two arms — and the preregistered confirmation, not the screen, decides what happens next.** Session 4
 > implemented `src/gemsdoe/h41.py`, the first use anywhere in this project of the hash-pinned INGENIOUS Quaternary
 > fault attribute table for prediction (slip-rate × recency weighted trace-centroid support, restricted to centroids
 > ≥500 m from the visible catalogue, plus an anisotropic scarp-strike corridor, a scarp product and an off-support
@@ -96,13 +139,53 @@
 
 ## Start here
 
-- **[H43 results — session 5 (read first)](knowledge/28_h43_results_2026-10-03.md)** — the 40-cell H43 drainage-organization
-  screen on draws 32/33 (`A4_h43_union` `+0.0039976` across 4/4 fold means, `A3_h43_scarp_free` `+0.0019365` primary and
-  `+0.0013560` SGMC `3/4` folds), priority-flood D8 mass-conservation audit, and why confirmation draws `34/35` were not fit.
-  Its frozen protocol is **[knowledge/27](knowledge/27_preregistered_h43_screen_2026-10-03.md)** and its feature module is
-  **[src/gemsdoe/h43.py](src/gemsdoe/h43.py)**.
-- **[H41 results — session 4](knowledge/26_h41_results_2026-10-03.md)** — the screen and confirmation tables, why the two passing
-  arms are a ranking gain rather than an emission fluke, the SGMC conflict that withheld promotion at G3, and every disclosed process defect.
+- **[H43 results — Workstream A (read first)](knowledge/30_h43_drainage_results_2026-10-03.md)** — the drainage-network screen on
+  draws 32/33 (40 cells): `A3_knick` **+0.01419** and `A4_union` **+0.01287** pass the frozen G1 gate with the
+  emission budget in band and the worst fold ≈ −0.001, while `A1_off` (+0.00401) and `A2_network` (−0.00136) fail —
+  so the signal is the **knickpoint residual**, not drainage density. The SGMC second proxy is negative on both
+  passing arms, the staged execution and the design-file rewrite are disclosed in §1, and the preregistered
+  confirmation on draws 34/35 **replicated both arms more strongly** (+0.01674 / +0.01568, 3/4 positive folds per
+  draw, worst folds 0.0 / −0.00053) — then the inherited G3 secondary-proxy rule vetoed promotion, exactly as for
+  H41, because the SGMC class is negative in both stages (2/4 → 0/4 and 1/4 → 2/4 folds). H43 closes with no
+  candidate and no slot; its frozen protocol is
+  **[knowledge/29](knowledge/29_preregistered_h43_screen_2026-10-03.md)**.
+- **[H43b results — Workstream B & head-to-head comparison](knowledge/34_h43b_mass_conserving_drainage_results_2026-10-03.md)** —
+  parallel Session-5 implementation (`src/gemsdoe/h43b.py`, frozen in
+  **[knowledge/27b](knowledge/27b_preregistered_h43b_screen_2026-10-03.md)**, `evidence/h43b_screen/`) that seeds
+  Barnes–Lehman–Mulla priority-flood at the true footprint boundary (`17,865` outlets, `876,389` raised cells,
+  `0` trapped interior cells, `100 %` mass conservation across `5,167,373` pixels, `max_acc_px = 824,820` vs `109`
+  in Workstream A), fits `108` per-basin repeated-median log–log $S\text{–}A$ envelopes, and separates
+  `A3_h43_scarp_free` (without `H43_CHANNEL_SCARP`) from `A4_h43_union`. On the same draws `32/33` (`40` cells in a
+  single uninterrupted process, `analyzer_report.json` `integrity_problems: []`), `A4_h43_union` gained **`+0.0039976`**
+  and was positive in **all 4 quadrant fold means** (`NW +0.00387, NE +0.00350, SW +0.00642, SE +0.00220`, worst
+  fold `+0.0021960`, `0.00100` short of G1's `+0.005` bar), while `A3_h43_scarp_free` (`+0.0019365` primary)
+  **passed the SGMC $\ge 3/4$ positive-folds gate (`+0.0013560`, 3/4 folds)**, isolating `H43_CHANNEL_SCARP` as the
+  column that trades SGMC score for primary range-front score.
+- **[Session-5 note](knowledge/31_session5_data_and_emission_2026-10-03.md)** — the data-placement receipt (the
+  standing blocker, closed), the emission-density sweep (negative: keep the pinned artifact) and the H43 execution
+  record, with every re-check command.
+- **[Proxy-policy review (session 5, decision requested)](knowledge/32_proxy_policy_review_2026-10-03.md)** —
+  recomputed from every archived raw cell: **0 of the 5 arm-stages that ever cleared a primary promotion gate
+  had a positive SGMC sign**, and only the primary proxy has an external anchor (+1.0 vs the SGMC proxy's −0.5
+  on the same three unverified owner-reported points). Registered as `IR-29-PROXY-VETO-PATTERN` with three
+  options for the owner; **no label or gate was changed**. Evidence:
+  [`evidence/proxy_agreement_review.json`](evidence/proxy_agreement_review.json).
+- **[Artifact leakage and the cross-fitted fix (session 5, parallel workstream)](knowledge/33_artifact_leakage_and_crossfit_2026-10-03.md)** —
+  the measured defect in the single-fit artifact path (`E_dist` separates the training labels perfectly, 2 distinct
+  columns used out of 81), why the screens are unaffected, the cross-fitted protocol, the `-nan` vs `-zeros`
+  answer to the `Predicted values must be in range [0, 1]` rejection, and the disclosed narrowing of one test
+  assertion (§7). Registered `IR-29-ARTIFACT-LEAK`.
+- **[H41-A4 vs the slot bar (session 5)](knowledge/28_h41a4_results_2026-10-03.md)** — the frozen re-score on the
+  draws that define the bar, the bit-for-bit control reproduction that validates the comparison, and why the
+  family's promotion path is now closed. Frozen protocol:
+  **[knowledge/27](knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md)**.
+- **[Data/pipeline receipt](evidence/pipeline_verification.json)** — 22/22 manifest entries hash-verified, caches
+  complete, candidate rebuilt byte-identically (`scripts/verify_pipeline.py --reproduce`).
+- **[Remaining work and limitations (session 5)](knowledge/29_remaining_work_and_limitations_2026-10-03.md)** —
+  what the data blocker's clearance changed, the priority list for the next session, the standing limitations, and
+  the three-pass record.
+- **[H41 results](knowledge/26_h41_results_2026-10-03.md)** — the screen table, why the two passing
+  arms are a ranking gain rather than an emission fluke, the SGMC conflict, and every disclosed process defect.
   Its frozen protocol is **[knowledge/24](knowledge/24_preregistered_h41_screen_2026-10-03.md)**.
 - **[Session-4 brief, frozen screen and slate](knowledge/25_candidates_v4_2026-10-03.md)** — the
   v4 candidate slate (H43 drainage organization, H44 discharge chain, H45 seismicity strands, H46 1-m LiDAR
@@ -137,9 +220,55 @@
 
 ## Evidence boundary and current status
 
-- **Next free draw is 34 (with 34/35 recorded as authorized-then-released unused for H43 confirmation)** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27, 2/3, and 34/35 are recorded as authorized-then-released unused because their screens failed G1 and confirmation was never fitted.
+- **Data blocker cleared and verified (session 5):** 22/22 manifest entries hash-verified in this
+  checkout (11 core + 11 H31-group), aligned caches built, template grid checked, and the registered candidate
+  rebuilt byte-identically — the receipt is [`evidence/pipeline_verification.json`](evidence/pipeline_verification.json),
+  produced by [`scripts/verify_pipeline.py`](scripts/verify_pipeline.py) (`--reproduce` re-runs the build). Session 5
+  also wrote its own placement receipt ([`evidence/data_placement_receipt.json`](evidence/data_placement_receipt.json),
+  re-checkable with `python scripts/record_data_placement.py --check`). The inputs remain hash-pinned owner mirrors,
+  not organizer-authenticated bytes (`IR-DATA-01`); `data/` is ignored by Git.
+- **H41-A4 vs the slot bar (session 5):** frozen preregistration
+  [`knowledge/27`](knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md), 24 cells on the spent draws 20/21,
+  `A4_h41_union` 0.14597316 with mean paired gain **+0.001183** (bar +0.005) and SGMC **−0.007180 (0/4 folds)**;
+  the frozen controls reproduced the stored H34 cells **exactly** (max |Δ| = 0.0). Verdict: **no promotion, no
+  candidate built, no slot** — [`knowledge/28`](knowledge/28_h41a4_results_2026-10-03.md),
+  [`evidence/h41a4_h34protocol/`](evidence/h41a4_h34protocol/).
+- **Next free draw is 36** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). Draws 32/33 were fitted by the H43 screen and 34/35 by its completed confirmation (both recorded in the ledger, which now also marks `h43_confirmation` COMPLETE); the next free pair is 36. The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27 plus 2/3 count as spent because they were authorized under a recorded receipt and never fitted.
 - **One download by hand** — the *leaderboard score itself*. The manual link is on the site's leaderboard card and in `knowledge/03`; `scripts/check_site.py` deliberately fails if anything on the site links the score page, and `registry/score_claims.json` keeps every score as a claim until the owner confirms it.
-- **H43 (session 5):** DEM priority-flood D8 drainage organization, stream-power and per-basin knickpoint excess (`src/gemsdoe/h43.py`, `knowledge/27_preregistered_h43_screen_2026-10-03.md`). Screened across 40 cells on draws 32/33 (`evidence/h43_screen/`, `scripts/analyze_h43_screen.py` `integrity_problems: []`). All four arms failed G1 (`+0.005` mean bar): `A4_h43_union` gained `+0.0039976` and cleared every stability/floor/budget criterion (positive in 4/4 fold means, `3/4` and `4/4` positive folds per draw, worst fold `+0.0021960`, holdout AUC `0.7883 -> 0.7913`), missing only the `+0.005` effect bar by `0.00100`; `A3_h43_scarp_free` (`+0.0019365`) passed the SGMC off-catalogue `>= 3/4` fold gate (`+0.0013560`, 3/4 folds positive); `A2_h43_omega_area` (`+0.0018808`) and `A1_h43_off_front` (`-0.0011044`) also failed G1. Confirmation draws `34/35` were not fit; no candidate built, no slot used. Write-up: [`knowledge/28_h43_results_2026-10-03.md`](knowledge/28_h43_results_2026-10-03.md).
+- **H43 (session 5):** drainage-network organization on the cached detrended surface — priority-flood fill → D8
+  accumulation → binned-median log-log stream-power fit → knickpoint residual, plus off-catalogue and
+  channel/scarp columns (`src/gemsdoe/h43.py`). Frozen at `knowledge/29` (sha256 `919210d9…`), screened on
+  draws 32/33 across the four blocked folds and five arms: **`A3_knick` PASS +0.01419** (fold gains
+  −0.0010/+0.0195/+0.0153/+0.0229, 3/4 positive folds in both draws, worst fold −0.00095) and
+  **`A4_union` PASS +0.01287**; `A1_off` (+0.00401) and `A2_network` (−0.00136) FAIL. Control mean 0.14317,
+  passing-arm means 0.15735/0.15603, emissions 7.3–7.5 k dots per cell (budget in band), viability guard passed,
+  and `scripts/analyze_h43_screen.py` recomputed every gate from the raw rows with **integrity_problems: 0**.
+  The **SGMC second proxy is negative on both passing arms** (A3 −0.00012 on 2/4 folds, A4 −0.00190 on 1/4) — the
+  same proxy conflict that vetoed H41 — so this is a screen pass, not a promotion. The first launch was OOM-killed
+  at 23/40 rows and its partial stage is quarantined under `evidence/history/h43_screen_oom_partial_2026-10-03/`;
+  the completed stage ran as four verified process episodes, and the design-file rewrite that happened before the
+  keep-design guard existed is disclosed with the exact evidence in `knowledge/30` §1
+  (`IR-29-H43-DESIGN-REWRITE`, `IR-29-H43-STAGED-EXECUTION`). Raw cells: [`evidence/h43_screen/`](evidence/h43_screen/).
+  The preregistered confirmation on draws 34/35 was launched from a clean tree at `bd6811e` and completed 40/40 cells:
+  both arms replicated more strongly (A3 +0.01674, A4 +0.01568; 3/4 positive folds per draw; worst folds 0.0 and
+  −0.000533; budgets in band; analyzer `integrity_problems: 0`, screen section bit-identical to the pre-confirmation
+  report), and the inherited G3 rule then withheld promotion because the SGMC second proxy is negative in both stages
+  — the second independent family (after H41) with the replicated-primary/secondary-proxy-loss signature.
+  **No H43 candidate exists, no file is slot-approved, and no weekly slot has been used.**
+- **Data placement (session 5):** the original brief's blocker — "run the data download script and prepare the
+  data" — is closed locally with a re-checkable receipt. `bash scripts/download_competition_data.sh` restored the
+  hash-pinned owner mirrors, `python scripts/prepare_data.py` rebuilt the footprint/label/band caches (5,167,373
+  footprint pixels, 60,988 catalogue pixels, 19 bands), and `python scripts/record_data_placement.py` wrote
+  `evidence/data_placement_receipt.json`: 22/22 pinned manifest entries byte-correct (11/11 H31 group, 11/11 core),
+  `problems: []`, **`organizer_authenticated: false`** (owner mirrors, not organizer bytes — `IR-DATA-01`).
+  `--check` re-verifies without rewriting. See `knowledge/31` §2.
+- **Emission density (session 5):** the frozen sweep (`knowledge/27`) returned a **negative**: on a proxy that
+  reproduces the reported ladder order (solid 0.06970 < d1.5 0.09449 < d2.8 0.09832), the pinned 2.8-px artifact is
+  the **maximum** of its family — every denser row loses 0.0038–0.0286 and every sparser row 0.0028–0.0267, the
+  score-aware placement variant loses 0.0043, and the rule returns `admissible: []` with "keep the pinned artifact"
+  (`knowledge/28`, `evidence/emission_sweep/`). Two side findings are registered: the spacing parameter is
+  quantised by an integer disc (`IR-29-SPACING-QUANTISATION`) and the repository-candidate file scores 0.327 on the
+  file-level proxy purely from training leakage, which is why the sweep never ranks model-derived artifacts.
 - **H41 (session 4):** slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only — the first G1 pass in
   this family (`A1` +0.0066173, `A4` +0.0073436 on 40 cells; `A2`/`A3` fail; AUC 0.8037 → 0.8159; SGMC second proxy
   negative on every arm, and again on the confirmation). **Confirmation verdict (draws 30/31, 40 cells): `A4_h41_union` reproduces at +0.0077283 and passes G1+G2, `A1_h41_off` fails G2 at +0.0044157, and G3 — the inherited secondary-proxy requirement — withholds promotion for every arm (SGMC 1/4 folds in both stages), so nothing was built or submitted.** `knowledge/26` additionally discloses seven process defects, including five wrong sentences in the frozen preregistration (left byte-identical on purpose) and a fabricated citation. No leaderboard was fetched: that check stays manual by policy. Raw cells: [`evidence/h41_screen/`](evidence/h41_screen/) (including the preserved
@@ -195,10 +324,12 @@ python -m pip install -e '.[dev]'
 python -m pytest -q
 ruff check src scripts tests
 python scripts/build_submission_contract.py
-python scripts/build_draw_ledger.py --check   # which holdout draws are already spent (next free: 32)
+python scripts/record_data_placement.py --check   # re-verify the session-5 data placement receipt (no rewrite)
+python scripts/build_draw_ledger.py --check   # which holdout draws are already spent (next free: 36)
 python scripts/build_site.py
 python scripts/check_site.py
 python scripts/verify_downloads.py            # re-verify every registered download (never its build hashes)
+python scripts/verify_pipeline.py --reproduce # hash-verify the restored inputs + rebuild the candidate (~2 min)
 ```
 
 **One command, both layouts:** `bash scripts/download_competition_data.sh` added on 2026-10-03 as the
@@ -206,6 +337,9 @@ entry point the original prompt asked for ("run `bash scripts/download_competiti
 It does **not** contact DrivenData (that is prohibited by `AGENTS.md` rule 3); it wraps the two hash-pinned
 owner-mirror restorers, defaults to the H31-group set that the current screens and caches expect, accepts
 `--group core|h31|all` and `--verify`, and ends by printing which template path the local checker will use.
+A review pass on 2026-10-03 corrected its final resolver probe from the retired `gems29.paths` package to the
+active `gemsdoe.paths` package; this was checked with shell syntax validation and a regression test, but no
+restore is claimed in this sandbox because competition authentication/data access is unavailable.
 `check_submission.py` and `verify_downloads.py` now resolve `data/bridge/sample_submission.tif` *or*
 `data/sample_submission.tif` through one shared helper, which fixes the documented command that previously
 failed on an H31-group restore (`IR-29-CHECK-TEMPLATE-ROOT`; the verifier's third copy of the same bug was

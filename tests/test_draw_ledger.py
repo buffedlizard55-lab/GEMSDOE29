@@ -31,16 +31,22 @@ def test_no_draw_is_claimed_twice_and_next_free_is_beyond_every_claim() -> None:
     assert d["next_free_draw"] > max(d["claimed_by_any_fit"])
 
 
-def test_h41_and_h43_used_the_fresh_pairs_the_preregistrations_froze() -> None:
+def test_h41_used_the_fresh_pairs_the_preregistration_froze() -> None:
     d = json.loads(LEDGER.read_text())
     assert d["stages"]["h41_screen"]["draws_fitted"] == [28, 29]
     assert d["stages"]["h41_confirmation"]["draws_fitted"] == [30, 31]
     assert d["stages"]["h41_screen"]["raw_cells"] == 40
-    assert d["stages"]["h43_screen"]["draws_fitted"] == [32, 33]
-    assert d["stages"]["h43_screen"]["raw_cells"] == 40
-    # the session-4 and session-5 pairs were not spent by any earlier stage, and 26/27, 34/35 stay released-but-unused
+    # the session-4 pairs were not spent by any earlier stage, and 26/27 stay released-but-unused
     assert 26 not in d["stages"]["h35_h40_screen"]["draws_fitted"]
     assert d["stages"]["h35_h40_screen"]["draws_fitted"] == [24, 25]
-    assert 34 in d["released_unused"] and 35 in d["released_unused"]
-    assert d["next_free_draw"] == 34
 
+
+def test_h43_spent_32_33_and_reserved_34_35_for_its_confirmation() -> None:
+    d = json.loads(LEDGER.read_text())
+    assert d["stages"]["h43_screen"]["draws_fitted"] == [32, 33]
+    assert d["stages"]["h43_screen"]["raw_cells"] == 40
+    # the confirmation's row count is deliberately not pinned while its note says IN FLIGHT (a live process appends
+    # to it); the draws and the status note referencing them are the invariants that must hold either way
+    assert d["stages"]["h43_confirmation"]["draws_fitted"] == [34, 35]
+    assert "34/35" in str(d["stages"]["h43_confirmation"].get("status_note", ""))
+    assert d["next_free_draw"] == 36

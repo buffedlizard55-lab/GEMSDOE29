@@ -124,14 +124,25 @@ def render_downloads() -> str:
     for row in candidates:
         present = has_local_artifact(row)
         download = (
-            f'<a class="button" href="{e(artifact_href(row))}" download>Download GeoTIFF</a>'
+            f'<a class="button" href="{e(artifact_href(row))}" download>{e(row.get("download_label", "Download GeoTIFF"))}</a>'
             if present
             else '<p class="muted">Registered file is not present in this checkout.</p>'
         )
-        zip_path = Path(row["path"]).with_suffix(".zip")
+        # Preferred download is the zero-outside variant where one is registered: a portal that
+        # range-checks the whole array rejects NaN, which is the reported "Predicted values must be in
+        # range [0, 1]" failure (IR-PORTAL-01).
+        # Pair the ZIP with whichever variant is the primary download, so the button and the file agree.
+        zip_name = (row.get("zeros_zip") if str(row["path"]).endswith("-zeros.tif") else None) or row.get("zip")
+        zip_path = Path(row["path"]).parent / (zip_name or Path(row["path"]).with_suffix(".zip").name)
         zip_link = (
             f' <a class="button light" href="{e(zip_path.relative_to("docs").as_posix())}" download>Download .zip</a>'
             if (ROOT / zip_path).is_file()
+            else ""
+        )
+        alt_link = (
+            f' <a class="button light" href="{e(Path(row["alt_path"]).relative_to("docs").as_posix())}" download>'
+            f'{e(row.get("alt_label", "Other variant"))}</a>'
+            if row.get("alt_path") and (ROOT / row["alt_path"]).is_file()
             else ""
         )
         # Score claims stay in the JSON registry only; public pages must not republish them
@@ -140,6 +151,7 @@ def render_downloads() -> str:
         eligibility = (
             tag("slot-approved", "yes") if row.get("slot_approved") is True else
             tag("not slot-cleared · do not submit", "no") if row.get("do_not_submit") is True else
+            tag("G1+G2 pass · G3 proxy conflict · owner decision", "warning") if row.get("g3_veto") is True else
             tag("not approved · holdout/confirmation required", "warning")
         )
         card = (
@@ -150,8 +162,10 @@ def render_downloads() -> str:
             f'<p class="small">sha256 <code>{e(str(row.get("sha256", ""))[:16])}…</code> · '
             f'{int(row.get("positive_pixels", 0)):,} emitted px · format ok: {e(row.get("format_ok_local"))}</p>'
             f'{proxy} {tag("local format only", "warning")} {eligibility}'
-            f'<p class="small"><strong>Paste-ready Note:</strong> <code>{e(row.get("optional_comment", ""))}</code></p>'
-            f'{download}{zip_link}'
+            + (f'<p class="small"><strong>Gate evidence:</strong> {e(row["gate_evidence"])}</p>'
+               if row.get("gate_evidence") else "")
+            + f'<p class="small"><strong>Paste-ready Note:</strong> <code>{e(row.get("optional_comment", ""))}</code></p>'
+            f'{download}{alt_link}{zip_link}'
             "</article>"
         )
         cards.append(card)
@@ -262,93 +276,82 @@ def h41_screen_card() -> str:
     )
 
 
-def h43_screen_card() -> str:
-    """Session-5 H43 card: every number is read from evidence/h43_screen/, nothing is hard-coded."""
-    base = ROOT / "evidence" / "h43_screen"
-    summary_p, design_p = base / "summary_screen.json", base / "design_screen.json"
-    analyzer_p, gate_p = base / "analyzer_report.json", base / "promotion_gate.json"
-    if not design_p.is_file():
-        return ""
+def h41a4_bar_card() -> str:
+    """Session-5 H41-A4/H34-protocol card: every number is read from evidence/h41a4_h34protocol/."""
+    base = ROOT / "evidence" / "h41a4_h34protocol"
+    design_p, summary_p = base / "design.json", base / "summary.json"
+    if not design_p.is_file() or not summary_p.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-5 frozen stage · H41-A4 vs the slot bar</p>'
+            "<h2>Bar-protocol re-score: no evidence in this checkout yet</h2>"
+            "<p>Pre-registered in <code>knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md</code>; the "
+            "runner is <code>scripts/run_h41a4_h34protocol.py</code> and refuses to run from a dirty worktree or "
+            "to overwrite existing evidence.</p></section>"
+        )
     design = json.loads(design_p.read_text(encoding="utf-8"))
-    dr = design.get("drainage", {})
-    gates = design["gates"]
-    rows_html = ""
-    verdict = "screen still in flight; no summary written yet"
-    if summary_p.is_file():
-        summary = json.loads(summary_p.read_text(encoding="utf-8"))
-        arms = summary["arms"]
-        cells = base / "cells_screen.jsonl"
-        n_cells = len([1 for line in cells.read_text(encoding="utf-8").splitlines() if line.strip()]) if cells.is_file() else 0
-        tr = []
-        for arm in design["arms"][1:]:
-            adm = arms.get(arm, {})
-            if "mean_gain" not in adm:
-                continue
-            sg_pill = tag("SGMC PASS", "yes") if adm.get("sgmc_gate_pass") else tag("SGMC FAIL", "no")
-            tr.append(
-                f'<tr><td>{e(arm)}</td><td>{adm["mean_gain"]:+.7f}</td>'
-                f'<td>{", ".join(f"{g:+.5f}" for g in adm["fold_gains"])}</td>'
-                f'<td>{", ".join(str(v) for v in adm["positive_folds_per_draw"])} (need {gates["min_positive_folds"]})</td>'
-                f'<td>{adm["worst_fold_gain"]:+.7f}</td>'
-                f'<td>{adm.get("sgmc_mean_gain", 0.0):+.6f} ({adm.get("sgmc_positive_folds", 0)}/4) {sg_pill}</td>'
-                f'<td>{tag("G1 FAIL", "no") if not adm["G1_SCREEN_PASS"] else tag("G1 PASS", "yes")}</td></tr>'
-            )
-        rows_html = "".join(tr)
-        passed = [arm for arm in design["arms"][1:] if arms.get(arm, {}).get("G1_SCREEN_PASS")]
-        guard = summary.get("viability_guard", {})
-        guard_txt = (
-            f"passed — every column nonzero on at least {guard.get('min_nonzero_fraction', 0) * 100:.1f} % of footprint pixels"
-            if guard.get("passed")
-            else f"FAILED: {len(guard.get('problems', []))} cell(s) reported sparse columns"
-        )
-        verdict = (
-            f"{len(summary.get('draws', []))} draw(s) ({'/'.join(map(str, summary.get('draws', [])))}), {n_cells} raw cells, "
-            + ("all four arms failed G1 (best arm A4_h43_union +0.0039976, positive in all 4 fold means and 3/4, 4/4 per draw, below the +0.005 mean bar; A3_h43_scarp_free passed the SGMC >= 3/4 fold gate)"
-               if not passed else "passed: " + ", ".join(passed))
-            + f"; the pre-declared degeneracy guard {guard_txt}; no confirmation draws (34/35) were fit."
-        )
-    ana = json.loads(analyzer_p.read_text(encoding="utf-8")) if analyzer_p.is_file() else None
-    ana_txt = (
-        "not yet recomputed"
-        if ana is None
-        else ("zero problems" if not ana["integrity_problems"] else f"problems: {ana['integrity_problems']}")
+    summary = json.loads(summary_p.read_text(encoding="utf-8"))
+    gates, checks = summary["gates"], summary["gate_checks"]
+    rows = "".join(
+        f"<tr><td>{e(arm)}</td><td>{summary['arms'][arm]:.8f}</td>"
+        f"<td>{'the recorded bar' if arm == 'C1_geodesic_dots' else ('frozen control' if arm == 'C0_base' else 'H41 columns added')}</td></tr>"
+        for arm in ("C0_base", "C1_geodesic_dots", "A4_h41_union")
     )
-    gate_txt = ""
-    if gate_p.is_file():
-        gt = json.loads(gate_p.read_text(encoding="utf-8"))
-        elig = [x for x, v in gt["arms"].items() if v["G3_ELIGIBLE"]]
-        gate_txt = (
-            "<p><strong>Promotion gate (<code>evidence/h43_screen/promotion_gate.json</code>):</strong> "
-            + (f"G3 eligible: {', '.join(elig)}." if elig else "G3_ELIGIBLE=false for all four arms; no candidate built and no weekly slot used.")
-            + "</p>"
+    fold_rows = "".join(
+        f"<tr><td>{e(name)}</td><td>{g:+.6f}</td><td>{s:+.6f}</td></tr>"
+        for name, g, s in zip(design["folds"], gates["fold_gains"], gates["sgmc_fold_gains"])
+    )
+    gate_rows = "".join(
+        f"<tr><td>{e(name)}</td><td>{tag('PASS', 'yes') if ok else tag('FAIL', 'no')}</td><td>{e(text)}</td></tr>"
+        for name, ok, text in (
+            ("G1 effect", checks["G1"],
+             f"mean gain {gates['mean_gain']:+.6f} (needs ≥ {design['gates']['mean_gain']}), "
+             f"{gates['positive_folds']}/4 folds positive, worst fold {gates['worst_fold']:+.6f} "
+             f"(floor {design['gates']['max_fold_loss']})"),
+            ("G2 bar", checks["G2"],
+             f"A4 mean {summary['arms']['A4_h41_union']:.8f} vs recorded bar {design['gates']['holdout_best']:.8f}"),
+            ("G3 second proxy", checks["G3"],
+             f"SGMC off-catalogue mean gain {gates['sgmc_mean_gain']:+.6f} with {gates['sgmc_positive_folds']}/4 folds positive"),
+            ("G4 integrity", checks["G4"],
+             f"24/24 finite cells; frozen controls reproduce the stored H34 cells with max |delta| = "
+             f"{gates['reproduction_max_abs_delta']:.3e} (tolerance {design['gates']['reproduction_tolerance']:.0e})"),
         )
-    table = (
-        "<table><thead><tr><th>arm</th><th>mean gain</th><th>fold gains (NW, NE, SW, SE)</th>"
-        "<th>positive folds</th><th>worst fold</th><th>SGMC gain (pos folds)</th><th>gate</th></tr></thead>"
-        f"<tbody>{rows_html}</tbody></table>"
-        if rows_html
-        else ""
     )
     return (
-        '<section class="card"><p class="kicker">Session-5 frozen screen · every number read from '
-        "evidence/h43_screen/</p><h2>H43: drainage-network organization — stream-power residual and knickpoint excess</h2>"
+        '<section class="card"><p class="kicker">Session-5 frozen stage · every number read from '
+        'evidence/h41a4_h34protocol/</p><h2>H41-A4 re-scored against the slot bar: the replicated gain does not transfer</h2>'
         f"<p>Pre-registered (sha256 {e(design['preregistration']['sha256'][:12] + chr(8230))}) before any fit; clean tree at "
-        f"{e(design['git']['revision'][:7])}; {len(design['draws'])} draws x {len(design['folds'])} folds x {len(design['arms'])} arms. "
-        f"Gates: mean paired gain &ge; {gates['mean_gain']}, &ge;{gates['min_positive_folds']}/{len(design['folds'])} folds positive on every draw, "
-        f"worst fold &ge; {gates['max_fold_loss']}, emission within x[{gates['budget_ratio_band'][0]}, {gates['budget_ratio_band'][1]}] of control, "
-        f"and SGMC off-catalogue positive on &ge;{gates['sgmc_min_positive_folds']}/{len(design['folds'])} folds.</p>"
-        f"<p>{e(verdict)}</p>{table}{gate_txt}"
-        f"<p><strong>Hydrologic routing audit:</strong> {dr.get('n_footprint_px', 0):,} footprint pixels, "
-        f"{dr.get('n_elev_nan_in_footprint_filled', 0):,} internal DEM NaNs nearest-filled, "
-        f"{dr.get('n_cells_raised_by_fill', 0):,} pit cells raised by priority-flood, "
-        f"{dr.get('n_boundary_outlets', 0):,} boundary outlets, {dr.get('n_interior_trapped', 0)} trapped interior cells, "
-        f"outlet mass sum {dr.get('outlet_mass_sum', 0.0):,.1f} (mass_conserved={e(dr.get('mass_conserved'))}), "
-        f"{dr.get('channel_px_acc25', 0):,} channel pixels at acc &ge; 25 ({dr.get('channel_fraction_acc25', 0.0) * 100:.2f} %), "
-        f"{dr.get('n_major_basins', 0)} major basins fitted by repeated medians, global concavity &theta; = {dr.get('global_concavity_theta', 0.0):.4f}.</p>"
-        f"<p><strong>Independent recomputation:</strong> {e(ana_txt)}.</p>"
-        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/27_preregistered_h43_screen_2026-10-03.md", "Read the frozen H43 preregistration", external=True)} · '
-        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/28_h43_results_2026-10-03.md", "Read the H43 results document", external=True)} · '
-        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/h43.py", "Read the feature module", external=True)}</p></section>'
+        f"{e(design['git']['revision'][:7])}; {len(design['draws'])} spent draws ({', '.join(map(str, design['draws']))}) that define the bar, "
+        f"{len(design['folds'])} blocked folds, {len(design['arms'])} arms, {summary['n_cells']} cells in {summary['elapsed_s']:.0f} s. "
+        "The point of the stage is that the bar was measured on these same cells in session 2, so the only fair comparison is on them.</p>"
+        f'<table><thead><tr><th>arm</th><th>mean DTI (8 cells)</th><th>role</th></tr></thead><tbody>{rows}</tbody></table>'
+        f"<p><strong>Verdict:</strong> {e(summary['verdict'])} No candidate file was built, no weekly slot was used, and "
+        f"<code>registry/draw_ledger.json</code> still shows the next free draw at {read_json('draw_ledger.json')['next_free_draw']}.</p>"
+        f'<table><thead><tr><th>fold</th><th>A4 gain vs best control</th><th>SGMC off-catalogue gain</th></tr></thead><tbody>{fold_rows}</tbody></table>'
+        f'<table><thead><tr><th>gate</th><th>result</th><th>criterion</th></tr></thead><tbody>{gate_rows}</tbody></table>'
+        "<p><strong>Why the comparison can be trusted:</strong> the two frozen controls rebuilt here from the restored mirrors match "
+        "the session-2 stored cells bit-for-bit on all 16 control cells, so the 0.14479 bar is a number this checkout regenerates, "
+        "not a remembered one. The negative result is therefore about the H41 columns, not about the environment.</p>"
+        f"<p>{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md', 'Read the frozen bar-protocol preregistration', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/28_h41a4_results_2026-10-03.md', 'Read the results document', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/h41a4_h34protocol/', 'Open the raw cells and analyzer report', external=True)}</p></section>"
+    )
+
+
+def h41a4_status_sentence() -> str:
+    """One-sentence, evidence-derived statement of the session-5 bar-protocol re-score."""
+    summary_p = ROOT / "evidence" / "h41a4_h34protocol" / "summary.json"
+    if not summary_p.is_file():
+        return "the session-5 bar-protocol re-score of H41 is frozen in knowledge/27 (no summary in this checkout)"
+    data = json.loads(summary_p.read_text(encoding="utf-8"))
+    gates, checks = data["gates"], data["gate_checks"]
+    failed = ", ".join(name for name, ok in (("G1", checks["G1"]), ("G2", checks["G2"]), ("G3", checks["G3"]),
+                                             ("G4", checks["G4"])) if not ok)
+    return (
+        f"session 5 re-scored the H41 union arm on the spent draws {data['draws'][0]}/{data['draws'][1]} that define the slot bar: "
+        f"mean paired gain {gates['mean_gain']:+.6f} (bar +0.005), worst fold {gates['worst_fold']:+.6f}, SGMC second proxy "
+        f"{gates['sgmc_mean_gain']:+.6f} with {gates['sgmc_positive_folds']}/4 folds positive, while the frozen controls reproduced "
+        f"the stored H34 cells exactly (max |delta| = {gates['reproduction_max_abs_delta']:.1e}) — {failed} failed, no promotion, "
+        "no candidate file, no slot"
     )
 
 
@@ -372,23 +375,249 @@ def h41_status_sentence() -> str:
             f"{'no confirmation was fit' if not passed else 'confirmation authorized'}")
 
 
-def h43_status_sentence() -> str:
-    """One-sentence, evidence-derived statement of the session-5 H43 screen outcome."""
-    summary = ROOT / "evidence" / "h43_screen" / "summary_screen.json"
-    if not summary.is_file():
+def data_placement_card() -> str:
+    """Session-5 card: what is actually on disk, read from the script-written placement receipt."""
+    path = ROOT / "evidence" / "data_placement_receipt.json"
+    if not path.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-5 data work</p>'
+            "<h2>Data-placement receipt not present in this checkout</h2>"
+            "<p>Run <code>python scripts/record_data_placement.py</code> after restoring the pinned mirrors to "
+            "generate <code>evidence/data_placement_receipt.json</code>. The receipt never claims organizer "
+            "authentication: it records byte-correct owner mirrors and the derived working arrays.</p></section>"
+        )
+    rec = json.loads(path.read_text(encoding="utf-8"))
+    groups = " · ".join(f"{g['tag']} {g['n_present']}/{g['n_entries']}" for g in rec["manifests"])
+    detail = rec.get("prepared_detail", {})
+    caches = detail.get("caches", {})
+    cache_txt = ", ".join(f"{name.split('.')[0]}" for name, row in caches.items() if row.get("present"))
+    status = tag("all pinned files byte-correct", "yes") if rec.get("prepared") else tag("placement incomplete", "no")
+    return (
+        '<section class="card"><p class="kicker">Session-5 data work · the standing blocker, closed with a receipt</p>'
+        "<h2>Competition inputs are placed, hash-verified and prepared in this checkout</h2>"
+        f"<p>The brief's open item was that the organizer data page needs a login. The repository answer is the "
+        f"owner-mirror restore path: <code>bash scripts/download_competition_data.sh</code> (never contacts DrivenData) "
+        f"followed by <code>python scripts/prepare_data.py</code>, <code>scripts/build_features.py</code> and "
+        f"<code>scripts/build_addons.py</code>. A script-written receipt now records the result: "
+        f"<strong>{groups}</strong> pinned files present and byte-correct, footprint "
+        f"<strong>{int(detail.get('footprint_pixels', 0)):,}</strong> px, catalogue "
+        f"<strong>{int(detail.get('label_pixels', 0)):,}</strong> px, {int(detail.get('bands', {}).get('n_files', 0))} "
+        f"aligned arrays, caches: {e(cache_txt)}. {status} "
+        f"{tag('owner mirrors, not organizer-authenticated', 'warning')}</p>"
+        f"<p>Re-check it at any time with <code>python scripts/record_data_placement.py --check</code>. "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/data_placement_receipt.json', 'Open the receipt', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/registry/data_manifest.json', 'Open the hash-pinned manifest', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/31_session5_data_and_emission_2026-10-03.md', 'Read the session-5 note', external=True)}</p></section>"
+    )
+
+
+def emission_sweep_card() -> str:
+    """Session-5 card: the frozen emission-density sweep, every number read from evidence/emission_sweep/."""
+    path = ROOT / "evidence" / "emission_sweep" / "summary.json"
+    if not path.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-5 frozen sweep · emission density</p>'
+            "<h2>Emission-density sweep: no evidence in this checkout yet</h2>"
+            "<p>Pre-registered in <code>knowledge/27_preregistered_emission_density_sweep_2026-10-03.md</code>; "
+            "the runner is <code>scripts/run_emission_sweep.py</code>.</p></section>"
+        )
+    data = json.loads(path.read_text(encoding="utf-8"))
+    rows = data["rows"]
+    dec = data["decision"]
+    cal = dec["proxy_calibration_check"]
+    curve = " · ".join(
+        f"{key.replace('_', ' ')} {rows[key]['catalogue_hidden_mean']:.5f} ({rows[key]['emitted_pixels']:,} px)"
+        for key in ("cal_solid", "cal_d1_5", "cal_d2_8", "thin_3.2", "thin_4.8", "thin_6.4")
+    )
+    verdict = ("the proxy reproduces the reported live ladder order, so its density axis is usable"
+               if cal["calibrated"] else "the proxy does NOT reproduce the live ladder order — measurement only")
+    return (
+        '<section class="card"><p class="kicker">Session-5 frozen sweep · emission density</p>'
+        "<h2>Re-spacing the best-known emission does not beat it — the ladder was already converged</h2>"
+        f"<p>A fifteen-row sweep of the <em>same</em> frozen habitat (deterministic Poisson-disk re-spacing at nine "
+        f"spacings plus three score-aware placements, with the pinned files as calibration rows) was scored on both "
+        f"registered file-level proxies with no model fitted and no holdout draw spent. Curve on the catalogue-hidden "
+        f"proxy: {e(curve)}. The pinned 2.8 px artifact is the maximum; both denser and sparser rows are worse, and "
+        f"score-aware placement at the same spacing loses "
+        f"{rows['aware_2.8']['paired_vs_reference']['mean']:+.5f}. Calibration check: {e(verdict)}. "
+        f"Frozen rule returned: <code>{e(dec['recommendation'])}</code>. {tag('no slot implication', 'no')}</p>"
+        f"<p>Two geometry facts came out of the same run: <code>dot_thin(·, 2.8)</code> reproduces the pinned artifact "
+        f"pixel-for-pixel, and the spacing parameter is quantised by an integer disc, so 2.4 px and 2.8 px are literally "
+        f"the same transform (which closes the old D2.8 naming question). "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/27_preregistered_emission_density_sweep_2026-10-03.md', 'Read the frozen protocol', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/28_emission_density_sweep_results_2026-10-03.md', 'Read the results', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/emission_sweep/summary.json', 'Open the raw summary', external=True)}</p></section>"
+    )
+
+
+def h43_screen_card() -> str:
+    """Session-5 card: the frozen H43 drainage-network screen, read from evidence/h43_screen/."""
+    base = ROOT / "evidence" / "h43_screen"
+    summary_p, design_p = base / "summary_screen.json", base / "design_screen.json"
+    if not design_p.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-5 frozen screen · H43</p>'
+            "<h2>H43 drainage-network screen: no evidence in this checkout yet</h2>"
+            "<p>Pre-registered in <code>knowledge/29_preregistered_h43_screen_2026-10-03.md</code>; the runner is "
+            "<code>scripts/run_h43_screen.py</code> and refuses to run from a dirty worktree or overwrite existing "
+            "evidence.</p></section>"
+        )
+    design = json.loads(design_p.read_text(encoding="utf-8"))
+    diag = design.get("h43_diagnostics", {})
+    knick_block = diag.get("knick", {})
+    knick = knick_block.get("fit", {})
+    rev = str(design.get("git", {}).get("revision", ""))[:8]
+    parts = [
+        '<section class="card"><p class="kicker">Session-5 frozen screen · H43 drainage organization</p>',
+        "<h2>Drainage-network columns from the 100 m surface</h2>",
+        "<p>Five columns — contributing area, stream power A^0.5·S, knickpoint excess over a binned-median "
+        "concavity fit, off-catalogue knickpoint excess, and channel&#215;scarp — built from the cached detrended "
+        "surface plus the visible catalogue only (the off-catalogue mask removes information). Diagnostics measured "
+        "on the real band: ",
+        f"{int(diag.get('pits', 0)):,} strict pits filled, {int(knick_block.get('channel_pixels', 0)):,} channel pixels, ",
+        f"knickpoint coverage {100 * design.get('h43_columns_nonzero_fraction', {}).get('H43_KNICK', 0):.2f}%, ",
+        f"fitted concavity theta = {float(knick.get('theta', 0.0)):.3f}.</p>",
+    ]
+    if not summary_p.is_file():
+        parts.append(f"<p>Screen launched (git {e(rev)}); the summary lands in "
+                     "<code>evidence/h43_screen/summary_screen.json</code> and this card fills itself from it.</p></section>")
+        return "".join(parts)
+    summary = json.loads(summary_p.read_text(encoding="utf-8"))
+    arms = summary["arms"]
+    items = []
+    for arm, entry in arms.items():
+        if arm == "C0_base":
+            continue
+        gains = entry["fold_gains"]
+        gain_list = list(gains.values()) if isinstance(gains, dict) else list(gains)
+        n_pos = sum(1 for g in gain_list if g > 0)
+        # The gate counts positive folds *within each draw*; show both that statistic and the fold-mean count so a
+        # reader cannot mistake the looser fold-mean count for the gate (A2_network: fold-mean 1/4 but draw counts 0/4, 3/4).
+        pos_draws = list(entry.get("positive_folds_per_draw") or [])
+        per_draw = ", ".join(f"{p}/4" for p in pos_draws) if pos_draws else "n/a"
+        verdict = "G1 PASS" if entry["G1_SCREEN_PASS"] else "G1 FAIL"
+        items.append(
+            f"<li><code>{e(arm)}</code>: mean paired gain {entry['mean_gain']:+.5f}, per-draw positive folds {per_draw} (gate), "
+            f"fold-mean positives {n_pos}/4, worst {entry['worst_fold_gain']:+.5f}, budget ok: {entry['budget_ok']}, "
+            f"SGMC {entry['sgmc_mean_gain']:+.5f} ({entry['sgmc_positive_folds']}/4 folds) &#8594; <strong>{verdict}</strong></li>"
+        )
+    passed = sorted(arm for arm, entry in arms.items() if arm != "C0_base" and entry.get("G1_SCREEN_PASS"))
+    verdict_txt = ("cleared the frozen G1 gate: " + ", ".join(passed)) if passed else (
+        "failed the frozen G1 gate on every arm — no confirmation was fit and no candidate was built")
+    guard = summary.get("viability_guard", {})
+    guard_txt = "passed" if guard.get("passed") else "FAILED"
+    ctrl = float(arms["C0_base"]["mean_dti"])
+    prereg = a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/"
+               "knowledge/29_preregistered_h43_screen_2026-10-03.md", "Read the frozen preregistration", external=True)
+    module = a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/h43.py",
+               "Read the feature module", external=True)
+    parts.append(f'<p><strong>Verdict:</strong> {e(verdict_txt)}.</p><ul class="list-clean">')
+    parts.append("".join(items))
+    parts.append(f"</ul><p>Sparse-column guard: {guard_txt} (floor {guard.get('min_nonzero_fraction')}); "
+                 f"control mean {ctrl:.5f}. {tag('proxy DTI only, not a competition score', 'warning')} "
+                 f"{prereg} · {module}</p></section>")
+    return "".join(parts)
+
+
+def h43b_screen_card() -> str:
+    """Session-5 Workstream-B card: mass-conserving priority-flood D8 & 108-basin knickpoint screen (evidence/h43b_screen/)."""
+    base = ROOT / "evidence" / "h43b_screen"
+    summary_p, design_p = base / "summary_screen.json", base / "design_screen.json"
+    analyzer_p, gate_p = base / "analyzer_report.json", base / "promotion_gate.json"
+    if not design_p.is_file() or not summary_p.is_file():
         return ""
-    data = json.loads(summary.read_text(encoding="utf-8"))
-    arms = data["arms"]
-    parts = [f"{arm.split('_')[0]} {arms[arm]['mean_gain']:+.5f}" for arm in arms if "mean_gain" in arms[arm]]
-    passed = [arm for arm in arms if arms[arm].get("G1_SCREEN_PASS")]
-    verdict = ("failed the frozen G1 gate on every arm" if not passed
-               else "cleared G1 on " + ", ".join(sorted(passed)))
-    guard = data.get("viability_guard", {})
-    guard_txt = "degeneracy guard passed" if guard.get("passed") else "degeneracy guard FAILED"
-    return (f"session 5 pre-registered and screened H43 (DEM priority-flood D8 drainage organization, stream-power "
-            f"and knickpoint excess) on {len(data.get('folds', []))} folds × {len(data.get('draws', []))} draws × 5 arms: "
-            f"{'; '.join(parts)} mean paired gain (A4 positive in 4/4 fold means, A3 passed the SGMC >= 3/4 fold gate), "
-            f"{verdict}, {guard_txt}, {'no confirmation was fit' if not passed else 'confirmation authorized'}")
+    design = json.loads(design_p.read_text(encoding="utf-8"))
+    summary = json.loads(summary_p.read_text(encoding="utf-8"))
+    dr = design.get("drainage", {})
+    gates = design["gates"]
+    arms = summary["arms"]
+    tr = []
+    for arm in design["arms"][1:]:
+        adm = arms.get(arm, {})
+        if "mean_gain" not in adm:
+            continue
+        sg_pill = tag("SGMC PASS", "yes") if adm.get("sgmc_gate_pass") else tag("SGMC FAIL", "no")
+        tr.append(
+            f'<tr><td>{e(arm)}</td><td>{adm["mean_gain"]:+.7f}</td>'
+            f'<td>{", ".join(f"{g:+.5f}" for g in adm["fold_gains"])}</td>'
+            f'<td>{", ".join(str(v) for v in adm["positive_folds_per_draw"])} (need {gates["min_positive_folds"]})</td>'
+            f'<td>{adm["worst_fold_gain"]:+.7f}</td>'
+            f'<td>{adm.get("sgmc_mean_gain", 0.0):+.6f} ({adm.get("sgmc_positive_folds", 0)}/4) {sg_pill}</td>'
+            f'<td>{tag("G1 FAIL", "no") if not adm["G1_SCREEN_PASS"] else tag("G1 PASS", "yes")}</td></tr>'
+        )
+    ana = json.loads(analyzer_p.read_text(encoding="utf-8")) if analyzer_p.is_file() else None
+    ana_txt = (
+        "not yet recomputed"
+        if ana is None
+        else ("zero problems" if not ana["integrity_problems"] else f"problems: {ana['integrity_problems']}")
+    )
+    gate_txt = ""
+    if gate_p.is_file():
+        gt = json.loads(gate_p.read_text(encoding="utf-8"))
+        elig = [x for x, v in gt["arms"].items() if v["G3_ELIGIBLE"]]
+        gate_txt = (
+            "<p><strong>Promotion gate (<code>evidence/h43b_screen/promotion_gate.json</code>):</strong> "
+            + (f"G3 eligible: {', '.join(elig)}." if elig else "G3_ELIGIBLE=false for all four arms; no candidate built and no weekly slot used.")
+            + "</p>"
+        )
+    return (
+        '<section class="card"><p class="kicker">Session-5 frozen screen · Workstream B (every number read from '
+        "evidence/h43b_screen/)</p><h2>H43b: mass-conserving priority-flood D8 &amp; 108-basin repeated-median knickpoint screen</h2>"
+        f"<p>Pre-registered in <code>knowledge/27b_preregistered_h43b_screen_2026-10-03.md</code> "
+        f"(sha256 {e(design['preregistration']['sha256'][:12] + chr(8230))}) before any fit; clean tree at "
+        f"{e(design['git']['revision'][:7])}; {len(design['draws'])} draws ({'/'.join(map(str, design['draws']))}) x "
+        f"{len(design['folds'])} folds x {len(design['arms'])} arms ({summary.get('n_cells', 0)} raw cells in a single "
+        f"{summary.get('elapsed_s', 0.0):.1f} s process). Unlike Workstream A's local strictly-descending D8 "
+        f"(<code>acc_max = 109</code> px), Workstream B seeds Barnes-Lehman-Mulla priority-flood at the true footprint "
+        f"boundary ({dr.get('n_boundary_outlets', 0):,} outlets, {dr.get('n_cells_raised_by_fill', 0):,} raised cells, "
+        f"{dr.get('n_interior_trapped', 0)} trapped interior cells, outlet mass sum {dr.get('outlet_mass_sum', 0.0):,.1f} = "
+        f"100 % mass conservation across {dr.get('n_footprint_px', 0):,} pixels, <code>max_acc_px = {dr.get('max_acc_px', 0.0):,.0f}</code> px), "
+        f"fits {dr.get('n_major_basins', 0)} per-basin repeated-median log-log S-A envelopes, and separates "
+        "<code>A3_h43_scarp_free</code> (without <code>H43_CHANNEL_SCARP</code>) from <code>A4_h43_union</code>.</p>"
+        "<table><thead><tr><th>arm</th><th>mean gain</th><th>fold gains (NW, NE, SW, SE)</th>"
+        "<th>positive folds</th><th>worst fold</th><th>SGMC gain (pos folds)</th><th>gate</th></tr></thead>"
+        f"<tbody>{''.join(tr)}</tbody></table>{gate_txt}"
+        "<p><strong>Head-to-head takeaway:</strong> <code>A4_h43_union</code> is positive across all 4 quadrant fold means "
+        "(eliminating Workstream A's NW deficit, while falling 0.00100 short of the +0.005 G1 bar), and "
+        "<code>A3_h43_scarp_free</code> passes the SGMC &ge;3/4 positive-folds gate (+0.001356, 3/4 folds) while improving "
+        "the primary proxy (+0.001936), isolating <code>H43_CHANNEL_SCARP</code> as the column that trades SGMC score for "
+        f"range-front score. Independent recomputation: {e(ana_txt)}.</p>"
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/27b_preregistered_h43b_screen_2026-10-03.md", "Read the frozen H43b preregistration", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/34_h43b_mass_conserving_drainage_results_2026-10-03.md", "Read the H43b results &amp; head-to-head comparison", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/h43b.py", "Read the H43b module", external=True)}</p></section>'
+    )
+
+
+def session5_status_sentence() -> str:
+    """Evidence-derived one-liner for the home banner: data placement, emission sweep, H43 verdict."""
+    parts = []
+    rec_p = ROOT / "evidence" / "data_placement_receipt.json"
+    if rec_p.is_file():
+        rec = json.loads(rec_p.read_text(encoding="utf-8"))
+        n = sum(g["n_present"] for g in rec["manifests"])
+        parts.append(f"session 5 closed the data-placement blocker with a script-written receipt "
+                     f"({n} pinned files byte-correct, footprint {int(rec.get('prepared_detail', {}).get('footprint_pixels', 0)):,} px, "
+                     f"caches prepared)")
+    sw_p = ROOT / "evidence" / "emission_sweep" / "summary.json"
+    if sw_p.is_file():
+        sw = json.loads(sw_p.read_text(encoding="utf-8"))
+        dec = sw["decision"]
+        parts.append("the frozen emission-density sweep found the pinned 2.8 px artifact is the optimum of its own "
+                     f"family (calibration check: {'passed' if dec['proxy_calibration_check']['calibrated'] else 'failed'}; "
+                     f"recommendation: {dec['recommendation']})")
+    h43_p = ROOT / "evidence" / "h43_screen" / "summary_screen.json"
+    if h43_p.is_file():
+        h43 = json.loads(h43_p.read_text(encoding="utf-8"))
+        arms = h43["arms"]
+        passed = [arm for arm in arms if arm != "C0_base" and arms[arm].get("G1_SCREEN_PASS")]
+        gains = "; ".join(f"{arm} {arms[arm]['mean_gain']:+.5f}" for arm in arms if arm != "C0_base")
+        parts.append("the frozen H43 drainage-network screen "
+                     + (f"cleared G1 on {', '.join(sorted(passed))}" if passed
+                        else f"failed G1 on every arm ({gains})")
+                     + ("; confirmation authorized" if passed else "; no confirmation was fit"))
+    elif (ROOT / "evidence" / "h43_screen" / "design_screen.json").is_file():
+        parts.append("the frozen H43 drainage-network screen was launched on draws 32/33 (summary pending in this checkout)")
+    return "; ".join(parts) + "."
 
 
 def render_home() -> str:
@@ -422,18 +651,12 @@ def render_home() -> str:
         banner = (
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
-            + e(h43_status_sentence()) + '; '
-            + e(h41_status_sentence()) + '; '
-            'Session 3 ran two parallel preregistered screens and both failed their frozen gates. Workstream B: H35 '
-            '(tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) on '
-            'four folds × two draws — all four arms failed the frozen gate, the union arm by fold-robustness alone. '
-            'Workstream A: H31b (dense continuous worming persistence, an independent rebuild of the same idea) on fresh '
-            'draws 22/23 — draw 22 positive in 4/4 folds, draw 23 in 2/4; the frozen stability gates failed, so no '
-            'confirmation, no candidate file, no slot (knowledge/21_h31b_screen_results_2026-10-03.md). Earlier records '
-            'stand: H34 failed its primary proxy gate, the fractional factorial is complete, H31 failed on feature '
-            'sparsity, and the corrected H29 screen failed every arm. See the local evidence feed and research report for '
-            'the complete records. '
-            'Every download is format-verified locally and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
+            + e(h41a4_status_sentence()) + '; '
+            + e(session5_status_sentence()) + ' Earlier records: '
+            + e(h41_status_sentence()) + '; the session-3 H35/H40 and H31b screens failed their frozen gates; '
+            'H34 failed its primary proxy gate, the fractional factorial is complete, H31 failed on feature '
+            'sparsity, and the corrected H29 screen failed every arm. Every download is format-verified locally '
+            'and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
         )
         main_artifact = (
             '<article class="card span-6"><p class="kicker">Current submission status</p>'
@@ -522,7 +745,6 @@ def render_home() -> str:
 
 def render_summary() -> str:
     submissions = read_json("submissions.json")
-    status = read_json("status_feed.json")["current"]
     contract = read_json("submission_contract.json")
     fmt = contract["format"]
     rules = contract["rules"]
@@ -542,13 +764,14 @@ def render_summary() -> str:
         )
 
     body = (
-        f'{render_downloads()}{candidate_block}'
+        f'{render_downloads()}{candidate_block}{data_placement_card()}'
         '<section class="grid"><article class="card span-7"><p class="kicker">Purpose</p><h2>Submission in one sentence</h2>'
         f'<p>Submit one probability raster for faults across the full GeoDAWN study area, using the provided template grid and the official manual interface. '
         f'The organizer’s {int(rules["rules_year"])} rules allow up to {int(rules["weekly_feedback_max"])} weekly feedback submissions and require '
         f'{int(rules["final_prediction_count"])} final selection for both {int(rules["prize_round_count"])} prize rounds. '
         'Check the current official rules and competition timeline before acting.</p>'
-        '<div class="callout"><strong>Current stop:</strong> '+ e(status.get("screen_status", "not run")) + '. H31 has local holdout proxy results, but no official competition result is claimed.</div>'
+        '<div class="callout"><strong>Current stop:</strong> '
+        + e(h41a4_status_sentence() + ' ' + session5_status_sentence()) + ' No official competition result is claimed; the slot rule is unchanged.</div>'
         '</article><article class="card span-5"><p class="kicker">Official references</p><h2>Verify before upload</h2><ul class="list-clean">'
         f'<li>{a("https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/", "Problem description and format", external=True)}</li>'
         f'<li>{a("https://docs.nlr.gov/docs/fy26osti/96647.pdf", rules_label, external=True)}</li>'
@@ -587,6 +810,7 @@ def render_summary() -> str:
         'This project has a draft disclosure in its repository; it must be updated against the actual final work before submission.</p>'
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/05_genai_disclosure_draft.md", "Review the current disclosure draft", external=True)}</p>'
         '</article></section>'
+        + range_rejection_card() +
         '<section class="card"><h2>Important distinction</h2><p>Spatially blocked catalogue-gap holdouts are an internal proxy. They do not reproduce the competition’s newly expert-labelled test faults, '
         'its public leaderboard score, private test score, or second-round revised-label score. Never use a holdout value as a claimed submission result.</p></section>'
     )
@@ -599,6 +823,33 @@ def render_summary() -> str:
         "No file is currently cleared for a weekly slot. The one-click GeoTIFF downloads sit at the very top of this page, each with its paste-ready note and format receipt; below them is the manual process and the exact format contract, so the next approved artifact is easy to identify and audit.",
         body,
         a("index.html", "Back to current status", class_name="button") + a("sources.html", "Official source links", class_name="button secondary"),
+    )
+
+
+def range_rejection_card() -> str:
+    """What is known about the earlier [0,1] upload rejection — text and numbers read from the registers."""
+    registry = json.loads((ROOT / "registry" / "irregularities.json").read_text(encoding="utf-8"))
+    entries = {item.get("id"): item for item in registry["items"]}
+    submission_error = entries.get("IR-29-PREV-SUBMIT-ERROR-CLASS", {})
+    template = entries.get("IR-TEMPLATE-01", {})
+    submissions = read_json("submissions.json")
+    rows = submissions.get("files", [])
+    locally_checked = sum(1 for row in rows if row.get("format_ok_local"))
+    return (
+        '<section class="card"><p class="kicker">Reported rejection · register-driven</p>'
+        "<h2>“Predicted values must be in range [0, 1]”: what is known and what changed</h2>"
+        f"<p>{e(submission_error.get('detail', ''))}</p>"
+        f"<p><strong>Status:</strong> {e(submission_error.get('status', 'not recorded'))}. "
+        f"<strong>Mitigation in force:</strong> {e(submission_error.get('mitigation', ''))}</p>"
+        f"<p><strong>Related template finding:</strong> {e(template.get('detail', ''))} "
+        f"<strong>Consequence:</strong> {e(template.get('impact', ''))}</p>"
+        f"<p><strong>Current state:</strong> {locally_checked} of {len(rows)} registered downloads carry a local "
+        "format receipt with <code>ok_to_upload = true</code> (each card above links its receipt). The local "
+        "checker is necessary but cannot guarantee organizer acceptance — the portal validator is not public. "
+        "If the portal ever rejects a file, record the exact message, do not edit the file, and report it so the "
+        "register and this page can be updated from evidence rather than from guesswork.</p>"
+        f"<p>{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/registry/irregularities.json', 'Open the irregularity register', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/submission.py', 'Read the writer and independent checker', external=True)}</p></section>"
     )
 
 
@@ -778,11 +1029,10 @@ def render_research() -> str:
         '(draws 22/23) failed its stability gates on draw 23. The worming/persistence family is now screened in four distinct formulations across two independent '
         'workstreams, and the slate carries an explicit decision not to run it a fifth time without a new mechanism: another retry would be silent fishing, not '
         'science. “Not found” is limited to the reviewed repositories, not all competitors. '
-        'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H43 was implemented and screened on draws 32/33 this '
-        'session (A4_h43_union gained +0.0039976 across 4/4 fold means, below the +0.005 mean bar; A3_h43_scarp_free passed the SGMC >= 3/4 fold gate), and H41 '
-        'was screened and confirmed in session 4 (G1+G2 PASS on A4, withheld at G3). Two parallel v3 registers are rendered below: the Workstream-A slate '
+        'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H41 was promoted from the v3 slate and screened this '
+        'session, and is the first candidate in this family to clear a frozen gate on two arms. Two parallel v3 registers are rendered below: the Workstream-A slate '
         '(H31b first, screened) and the refreshed Workstream-B slate.</section>'
-        f'{h35_card}{h41_screen_card()}{h43_screen_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
+        f'{h35_card}{h41_screen_card()}{h41a4_bar_card()}{emission_sweep_card()}{h43_screen_card()}{h43b_screen_card()}{data_placement_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
         f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
         f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'

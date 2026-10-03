@@ -131,12 +131,29 @@
       "evidence": {
         "evidence/h43_screen/design_screen.json": {
           "present": true,
-          "sha256": "0960d06b96ef0a46e667e7102d80b8c0c0080893707d98a685c224662c7b9813",
-          "prereg_sha256": "f6d6b33e7ae2782fc74e73088b507f4ba04d02aa14d007ee62dd8a4f9a025fb2",
-          "git_revision": "09e8126413a0b4cf351930efdf5658a7efc645e5"
+          "sha256": "3c5454f030d7420493c848c7c2e1467eb9ba8f3a5d8b2ee127eaa7e13c7f4bf5",
+          "prereg_sha256": "919210d9dad7ccd068af411b30114606dbe0e0c9997de0ac423c41c1f65d9393",
+          "git_revision": "ca271bae48331fd6a9f35a20badd15f0ec0feaa7"
         }
       },
-      "status_note": "COMPLETE: 40 cells on draws 32/33. All four arms failed G1 (best arm A4_h43_union +0.0039976, 4/4 fold means positive, 3/4 and 4/4 per draw, below the +0.005 mean bar; A3_h43_scarp_free +0.0019365 passed the SGMC >=3/4 fold gate at +0.0013560). Reserved confirmation draws 34/35 were never authorized or fitted. See knowledge/28."
+      "status_note": "COMPLETE: 40 cells on draws 32/33 (staged into two-cell processes after the OOM kill). A3_knick +0.01419 and A4_union +0.01287 passed G1, A1_off +0.00401 and A2_network -0.00136 failed, SGMC second proxy negative on both passing arms (proxy conflict). See knowledge/30; no candidate, no slot."
+    },
+    "h43_confirmation": {
+      "draws_fitted": [
+        34,
+        35
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 40,
+      "evidence": {
+        "evidence/h43_screen/design_confirm.json": {
+          "present": true,
+          "sha256": "54651fe6e6f9498e90592eeedb160f5ff1b192f10daf6af4ae59643359cabf19",
+          "prereg_sha256": "919210d9dad7ccd068af411b30114606dbe0e0c9997de0ac423c41c1f65d9393",
+          "git_revision": "bd6811e44f794eb6294a5814fa2471737f6c33cd"
+        }
+      },
+      "status_note": "COMPLETE: 40 cells on draws 34/35. A3_knick +0.01674 and A4_union +0.01568 replicated the primary proxy result (3/4 positive folds per draw, worst folds 0.0/-0.000533) but the SGMC second proxy is negative in both stages, so the inherited G3 requirement withheld promotion for every arm: no candidate, no slot. See knowledge/30 section 5 and evidence/h43_screen/analyzer_report.json (integrity_problems 0)."
     }
   },
   "prose_claimed": {
@@ -169,10 +186,6 @@
     "h35_h40_confirmation_draws_never_fit": [
       26,
       27
-    ],
-    "h43_confirmation_draws_never_fit": [
-      34,
-      35
     ]
   },
   "claimed_by_any_fit": [
@@ -203,15 +216,15 @@
     30,
     31,
     32,
-    33
-  ],
-  "released_unused": [
-    26,
-    27,
+    33,
     34,
     35
   ],
-  "next_free_draw": 34,
+  "released_unused": [
+    26,
+    27
+  ],
+  "next_free_draw": 36,
   "rule": "A frozen screen must use draws >= next_free_draw, or a documented released-unused pair that was never fitted. Reusing a draw that any fit has touched silently un-blinds a stage.",
   "note": "Derived from committed evidence only; draw provenance for stages whose raw cells were never archived is inherited from knowledge/18 and knowledge/22 and is recorded under prose_claimed."
 }
