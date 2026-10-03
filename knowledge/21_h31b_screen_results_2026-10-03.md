@@ -106,3 +106,20 @@ considered. This is a proxy outcome, not a competition score.
 All numbers above are spatially blocked **proxy** results on hash-pinned owner-mirror inputs
 with artificially hidden catalogue components. They do not measure the organizer's hidden
 expert-labelled test faults or any leaderboard score.
+
+## 6. Postscript (2026-10-03, merge-time): independent confirmation by a parallel workstream
+
+A parallel session-3 workstream (merged to main as PR #7/#8) preregistered and ran an
+**independent screen of the same dense-persistence idea** — their H40 "dense continuous
+upward-continuation persistence ladder" — on draws 24/25 (the draws this workstream had
+reserved for H31b confirmation), plus new H35 tip-corridor interaction fields. All four of
+their arms **also failed** their frozen gate
+([`knowledge/21_h35_h40_results_2026-10-03.md`](21_h35_h40_results_2026-10-03.md); A3_h40_persist
+mean gain +0.00048). The dense-persistence family has now failed on **two independent
+implementations, on adjacent draw pairs (22/23 and 24/25), with identical gate structure** —
+the family verdict (no generalizable increment over the frozen structural baseline on this
+grid) is materially stronger than this document's original "unproven-at-the-bar" wording,
+which is retained as written above because it was frozen with the verdict. The two
+workstreams' v3 slates overlap (this file's H31b ≈ their H40; this file's H35 ≈ their H35
+direction); both registers are kept for audit (`registry/hypotheses_v3_2026-10-03.json`
+here, `registry/hypotheses.json` there).

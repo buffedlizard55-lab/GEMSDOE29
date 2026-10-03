@@ -2,35 +2,59 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
-> **Current decision (2026-10-03, session 3 close-out): no slot-approved submission. The H31b
-> dense-worming screen is complete and FAILED its frozen stability gates (draw-unstable), so no
-> confirmation, no candidate TIFF, no slot** — see
-> [`knowledge/21_h31b_screen_results_2026-10-03.md`](knowledge/21_h31b_screen_results_2026-10-03.md).
-> Result detail: draw 22 mean paired gain +0.0050 (4/4 folds positive), draw 23 +0.0018 (2/4);
-> the 8-cell primary-arm mean 0.15547 is the highest same-protocol screen mean in the repository
-> but, having failed its frozen gates, is not a promotion anchor (anchor remains H34 C1, 0.14479).
-> The dense columns *did* move the output (unlike H31's null), so the worming family is
-> unproven-at-the-bar, not closed; branch ranking: pseudogravity-proxy and RTP routes lead, the
-> isostatic-gravity branch is inert. **H36 (MT conductance structural edges, local bands) is now
-> the lead local candidate**; H35 awaits the owner-side fetch of Siler (2022). This session
-> re-verified the official sources line-by-line with links for manual review
-> ([`registry/sources.json`](registry/sources.json)): the problem page (metric α=0.2/β=0.8,
-> 300 m triangular kernel, single float32 band in [0,1]), the NLR 96647 rules (single GeoTIFF,
-> up to three weekly feedback submissions, one final selection, generative-AI disclosure), the
-> official reference solution's `TverskyLoss(α=0.2, β=0.8)`, and — with the owner's explicit
-> request — one single fetch of the public leaderboard, which displayed the owner-supplied
-> **0.3195** as rank #1 at fetch time (no table stored, no polling; audit note in
-> `registry/score_claims.json`). The top-scoring historical artifact (GEMSDOE25 "D2.8", 0.2600
-> owner-reported) is byte-verified against the GEMSDOE25 site (sha256 `91eae1ca42ec845e…`,
-> 1,603,424 B) and its transformation chain (`dot_thin(H19-5, 1.5)` → d1.5;
-> `dot_thin(H19-5, 2.8)` → D2.8, 44,090 px) reproduces bit-for-bit locally. The five-candidate
-> slate v3 is registered ([`registry/hypotheses_v3_2026-10-03.json`](registry/hypotheses_v3_2026-10-03.json),
-> [`knowledge/20_candidates_v3_2026-10-03.md`](knowledge/20_candidates_v3_2026-10-03.md)).
-> The session-3 prompt is preserved verbatim below. The prior session-2 decision block is
-> retained below it, unedited.
+> **Current decision (2026-10-03, session 3 close-out): no slot-approved submission.**
+> Session 3 ran **two parallel, preregistered physics screens** and both failed their frozen gates,
+> so no confirmation, no candidate file, and no slot on either line.
 >
-> **Current decision (2026-10-03, session 2 close-out): no slot-approved submission, but the site now
-> leads with the repository's own best-evidenced candidate.** The 2^(5−1) fractional factorial over the
+> **Workstream A — H31b dense continuous worming persistence (draws 22/23).** Preregistered
+> ([`knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md`](knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md))
+> and screened 4 folds × 2 draws × 5 arms (40/40 cells finite, 1281 s, clean tree at the frozen
+> revision). **FAIL on draw 23**: draw 22 mean paired gain +0.0050 (4/4 folds positive), draw 23
+> +0.0018 (2/4) — the frozen stability gates fail. The 8-cell primary-arm mean 0.15547 is the
+> highest same-protocol screen mean in the repository but, having failed its frozen gates, is not a
+> promotion anchor (anchor remains H34 C1, 0.14479). The dense columns did move the output (unlike
+> H31's null): branch ranking pseudogravity-proxy > RTP > gravity (inert). Full cell tables and
+> draw-composition diagnostics: [`knowledge/21_h31b_screen_results_2026-10-03.md`](knowledge/21_h31b_screen_results_2026-10-03.md).
+>
+> **Workstream B — H35/H40 (draws 24/25).** Session 3 also took the two strongest remaining physics
+> bets — **H35** (tip-corridor stress-shadow interaction zones under the frozen Bellier–Zoback
+> σ₃ = 105° regional field) and **H40** (multiscale upward-continuation persistence rebuilt as
+> *dense continuous surfaces*, an independent rebuild of the same dense-worming idea as Workstream A) —
+> pre-registered them as a five-arm frozen screen (`knowledge/19_preregistered_h35_h40_screen_2026-10-03.md`,
+> sha256 `5432b42a…`) BEFORE any fit or cache, ran 4 folds × 2 draws × 5 arms (40 cells, 1,475 s,
+> clean tree), and had every gate independently recomputed from raw cells by
+> `scripts/analyze_h35_screen.py` (zero problems). **All four arms failed G1**: A1 +0.00181, A2
+> +0.00459, A3 +0.00048, and A4 (union) +0.00562 — the union passed the effect-size, worst-fold and
+> budget criteria and was rejected solely because draw 24 was positive in only 2/4 folds, the
+> fold-concentration pattern the preregistration pre-declared as noise. No confirmation draws (26/27)
+> were fit; no submission file was produced; no weekly slot was used. The worming/persistence line is
+> now screened negative in **four distinct formulations across two independent workstreams** on
+> adjacent folds (H29 sparse, H31 seed-tracked, H31b dense, H40 dense-ladder). Results:
+> `knowledge/21_h35_h40_results_2026-10-03.md`.
+>
+> **Sources and provenance (Workstream A, this session).** Official sources were re-verified
+> line-by-line with links for manual review ([`registry/sources.json`](registry/sources.json)): the
+> problem page (metric α=0.2/β=0.8, 300 m triangular kernel, single float32 band in [0,1]), the NLR
+> 96647 rules (single GeoTIFF, up to three weekly feedback submissions, one final selection,
+> generative-AI disclosure), the official reference solution's `TverskyLoss(α=0.2, β=0.8)`, and — with
+> the owner's explicit request — one single fetch of the public leaderboard, which displayed the
+> owner-supplied **0.3195** as rank #1 at fetch time (no table stored, no polling; audit note in
+> `registry/score_claims.json`; the registry entry is audit-only and hidden from the Pages site). The
+> top-scoring historical artifact (GEMSDOE25 "D2.8", 0.2600 owner-reported) is byte-verified against
+> the GEMSDOE25 site (sha256 `91eae1ca42ec845e…`, 1,603,424 B) and its transformation chain
+> (`dot_thin(H19-5, 1.5)` → d1.5; `dot_thin(H19-5, 2.8)` → D2.8, 44,090 px) reproduces bit-for-bit
+> locally. **Two parallel v3 candidate slates** were registered by the two workstreams
+> ([`registry/hypotheses_v3_2026-10-03.json`](registry/hypotheses_v3_2026-10-03.json) +
+> [`knowledge/20b_candidates_v3_h31b_slate_2026-10-03.md`](knowledge/20b_candidates_v3_h31b_slate_2026-10-03.md)
+> for Workstream A; [`registry/hypotheses.json`](registry/hypotheses.json) +
+> [`knowledge/20_candidates_v3_2026-10-03.md`](knowledge/20_candidates_v3_2026-10-03.md) for Workstream B,
+> where H41 — slip-rate-weighted INGENIOUS off-catalogue centroid corridors, data already mirrored —
+> leads the refreshed slate). Next local candidates: **H41** (label-side, ~0.5 day) and **H36** (MT
+> conductance edges, local bands). The session-3 prompt is preserved verbatim below. The prior
+> session-2 decision block is retained below it, unedited.
+>
+> **Session 2 records stand.** No slot-approved submission exists, but the site leads with the
+> repository's own best-evidenced candidate. The 2^(5−1) fractional factorial over the
 > five feature families is complete: supported inclusion effects are **B** (DEM curvature/scarp,
 > +0.0241, 8/8 cells positive) and **E** (visible-catalogue geometry, +0.0596, 8/8), with interactions
 > AC/AD/CD positive and AB/BD negative — see
@@ -49,11 +73,15 @@
 ## Start here
 
 - **[Session 3 brief — preserved verbatim](#session-3-brief--preserved-verbatim-2026-10-03)** — this session's standing starting point (re-read every session).
-- **[Candidates v3 — five new ranked hypotheses](knowledge/20_candidates_v3_2026-10-03.md)** — H31b dense worming (screened this session: FAIL on stability gates — [`knowledge/21`](knowledge/21_h31b_screen_results_2026-10-03.md)), H36 MT conductance edges (now the lead local candidate), H35 interaction zones, H37 geothermometry, H38 azimuth coherence.
-- **[Latest session handoff (session 2)](knowledge/18_h29_corrected_screen_handoff_2026-10-03.md)** — current H29 gate, corrections, artifact status, and final local verification.
+- **[Session 3 results, Workstream B — H35/H40 screen (read first)](knowledge/21_h35_h40_results_2026-10-03.md)** — frozen-screen verdict, gate-by-gate reading of the A4 near-miss, and registry consequences.
+- **[Session 3 results, Workstream A — H31b screen](knowledge/21_h31b_screen_results_2026-10-03.md)** — dense worming persistence, FAIL on draw 23, full cell tables.
+- **[Limitations & next-session plan](knowledge/22_limitations_and_next_2026-10-03.md)** — pass-3 honest status, prioritized remaining work, and the standing limitations that must not be "fixed" by assertion.
+- **[Refreshed untried slate v3 (Workstream B)](knowledge/20_candidates_v3_2026-10-03.md)** — H41 (INGENIOUS slip-rate centroid corridors) ranked first, with H36/H37/H42 and the H38/H39 filter-role pair behind it.
+- **[Parallel v3 slate (Workstream A)](knowledge/20b_candidates_v3_h31b_slate_2026-10-03.md)** — H31b dense worming (screened: FAIL), H36 MT conductance edges, H35 interaction zones, H37 geothermometry, H38 azimuth coherence.
+- **[Prior session handoff](knowledge/18_h29_corrected_screen_handoff_2026-10-03.md)** — H29 gate corrections, artifact status, and final local verification (historical).
 - **[Executive summary and manual submission guide](docs/executive-summary.html)** — acceptance checks, current download status, file naming, optional comment, and manual upload steps.
 - **[Live project site](https://buffedlizard55-lab.github.io/GEMSDOE29/)** — research status, local evidence feed, sources, and downloads. The status page is not a DrivenData leaderboard feed.
-- **[Research and hypotheses](docs/research.html)** — ranked H31–H33 hypotheses, prior work, and holdout/confirmation policy.
+- **[Research and hypotheses](docs/research.html)** — the session-3 screen table, the refreshed ranked slate, prior work, and holdout/confirmation policy.
 - **[Project-local status feed](docs/status.html)** — timestamps only from this repository's checked-in research, experiment, review, and deploy evidence.
 - **[Source register](docs/sources.html)** — official competition/rules links and scientific sources, with verification dates and caveats.
 - **[Irregularities and caveats](docs/irregularities.html)** — owner-mirror limitations, ambiguous data labels, unverified historical scores, and holdout/method risks.
@@ -71,6 +99,7 @@
 
 ## Evidence boundary and current status
 
+- **H35/H40 (session 3):** the interaction-zone + dense-persistence four-arm screen failed its frozen G1 gate on all arms (means +0.0018/+0.0046/+0.0005/+0.0056; the union missed only the ≥3/4-positive-folds rule on draw 24). Pre-registered before fitting (`knowledge/19`), independently audited from raw cells (`evidence/h35_h40_screen/analyzer_report.json`: no problems), no confirmation, no slot. See [`knowledge/21_h35_h40_results_2026-10-03.md`](knowledge/21_h35_h40_results_2026-10-03.md). The D2.8 emission geometry behind the why-0.2600 analysis was re-derived byte-exactly from the mirrored rasters ([`evidence/d28_geometry.json`](evidence/d28_geometry.json)).
 - **H34 (session 2):** the metric-native coverage emission was preregistered, implemented and screened on 32 paired cells (4 folds x 2 draws x 4 arms, 306.6 s). It **failed** its frozen primary gate on the catalogue-hidden proxy (mean paired gain −0.0212 vs the best control, 0/4 folds positive) and passed its secondary SGMC off-catalogue class (+0.0535, 4/4 folds). Raw cells and summary: [`evidence/h34_coverage_screen/`](evidence/h34_coverage_screen/); write-up: [`knowledge/09_h34_results_2026-10-03.md`](knowledge/09_h34_results_2026-10-03.md). Nothing was re-tuned after the run.
 - **Candidates (session 2):** the site's first download is the repository's own HGB candidate (`gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif`: trained on every catalogue pixel, 3-seed average, frozen standard emission; 37,913 dots; format `ok_to_upload=True`; never live-scored). Its method scores 0.1409 on the catalogue-hidden proxy vs 0.0983/0.0945/0.0697 for the historical family, but loses on the SGMC proxy (0.0847 vs 0.0953). Crucially, it does not beat the current H34 C1 control best (0.14479 vs 0.14086 on the same 8-cell report) and is not slot-cleared. See [`knowledge/17_repo_candidate_2026-10-03.md`](knowledge/17_repo_candidate_2026-10-03.md) and [`evidence/candidate_scoreboard.json`](evidence/candidate_scoreboard.json). Nothing is slot-approved.
 - **H31 screen (session 2):** 40 validated cells (draws 10–11 x four spatial blocks x five arms, 921 s) under the frozen protocol; gate **FAIL**, mean paired gain +0.000000, 0/4 blocks. The registered contrasts are identically zero because the persistence columns are sparse binary peak sets. The only worming-adjacent signal remains the H27 tip control (+0.0083). Raw: [`evidence/h31_worm_screen/`](evidence/h31_worm_screen/).

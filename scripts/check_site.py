@@ -82,6 +82,9 @@ try:
     if "all five arms FAIL" not in screen or "no file is slot-approved" not in status["current"]["confirmation_status"]:
         print("STATUS REGISTER lacks the corrected H29 failure or no-slot decision")
         fail += 1
+    if "all four arms FAIL G1" not in screen:
+        print("STATUS REGISTER lacks the session-3 H35/H40 screen verdict")
+        fail += 1
 except (KeyError, json.JSONDecodeError, OSError) as exc:
     print(f"BAD CURRENT STATUS: {exc}")
     fail += 1
