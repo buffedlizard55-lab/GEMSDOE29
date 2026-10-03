@@ -50,9 +50,11 @@ Companion documents: `knowledge/27` (frozen bar-protocol preregistration), `know
 4. **Owner-side data (unchanged, blocked here by `IR-29-SANDBOX-NET`):** Siler slip/dilation-tendency shapefile
    (10.5066/P9YL58W6), Peacock & Bedrosian conductance maps (10.5066/P9TWT2LU), extra 3DEP 1-m tiles, and the
    GeoDAWN flight-path binary for H33/H46. Each is free and official; none is reachable from this sandbox.
-5. **Site/CI housekeeping:** `check_site.py` runs manually; adding it as a step after the Pages build in
-   `.github/workflows/pages.yml` would catch a stale status page automatically. The `draw_inventory` prose is
-   still not a structured registry (`knowledge/22` §5).
+5. **Site/CI housekeeping — partly done in session 5.** `scripts/check_site.py` now runs as its own step in
+   both `.github/workflows/pages.yml` (before the Pages artifact is uploaded) and `.github/workflows/ci.yml`,
+   so a stale status page, a score-claim leak, a leaderboard link or a broken local link fails the build
+   instead of waiting for a manual check. The `draw_inventory` prose is still not a structured registry
+   (`knowledge/22` §5).
 
 ## 3. Limitations that bound every claim (standing, re-affirmed)
 
