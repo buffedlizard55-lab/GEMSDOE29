@@ -49,7 +49,7 @@ from build_crossfit_candidate import assemble, base_column_names  # noqa: E402
 from gems29.submission import write_submission as write_all_variants  # noqa: E402
 from gemsdoe.experiment import HGB_PARAMS, N_NEG, load_context  # noqa: E402
 from gemsdoe.features import build_catalogue_features, build_tip_continuation  # noqa: E402
-from gemsdoe.paths import data_dir, work_dir  # noqa: E402
+from gemsdoe.paths import work_dir  # noqa: E402
 from gemsdoe.submission import content_id, make_note, sha256_file  # noqa: E402
 from gemsdoe.thinning import dot_thin, ridge_nms, select_top_positive  # noqa: E402
 from gemsdoe.wormfilter import WF_NAMES  # noqa: E402
@@ -75,20 +75,98 @@ def git_state() -> dict:
                 dirty_worktree=bool(run("status", "--porcelain")))
 
 
+def note_for(cid: str) -> str:
+    """The paste-ready portal Note. Kept short so make_note() never has to truncate it."""
+    return make_note("worm-survival filter", "worming survival veto at emission", cid,
+                     scored="proxy-only, not slot-cleared")
+
+
+def stem_for(cid: str, date: str) -> str:
+    return f"gemsdoe29-wormsurv-filter-{date}-{cid}"
+
+
+def repackage(args: argparse.Namespace) -> int:
+    """Rewrite variants, note and record from an already-built mask; the emission is not recomputed.
+
+    Why this exists: the first build produced a portal note that ``make_note`` truncated mid-word
+    ("...; cros"), and correcting packaging metadata is not worth another ten minutes of refits. The
+    mask is read back from the built ``-nan`` raster and verified to be exactly 0/1 inside the pinned
+    template footprint, so the emitted pixel set is provably the one that was built and checked.
+    """
+    import rasterio
+
+    from gemsdoe.experiment import load_context  # noqa: PLC0415  (same loader main() uses)
+
+    ctx = load_context(work_dir())
+    with rasterio.open(args.repackage) as source:
+        if source.count != 1 or source.dtypes[0] != "float32":
+            raise SystemExit(f"{args.repackage} is not a single-band float32 GeoTIFF")
+        arr = source.read(1)
+    inside = arr[np.isfinite(arr)]
+    if inside.size == 0 or not np.isin(inside, (0.0, 1.0)).all():
+        raise SystemExit("in-footprint values are not exactly 0.0/1.0; refusing to repackage")
+    if not np.array_equal(np.isfinite(arr), ctx.foot):
+        raise SystemExit("the source raster's footprint differs from the pinned template")
+    emitted = arr > 0.5
+    if int(emitted.sum()) != int((inside > 0.5).sum()):
+        raise SystemExit("dot count changed while reading the mask back")
+
+    cid = content_id(emitted, ctx.foot, ctx.labels)
+    stem = f"gemsdoe29-wormsurv-filter-{args.date}-{cid}"
+    note = make_note("worm-survival filter", "worming survival veto at emission", cid,
+                     scored="proxy-only, not slot-cleared")
+    checks = write_all_variants(emitted, args.out_dir, stem, note=note)
+    record = dict(
+        schema_version=1,
+        built_utc=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        stage="wormfilter_candidate_repackage",
+        repackaged_from=str(args.repackage),
+        repackaged_reason="the portal note was truncated mid-word by make_note(); emission unchanged",
+        preregistration="knowledge/37_preregistered_wormfilter_h34protocol_2026-10-03.md",
+        screen_evidence="evidence/wormfilter_screen/summary.json",
+        guard=dict(identical_to_control=False, emitted_px=int(emitted.sum()),
+                   note="mask read back from the built raster; no refit was performed"),
+        files={p.name: {"bytes": p.stat().st_size, "sha256": sha256_file(p)}
+               for p in (args.out_dir / f"{stem}-nan.tif", args.out_dir / f"{stem}-zeros.tif",
+                         args.out_dir / f"{stem}-nan.zip") if p.is_file()},
+        content_id=cid, stem=stem, note_to_paste=note,
+        local_format_receipt=str((args.out_dir / f"checks-{stem}.json").relative_to(ROOT)),
+        local_format_verified=bool(checks["__summary__"]["pass"]),
+        recommended_upload=f"{stem}-zeros.tif",
+        recommended_upload_reason="a strict whole-array [0,1] check rejects NaN (IR-PORTAL-01)",
+        slot_approved=False,
+        score_claims="none: no organizer score is claimed or implied for this file",
+        environment=dict(python=platform.python_version(), numpy=np.__version__, platform=platform.platform()),
+        git=git_state(), drivendata_contacted=False,
+    )
+    args.record.write_text(json.dumps(record, indent=2, default=float) + "\n")
+    print(f"repackaged {int(emitted.sum()):,} dots from {args.repackage}")
+    print(f"upload the zero-outside file: {stem}-zeros.tif")
+    print(f"note: {note}")
+    print(f"record: {args.record.relative_to(ROOT)}")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--draws", default=",".join(str(d) for d in DEFAULT_DRAWS))
     parser.add_argument("--out-dir", type=Path, default=ROOT / "docs" / "downloads")
     parser.add_argument("--record", type=Path, default=ROOT / "evidence" / "wormfilter_candidate_build.json")
     parser.add_argument("--date", default=datetime.now(timezone.utc).strftime("%Y%m%d"))
+    parser.add_argument("--repackage", type=Path, default=None, metavar="NAN_TIF",
+                        help="Recover the emission mask from an already-built -nan.tif and rewrite every "
+                             "variant, note and record without refitting. Emission is unchanged; only the "
+                             "packaging metadata is rewritten.")
     args = parser.parse_args()
     draws = tuple(int(d) for d in args.draws.split(",") if d.strip())
     if not draws:
         raise SystemExit("no draws given")
     if args.record.exists():
         raise SystemExit(f"refusing to overwrite {args.record}; move it aside first")
+    if args.repackage is not None:
+        return repackage(args)
 
-    data, work = data_dir(), work_dir()
+    work = work_dir()
     missing = [str(work / name) for name in ("static_ABCD.npy", "addons.npy", *FIELDS) if not (work / name).is_file()]
     if missing:
         raise SystemExit(f"missing caches: {missing}")
@@ -164,7 +242,7 @@ def main() -> int:
 
     cid = content_id(emitted, ctx.foot, ctx.labels)
     stem = f"gemsdoe29-wormsurv-filter-{args.date}-{cid}"
-    note = make_note("worm-survival filter", "WF shallow-only veto at emission; cross-fitted", cid,
+    note = make_note("worm-survival filter", "worming survival veto at emission", cid,
                      scored="proxy-only, not slot-cleared")
     checks = write_all_variants(emitted, args.out_dir, stem, note=note)
 

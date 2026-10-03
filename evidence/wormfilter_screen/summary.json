@@ -1,0 +1,212 @@
+{
+  "arms": {
+    "C0_base": 0.14086084085915884,
+    "C1_geodesic_dots": 0.14479018210246675,
+    "W1_surv_veto": 0.14030949463023917,
+    "W2_surv_refill": 0.14336136648461373,
+    "W3_azimuth_refill": 0.14284059156661416,
+    "W4_union_refill": 0.14206266322197475,
+    "W5_surv_features": 0.14727195097971468
+  },
+  "artifact_audit": {
+    "azimuth_defined_fraction": 0.17249983695777332,
+    "d28_reference": {
+      "emitted_px": 44090,
+      "file": "data/inputs/dotted_h19_5_d2_8_nan.tif",
+      "flagged_fraction": 0.15264232252211385,
+      "flagged_shallow": 6730,
+      "mean_surv_joint_on_dots": 0.5053022503852844
+    },
+    "footprint_mean_surv_joint": 0.5770326852798462,
+    "footprint_shallow_fraction": 0.11137516103443665
+  },
+  "cells": 56,
+  "controls": {
+    "0": 0.16401750243268381,
+    "1": 0.1348995415995732,
+    "2": 0.12774497034805157,
+    "3": 0.1524987140295584
+  },
+  "elapsed_s": 573.0,
+  "gate_checks": {
+    "G1": false,
+    "G2": false,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "gates": {
+    "all_finite": true,
+    "bar_from_stored": 0.14479018210246675,
+    "bar_mean": 0.16401750243268381,
+    "budget_ok": true,
+    "budget_ratio_max": 1.0869820172009381,
+    "budget_ratio_min": 1.0059298640220837,
+    "cells_present": true,
+    "expected_cells": 8,
+    "fold_gains": [
+      -0.0034134166991970916,
+      -0.002080747480412093,
+      0.0021865114732895485,
+      -0.002407609765092411
+    ],
+    "identical_to_c1_cells": 0,
+    "mean_gain": -0.0014288156178530118,
+    "mean_veto_rate": 0.13803985783777606,
+    "positive_folds": 1,
+    "primary_mean_dti": 0.14336136648461373,
+    "reproduction_cells": [
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "NW",
+        "rebuilt": 0.15844282402158233,
+        "stored": 0.15844282402158233
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "NW",
+        "rebuilt": 0.16455969355029598,
+        "stored": 0.16455969355029598
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "NW",
+        "rebuilt": 0.16125053923319685,
+        "stored": 0.16125053923319685
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "NW",
+        "rebuilt": 0.16347531131507162,
+        "stored": 0.16347531131507162
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "NE",
+        "rebuilt": 0.13825190508512086,
+        "stored": 0.13825190508512086
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "NE",
+        "rebuilt": 0.14239209212555312,
+        "stored": 0.14239209212555312
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "NE",
+        "rebuilt": 0.12368306461664387,
+        "stored": 0.12368306461664387
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "NE",
+        "rebuilt": 0.1274069910735933,
+        "stored": 0.1274069910735933
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "SW",
+        "rebuilt": 0.1443070201100771,
+        "stored": 0.1443070201100771
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "SW",
+        "rebuilt": 0.14749487859680374,
+        "stored": 0.14749487859680374
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "SW",
+        "rebuilt": 0.10509291121527896,
+        "stored": 0.10509291121527896
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "SW",
+        "rebuilt": 0.10799506209929942,
+        "stored": 0.10799506209929942
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "SE",
+        "rebuilt": 0.1605483474838944,
+        "stored": 0.1605483474838944
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "SE",
+        "rebuilt": 0.16832143487289203,
+        "stored": 0.16832143487289203
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "SE",
+        "rebuilt": 0.13531011510747643,
+        "stored": 0.13531011510747643
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "SE",
+        "rebuilt": 0.13667599318622475,
+        "stored": 0.13667599318622475
+      }
+    ],
+    "reproduction_max_abs_delta": 0.0,
+    "sgmc_fold_gains": [
+      0.0038997128284204152,
+      0.0008000929082559449,
+      0.008265770742805309,
+      0.003926175342403512
+    ],
+    "sgmc_mean_gain": 0.004222937955471295,
+    "sgmc_positive_folds": 4,
+    "veto_rates": [
+      0.1324956318078739,
+      0.13186363805345924,
+      0.037241379310344824,
+      0.06260869565217392,
+      0.2932725892179195,
+      0.2786940015186029,
+      0.08239418039274811,
+      0.08574874674908597
+    ],
+    "wf_split_cells": 8,
+    "worst_fold": -0.0034134166991970916
+  },
+  "verdict": "NO PROMOTION: worming survival as an emission filter does not clear the frozen gates on the bar protocol."
+}

@@ -1,5 +1,30 @@
 # 39 — Preregistered H52-F confirmation: the worm-survival **feature** block on fresh draws 36/37
 
+> ## ⛔ STAGE NOT EXECUTED — superseded before any fit (2026-10-03)
+>
+> **`scripts/run_wormfilter_confirm.py` was never run. No cell below was produced. Draws 36/37 remain
+> unspent** (`registry/draw_ledger.json` still reads `next_free_draw = 36`), and
+> `evidence/wormfilter_confirm/` does not exist, so **no SHA-256 of this file was ever recorded**.
+>
+> Two statements in the header below are wrong and are corrected here rather than silently rewritten:
+>
+> 1. This file was **not** written "after the H52 filter screen finished". It was written after **4 of
+>    the 8** screen cells were visible (NW and NE), when `W5_surv_features` led in both scored folds
+>    (+0.0077, +0.0104). With all 8 cells in, the arm's mean paired gain is **−0.006121** with 2/4 folds
+>    positive (NW +0.00883, NE +0.00499, SW −0.02239, SE −0.01590): it **failed G1 on its own screen**,
+>    so there is nothing left to confirm.
+> 2. Its SHA-256 was never recorded in any `design.json`, because the stage that would have written it
+>    was cancelled.
+>
+> The correct action was to **not** spend two fresh draws on an arm that had already failed its screen,
+> and to record the process defect instead: a confirmation preregistration must not be written before the
+> full screen summary exists. That is now `AGENTS.md` rule 10 and irregularity
+> **`IR-29-PREREG-PARTIAL-DATA`**. See `knowledge/40` §4 for the full account.
+>
+> The frozen text is preserved verbatim below because it is the record of what was proposed and of the
+> selection bias it declared.
+
+
 **Status: FROZEN before any fit.** Written 2026-10-03 (session 7), after the H52 filter screen finished
 and **before** `scripts/run_wormfilter_confirm.py` runs. Its SHA-256 is recorded in
 `evidence/wormfilter_confirm/design.json`; editing this file after the run invalidates the stage.

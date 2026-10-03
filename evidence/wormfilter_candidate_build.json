@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "built_utc": "2026-10-03T23:01:07+00:00",
+  "stage": "wormfilter_candidate_repackage",
+  "repackaged_from": "docs/downloads/gemsdoe29-wormsurv-filter-20261003-921f10960d6e-nan.tif",
+  "repackaged_reason": "the portal note was truncated mid-word by make_note(); emission unchanged",
+  "preregistration": "knowledge/37_preregistered_wormfilter_h34protocol_2026-10-03.md",
+  "screen_evidence": "evidence/wormfilter_screen/summary.json",
+  "guard": {
+    "identical_to_control": false,
+    "emitted_px": 38907,
+    "note": "mask read back from the built raster; no refit was performed"
+  },
+  "files": {
+    "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-nan.tif": {
+      "bytes": 1562739,
+      "sha256": "87eda0c871f8f2ff03482452674010083486aad534e6a7f75dc3124177a34db1"
+    },
+    "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-zeros.tif": {
+      "bytes": 798295,
+      "sha256": "8a85485ed0877d240ece6b07883641d04fa64cdf8d3687ff767a068346350313"
+    },
+    "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-nan.zip": {
+      "bytes": 291031,
+      "sha256": "745679559b37b8d8ba8e99c6b840125cc0f101050efd606aebf7035d032bdfa1"
+    }
+  },
+  "content_id": "921f10960d6e",
+  "stem": "gemsdoe29-wormsurv-filter-20261003-921f10960d6e",
+  "note_to_paste": "GEMSDOE29 worm-survival filter | worming survival veto at emission | id 921f10960d6e | proxy-only, not slot-cleared",
+  "local_format_receipt": "docs/downloads/checks-gemsdoe29-wormsurv-filter-20261003-921f10960d6e.json",
+  "local_format_verified": true,
+  "recommended_upload": "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-zeros.tif",
+  "recommended_upload_reason": "a strict whole-array [0,1] check rejects NaN (IR-PORTAL-01)",
+  "slot_approved": false,
+  "score_claims": "none: no organizer score is claimed or implied for this file",
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6",
+    "platform": "Linux-6.1.158+-x86_64-with-glibc2.36"
+  },
+  "git": {
+    "branch": "arena/01a103c6-gemsdoe29",
+    "revision": "45d7da27e2b2eaed7a714661e2f1d62caa04214b",
+    "dirty_worktree": true
+  },
+  "drivendata_contacted": false
+}

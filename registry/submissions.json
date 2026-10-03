@@ -3,6 +3,51 @@
   "policy": "Only a same-run spatially blocked holdout winner may be proposed for a weekly slot. No artifact in this registry meets that bar: A4_h41_union passed its own-fold screen and confirmation but fails the H34 slot-bar re-score (0.14597 vs 0.16402) and is G3-vetoed, and every other registered file is a reference or a failed arm. Nothing is slot-approved. The cross-fitted downloads exist because the previous single-fit artifact was defective (IR-29-ARTIFACT-LEAK), not because a proxy recommends submitting them. The recommended file format is the zero-outside variant because a strict whole-array range check rejects NaN.",
   "files": [
     {
+      "id": "wormsurv-filter-h52f",
+      "role": "candidate_review",
+      "file": "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-zeros.tif",
+      "path": "docs/downloads/gemsdoe29-wormsurv-filter-20261003-921f10960d6e-zeros.tif",
+      "download_label": "Download the .tif (zero-outside, safest)",
+      "alt_file": "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-nan.tif",
+      "alt_path": "docs/downloads/gemsdoe29-wormsurv-filter-20261003-921f10960d6e-nan.tif",
+      "alt_label": "NaN-outside variant (rejected by the upload form - IR-PORTAL-01)",
+      "zip": "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-nan.zip",
+      "content_id": "921f10960d6e",
+      "status": "Research artifact, NOT slot-recommended. This is the owner-requested multiscale worming product: amplitude survival across a 5-level upward-continuation ladder on the magnetic and gravity layers, used to veto zero-continuation-only edges at emission. The preregistered screen failed it (0.143359 vs the frozen bar 0.144790, mean gain -0.001429, 1/4 folds positive).",
+      "score": null,
+      "score_claims": [],
+      "slot_approved": false,
+      "g3_veto": false,
+      "do_not_submit": true,
+      "bytes": 798295,
+      "sha256": "8a85485ed0877d240ece6b07883641d04fa64cdf8d3687ff767a068346350313",
+      "nan_sha256": "87eda0c871f8f2ff03482452674010083486aad534e6a7f75dc3124177a34db1",
+      "positive_pixels": 38907,
+      "format_ok_local": true,
+      "outside": "zero (recommended) / nan (alternate)",
+      "template_sha256": null,
+      "format_check_receipt": "docs/downloads/checks-gemsdoe29-wormsurv-filter-20261003-921f10960d6e.json",
+      "name": "Multiscale worming survival filter (H52-F, review only - fails the H34 slot bar)",
+      "optional_comment": "GEMSDOE29 worm-survival filter | worming survival veto at emission | id 921f10960d6e | proxy-only, not slot-cleared",
+      "gate_evidence": "FAILED the preregistered H34-protocol screen (knowledge/37, frozen before any fit): W2_surv_refill mean DTI 0.143359 against the C1 bar 0.144790, mean paired gain -0.001429, 1/4 folds positive, worst fold -0.003413 -> G1 and G2 fail. G4 passed (56/56 finite, controls reproduced the stored H34 cells with max |delta| 0.0) and G5 passed (0/8 cells identical to C1, mean veto rate 0.138), so the filter is demonstrably active and demonstrably costs DTI. The feature role (8 WF_* columns, emission identical to C0) scored 0.147271 but its mean paired gain is -0.006121 with 2/4 folds positive, so it fails too. One positive result: the veto helps the off-catalogue SGMC proxy on 4/4 folds (+0.004223). DTI is a catalogue-gap proxy, not a competition score. Do not spend a weekly slot on this. (evidence/wormfilter_screen/summary.json, knowledge/40)",
+      "build_record": "evidence/wormfilter_candidate_build.json",
+      "summary": "The owner asked for Hornby/Boschetti/Horowitz multiscale worming: edges computed across a sequence of upward-continued versions of the magnetic and gravity grids, with persistence-with-height used as an explicit filter rather than a fixed-scale gradient. This file is that filter, cross-fitted over 8 cells (4 quadrants x draws 20/21) with the frozen control matrix and the frozen emission, minus the pixels flagged WF_SHALLOW_ONLY - edges that vanish at the first continuation step, i.e. the acquisition-artifact class. 38,907 dots; the veto removed 15.5% of the eligible ridge candidates. The audit number behind it: 11.14% of footprint pixels are shallow-only, and the owner-reported best file (D2.8) has 15.26% of its dots in that class with mean survival 0.50530 vs a footprint mean 0.57703, so the winning file sits on low-persistence ground - which is why the veto costs DTI on the catalogue-hidden proxy while helping the off-catalogue SGMC proxy on 4/4 folds. Zero outside the footprint, so a strict whole-array [0,1] check passes (the NaN variant is what the upload form rejected, IR-PORTAL-01).",
+      "files": {
+        "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-nan.tif": {
+          "bytes": 1562739,
+          "sha256": "87eda0c871f8f2ff03482452674010083486aad534e6a7f75dc3124177a34db1"
+        },
+        "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-zeros.tif": {
+          "bytes": 798295,
+          "sha256": "8a85485ed0877d240ece6b07883641d04fa64cdf8d3687ff767a068346350313"
+        },
+        "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-nan.zip": {
+          "bytes": 291031,
+          "sha256": "745679559b37b8d8ba8e99c6b840125cc0f101050efd606aebf7035d032bdfa1"
+        }
+      }
+    },
+    {
       "id": "xfit-h41-union",
       "role": "candidate_review",
       "file": "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif",
@@ -220,12 +265,12 @@
       "id": "wormrank-current",
       "role": "candidate_review",
       "name": "WORMRANK H29 research emission (A2 gate failed)",
-      "file": "gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.tif",
-      "path": "docs/downloads/gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.tif",
+      "file": "gems29-wormrank-d28-20261003-59dcaf6dd11d-zeros.tif",
+      "path": "docs/downloads/gems29-wormrank-d28-20261003-59dcaf6dd11d-zeros.tif",
       "source_file": null,
       "source_sha256": null,
       "content_id": "59dcaf6dd11d",
-      "status": "research artifact — A2 local proxy gate FAIL; do not spend a weekly slot",
+      "status": "research artifact \u2014 A2 local proxy gate FAIL; do not spend a weekly slot",
       "score": null,
       "score_claims": [],
       "slot_approved": false,
@@ -234,11 +279,23 @@
       "sha256": "7036b8dfcb76444e7bb51b02fa770156a0c7b345ce1d40fb820d8d65f31c8995",
       "positive_pixels": 41338,
       "format_ok_local": true,
-      "outside": "nan",
+      "outside": "zero (recommended) / nan (alternate)",
       "template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
       "format_check_receipt": "docs/downloads/checks-gems29-wormrank-d28-20261003-59dcaf6dd11d.json",
       "optional_comment": "GEMSDOE29 WORMRANK | d2.8 spacing, corrected persistence+ridge rank | A2 gate=FAIL proxy only | 59dcaf6dd11d | live-unverified",
-      "summary": "research artifact — A2 local proxy gate FAIL; do not spend a weekly slot. Local format checks do not authenticate the source or guarantee organizer acceptance."
+      "summary": "research artifact \u2014 A2 local proxy gate FAIL; do not spend a weekly slot. Local format checks do not authenticate the source or guarantee organizer acceptance. Fixed 2026-10-03: this card used to offer the NaN-outside raster as its primary download, which is exactly the variant the owner's submission form rejected with 'Predicted values must be in range [0, 1]' (IR-PORTAL-01). The emission is unchanged; only the outside-footprint fill differs.",
+      "primary": "gems29-wormrank-d28-20261003-59dcaf6dd11d-zeros.tif",
+      "recommended": false,
+      "recommended_reason": "Historical reference only. The zero-outside variant is now named as the download because the NaN variant is rejected by the portal's strict [0,1] check (IR-PORTAL-01, owner-reported).",
+      "caveat": " Fixed 2026-10-03: this card used to point at the NaN variant, which is exactly the file the owner's submission form rejected.",
+      "download_label": "Download the .tif (zero-outside, safest)",
+      "alt_file": "gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.tif",
+      "alt_path": "docs/downloads/gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.tif",
+      "alt_label": "NaN-outside variant (rejected by the upload form - IR-PORTAL-01)"
     }
+  ],
+  "updated_local_date": "2026-10-03",
+  "notes": [
+    "2026-10-03 session 7: the worming survival filter artifact is registered as the lead research download and every card now points at a zero-outside variant, because the owner's submission form rejects NaN outside the footprint (IR-PORTAL-01). No card is slot-approved; no weekly submission is recommended."
   ]
 }

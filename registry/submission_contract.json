@@ -16,6 +16,13 @@
     "probability_max": 1.0,
     "outside_footprint": "NaN"
   },
+  "portal_validation": {
+    "observed_local_date": "2026-10-03",
+    "rejection_message_owner_reported": "Predicted values must be in range [0, 1]",
+    "reproduced_locally": "the NaN-outside raster fails a strict whole-array [0,1] check and the zero-outside raster of the same emission passes it (scripts/check_submission.py)",
+    "recommended_upload": "the zero-outside variant of every artifact",
+    "irregularity_id": "IR-PORTAL-01"
+  },
   "metric": {
     "support_radius_m": 300,
     "alpha": 0.2,
