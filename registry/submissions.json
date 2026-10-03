@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "policy": "Only a current same-run spatially blocked holdout winner can be considered for a weekly slot. A holdout proxy is not a competition score. No current artifact is slot-approved.",
+  "files": [
+    {
+      "id": "historical-d28",
+      "role": "historical_reference",
+      "file": "gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif",
+      "path": "docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif",
+      "source_file": "buffedlizard55-lab/GEMSDOE25 at efc4be7bb3cfdf2def12a7fb83284d3311ac9220: docs/downloads/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif",
+      "source_sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+      "content_id": "e56ea318af89",
+      "status": "historical; locally format-validated against hash-pinned owner-mirror template; unscored; not slot-approved; do not submit",
+      "score": null,
+      "score_claims": [],
+      "slot_approved": false,
+      "do_not_submit": true,
+      "bytes": 1603424,
+      "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+      "positive_pixels": 44090,
+      "format_ok_local": true,
+      "outside": "nan",
+      "template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "format_check_receipt": "evidence/format_checks/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.json",
+      "name": "GEMSDOE29 historical D2.8",
+      "optional_comment": "GEMSDOE29 D2.8 | historical; no verified score; not slot-approved | id e56ea318af89 | do not submit",
+      "summary": "Historical 44,090-pixel owner-mirrored dotted H19-5 artifact (D2.8). It is preserved for provenance and format demonstration only. GEMSDOE29 locally checked its single-band float32 grid, CRS, transform, footprint values and NaN outside against the hash-pinned owner-mirror template; neither file is organizer-authenticated. The artifact remains unscored, not slot-approved, and do not submit."
+    }
+  ]
+}

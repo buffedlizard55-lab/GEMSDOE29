@@ -81,7 +81,7 @@ def main() -> int:
              "research artifact — frozen gate NOT passed; do not spend a weekly slot on this unless the owner accepts the risk"
     note = (f"GEMSDOE29 WORMRANK | d2.8 spacing, worm-persistence+ridge ranked order | "
             f"gate={'PASS' if passed else 'FAIL'} proxy ΔDTI see repo | {cid} | live-unverified")[:200]
-    checks = write_submission(mask, out_dir, stem, note=note)
+    write_submission(mask, out_dir, stem, note=note)
     ledger["WORMRANK"] = {"stem": stem, "px": int(mask.sum()), "status": status,
                           "content_id": cid, "note": note}
 

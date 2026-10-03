@@ -84,8 +84,6 @@ def dense_rows(feats: dict[str, np.ndarray], names: list[str], chunk: int = 500_
     any_arr = next(iter(feats.values()))
     n = int(np.prod(any_arr.shape))
     starts = range(0, n, chunk)
-    H = any_arr.shape[0]
-    W = any_arr.shape[1]
     for s in starts:
         e = min(s + chunk, n)
         X = np.stack([feats[nm].reshape(-1)[s:e] for nm in names], axis=1).astype(np.float32)

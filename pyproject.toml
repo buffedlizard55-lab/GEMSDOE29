@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gemsdoe29"
+version = "0.1.0"
+description = "Auditable spatially blocked research and submission tooling for the DOE GEMS Prize"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26,<3",
+  "scipy>=1.13",
+  "rasterio>=1.3",
+  "scikit-learn>=1.5",
+  "pandas>=2.2",
+  "requests>=2.31",
+  "shapely>=2.0",
+  "pyshp>=2.3",
+  "pyproj>=3.6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "scripts"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 140
+extend-exclude = ["data", "work", "docs/downloads"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

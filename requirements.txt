@@ -1,8 +1,14 @@
-# Verified working set for GEMSDOE29 (installed and exercised on 2026-10-03, Python 3.11).
-numpy>=1.26
-scipy>=1.11
+# Runtime and research dependencies (Python 3.11+)
+numpy>=1.26,<3
+scipy>=1.13
 rasterio>=1.3
+scikit-learn>=1.5
+pandas>=2.2
+requests>=2.31
 shapely>=2.0
-scikit-learn>=1.3
 pyshp>=2.3
 pyproj>=3.6
+
+# Development/verification
+pytest>=8
+ruff>=0.6
