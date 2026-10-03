@@ -1,0 +1,87 @@
+{
+  "experiment": "H31b dense continuous worming persistence",
+  "stage": "screen",
+  "elapsed_s": 1281.3050615787506,
+  "arms": {
+    "C_base": 0.1520519671064232,
+    "C_wrtp": 0.15424216973659977,
+    "C_wpsg": 0.15480355575575883,
+    "C_wgrav": 0.15189317693882187,
+    "C_wall": 0.15547091396383247
+  },
+  "sgmc_arms": {
+    "C_base": 0.08396297273290321,
+    "C_wrtp": 0.08330597581332759,
+    "C_wpsg": 0.08330270670273754,
+    "C_wgrav": 0.0813544757172063,
+    "C_wall": 0.08341309893605484
+  },
+  "paired_per_draw": {
+    "22": {
+      "per_fold": {
+        "NW": 0.001871003847209729,
+        "NE": 0.009745771477985332,
+        "SW": 0.007646959015017302,
+        "SE": 0.000882875200316463
+      },
+      "mean": 0.0050366523851322065,
+      "positive_folds": 4,
+      "min_fold": 0.000882875200316463
+    },
+    "23": {
+      "per_fold": {
+        "NW": -0.004029790352629209,
+        "NE": -0.0037289819459622175,
+        "SW": 0.011472273194513688,
+        "SE": 0.0034914644228229708
+      },
+      "mean": 0.001801241329686308,
+      "positive_folds": 2,
+      "min_fold": -0.004029790352629209
+    }
+  },
+  "gates": {
+    "per_draw": {
+      "22": {
+        "per_fold": {
+          "NW": 0.001871003847209729,
+          "NE": 0.009745771477985332,
+          "SW": 0.007646959015017302,
+          "SE": 0.000882875200316463
+        },
+        "mean": 0.0050366523851322065,
+        "positive_folds": 4,
+        "min_fold": 0.000882875200316463
+      },
+      "23": {
+        "per_fold": {
+          "NW": -0.004029790352629209,
+          "NE": -0.0037289819459622175,
+          "SW": 0.011472273194513688,
+          "SE": 0.0034914644228229708
+        },
+        "mean": 0.001801241329686308,
+        "positive_folds": 2,
+        "min_fold": -0.004029790352629209
+      }
+    },
+    "mean_wall_8cell": 0.15547091396383247,
+    "all_cells_present": true,
+    "all_finite": true
+  },
+  "gate_checks": {
+    "G1_mean_gain_per_draw": false,
+    "G2_positive_folds_per_draw": false,
+    "G3_fold_floor": true,
+    "G4_beats_holdout_best": true,
+    "G5_cells_and_manifest": true
+  },
+  "sgmc_stats": {
+    "sgmc_positive": 83593,
+    "off_catalogue": 62703,
+    "on_catalogue": 3978,
+    "within_300m": 16912
+  },
+  "pass_fail": "FAIL",
+  "interpretation": "Proxy outcome only: exact masked DTI on hidden catalogue components plus a secondary state-geologic-map off-catalogue class (descriptive; the two proxies are in a registered conflict). Neither is the organizer's hidden expert label set and neither is a competition score. A PASS authorizes a reviewed full-data build and an owner decision, not an automatic submission."
+}

@@ -32,6 +32,10 @@ STAGE_SOURCES = {
     "factorial_families": dict(files=["evidence/factorial_families/design.json"], fitted_key="draws"),
     "h34_coverage_screen": dict(files=["evidence/h34_coverage_screen/design.json"], fitted_key="draws"),
     "h35_h40_screen": dict(files=["evidence/h35_h40_screen/design_screen.json"], fitted_key="draws"),
+    "h31b_dense_screen": dict(files=["evidence/h31b_dense_screen/design.json"], fitted_key="draws",
+                              status_note="Workstream A, merged into main during session 4: screened and failed "
+                                          "its frozen stability gates, so its reserved confirmation pair was "
+                                          "never authorized."),
     "h41_screen": dict(files=["evidence/h41_screen/design_screen.json"], fitted_key="draws"),
     "h41_confirmation": dict(files=["evidence/h41_screen/design_confirm.json"], fitted_key="draws",
                              status_note="IN FLIGHT: the confirmation process was still appending rows to "
@@ -58,6 +62,7 @@ def cell_count(stage: str) -> int | None:
         "factorial_families": "evidence/factorial_families/cells.jsonl",
         "h34_coverage_screen": "evidence/h34_coverage_screen/cells.jsonl",
         "h35_h40_screen": "evidence/h35_h40_screen/cells_screen.jsonl",
+        "h31b_dense_screen": "evidence/h31b_dense_screen/cells.jsonl",
         "h41_screen": "evidence/h41_screen/cells_screen.jsonl",
         "h41_confirmation": "evidence/h41_screen/cells_confirm.jsonl",
     }

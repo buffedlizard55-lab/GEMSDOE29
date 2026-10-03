@@ -292,9 +292,17 @@ def render_home() -> str:
         banner = (
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
-            + e(h41_status_sentence()) + '; ' + 'Session 3 pre-registered and screened H35 (tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) on four folds × two draws: '
-            'all four arms failed the frozen gate, the union arm by fold-robustness alone, and no confirmation was fit. Earlier records stand: H34 failed its primary proxy gate, the fractional factorial '
-            'is complete, H31 failed on feature sparsity, and the corrected H29 screen failed every arm. See the local evidence feed and research report for the complete records. '
+            '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
+            + e(h41_status_sentence()) + '; '
+            'Session 3 ran two parallel preregistered screens and both failed their frozen gates. Workstream B: H35 '
+            '(tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) on '
+            'four folds × two draws — all four arms failed the frozen gate, the union arm by fold-robustness alone. '
+            'Workstream A: H31b (dense continuous worming persistence, an independent rebuild of the same idea) on fresh '
+            'draws 22/23 — draw 22 positive in 4/4 folds, draw 23 in 2/4; the frozen stability gates failed, so no '
+            'confirmation, no candidate file, no slot (knowledge/21_h31b_screen_results_2026-10-03.md). Earlier records '
+            'stand: H34 failed its primary proxy gate, the fractional factorial is complete, H31 failed on feature '
+            'sparsity, and the corrected H29 screen failed every arm. See the local evidence feed and research report for '
+            'the complete records. '
             'Every download is format-verified locally and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
         )
         main_artifact = (
@@ -346,7 +354,7 @@ def render_home() -> str:
     body = (
         f'{render_downloads()}{banner}{metrics}<section class="grid" aria-label="Submission artifacts">{main_artifact}{historical_card}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">Research, not score-chasing</p><h2>Test the unseen-fault hypothesis first</h2>'
-        '<p>H29 has now been rerun with corrected bounded persistence and preregistration-compliant nearest-valid FFT padding; every preregistered arm failed, so no confirmation fits were run. The original run is archived as history. H31 is a separate pseudogravity/edge-drift screen and also failed, with sparse persistence features diagnosed as the cause. Session 3 rebuilt persistence as a dense continuous field (H40) and added new physics-anchored interaction fields (H35); the frozen four-arm screen failed all arms, closing the worming-family line in three formulations.</p>'
+        '<p>H29 has now been rerun with corrected bounded persistence and preregistration-compliant nearest-valid FFT padding; every preregistered arm failed, so no confirmation fits were run. The original run is archived as history. H31 is a separate pseudogravity/edge-drift screen and also failed, with sparse persistence features diagnosed as the cause. Session 3 rebuilt persistence as a dense continuous field in two independent workstreams — H40 (dense ladder) and H31b (dense worming persistence) — and added new physics-anchored interaction fields (H35); the frozen screens failed every arm, closing the worming-family line in four formulations across adjacent folds.</p>'
         '<p><strong>Holdout DTI is a catalogue-gap proxy, not the official competition score.</strong> The public competition uses expert-labelled '
         'faults unavailable to these local folds, and official private/final-round results are not observed here.</p>'
         '<p><a href="research.html">Read the ranked hypotheses and scientific caveats →</a></p></article>'
@@ -558,6 +566,65 @@ def render_research() -> str:
         "record.</p></article></section>"
     )
 
+    def _hypothesis_card(item: dict[str, Any]) -> str:
+        layers = ", ".join(item.get("layers", []))
+        return (
+            f'<article class="card span-12"><div class="grid"><div class="span-8"><p class="kicker">Rank {e(item.get("rank"))} · {e(item["id"])}</p>'
+            f'<h2>{e(item["title"])}</h2><p>{tag(item.get("status", ""))}</p><p><strong>Layers:</strong> {e(layers)}</p>'
+            f'<p><strong>Physical signature / transform:</strong> {e(item.get("signature", ""))}</p>'
+            f'<p><strong>Why it could catch a fault missing from the USGS/INGENIOUS catalogue:</strong> {e(item.get("why_unmapped", ""))}</p>'
+            f'<p><strong>How it differs from anything in the reviewed repositories:</strong> {e(item.get("difference", ""))}</p></div>'
+            f'<aside class="span-4"><div class="metric"><span class="label">Planning ΔDTI</span><span class="value">{e(item.get("planning_delta_dti", "not estimated"))}</span>'
+            '<span class="label">Planning range only—not measured, not a score</span></div>'
+            f'<p><strong>Cost:</strong> {e(item.get("cost", ""))}</p><p><strong>Data obtainability:</strong> {e(item.get("external_data", ""))}</p></aside></div></article>'
+        )
+
+    hypotheses_v3_path = ROOT / "registry" / "hypotheses_v3_2026-10-03.json"
+    hypotheses_v3 = json.loads(hypotheses_v3_path.read_text(encoding="utf-8")) if hypotheses_v3_path.is_file() else None
+    v3_section = ""
+    if hypotheses_v3 is not None:
+        v3_cards = "".join(_hypothesis_card(i) for i in hypotheses_v3.get("items", []))
+        h31b_screen_dir = ROOT / "evidence" / "h31b_dense_screen"
+        h31b_result = ""
+        if (h31b_screen_dir / "summary.json").is_file():
+            h31b_summary = json.loads((h31b_screen_dir / "summary.json").read_text(encoding="utf-8"))
+            arms_txt = ", ".join(f"{k} {v:.4f}" for k, v in h31b_summary.get("arms", {}).items())
+            if h31b_summary.get("pass_fail") == "PASS":
+                decision = "A pass authorizes fresh confirmation on new draws, not a submission."
+            else:
+                decision = ("Per the frozen decision rules: no confirmation, no candidate TIFF, no slot. "
+                            "Draw 22 mean paired gain +0.0050 (4/4 folds positive); draw 23 +0.0018 (2/4) — the stability "
+                            "gates fail on draw 23. The 8-cell primary-arm mean is recorded for the scientific record only "
+                            "(not a promotion anchor). Full analysis: "
+                            + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/21_h31b_screen_results_2026-10-03.md", "knowledge/21 (H31b)", external=True))
+            h31b_result = (
+                f'<p><strong>Screen outcome (screen draws 22/23):</strong> '
+                f'8-cell mean proxy DTI by arm — {e(arms_txt)}. '
+                f'Gate: <span class="pill {"yes" if h31b_summary.get("pass_fail") == "PASS" else "no"}">{e(h31b_summary.get("pass_fail"))}</span>. '
+                + decision + ' Raw cells and gates: '
+                + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/h31b_dense_screen/", "evidence/h31b_dense_screen/", external=True) + '.</p>'
+            )
+        else:
+            h31b_result = ('<p><strong>Screen status:</strong> ' + e(status.get("current", {}).get("screen_status", "running or not yet run"))
+                           + ' — raw cells and frozen gates will be published under '
+                           + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/h31b_dense_screen/", "evidence/h31b_dense_screen/", external=True)
+                           + ' on completion.</p>')
+        v3_section = (
+            '<section class="status-banner"><strong>Candidates v3, Workstream A (2026-10-03) — five new untried hypotheses, ranked by expected ΔDTI per implementation cost.</strong> '
+            'Per the owner brief: each names its layers, physical signature/transform, why it could catch a fault missing from the USGS/INGENIOUS catalogue, and how it differs from everything in the reviewed repositories. '
+            'Rank 1 (H31b, dense continuous worming persistence) was preregistered and screened on the spatially-blocked holdout this session — it FAILED its frozen stability gates (draw-unstable), so no slot path opened for it. '
+            'A parallel workstream registered an independent refreshed slate (H41 first) below and screened the same dense-persistence idea as H40 (also FAIL). Planning brackets are not predictions or scores. Register: '
+            + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/registry/hypotheses_v3_2026-10-03.json", "registry/hypotheses_v3_2026-10-03.json", external=True) + ' · note: '
+            + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/20b_candidates_v3_h31b_slate_2026-10-03.md", "knowledge/20b", external=True) + '.</section>'
+            f'<section class="grid" aria-label="Ranked hypotheses v3 (Workstream A)">{v3_cards}</section>'
+            '<section class="card"><p class="kicker">H31b — screened this session (result: FAIL, no slot path)</p><h2>Dense continuous worming persistence (magnetic + gravity)</h2>'
+            '<p>H31 (the binarised predecessor) failed because its persistence columns were nonzero on 0.001–0.084 % of the footprint, so its arms emitted dot sets identical to the control in 8/8 cells. H31b records, for every pixel, the fraction of five upward-continuation heights at which the horizontal-gradient modulus clears the per-height p90 scale threshold, plus deepest-survival height and 0 m / 1200 m edge amplitudes — 12 dense columns (family W) over the frozen 81-column H34 control layout, with a 68-px margin-zero band where the FFT taper cannot be trusted.</p>'
+            f'<p><strong>Frozen gates:</strong> per-draw mean paired gain ≥ +0.005 in ≥3/4 folds on each of draws 22/23, no fold below −0.010, the 8-cell mean must beat the current holdout best (0.14479), 40/40 cells finite; fresh confirmation draws only if the screen passes (moot — the screen FAILED; the reserved confirmation draws 24/25 were consumed by the parallel H35/H40 screen, so any retest needs new draws and a new preregistration). '
+            + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md", "Read the preregistration", external=True) + '</p>'
+            + h31b_result
+            + '</section>'
+        )
+
     cards = []
     for item in hypotheses.get("items", []):
         layers = ", ".join(item.get("layers", []))
@@ -574,13 +641,16 @@ def render_research() -> str:
             f'<p><strong>Cost:</strong> {e(item.get("cost", ""))}</p><p><strong>Data:</strong> {e(item.get("external_data", ""))}</p></aside></div></article>'
         )
     body = (
-        '<section class="status-banner"><strong>Novelty was rechecked again on 2026-10-03 against the current main branch, including the session-3 and session-4 screens.</strong> '
+        '<section class="status-banner"><strong>Novelty was rechecked again on 2026-10-03 against the current main branch, including both session-3 workstreams and the session-4 screen.</strong> '
         'Every arm in the corrected H29 screen failed; the H31 seed-tracked screen and the H34 coverage-emission screen failed; the session-3 H35/H40 screen '
-        '(tip-corridor interaction zones + dense continuous persistence, four arms) failed its frozen gate on all arms. The worming/persistence family is now '
-        'screened in three distinct formulations on identical folds, and the slate carries an explicit decision not to run it a fourth time: a third '
-        'retry would be silent fishing, not science. “Not found” is limited to the reviewed repositories, not all competitors. '
-        'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H41 was promoted from the v3 slate and screened this session.</section>'
-        f'{h35_card}{h41_screen_card()}{strategy_card}<section class="grid" aria-label="Ranked hypotheses">{"".join(cards)}</section>'
+        '(tip-corridor interaction zones + dense continuous persistence, four arms) failed its frozen gate on all arms; the parallel H31b dense-worming screen '
+        '(draws 22/23) failed its stability gates on draw 23. The worming/persistence family is now screened in four distinct formulations across two independent '
+        'workstreams, and the slate carries an explicit decision not to run it a fifth time without a new mechanism: another retry would be silent fishing, not '
+        'science. “Not found” is limited to the reviewed repositories, not all competitors. '
+        'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H41 was promoted from the v3 slate and screened this '
+        'session, and is the first candidate in this family to clear a frozen gate on two arms. Two parallel v3 registers are rendered below: the Workstream-A slate '
+        '(H31b first, screened) and the refreshed Workstream-B slate.</section>'
+        f'{h35_card}{h41_screen_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
         f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
         f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'
@@ -605,7 +675,7 @@ def render_research() -> str:
         + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/06_h29_gate_reconciliation_2026-10-03.md", "Read the archived gate reconciliation", external=True) + '</p>'
         '<p>Historical score claims remain unverified owner/user reports. No leaderboard snapshot is shown or used here. H31 is not designed or tuned to reproduce them.</p>'
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/04_prior_work_audit.md", "Review the predecessor audit", external=True)}</p></section>'
-        '<section class="card"><h2>Model and emission</h2><p>The frozen screen compares a fixed BDE + X1–X3 baseline, a H27 tip control, and factorial additions of magnetic-pseudogravity persistence/drift, gravity persistence/drift, and joint cross-support. All arms share the same holdout masks, samples, classifier family, and emission budget within a cell. The output is scored by the local distance-weighted metric on held-out catalogue traces only.</p></section>'
+        '<section class="card"><h2>Model and emission</h2><p>The frozen H31b screen compared five arms over the frozen 81-column H34 control layout: the base arm, plus magnetic (RTP), pseudogravity-proxy (PSG), isostatic-gravity (GRAV), and all-branch (WALL) additions of the dense worming-persistence family (12 columns, 68-px margin-zero band). The parallel H35/H40 screen used the same family and emission machinery with tip-corridor interaction additions. All arms share the same holdout masks, samples, classifier family (HistGradientBoosting), Hessian-ridge NMS emission, and score-ordered dotting budget within a cell. The output is scored by the local distance-weighted metric on held-out catalogue traces only.</p></section>'
     )
     return page(
         "Research and hypotheses",
@@ -613,7 +683,9 @@ def render_research() -> str:
         "research",
         "Research register · updated from local files",
         "Hypotheses, re-ranked against the current screens.",
-        "The corrected H29, H31, H34 and session-3 H35/H40 screens all failed their frozen gates, as did the session-4 H41 qfaults-corridor screen. The v4 slate ranks the next five ideas by gain per cost. No current file is slot-approved.",
+        "The corrected H29, H31, H34, session-3 H35/H40 and H31b screens all failed their frozen gates; the session-4 H41 "
+        "qfaults-corridor screen passed on two of four arms and its confirmation is recorded in knowledge/26. The v4 slate "
+        "ranks the next five ideas by gain per cost, H43 first. No current file is slot-approved.",
         body,
         a("status.html", "View the evidence feed", class_name="button") + a("sources.html", "Review scientific sources", class_name="button secondary"),
     )
@@ -658,7 +730,14 @@ def render_status() -> str:
 def render_sources() -> str:
     registry = read_json("sources.json")
     items = []
+    hidden = 0
     for source in registry.get("sources", []):
+        if source.get("site_hidden"):
+            # Audit-only registry entries (e.g. a one-off verification of a score the owner
+            # supplied) stay out of the rendered site per the checker's no-claim/no-leaderboard-link
+            # rule; the full entry remains in registry/sources.json on GitHub.
+            hidden += 1
+            continue
         verified = tag("verified page/listing", "yes") if source.get("verified") else tag("not verified", "no")
         used = ''.join(f'<li>{e(value)}</li>' for value in source.get("used_for", []))
         items.append(
@@ -673,7 +752,11 @@ def render_sources() -> str:
     body = (
         '<section class="status-banner"><strong>Source discipline:</strong> every source has a verification status and limitation. '
         '“Verified” means the cited page/listing was read or a checked predecessor record was carried forward; it does not validate a model, competition score, owner-mirror file, or right to use data beyond its stated licence.</section>'
-        '<section class="card"><p class="kicker">Official and research sources</p><h2>Open the primary source yourself</h2>' + ''.join(items) + '</section>'
+        '<section class="card"><p class="kicker">Official and research sources</p><h2>Open the primary source yourself</h2>'
+        + (f'<p class="small">{hidden} registry entr{"y is" if hidden == 1 else "ies are"} audit-only (score-verification records) and shown in '
+           + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/registry/sources.json", "registry/sources.json", external=True)
+           + ' rather than on this page, per the site’s no-claim/no-leaderboard-link rule.</p>' if hidden else '')
+        + ''.join(items) + '</section>'
         '<section class="card"><h2>Data and interpretation caveats</h2><p>Review the project irregularities register for mirror provenance, ambiguous band semantics, unverified score claims, proxy limits, and blocked data.</p><p><a href="irregularities.html">Open the irregularities page →</a></p></section>'
         '<section class="card"><p class="kicker">Terms decision</p><h2>No DrivenData polling or scraping</h2>'
         '<p>DrivenData’s Terms of Use prohibit robots or other automatic access for any purpose, including monitoring/copying, and manual monitoring/copying without prior written consent. No written consent for monitoring is present. This project includes no leaderboard link, live page content, polling, or copied score feed; local status comes only from repository evidence.</p>'

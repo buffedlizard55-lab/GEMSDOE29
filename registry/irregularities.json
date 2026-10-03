@@ -419,6 +419,20 @@
         "knowledge/24_preregistered_h41_screen_2026-10-03.md",
         "registry/sources.json"
       ]
+    },
+    {
+      "id": "IR-29-LEADERBOARD-FETCH-MAIN",
+      "status": "open",
+      "severity": "low",
+      "date": "2026-10-03",
+      "summary": "main carries a record of a one-off fetch of the DrivenData leaderboard by the parallel session-3 workstream, which sits awkwardly against this repository's own no-DrivenData-contact policy line.",
+      "detail": "Merging main into this session's branch surfaced registry/sources.json entry 'dd-leaderboard-verify-2026-10-03' (kind: public competition leaderboard, single fetch, not monitoring), plus a feed event describing the same check as cross-verifying the owner-supplied 0.3195 leader figure. knowledge/03 and AGENTS.md state that DrivenData is not contacted from the sandbox at all (submission upload is the owner's action), and scripts/check_site.py exists precisely to keep the site from linking the score page. Neither statement was edited to hide the record: the source entry is kept because it is the provenance for a score claim already in registry/score_claims.json, and the tension is logged here instead. Session 4 performed no fetch of any drivendata.org URL (the only egress used was pypi.org and api.github.com), and no leaderboard figure in the site is presented as a repo-measured value. Action for the owner: decide whether a single deliberate manual verification is allowed by the rules as you read them, and if it is not, delete the source entry and mark the score claim unverified.",
+      "affected_artifacts": [
+        "registry/sources.json",
+        "registry/score_claims.json",
+        "knowledge/03_drivendata_terms_access_policy.md",
+        "AGENTS.md"
+      ]
     }
   ],
   "updated": "2026-10-03"

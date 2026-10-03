@@ -278,13 +278,13 @@
       "publisher": "DrivenData / University of Portland (J. Lipor)",
       "kind": "official organizer reference implementation",
       "verified": true,
-      "verified_date": "2026-10-03",
+      "verified_date": "2026-10-03 (re-fetched: notebook source read directly)",
       "used_for": [
         "corroborates alpha=0.2/beta=0.8 Tversky loss and the label raster as patch target",
         "shows the organizers' own emission convention (y>0.1 float GeoTIFF on the label grid)",
         "confirms no model/score is published, so no organizer model or score is published to copy"
       ],
-      "caveat": "A reference implementation, not a leaderboard model; it is trained on catalogue labels and therefore inherits the catalogue-gap blind spot."
+      "caveat": "Re-fetched 2026-10-03: the notebook sets alpha = 0.2, beta = 0.8 and TverskyLoss(alpha, beta, mode='binary'); U-Net MC-CV baseline, no model or score published. A reference implementation, not a leaderboard model."
     },
     {
       "id": "forum-11516",
@@ -369,6 +369,38 @@
         "intended external source for hypothesis H47 (map-unit boundary adjacency)"
       ],
       "caveat": "Obtainability is NOT established. What was verified from the sandbox, which can reach only api.github.com: the UGS-GIO/ugs-map-viewer and UGS-GIS organizations exist (real U.S. Utah Geological Survey GIS repositories), while a GitHub user/org lookup for the Nevada Division of Geological Survey returns 404 and a repository search for 'geologic map Nevada survey' returns 0 hits. An earlier draft of this entry named a Nevada 'NV-DGGS' organization; that organization does not exist and the claim was removed the same day it was written. Neither the 1:250k unit polygons themselves nor any download endpoint was fetched or verified; H47 must be treated as blocked until the owner checks the state surveys' own portals."
+    },
+    {
+      "id": "dd-leaderboard-verify-2026-10-03",
+      "title": "Public leaderboard - single verification fetch (owner-requested)",
+      "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
+      "publisher": "DrivenData",
+      "kind": "public competition leaderboard (single fetch, not monitoring)",
+      "verified": true,
+      "verified_date": "2026-10-03 (single manual fetch to verify the owner-supplied 0.3195 claim; not polled, not repeated)",
+      "used_for": [
+        "confirms the owner-supplied then-current top score 0.3195 was displayed as rank #1 at fetch time (12 submissions)",
+        "confirms the 0.2600 and 0.2449 values that are already recorded as owner-reported historical claims also appear on the page; account identities and score-to-file mappings are NOT verified",
+        "context: a multi-team plateau near 0.26 and a frontier cluster near 0.29-0.32 exist at fetch time (no table stored in the repository)"
+      ],
+      "caveat": "One-off human-equivalent fetch at the owner's explicit request (the standing brief supplies the 0.3195 figure and asks for line-by-line verification with links for manual review). Per the Terms-of-Use policy (knowledge/03) there is no polling, no scheduled reads, and no leaderboard table content stored in this repository; the single confirmed value is kept in registry/score_claims.json as an audit record. Open the linked page yourself for the current board.",
+      "site_hidden": true,
+      "note_for_site": "Audit-only: full entry in registry/sources.json; not rendered on the Pages site (no-claim/no-leaderboard-link rule)."
+    },
+    {
+      "id": "gemsdoe25-site-2026-10-03",
+      "title": "GEMSDOE25 research site (highest-scoring historical artifact, D2.8)",
+      "url": "https://buffedlizard55-lab.github.io/GEMSDOE25/",
+      "publisher": "owner (buffedlizard55-lab), prior session site",
+      "kind": "owner's prior-project site (verified for file identity)",
+      "verified": true,
+      "verified_date": "2026-10-03 (site index fetched; file hashes compared locally)",
+      "used_for": [
+        "the site's D2.8 download is byte-identical to this repository's pinned mirror: sha256 91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8, 1,603,424 bytes (docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif)",
+        "H28 conditional metric model context (model-implied N ~ 12,691 hidden truth pixels; dot sweep peaks at d=2.4 px -> the D2.8 file)",
+        "paste-ready Note convention for DrivenData's optional comment field"
+      ],
+      "caveat": "All scores there are owner-reported and unverified; the site itself states the file is not slot-approved. Local bit-for-bit reproduction of dot_thin(H19-5, 1.5) -> d1.5 and dot_thin(H19-5, 2.8) -> D2.8 (44,090 px) is verified by tests/test_sibling_reproduction.py."
     }
   ]
 }

@@ -72,6 +72,22 @@
         }
       }
     },
+    "h31b_dense_screen": {
+      "draws_fitted": [
+        22,
+        23
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 40,
+      "evidence": {
+        "evidence/h31b_dense_screen/design.json": {
+          "present": true,
+          "sha256": "c9160e62861777a3529de2562e4e10df76dae2f464873fdbac2f87f7b7d9a696",
+          "git_revision": "14b8c68ea21c0c182606b27bc7e1d4c18384d6a6"
+        }
+      },
+      "status_note": "Workstream A, merged into main during session 4: screened and failed its frozen stability gates, so its reserved confirmation pair was never authorized."
+    },
     "h41_screen": {
       "draws_fitted": [
         28,
@@ -94,7 +110,7 @@
         31
       ],
       "draws_reserved_not_fitted": [],
-      "raw_cells": 21,
+      "raw_cells": 28,
       "evidence": {
         "evidence/h41_screen/design_confirm.json": {
           "present": true,
@@ -157,6 +173,8 @@
     15,
     20,
     21,
+    22,
+    23,
     24,
     25,
     28,
