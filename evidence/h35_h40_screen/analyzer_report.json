@@ -1,0 +1,179 @@
+{
+  "generated_by": "scripts/analyze_h35_screen.py",
+  "date": "2026-10-03",
+  "gates": {
+    "mean_gain": 0.005,
+    "min_positive_folds": 3,
+    "worst_floor": -0.01,
+    "budget_band": [
+      0.75,
+      1.25
+    ],
+    "holdout_best": 0.14479018210246675
+  },
+  "note": "Independent recomputation from raw cells only; summary cross-checked. Gate constants copied from knowledge/19_preregistered_h35_h40_screen_2026-10-03.md \u00a74 and re-verified against design_screen.json when present.",
+  "integrity_problems": [],
+  "report": {
+    "screen": {
+      "draws": [
+        24,
+        25
+      ],
+      "arms": {
+        "C0_base": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "mean_dti": 0.1439446373557247,
+          "fold_gains": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          },
+          "mean_gain": 0.0,
+          "positive_folds_per_draw": {
+            "24": 0,
+            "25": 0
+          },
+          "worst_fold_gain": 0.0,
+          "sgmc_fold_gains": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          },
+          "budget_ratio_min": 1.0,
+          "budget_ratio_max": 1.0
+        },
+        "A1_h35_struct": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "mean_dti": 0.14575048447958378,
+          "fold_gains": {
+            "0": 0.0006421250454894389,
+            "1": -0.010348898565975845,
+            "2": 0.006093534994070088,
+            "3": 0.010836627021852507
+          },
+          "mean_gain": 0.0018058471238590473,
+          "positive_folds_per_draw": {
+            "24": 1,
+            "25": 3
+          },
+          "worst_fold_gain": -0.010348898565975845,
+          "sgmc_fold_gains": {
+            "0": -0.0015146865921537994,
+            "1": 0.0018753875288093358,
+            "2": 0.00597192358634413,
+            "3": -0.0052153794586147495
+          },
+          "budget_ratio_min": 0.9818381948266374,
+          "budget_ratio_max": 1.010295054128635,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 2,
+          "above_holdout_best": true
+        },
+        "A2_h35_corrob": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "mean_dti": 0.14853308785129804,
+          "fold_gains": {
+            "0": 0.003638084887249815,
+            "1": -0.00370776738286957,
+            "2": 0.0076932711286543665,
+            "3": 0.01073021334925861
+          },
+          "mean_gain": 0.0045884504955733055,
+          "positive_folds_per_draw": {
+            "24": 2,
+            "25": 4
+          },
+          "worst_fold_gain": -0.00370776738286957,
+          "sgmc_fold_gains": {
+            "0": 0.004501615616895688,
+            "1": 0.002459366076621061,
+            "2": 0.008368497018625298,
+            "3": -0.0041168299333254055
+          },
+          "budget_ratio_min": 0.9864133563615429,
+          "budget_ratio_max": 1.0119932073869666,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 3,
+          "above_holdout_best": true
+        },
+        "A3_h40_persist": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "mean_dti": 0.14442737611357015,
+          "fold_gains": {
+            "0": 0.0003616091717203451,
+            "1": -0.0032460691719927437,
+            "2": -0.004036416915282198,
+            "3": 0.008851831946936284
+          },
+          "mean_gain": 0.00048273875784542175,
+          "positive_folds_per_draw": {
+            "24": 2,
+            "25": 2
+          },
+          "worst_fold_gain": -0.004036416915282198,
+          "sgmc_fold_gains": {
+            "0": 0.005089003960435892,
+            "1": -0.0011090286780697928,
+            "2": -0.0004992822611217529,
+            "3": 0.00010320137249897332
+          },
+          "budget_ratio_min": 0.9865209085119933,
+          "budget_ratio_max": 1.0111447440836543,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 2,
+          "above_holdout_best": false
+        },
+        "A4_union": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "mean_dti": 0.14956557429047157,
+          "fold_gains": {
+            "0": 0.0028871581673930446,
+            "1": -0.00014821188877842117,
+            "2": 0.004400762396773145,
+            "3": 0.015344039063599546
+          },
+          "mean_gain": 0.0056209369347468285,
+          "positive_folds_per_draw": {
+            "24": 2,
+            "25": 4
+          },
+          "worst_fold_gain": -0.00014821188877842117,
+          "sgmc_fold_gains": {
+            "0": 0.0005025657924392357,
+            "1": 0.0035268600901426084,
+            "2": 0.0092365123651202,
+            "3": -0.005036921967148306
+          },
+          "budget_ratio_min": 0.9880297193175565,
+          "budget_ratio_max": 1.0148588410104011,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 3,
+          "above_holdout_best": true
+        }
+      },
+      "summary_cross_check": {
+        "C0_base.mean_dti": 1.0,
+        "A1_h35_struct.mean_gain": 1.0,
+        "A1_h35_struct.mean_dti": 1.0,
+        "A1_h35_struct.G1_SCREEN_PASS": 1.0,
+        "A2_h35_corrob.mean_gain": 1.0,
+        "A2_h35_corrob.mean_dti": 1.0,
+        "A2_h35_corrob.G1_SCREEN_PASS": 1.0,
+        "A3_h40_persist.mean_gain": 1.0,
+        "A3_h40_persist.mean_dti": 1.0,
+        "A3_h40_persist.G1_SCREEN_PASS": 1.0,
+        "A4_union.mean_gain": 1.0,
+        "A4_union.mean_dti": 1.0,
+        "A4_union.G1_SCREEN_PASS": 1.0
+      }
+    }
+  },
+  "design_gate_match": true
+}

@@ -197,8 +197,9 @@ def render_home() -> str:
         banner = (
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
-            'H34 failed its frozen primary proxy gate while passing its secondary off-catalogue class; the fractional factorial is complete. H31 also failed its screen on feature sparsity. '
-            'The current corrected H29 screen failed every preregistered arm; no confirmation models were fit. See the local evidence feed and research report for the complete records. '
+            'Session 3 pre-registered and screened H35 (tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) on four folds × two draws: '
+            'all four arms failed the frozen gate, the union arm by fold-robustness alone, and no confirmation was fit. Earlier records stand: H34 failed its primary proxy gate, the fractional factorial '
+            'is complete, H31 failed on feature sparsity, and the corrected H29 screen failed every arm. See the local evidence feed and research report for the complete records. '
             'Every download is format-verified locally and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
         )
         main_artifact = (
@@ -250,7 +251,7 @@ def render_home() -> str:
     body = (
         f'{render_downloads()}{banner}{metrics}<section class="grid" aria-label="Submission artifacts">{main_artifact}{historical_card}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">Research, not score-chasing</p><h2>Test the unseen-fault hypothesis first</h2>'
-        '<p>H29 has now been rerun with corrected bounded persistence and preregistration-compliant nearest-valid FFT padding; every preregistered arm failed, so no confirmation fits were run. The original run is archived as history. H31 is a separate pseudogravity/edge-drift screen and also failed, with sparse persistence features diagnosed as the cause.</p>'
+        '<p>H29 has now been rerun with corrected bounded persistence and preregistration-compliant nearest-valid FFT padding; every preregistered arm failed, so no confirmation fits were run. The original run is archived as history. H31 is a separate pseudogravity/edge-drift screen and also failed, with sparse persistence features diagnosed as the cause. Session 3 rebuilt persistence as a dense continuous field (H40) and added new physics-anchored interaction fields (H35); the frozen four-arm screen failed all arms, closing the worming-family line in three formulations.</p>'
         '<p><strong>Holdout DTI is a catalogue-gap proxy, not the official competition score.</strong> The public competition uses expert-labelled '
         'faults unavailable to these local folds, and official private/final-round results are not observed here.</p>'
         '<p><a href="research.html">Read the ranked hypotheses and scientific caveats →</a></p></article>'
@@ -362,6 +363,52 @@ def render_research() -> str:
     h31_design = json.loads((ROOT / "evidence" / "h31_worm_screen" / "design.json").read_text(encoding="utf-8"))
     h31_gate = h31_design["promotion_gate"]
     h31_fold_count = len(h31_design["spatial_folds"])
+    h35_summary = json.loads((ROOT / "evidence" / "h35_h40_screen" / "summary_screen.json").read_text(encoding="utf-8"))
+    h35_design = json.loads((ROOT / "evidence" / "h35_h40_screen" / "design_screen.json").read_text(encoding="utf-8"))
+    h35_analyzer = json.loads((ROOT / "evidence" / "h35_h40_screen" / "analyzer_report.json").read_text(encoding="utf-8"))
+    h35_gates = h35_summary["gates"]
+    d28 = json.loads((ROOT / "evidence" / "d28_geometry.json").read_text(encoding="utf-8"))
+    arm_rows = []
+    for arm in ("A1_h35_struct", "A2_h35_corrob", "A3_h40_persist", "A4_union"):
+        adm = h35_summary["arms"][arm]
+        arm_rows.append(
+            f'<tr><td>{e(arm)}</td><td>{adm["mean_gain"]:+.7f}</td>'
+            f'<td>{", ".join(f"{g:+.5f}" for g in adm["fold_gains"])}</td>'
+            f'<td>{", ".join(str(v) for v in adm["positive_folds_per_draw"])} (need {h35_gates["min_positive_folds"]})</td>'
+            f'<td>{adm["worst_fold_gain"]:+.7f}</td>'
+            f'<td>{tag("G1 FAIL", "no") if not adm["G1_SCREEN_PASS"] else tag("G1 PASS", "yes")}</td></tr>'
+        )
+    h35_card = (
+        '<section class="grid"><article class="card span-12"><p class="kicker">Session-3 frozen screen · every number read from evidence/h35_h40_screen/</p>'
+        '<h2>H35 interaction zones &amp; H40 dense persistence: all four arms FAIL G1</h2>'
+        f'<p>Pre-registered (sha256 {e(h35_design["preregistration"]["sha256"][:12] + "…")}) before any fit; 4 folds × 2 draws (24/25) × 5 arms, '
+        f'{h35_summary["elapsed_s"]:.1f} s, clean tree at {e(h35_summary["git"]["revision"][:7])}. Gates: mean paired gain ≥ {h35_gates["mean_gain"]}, ≥{h35_gates["min_positive_folds"]}/4 folds positive on both draws, '
+        f'worst fold ≥ {h35_gates["max_fold_loss"]}, emission within ×[{h35_gates["budget_ratio_band"][0]}, {h35_gates["budget_ratio_band"][1]}] of control.</p>'
+        '<table><thead><tr><th>arm</th><th>mean gain</th><th>fold gains (NW, NE, SW, SE)</th><th>positive folds (d24, d25)</th><th>worst fold</th><th>gate</th></tr></thead>'
+        f'<tbody>{"".join(arm_rows)}</tbody></table>'
+        f'<p>The A4 union arm is the notable near-miss: its mean gain (+{h35_summary["arms"]["A4_union"]["mean_gain"]:.7f}) clears the effect bar and its worst fold '
+        f'({h35_summary["arms"]["A4_union"]["worst_fold_gain"]:+.7f}) clears the floor — only the draw-24 fold-robustness rule rejects it, exactly the fold-concentration pattern the preregistration pre-declared as noise. '
+        'The independent analyzer recomputed every gate from raw cells and reported '
+        f'{e("zero problems" if not h35_analyzer["integrity_problems"] else str(h35_analyzer["integrity_problems"]))}. '
+        'No confirmation draws (26/27) were fit; no file was emitted; no weekly slot was used. Proxy outcome only — not a competition score.</p>'
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/19_preregistered_h35_h40_screen_2026-10-03.md", "Read the frozen preregistration", external=True)} · '
+        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/21_h35_h40_results_2026-10-03.md", "Read the results document", external=True) + ' · '
+        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/20_candidates_v3_2026-10-03.md", "Read the refreshed candidate slate", external=True) + '</p></article>'
+        '<article class="card span-6"><p class="kicker">Emission geometry receipt</p><h2>Why fewer, better-placed dots scored higher</h2>'
+        f'<p>Re-derived deterministically from the owner-mirrored rasters (script: <code>scripts/audit_d28_geometry.py</code> → <code>evidence/d28_geometry.json</code>): the parent emission has '
+        f'{d28["files"]["h19_5_parent"]["emitted_px"]:,} pixels; the thinned d1.5 file keeps {d28["files"]["d1_5"]["emitted_px"]:,} (×{d28["files"]["d1_5"]["share_of_parent"]:.3f}) and captures '
+        f'{d28["files"]["d1_5"]["parent_kernel_captured_share"] * 100:.2f} % of the parent mass under the metric’s ±3-pixel triangular kernel ({d28["files"]["d1_5"]["credit_per_emitted_px"]:.4f} credit per emitted pixel); '
+        f'the sparsest d2.8 file keeps {d28["files"]["d2_8"]["emitted_px"]:,} (×{d28["files"]["d2_8"]["share_of_parent"]:.3f}), captures {d28["files"]["d2_8"]["parent_kernel_captured_share"] * 100:.2f} %, and earns '
+        f'{d28["files"]["d2_8"]["credit_per_emitted_px"]:.4f} credit per emitted pixel — every pixel isolated ({d28["files"]["d2_8"]["isolated_share"] * 100:.1f} %), none on the catalogue '
+        f'({d28["files"]["d2_8"]["catalogue_overlap_px"]} overlap pixels). The kernel credit per emitted pixel rises monotonically as the emission thins toward the trace: this is why a 36 % emission can beat a 100 % emission '
+        'under the published metric, and it is a property of the metric, not of any model. Owner-reported competition scores for these files are unverified claims and are deliberately absent here.</p></article>'
+        '<article class="card span-6"><p class="kicker">What it means</p><h2>Three worming-family screens, three consistent negatives</h2>'
+        '<p>H29 (sparse persistence features), H31 (seed-tracked persistence), and now H40 (dense continuous persistence) plus the new H35 tip-corridor interaction fields all failed the same fixed effect bar on the same '
+        'spatial folds. The mechanisms are not disproven science — the caveat that this grid’s most persistent edges run E–W (survey-parallel, the H29 diagnostic) travels with every verdict — but on this pipeline the '
+        'frozen structural baseline already extracts most of that information. Remaining independent levers are label-side or other-physics: the v3 slate promotes H41 (slip-rate-weighted INGENIOUS off-catalogue trace '
+        'centroids, data already mirrored) to rank 1, with H36 (MT edges), H37 (geothermometry residuals), H42 (measured-period line audit) and the H38/H39 filter-role pair behind it.</p></article></section>'
+    )
+
     cards = []
     for item in hypotheses.get("items", []):
         layers = ", ".join(item.get("layers", []))
@@ -377,8 +424,12 @@ def render_research() -> str:
             f'<p><strong>Cost:</strong> {e(item.get("cost", ""))}</p><p><strong>Data:</strong> {e(item.get("external_data", ""))}</p></aside></div></article>'
         )
     body = (
-        '<section class="status-banner"><strong>Novelty was rechecked against the latest main branch.</strong> Every arm in the corrected H29 screen failed; H31’s separate screen also failed. H32 is the next unimplemented candidate. “Not found” is limited to the reviewed repositories, not all competitors.</section>'
-        f'<section class="grid" aria-label="Ranked hypotheses">{"".join(cards)}</section>'
+        '<section class="status-banner"><strong>Novelty was rechecked against the latest main branch, including the session-3 screen.</strong> '
+        'Every arm in the corrected H29 screen failed; the H31 seed-tracked screen and the H34 coverage-emission screen failed; the session-3 H35/H40 screen '
+        '(tip-corridor interaction zones + dense continuous persistence, four arms) failed its frozen gate on all arms. The worming/persistence family is now '
+        'screened in three distinct formulations on identical folds. “Not found” is limited to the reviewed repositories, not all competitors. '
+        'The refreshed untried slate (H41 first) is in knowledge/20_candidates_v3.</section>'
+        f'{h35_card}<section class="grid" aria-label="Ranked hypotheses">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
         f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
         f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'
@@ -411,7 +462,7 @@ def render_research() -> str:
         "research",
         "Research register · updated from local files",
         "Hypotheses, re-ranked against H29.",
-        "Every tested H29 arm failed the corrected screen; the separate H31 screen also failed. H32 is the first unimplemented candidate, and H33 remains blocked. No current file is slot-approved.",
+        "The corrected H29 screen, the H31 screen, the H34 emission screen and the session-3 H35/H40 screen (all four arms) failed their frozen gates. H41 leads the refreshed untried slate. No current file is slot-approved.",
         body,
         a("status.html", "View the evidence feed", class_name="button") + a("sources.html", "Review scientific sources", class_name="button secondary"),
     )

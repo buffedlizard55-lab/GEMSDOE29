@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "review_date": "2026-10-03",
-  "novelty_boundary": "The initial candidate slate was drafted before the H31 feature prototype was implemented on arena/01a10075-gemsdoe29, based at ad130c8. After rebasing onto current main, the review includes the in-repository H29 raw-RTP/gravity worming screen. H31 is not a novel worming category: its regularized RTP vertical-integration transform and explicit drift increment remain unfit and untested on spatial holdouts. After the H34 screen (2026-10-03), H34 is reported as a negative method result, and H35-H39 are registered as the next candidate slate (H35 interaction zones, H36 MT conductance edges, H37 geothermometry, H38 worm convergence/azimuth, H39 Euler depths). Novelty claims apply only to the reviewed repositories, not all competitors.",
+  "novelty_boundary": "The initial candidate slate was drafted before the H31 feature prototype was implemented on arena/01a10075-gemsdoe29, based at ad130c8. After rebasing onto current main, the review includes the in-repository H29 raw-RTP/gravity worming screen. H31 is not a novel worming category: its regularized RTP vertical-integration transform and explicit drift increment remain unfit and untested on spatial holdouts. After the H34 screen (2026-10-03), H34 is reported as a negative method result, and H35-H39 are registered as the next candidate slate (H35 interaction zones, H36 MT conductance edges, H37 geothermometry, H38 worm convergence/azimuth, H39 Euler depths). Novelty claims apply only to the reviewed repositories, not all competitors. Session 3 (2026-10-03): H35 (tip-corridor stress-shadow interaction) and H40 (dense continuous persistence) were pre-registered (knowledge/19), implemented, and screened on draws 24/25; all four arms failed G1 (knowledge/21, evidence/h35_h40_screen/). The untried slate re-ranked in knowledge/20 (H41, H36, H37, H42, H38/H39 merged). Novelty claims apply only to the reviewed repositories, not all competitors.",
   "items": [
     {
       "id": "H32",
       "rank": 1,
       "title": "Asymmetric fault-scarp cross-profile shape",
-      "status": "unimplemented; first candidate for a new preregistration after the main-branch review",
+      "status": "unimplemented; priority superseded after the H35/H40 screen by the v3 slate (knowledge/20); first in line if H41 fails its own gate",
       "layers": [
         "L_step_max",
         "L_cross_max",
@@ -19,7 +19,7 @@
       ],
       "signature": "Compare opposing-face steepness and width at a coherent terrain step; a one-sided scarp may be more fault-like than a symmetric channel bank, ridge or bench.",
       "why_unmapped": "Fault scarps may retain terrain expression even when USGS/INGENIOUS trace layers omit the fault.",
-      "difference": "At GEMSDOE25 commit efc4be7bb3cfdf2def12a7fb83284d3311ac9220, the code dequantizes downface_max/upface_max as separate inputs; H30-1 uses a step × cross-profile × coherence composite and H30-3 registers cross-profile scale persistence. The raw 1-m scarp-template idea is deferred. A repository-wide search of code, tests, hypotheses and knowledge at that commit found no normalized opposing-face asymmetry ratio. H32 tests that specific derived shape ratio, not another scarp-magnitude product.",
+      "difference": "At GEMSDOE25 commit efc4be7bb3cfdf2def12a7fb83284d3311ac9220, the code dequantizes downface_max/upface_max as separate inputs; H30-1 uses a step \u00d7 cross-profile \u00d7 coherence composite and H30-3 registers cross-profile scale persistence. The raw 1-m scarp-template idea is deferred. A repository-wide search of code, tests, hypotheses and knowledge at that commit found no normalized opposing-face asymmetry ratio. H32 tests that specific derived shape ratio, not another scarp-magnitude product.",
       "planning_delta_dti": "0 to +0.006 (low-confidence planning bracket only; not an observed result)",
       "cost": "about 1 day; uses existing owner-derived 3DEP descriptors",
       "external_data": "none for an initial test; any new DEM tiles would require free official USGS 3DEP availability and coverage verification first",
@@ -38,7 +38,7 @@
       "why_unmapped": "A buried susceptibility boundary may yield a coherent gravity-equivalent edge and scale-dependent lateral path where no surface trace is mapped in USGS/INGENIOUS; this is a structural hypothesis, not a depth/fault proof.",
       "difference": "The H29 experiment already ran raw-RTP and isostatic-gravity worming, joint persistence, and persistence as gate/rank/head features; all four arms failed its +0.005 proxy bar. H31 tests only a different magnetic transform (regularized vertical integration before continuation) and an explicit drift feature. It must not be presented as a first test of worming or persistence.",
       "planning_delta_dti": "0 to +0.003 (low-confidence planning bracket, reduced after the H29 negative proxy screen)",
-      "cost": "about 1–2 days for restored inputs, cache rebuild, paired screen and audit; feature code exists but no fit has run",
+      "cost": "about 1\u20132 days for restored inputs, cache rebuild, paired screen and audit; feature code exists but no fit has run",
       "external_data": "none required for this first test",
       "validation": "four spatial catalogue-gap folds; two screen draws; fresh confirmation draws only after all gates pass"
     },
@@ -56,9 +56,9 @@
       ],
       "signature": "Detect magnetic edge energy aligned to repeated survey flight lines and down-rank it unless it persists across continuation scales or is corroborated by another physical field.",
       "why_unmapped": "A real structural edge missed by USGS/INGENIOUS should not be systematically locked to the survey-flight geometry; geometry-aware artifact control could preserve cross-line fault evidence while suppressing acquisition imprints. This is an artifact-control test, not a direct fault detector.",
-      "difference": "H29 measured an E–W/N–S persistence audit and registered a spectral-notch experiment (H29-3); H33 would instead use verified spatial flight-path geometry as a per-location nuisance control. The concept is adjacent to prior line-artifact work and is lower-ranked/blocked until the official binary and its schema/CRS/coverage/licence are validated.",
+      "difference": "H29 measured an E\u2013W/N\u2013S persistence audit and registered a spectral-notch experiment (H29-3); H33 would instead use verified spatial flight-path geometry as a per-location nuisance control. The concept is adjacent to prior line-artifact work and is lower-ranked/blocked until the official binary and its schema/CRS/coverage/licence are validated.",
       "planning_delta_dti": "0 to +0.005 (very-low-confidence planning bracket only)",
-      "cost": "about 2–4 days after prerequisites",
+      "cost": "about 2\u20134 days after prerequisites",
       "external_data": "USGS ScienceBase DOI 10.5066/P93LGLVQ lists flight-path ZIPs, but binaries, schema, CRS, coverage and rights remain unvalidated. Do not download/use until verified.",
       "validation": "blocked until official files are obtained through permitted means and their bytes, schema, CRS, coverage and licence are independently checked"
     },
@@ -83,9 +83,9 @@
     },
     {
       "id": "H35",
-      "rank": 1,
+      "rank": "screened",
       "title": "Structural-interaction-zone field with dilation-tendency weighting",
-      "status": "specified; not implemented; ranked first for the next preregistration",
+      "status": "implemented and screened 2026-10-03: G1 FAIL. A1 structural arm mean paired gain +0.0018058 (1/4 folds positive on draw 24, worst fold -0.0103489); A2 corroboration arm +0.0045885 failed the +0.005 mean and 3/4-both-draws rules; A4 union +0.0056209 passed mean/floor/budget but only 2/4 folds positive on draw 24. No confirmation draws were fit. Evidence: evidence/h35_h40_screen/ + knowledge/21_h35_h40_results_2026-10-03.md",
       "layers": [
         "visible-catalogue geometry (labels/existing_faults)",
         "L_step_max/L_cross_max/L_coh100/L_strike_c2/s2",
@@ -95,7 +95,7 @@
       ],
       "signature": "Explicit interaction-zone objects: overlapping sub-parallel trace tips inside a 0.5-3 km relay window, terminations/horse-tails, and normal x transverse intersections; each weighted by dilation tendency from the regional stress field and corroborated by an independent field (scarp step+coherence, potential-field ridge, or radiometric contrast).",
       "why_unmapped": "Step-overs/relay ramps host 32-47% of Great Basin geothermal systems and terminations 22-25%, while range-front faults host ~1% (Faulds & Hinz 2015; Gidden & Faulds 2025). Catalogue mapping follows through-going strands and systematically misses short overlapping strands - the geometry the organizer says the hidden labels add.",
-      "difference": "Family E is distance/orientation/density around visible faults; H27_tip is a single-tip continuation; H30-1 (paired-tip bridge x scarp) failed fresh-draw confirmation. H35 pairs tips inside a relay window, weights by dilation tendency rather than distance-to-trace, and adds transverse-intersection objects.",
+      "difference": "Original: no reviewed repository uses tip-corridor stress-shadow interaction fields. Result: fields were dense enough to test (relay nonzero 2.2% on the visible NW fold; 1,389 accepted corridors of 25,831 candidate pairs) and emission changed in 32/32 cells; the increment still failed every robustness reading. The sigma3 105 deg source basis is recorded in knowledge/19 section 6.",
       "planning_delta_dti": "0 to +0.030 (low-confidence planning bracket; not observed)",
       "cost": "about 1-2 days",
       "external_data": "optional USGS slip/dilation-tendency shapefile (Siler 2022, DOI 10.5066/P9YL58W6); metadata verified, sciencebase.gov unreachable from the sandbox, so the hypothesis is written to run without it",
@@ -140,9 +140,9 @@
     },
     {
       "id": "H38",
-      "rank": 4,
+      "rank": 5,
       "title": "Worm convergence size and cross-field azimuth consistency",
-      "status": "specified; not implemented",
+      "status": "specified; not implemented; merged-downgrade with H39 in the v3 slate (filter role, not feature role)",
       "layers": [
         "rtp magnetic",
         "iso_grav_anom gravity",
@@ -173,6 +173,61 @@
       "cost": "about 1-2 days",
       "external_data": "none",
       "validation": "report the SI/window sensitivity table alongside the screen"
+    },
+    {
+      "id": "H40",
+      "rank": "screened",
+      "title": "Dense continuous multiscale upward-continuation persistence surfaces",
+      "status": "implemented and screened 2026-10-03: G1 FAIL. A3 mean paired gain +0.0004827 (2/4 folds positive on both draws) - inert increment, not disproven science; the E-W persistence caveat from the H29 diagnostic travels with the verdict. Cache work/h40_dense_persistence.npy sha256 444cc851...; evidence: evidence/h35_h40_screen/ and knowledge/21_h35_h40_results_2026-10-03.md",
+      "layers": [
+        "mag_anom_abs",
+        "iso_grav_anom",
+        "rtp",
+        "tmi"
+      ],
+      "signature": "Per-pixel min/mean edge magnitude and mean deep-scale magnitude over a frozen continuation ladder (0,100,200,400,800,1200 m) computed as dense smoothed surfaces with nearest-valid padding, not sparse peak sets; depth-proportionality prior for source-bounded edges.",
+      "why_unmapped": "A blind or buried source boundary retains scale-invariant edge amplitude where surface-expression detectors and the supplied catalogue have nothing; dense surfaces avoid the H31 sparsity failure.",
+      "difference": "H29 used sparse bounded persistence of worm-like tracks; H31 used seed-tracked persistence columns (0.001-0.084% nonzero). H40 is the dense continuous replacement, built from the same frozen Hornby/Boschetti/Horowitz 1999 motivation (doi:10.1111/j.1365-2478.1999.ggg031.x) but as always-defined fields. It failed by being flat, not by being empty (0/32 identical-emission cells).",
+      "planning_delta_dti": "measured +0.0004827 on the screen proxy (negative result; no planning bracket remains)",
+      "cost": "implemented; ~26 s cache build; 1,475 s full screen",
+      "external_data": "none; competition bands only",
+      "validation": "frozen screen complete; promotion path closed unless a NEW mechanism is preregistered"
+    },
+    {
+      "id": "H41",
+      "rank": 1,
+      "title": "Slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only",
+      "status": "proposed in the v3 slate (knowledge/20); not implemented; requires its own preregistration before any fit",
+      "layers": [
+        "gdr_qfaults_traces.csv (1,126 trace centroids with slip_rate; attributes-only, hash-pinned)",
+        "family A/B ridges",
+        "supplied catalogue mask (off-catalogue restriction)"
+      ],
+      "signature": "Sigma 2.5 km slip-rate-weighted support field from off-catalogue Quaternary-trace centroids, raw + scarp-corroborated + strike-smeared corridor variants.",
+      "why_unmapped": "INGENIOUS is the program producing the young-faulting inventory the supplied catalogue has not fully absorbed inside the window; the organizers state hidden labels include newly mapped geometry of existing systems - near-trace habitat is the most on-mechanism zero-download prior.",
+      "difference": "Nothing in the reviewed repos touches gdr_qfaults_traces.csv; family E is distance to the SUPPLIED catalogue, D_* thermal-point features are wells/springs, not slip-rate-weighted trace centroids. Centroids only (no geometry) caps the ceiling honestly at ~km-scale priors.",
+      "planning_delta_dti": "0 to +0.02 (low confidence; judgement range, never a gate)",
+      "cost": "about half a day; all inputs local and hash-pinned",
+      "external_data": "none required; upgrade path via full GDR 1391 trace geometry (public, CC BY 4.0) pending owner-side fetch + mirroring",
+      "validation": "four spatial folds; two screen draws (proposed 28/29) + fresh confirmation (30/31) under a new preregistration with the same G1/G2/G3 structure"
+    },
+    {
+      "id": "H42",
+      "rank": 4,
+      "title": "Measured-period acquisition-line spectral audit, then a one-shot notch",
+      "status": "proposed in the v3 slate (refines the registered H29-3 idea); not implemented; official flight-path binary (doi:10.5066/P93LGLVQ) remains unfetchable in-sandbox, so the assumed-spacing variant stays blocked",
+      "layers": [
+        "mag_anom_abs",
+        "rtp",
+        "iso_grav_anom"
+      ],
+      "signature": "Estimate the dominant cross-line wavenumber per flight-line block from azimuthally banded power spectra; notch only if the peak exceeds the local continuum by a frozen margin; recompute A-ridges once.",
+      "why_unmapped": "If acquisition imprint dominates the ridge operator, real cross-line faults are systematically under-emitted everywhere; removing it improves every downstream field, which is why the audit has value as a data-quality receipt even on a null result.",
+      "difference": "H29-3 registered a notch with ASSUMED spacing (200/400 m); nothing in the family measures the period from the data. The measured-period audit is new and self-verifying.",
+      "planning_delta_dti": "0 to +0.008 (very low confidence; data-quality value regardless)",
+      "cost": "about one day after a spectrum module is written; inputs local",
+      "external_data": "none for the measured audit; GeoDAWN flight-path binary only for the blocked assumed-spacing variant",
+      "validation": "screen as a frozen column swap on the A-family ridge set; same gate structure"
     }
   ]
 }

@@ -1,0 +1,110 @@
+{
+  "stage": "screen",
+  "elapsed_s": 1475.0808956623077,
+  "arms": {
+    "A1_h35_struct": {
+      "mean_gain": 0.0018058471238590473,
+      "fold_gains": [
+        0.0006421250454894389,
+        -0.010348898565975845,
+        0.006093534994070088,
+        0.010836627021852507
+      ],
+      "positive_folds_per_draw": [
+        1,
+        3
+      ],
+      "worst_fold_gain": -0.010348898565975845,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": 0.0002793112660962292,
+      "sgmc_positive_folds": 2,
+      "mean_dti": 0.14575048447958378,
+      "G1_SCREEN_PASS": false,
+      "G3_holdout_check_note": "screen stage does not evaluate G3; see summary + promotion doc"
+    },
+    "A2_h35_corrob": {
+      "mean_gain": 0.0045884504955733055,
+      "fold_gains": [
+        0.003638084887249815,
+        -0.00370776738286957,
+        0.0076932711286543665,
+        0.01073021334925861
+      ],
+      "positive_folds_per_draw": [
+        2,
+        4
+      ],
+      "worst_fold_gain": -0.00370776738286957,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": 0.0028031621947041604,
+      "sgmc_positive_folds": 3,
+      "mean_dti": 0.14853308785129804,
+      "G1_SCREEN_PASS": false,
+      "G3_holdout_check_note": "screen stage does not evaluate G3; see summary + promotion doc"
+    },
+    "A3_h40_persist": {
+      "mean_gain": 0.00048273875784542175,
+      "fold_gains": [
+        0.0003616091717203451,
+        -0.0032460691719927437,
+        -0.004036416915282198,
+        0.008851831946936284
+      ],
+      "positive_folds_per_draw": [
+        2,
+        2
+      ],
+      "worst_fold_gain": -0.004036416915282198,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": 0.00089597359843583,
+      "sgmc_positive_folds": 2,
+      "mean_dti": 0.14442737611357015,
+      "G1_SCREEN_PASS": false,
+      "G3_holdout_check_note": "screen stage does not evaluate G3; see summary + promotion doc"
+    },
+    "A4_union": {
+      "mean_gain": 0.0056209369347468285,
+      "fold_gains": [
+        0.0028871581673930446,
+        -0.00014821188877842117,
+        0.004400762396773145,
+        0.015344039063599546
+      ],
+      "positive_folds_per_draw": [
+        2,
+        4
+      ],
+      "worst_fold_gain": -0.00014821188877842117,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": 0.0020572540701384347,
+      "sgmc_positive_folds": 3,
+      "mean_dti": 0.14956557429047157,
+      "G1_SCREEN_PASS": false,
+      "G3_holdout_check_note": "screen stage does not evaluate G3; see summary + promotion doc"
+    },
+    "C0_base": {
+      "mean_dti": 0.1439446373557247
+    }
+  },
+  "gates": {
+    "mean_gain": 0.005,
+    "min_positive_folds": 3,
+    "max_fold_loss": -0.01,
+    "budget_ratio_band": [
+      0.75,
+      1.25
+    ],
+    "sgmc_min_positive_folds": 3,
+    "holdout_best": 0.14479018210246675
+  },
+  "git": {
+    "revision": "1442d1bf27956aaf88adb00f9a9ae940e103ebc3",
+    "branch": "arena/01a102a1-gemsdoe29",
+    "dirty_worktree": false
+  },
+  "interpretation": "Proxy outcome only: masked DTI on hidden catalogue components plus an SGMC off-catalogue class. Neither is the organizer metric; no competition score is claimed or implied."
+}
