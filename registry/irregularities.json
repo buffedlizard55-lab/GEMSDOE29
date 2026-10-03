@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "updated_local_date": "2026-10-03",
-  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits. 2026-10-03 (session 4): +IR-29-CHECK-TEMPLATE-ROOT, +IR-29-QFAULTS-RECENCY-BIN, +IR-29-H41-SMOKE-OVERLAP; IR-29-SANDBOX-NET re-probed; IR-CHECK-SUBMISSION-TEMPLATE-PATH superseded.",
+  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits. 2026-10-03 (session 4): +IR-29-CHECK-TEMPLATE-ROOT, +IR-29-QFAULTS-RECENCY-BIN, +IR-29-H41-SMOKE-OVERLAP; IR-29-SANDBOX-NET re-probed; IR-CHECK-SUBMISSION-TEMPLATE-PATH superseded. 2026-10-03 (session 4): +IR-29-UNVERIFIED-HOSTS (self-reported, corrected same day).",
   "items": [
     {
       "id": "IR-DATA-01",
@@ -335,6 +335,15 @@
       "detail": "To validate the runner end-to-end, fold 0 (NW) draw 28 with all five arms was computed once at 2026-10-03T2x UTC into /tmp/smoke_cells.jsonl. Draw 28 fold NW is also part of the frozen H41 screen. The preregistration and the implementation were already written and frozen before that run, and the formal screen recomputes all 40 cells from scratch with the frozen gates.",
       "impact": "A single pre-run cell outcome was visible before the formal screen started (A1 +0.0065, A2 +0.0041, A3 +0.0091, A4 +0.0125 relative to C0_base in that one cell). It creates a temptation to stop early; the gate requires all 8 cells per draw and 3-of-4 positive folds in each draw, and no parameter, arm, or gate was edited afterwards.",
       "mitigation": "Recorded here and in knowledge/26 before the screen summary was written. Future smokes must use a draw outside the frozen draw set (e.g. 99)."
+    },
+    {
+      "id": "IR-29-UNVERIFIED-HOSTS",
+      "severity": "medium",
+      "status": "fixed same session; process note kept for future sessions",
+      "subject": "two unverified hostnames were written into the v4 slate before being checked",
+      "detail": "While specifying H47 (state geologic-map unit adjacency) the draft named a Nevada 'NV-DGGS' GitHub organization and the portals ngs.unr.edu / geology.utah.gov. Checking the only reachable authority from this sandbox (api.github.com) showed users/NV-DGGS returns 404 and a repository search for 'geologic map Nevada survey' returns 0 hits; the Utah organizations UGS-GIO and UGS-GIS do exist. The portal hostnames are not resolvable from the sandbox at all, so they were never evidence.",
+      "impact": "A candidate in the slate would have been handed to a future session with a fake data source and an unverified URL.",
+      "mitigation": "Both claims were removed the same day. registry/sources.json id state-geologic-maps now states exactly what was and was not verified, knowledge/25 \u00a7H47 repeats it, and H47 is marked blocked rather than obtainable. Standing rule restated for future sessions: an external source may be named only with a fetched-and-quoted page or an explicit verified=false + \"not verified here\" caveat."
     }
   ]
 }

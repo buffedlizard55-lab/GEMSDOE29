@@ -34,7 +34,13 @@
 
 ## Start here
 
-- **[Session 3 results (read first)](knowledge/21_h35_h40_results_2026-10-03.md)** — H35/H40 frozen-screen verdict, gate-by-gate reading of the A4 near-miss, and registry consequences.
+- **[Session-4 brief, frozen screen and slate (read first)](knowledge/25_candidates_v4_2026-10-03.md)** — the
+  v4 candidate slate (H43 drainage organization, H44 discharge chain, H45 seismicity strands, H46 1-m LiDAR
+  scarp template, H47 map-unit adjacency), each with layers / expected signature / why off-catalogue /
+  difference from repo work / ranked cost, and the external-data obtainability statement per candidate.
+  Its frozen sibling is **[H41 preregistration](knowledge/24_preregistered_h41_screen_2026-10-03.md)** — the
+  first use anywhere in this family of the INGENIOUS Quaternary-fault attribute table for prediction.
+- **[Session 3 results](knowledge/21_h35_h40_results_2026-10-03.md)** — H35/H40 frozen-screen verdict, gate-by-gate reading of the A4 near-miss, and registry consequences.
 - **[Limitations & next-session plan](knowledge/22_limitations_and_next_2026-10-03.md)** — pass-3 honest status, prioritized remaining work, and the standing limitations that must not be "fixed" by assertion.
 - **[Refreshed untried slate v3](knowledge/20_candidates_v3_2026-10-03.md)** — H41 (INGENIOUS slip-rate centroid corridors) ranked first, with H36/H37/H42 and the H38/H39 filter-role pair behind it.
 - **[Prior session handoff](knowledge/18_h29_corrected_screen_handoff_2026-10-03.md)** — H29 gate corrections, artifact status, and final local verification (historical).
@@ -101,6 +107,16 @@ python scripts/build_submission_contract.py
 python scripts/build_site.py
 python scripts/check_site.py
 ```
+
+**One command, both layouts:** `bash scripts/download_competition_data.sh` added on 2026-10-03 as the
+entry point the original prompt asked for ("run `bash scripts/download_competition_data.sh` … into `data/`").
+It does **not** contact DrivenData (that is prohibited by `AGENTS.md` rule 3); it wraps the two hash-pinned
+owner-mirror restorers, defaults to the H31-group set that the current screens and caches expect, accepts
+`--group core|h31|all` and `--verify`, and ends by printing which template path the local checker will use.
+`check_submission.py` and `verify_downloads.py` now resolve `data/bridge/sample_submission.tif` *or*
+`data/sample_submission.tif` through one shared helper, which fixes the documented command that previously
+failed on an H31-group restore (`IR-29-CHECK-TEMPLATE-ROOT`; the verifier's third copy of the same bug was
+found and fixed the same day).
 
 **H29/core data:** `python scripts/restore_data.py` restores the hash-pinned `data/manifest.json` inputs under this checkout's `data/` directory; that legacy script does not honor `GEMS_DATA_DIR`. `python scripts/restore_data.py --verify` checks an existing restore without fetching missing files. These owner-mirrored bytes are not organizer-authenticated. The corrected H29 screen and current receipts are already recorded in `evidence/`; do not overwrite them just to recheck status. The corrected five-arm screen failed, so do not run confirmation.
 

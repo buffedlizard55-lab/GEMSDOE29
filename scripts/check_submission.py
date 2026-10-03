@@ -13,29 +13,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from gemsdoe.paths import data_dir  # noqa: E402
+from gemsdoe.paths import template_path  # noqa: E402
 from gemsdoe.submission import check_file, sha256_file  # noqa: E402
 
 
-TEMPLATE_CANDIDATES = ("bridge/sample_submission.tif", "sample_submission.tif")
-
-
 def default_template_path() -> Path:
-    """Return the template path, honouring whichever restore set is actually on disk.
+    """Return the template path, honouring whichever restore layout is actually on disk.
 
-    The legacy core manifest restores the template to ``GEMS_DATA_DIR/bridge/sample_submission.tif``
-    (``scripts/restore_data.py``), while the H31 group manifest restores it to
-    ``GEMS_DATA_DIR/sample_submission.tif`` (``scripts/restore_h31_data.py``) - the path every current
-    screen and the site's reproduce commands actually use. Prefer an existing file, so the documented
-    one-liner works after either restore; with neither present return the legacy bridge path because it is
-    the one ``data/manifest.json`` names in its ``path`` field.
+    The resolution lives in :func:`gemsdoe.paths.template_path` so that ``scripts/verify_downloads.py`` and
+    any future checker agree on one answer (both layouts are real: see IR-29-CHECK-TEMPLATE-ROOT).
     """
-    data = data_dir()
-    for rel in TEMPLATE_CANDIDATES:
-        p = data / rel
-        if p.is_file():
-            return p
-    return data / TEMPLATE_CANDIDATES[0]
+    return template_path()
 
 
 def main() -> int:
