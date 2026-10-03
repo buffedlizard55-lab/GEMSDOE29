@@ -70,8 +70,8 @@
     {
       "date": "2026-10-03",
       "type": "verification",
-      "title": "82 tests pass; rebase and site checks pass",
-      "detail": "After reconciling with the advanced main branch, 82 tests pass and 2 owner-mirror reproduction tests are skipped because temporary inputs are absent. Ruff passes, all six generated Pages match the site builder, and JSON registers/evidence parse. No new model fit, DTI result, competition score, or weekly slot is claimed."
+      "title": "83 tests pass; legacy Pages root now routes to the site",
+      "detail": "After reconciling with the advanced main branch, 83 tests pass and 2 owner-mirror reproduction tests are skipped because temporary inputs are absent. Ruff passes, the generated site and checked root redirect are current, and JSON registers/evidence parse. The legacy GitHub Pages source is the repository root; index.html routes visitors to the maintained docs/ site. No new model fit, DTI result, competition score, or weekly slot is claimed."
     }
   ]
 }

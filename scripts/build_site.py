@@ -440,8 +440,23 @@ def render_irregularities() -> str:
     )
 
 
+def render_root_redirect() -> str:
+    """Route the legacy GitHub Pages root to the maintained static site in ``docs/``."""
+    return (
+        '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        '<meta http-equiv="refresh" content="0; url=docs/index.html">'
+        '<link rel="canonical" href="https://buffedlizard55-lab.github.io/GEMSDOE29/docs/">'
+        '<title>GEMSDOE29 — opening research site</title></head><body>'
+        '<main><h1>GEMSDOE29</h1><p>The research site is opening.</p>'
+        '<p><a href="docs/index.html">Open the GEMS Prize research site</a></p></main>'
+        '</body></html>\n'
+    )
+
+
 def render_all() -> dict[Path, str]:
     return {
+        ROOT / "index.html": render_root_redirect(),
         DOCS / "index.html": render_home(),
         DOCS / "executive-summary.html": render_summary(),
         DOCS / "research.html": render_research(),

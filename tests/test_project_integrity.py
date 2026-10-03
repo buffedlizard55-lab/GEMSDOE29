@@ -46,6 +46,12 @@ def test_score_claims_remain_unverified_and_unused() -> None:
     assert all("unverified" in claim["verification"] for claim in registry["claims"])
 
 
+def test_legacy_pages_root_redirects_to_generated_site() -> None:
+    root = (ROOT / "index.html").read_text()
+    assert 'http-equiv="refresh" content="0; url=docs/index.html"' in root
+    assert '<a href="docs/index.html">Open the GEMS Prize research site</a>' in root
+
+
 def test_pages_include_submission_guide_and_caveats() -> None:
     pages = ["index.html", "executive-summary.html", "research.html", "status.html", "sources.html", "irregularities.html"]
     for name in pages:
