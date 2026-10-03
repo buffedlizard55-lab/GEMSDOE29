@@ -314,7 +314,7 @@ def test_h43b_screen_evidence_is_internally_consistent() -> None:
 
     base = ROOT / "evidence" / "h43b_screen"
     prereg = ROOT / "knowledge" / "27b_preregistered_h43b_screen_2026-10-03.md"
-    results = ROOT / "knowledge" / "34_h43b_mass_conserving_drainage_results_2026-10-03.md"
+    results = ROOT / "knowledge" / "37_h43b_mass_conserving_drainage_results_2026-10-03.md"
     assert prereg.is_file() and results.is_file()
     design = json.loads((base / "design_screen.json").read_text())
     summary = json.loads((base / "summary_screen.json").read_text())

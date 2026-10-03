@@ -1,4 +1,4 @@
-# 34 — H43b (Workstream B): mass-conserving priority-flood D8 & per-basin knickpoint screen, and head-to-head comparison with Workstream A (2026-10-03)
+# 37 — H43b (Workstream B): mass-conserving priority-flood D8 & per-basin knickpoint screen, and head-to-head comparison with Workstream A (2026-10-03)
 
 **Frozen preregistration:** [`knowledge/27b_preregistered_h43b_screen_2026-10-03.md`](27b_preregistered_h43b_screen_2026-10-03.md),
 sha256 `f6d6b33e7ae2782fc74e73088b507f4ba04d02aa14d007ee62dd8a4f9a025fb2` (committed at `09e81264` before any

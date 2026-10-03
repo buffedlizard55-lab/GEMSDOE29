@@ -583,7 +583,7 @@ def h43b_screen_card() -> str:
         "the primary proxy (+0.001936), isolating <code>H43_CHANNEL_SCARP</code> as the column that trades SGMC score for "
         f"range-front score. Independent recomputation: {e(ana_txt)}.</p>"
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/27b_preregistered_h43b_screen_2026-10-03.md", "Read the frozen H43b preregistration", external=True)} · '
-        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/34_h43b_mass_conserving_drainage_results_2026-10-03.md", "Read the H43b results &amp; head-to-head comparison", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/37_h43b_mass_conserving_drainage_results_2026-10-03.md", "Read the H43b results &amp; head-to-head comparison", external=True)} · '
         f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/h43b.py", "Read the H43b module", external=True)}</p></section>'
     )
 
