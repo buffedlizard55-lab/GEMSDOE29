@@ -85,6 +85,12 @@ try:
     if "all four arms FAIL G1" not in screen:
         print("STATUS REGISTER lacks the session-3 H35/H40 screen verdict")
         fail += 1
+    if "H41 screen" not in screen or "A1_h41_off PASS" not in screen or "A2_h41_support FAIL" not in screen:
+        print("STATUS REGISTER lacks the session-4 H41 screen verdict (per-arm PASS/FAIL)")
+        fail += 1
+    if "SGMC second proxy" not in screen:
+        print("STATUS REGISTER states the H41 screen without its negative SGMC second proxy")
+        fail += 1
 except (KeyError, json.JSONDecodeError, OSError) as exc:
     print(f"BAD CURRENT STATUS: {exc}")
     fail += 1
