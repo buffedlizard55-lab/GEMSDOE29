@@ -2,7 +2,7 @@
 
 > **Read this entire README, including the verbatim Project Charter below, at the start of every session.**
 > The site renders every number from this repo's own JSON evidence; nothing on the pages is hand-typed.
-> **Live site:** https://buffedlizard55-lab.github.io/GEMSDOE29/ — first screen: one-click submission TIF + note to paste.
+> **Live site:** https://buffedlizard55-lab.github.io/GEMSDOE29/ — first screen: one-click, locally format-verified research TIFF + note to paste. The current artifact failed its frozen proxy gate and is **not recommended for submission**.
 
 ## Core Values (verbatim, from Arena team — the focal point of every build, research, suggestion and implementation decision)
 
@@ -20,102 +20,67 @@ for manual review. There should be no manual input, work on your own to complete
 review. No hallucinations. Run every task through three passes (implement+verify; bug/edge review; full recheck
 against the original request). Create a pull request and merge it.*
 
-## Status — 2026-10-03 (this session)
+## Status — 2026-10-03 (review continuation)
 
-* **Repo review finding (IR-29-EMPTY-REPO, critical):** `GEMSDOE29` began as a single commit containing
-  `# GEMSDOE29` — no pipeline/site existed despite the inherited prompt assuming one. Everything below was
-  rebuilt this session from the verified sibling lineage (GEMSDOE, 19, 24, 25, 26, 27 cloned read-only).
-* **Data blocker resolved:** the "place competition data in `data/`" task is DONE here — `training_features.tif`
-  (418,912,844 B) reassembled from 5 hash-verified parts, sha256 `4371c82e…bc5` **byte-exact** vs the pin,
-  plus labels/template/parent rasters/LiDAR/GeoDAWN extensions/2 m probe archive, all pinned in
-  `data/manifest.json` (`python3 scripts/restore_data.py` → `ALL VERIFIED`). They remain **owner mirrors, not
-  organizer-authenticated** (IR-29-SIBLING-LINEAGE).
-* **The science asked for is implemented:** Fourier upward-continuation worming (Hornby/Boschetti/Horowitz 1999
-  ladder 0–1600 m on `rtp` + `iso_grav_anom`, worm tracking, persistence rasters, acquisition-line audit) in
-  `src/gems29/worming.py`; operator cross-checked against the official contractor `TMI_up150` grid (Spearman
-  0.878) and unit-tested against the analytic dike depth-shift identity; screened under a frozen gate
-  (`knowledge/01_preregistration_h29_worming_2026-10-03.md`).
-* **Key measured facts on the real grid** (`evidence/worming_receipt.json`): 51.0 % of gravity level-0 edges and
-  17.8 % of magnetic ones exist at zero continuation only (the distrust population, now a number); E–W-striking
-  edges are *more* persistent than N–S (0.656 vs 0.562) → the naive line-aliasing filter is refuted on this grid
-  (IR-29-LINE-PERSISTENCE-INVERSION); only ≈2.7 % of the live-scored 44,090-px emission dots sit on p95 edges
-  (IR-29-PARENT-OFF-EDGES) → worming enters as re-ranking/features, not as a hard gate.
-* **Why 0.2600 scored 0.2600:** not a better detector — the H19-5 solid (0.1922) thinned by Poisson-disk 2.8 px
-  to 44,090 dots; overlapping credit kernels waste pixels under the metric's max-within-300 m / sum-FP structure.
-  This repo reproduces the d1.5 (0.2477) mask bit-for-bit and the d2.8 44,090-px count exactly
-  (`tests/test_sibling_reproduction.py`). The geometry lever is exhausted at ≈0.255–0.260 (GEMSDOE27 live
-  inversion); beating public-#1 0.3195 (DARD, 12 subs; read from the leaderboard 2026-10-03, public column)
-  requires detector concentration > 5.7× blind. See `registry/live_scores.json`.
-* **Frozen gate verdict (2026-10-03):** all four arms FAIL the pre-registered +0.005 sparse-proxy bar —
-  A1 gate −0.0001/−0.0001, A2 rank −0.0010/+0.0002, B1 worm-features +0.0004/+0.0004, B2 thermal-features
-  +0.0005/+0.0012 (4/4 folds one draw; still 1/4 of margin). No slot recommended, none spent; the two
-  shipped TIFs carry their status on the download card. Full write-up: `knowledge/02_h29_results_2026-10-03.md`.
-* **Answer to "can we beat 0.26 / 0.3195?":** not by re-arranging this surface (exhausted ≈0.255–0.260,
-  independently re-verified here); beating 0.3195 requires detector concentration > 5.7× blind. This session
-  proved worming-persistence and probe-residuals in their SIMPLE forms are not that jump — and registered the
-  sharper versions (notch, corridors, soft prior, GPU U-Net) for the next sessions.
+* **Repository charter preserved:** the original full project prompt remains verbatim below. The working status here is maintained separately so the charter is not silently rewritten.
+* **Inputs restored and SHA-256 verified:** the 418,912,844-byte 19-band feature stack was reassembled from five correctly named, individually pinned split blobs; labels, template, parent rasters, LiDAR/GeoDAWN derivatives, the INGENIOUS probe archive, and the owner-mirrored D2.8 TIFF also pass their manifest pins. `python3 scripts/restore_data.py --verify` reports `ALL VERIFIED`. These are pinned **owner mirrors, not organizer-authenticated**; no competition endpoint was contacted.
+* **Material implementation corrections:** two independent worming bugs invalidated intermediate screens: the six-level persistence denominator could write `P=1.25`, and `prep_field` replaced its nearest-valid FFT padding with a global median despite the preregistration. The code now preserves nearest-valid fill and uses `last_level_index/(n_levels-1)`, bounded `[0,1]`, with regressions for both. The former holdout-gate aggregator could not see confirmation draws 2/3; the gate and safe staged-run command are tested. All superseded receipts, results and WORMRANK artifacts are hash-archived under `evidence/history/` and `knowledge/history/`, not silently overwritten. The acquisition-line routine remains a strike summary, not a spectral-energy/notch test.
+* **Current preregistered worming receipt:** `evidence/worming_receipt.json` reports magnetic/gravity mean persistence 0.485/0.302, level-0-only fractions 17.1%/58.7%, and full-ladder fractions 17.3%/19.1%. Mean magnetic E–W strike persistence (0.540) exceeds N–S (0.447), but strike summaries do not establish whether any edge is a flight-line artifact. The upward-continuation operator has Spearman 0.880 agreement with an owner-mirrored, u8-quantized contractor-labelled `TMI_up150` grid; this is a soft implementation check, not provenance authentication.
+* **Current preregistered spatial screen and H29-5:** both screen draws were evaluated over all four quadrants using the corrected nearest-valid padding. H29-5's candidate head scored −0.0789 and −0.0870 mean paired ΔDTI against the best same-fold/draw existing control, with 0/4 positive folds on each draw. H29-5 failed its frozen screen; confirmation draws were therefore not run, exactly as the preregistered compute-saving rule allows. A1/A2/B1/B2 also failed the +0.005 screen bar. All values are catalogue-internal proxy measurements, not live/private leaderboard evidence. **No weekly slot is recommended or spent.** Details: `evidence/h29_holdout.json`, `evidence/h29_gate.json`, and `knowledge/02_h29_results_2026-10-03.md`.
+* **Investigation of the reported 0.2600:** the restored GEMSDOE25 D2.8 raster has 44,090 positive pixels. The local deterministic `dot_thin(H19-5, 2.8)` mask matches its pixel mask exactly; GeoTIFF bytes differ. The associated 0.2600 score remains owner-reported: no organizer receipt ties that particular file to the value, although a 0.2600 public-column entry was observed at rank 15. Do not present the mask match as score verification.
+* **Download and format checks:** `docs/downloads/` contains the WORMRANK research artifact plus a D2.8 reference reproduction, each with an explicit unique name, short note, NaN/zero variants, single-TIFF ZIP and local read-back receipts. The verifier checks one float32 band, exact pinned-template CRS/dimensions/geotransform, finite `[0,1]` in-footprint values, declared outside convention, ZIP contents and hashes. These local checks reduce the reported range-error risk; they do **not** guarantee portal acceptance, and WORMRANK is **not submission-eligible** under the failed gate.
+* **Citation correction:** the prior DOI ending `.00793.x` identifies a different Schlottmann article. The Hornby et al. (1999) publisher record supports DOI [`10.1046/j.1365-246X.1999.00788.x`](https://academic.oup.com/gji/article/137/1/175/700677). The preserved charter below is not altered; the separate License/citation section after the charter is corrected and the erratum is recorded in `knowledge/05_pre_run_implementation_audit_2026-10-03.md`.
 
-## How to use the site / submit (also at `docs/executive-summary.html`)
+## How to use the site / submission steps
 
-1. Home page → big download button (`gems29-…-nan.tif`, plus `.zip` and `-zeros.tif` fallbacks).
-2. DrivenData → *My Submissions* → attach file → paste the unique name + Note shown on the site (≤200 chars).
-3. The writer + `scripts/verify_downloads.py` guarantee: single-band float32, EPSG:32611, 3730×3292, 100 m,
-   exact template geotransform, **every in-footprint pixel finite and in [0,1]**, NaN outside — the specific
-   class of error ("Predicted values must be in range [0, 1]") that killed a past upload is engineered away
-   (root cause + defenses: IR-29-PREV-SUBMIT-ERROR-CLASS).
+1. Open the project home page and download the prominent WORMRANK GeoTIFF (or its ZIP/zero-outside alternative). The displayed note, unique name, hash and check receipt belong to that exact artifact.
+2. **Current recommendation: do not spend a weekly slot on WORMRANK.** Its frozen A2 spatial-proxy gate failed. The D2.8 reference is a duplicate reproduction of an already-reported mask, not a new experiment.
+3. If a later candidate passes its frozen screen and confirmation gate, the owner may review its evidence and manually upload at DrivenData. No portal submission is automated here.
+4. A local-format pass is not a live-validator or score guarantee. Read `docs/executive-summary.html` for the exact portal steps and the source/acceptance caveats.
 
-## Quickstart (repo)
+## Quickstart
 
 ```bash
-pip install -r requirements.txt
-python3 scripts/restore_data.py            # hash-pinned mirror restore + verification
-python3 -m pytest -q tests/                # 15+ tests incl. metric brute-force & physics anchors
-python3 scripts/run_worming.py             # upward-continuation ladder + audits (~1 min, CPU)
-python3 scripts/run_holdout_screen.py      # frozen gate screen (~1 h CPU, 4 folds × draws)
-python3 scripts/build_candidate.py         # packages format-verified TIF(s) into docs/downloads
-python3 scripts/verify_downloads.py        # independent site-download audit
-python3 scripts/build_site.py              # regenerates index.html + docs/*.html from JSON evidence
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt pytest
+.venv/bin/python scripts/restore_data.py              # restore and hash-check pinned owner mirrors
+.venv/bin/python -m pytest -q                           # unit, gate-regression and sibling-mask checks
+.venv/bin/python scripts/run_worming.py                 # corrected upward-continuation ladder and receipt
+.venv/bin/python scripts/run_holdout_screen.py --screen-only  # 4 folds × 2 preregistered screens
+.venv/bin/python scripts/build_candidate.py             # packages locally verified research/reference TIFFs
+.venv/bin/python scripts/verify_downloads.py             # independent grid, range, ZIP and hash checks
+.venv/bin/python scripts/build_site.py                   # rebuild JSON-driven pages
+.venv/bin/python scripts/check_site.py                   # link/fragment/claim-page checks
 ```
 
-No GPU here: the reference-solution U-Net arm (torch) remains a next-session task on GPU hardware
-(`requirements-train.txt` style env per GEMSDOE4/5 notes). Never automate drivendata.org (ToS) — the owner
-submits manually through the portal using the note text above.
+The default and `--screen-only` evaluate screen draws 0/1 across four folds. Run `--confirmation-only` only after saved complete screen evidence contains at least one passing arm; it appends draws 2/3, and exits without fitting if no arm passes. Never access DrivenData programmatically. The official DOE/NLR rules PDF ([link](https://docs.nlr.gov/docs/fy26osti/96647.pdf)) states three automated-scoring submissions per week, private-set scoring, one final submission selected across the prize phases, finalist code/documentation requirements, and generative-AI narrative disclosure.
 
 ## Layout
 
 ```
-src/gems29/   worming (UC ladder, tracking, audits), metric (DTI), thinning (Poisson-disk + ranked),
-              holdout (quadrant hide-and-recover), features, head, emission arms, submission writer, thermal
-scripts/      restore_data · run_worming · run_holdout_screen · build_candidate · verify_downloads · build_site
-knowledge/    01 preregistration (frozen gates) · 02 results write-up · 03 verified knowledge base
-registry/     live_scores · sources · irregularities · hypotheses_h29 · artifact_ledger
-evidence/     worming_receipt.json · h29_holdout.json · h29_gate.json · screen logs
-docs/         executive-summary.html · research.html · sources.html · downloads/ (shipped TIFs + checks)
-index.html    Pages root (repo root per GEMSDOE25 IR-25-PAGES-ROOT lesson)
+src/gems29/   worming, DTI metric, thinning, holdout, feature assembly, gating, submission writer, thermal probes
+scripts/      pinned data restore · worming · spatial screen · candidate packaging · download/site validators
+knowledge/    frozen preregistration · corrected results · source-verified knowledge · next slate · audit corrections · three-pass recheck
+registry/     live-score claims · sources · irregularities · hypothesis slates · artifact ledger
+evidence/     corrected receipts/results · preserved pre-correction history
+docs/         executive summary · research · sources · locally checked downloads and receipts
+index.html    GitHub Pages home page and obvious TIFF download
 ```
 
-## Limitations (carried + new; full list in `registry/irregularities.json`)
+## Limitations and open work
 
-1. Mirrors not organizer-authenticated; live scores owner-reported; public leaderboard column ≠ private round score.
-2. The catalogue-internal proxy cannot see far-field habitat (100 % of its truth at catalogue distance 0); proxy
-   passes are eligibility, never evidence of live gain; the site says so on the same card as the download button.
-3. gdr.openei.org unreachable from the sandbox: paleo-geothermal + Q-volcanics layers stay BLOCKED (pins recorded).
-4. 2 CPU / 4 GB: boosted-tree heads only; no deep-model training; 100 m rasters only (no raw 1 m DEM reprocessing).
-5. Worming persistence uses a relative p95 edge threshold and a heuristic drift tolerance (documented in
-   knowledge/01 §3) — it is a reliability *weight*, not a validated depth inversion (Horowitz 2018's own caveat).
+1. Competition inputs are owner mirrors pinned by commit and SHA-256, not authenticated against organizer downloads. Score-to-file associations in the project lineage remain owner-reported unless separately receipted.
+2. The spatial holdout uses only catalogue-derived truth and is structurally blind to faults missing from that catalogue; a proxy pass is eligibility evidence only, never a live-score prediction.
+3. The free GDR 1391 paleothermal deposit archive is listed under CC BY 4.0, but its direct binary download failed in this sandbox. H29-4 stays blocked until an accessible, licensed and hash-pinned copy is obtained.
+4. CPU-only local screen uses histogram gradient boosting and 100 m rasters; the reference U-Net / DTI-aligned deep model remains unimplemented and untested here.
+5. Potential-field persistence is an interpretation cue, not a unique depth inversion or fault label; amplitude, source geometry, interference, processing and the relative p95 threshold affect it.
+6. H29-5 failed the pre-registered screen; this is not proof the physical mechanism is false. H29-3 spectral notch and H29-6 curvature/junctions remain untested and need their own preregistered gates. No implementation should precede that registration.
 
-## Next steps (queued for the following sessions, in priority order)
+## Next research priorities
 
-1. Read `evidence/h29_gate.json` outcome into knowledge/02 + README line; if A2 pass → owner may spend one of
-   the 3 weekly slots on the WORMRANK file with the site's Note text; if fail → record, do not spend.
-2. H29-3 spectral line-notch experiment (registered, own frozen gate) — the refuted naive filter's stronger sibling.
-3. H29-5 strain-×-persistence corridors (microseismicity + dilatation along persistent basement edges).
-4. On a networked runner: fetch paleo-geothermal + Q-volcanics against the pins; then H29-4.
-5. GPU session: reference-solution U-Net trained with the DTI-aligned loss on the now-local data (mirror the
-   drivendataorg reference repo, pinned), sliding-window + TTA, blended with h19-5 as prior surface — the only
-   lever class with room above 0.30 in the concentration arithmetic.
-6. Consider `soft persistence prior` (continuous S-decay field instead of quantized P) as H29-1b if A2 repeats
-   positive on fresh draws — pre-register before running.
+1. H29-3: measure the predicted cross-line spectral peaks first; only notch if a peak is demonstrated, then rerun persistence under its own frozen gate.
+2. H29-6: potential-field Hessian curvature/junction detector at fixed metric scales; compare against the current spatial holdout best.
+3. H29-4: retrieve the official GDR 1391 paleothermal archive through an accessible permitted route, pin its hash, then preregister before scoring.
+4. Higher-capacity detector (e.g. reference U-Net with DTI-aware loss) only after a reproducible GPU environment and leakage-safe validation plan exist.
 
 ## Project Charter (verbatim owner prompt — re-read every session)
 
@@ -211,4 +176,4 @@ Go ahead and create a pull request and then merge the pull request onto the main
 
 ## License / citation
 
-Data usage per competition rules (external data allowed with licenses permitting use and sharing with sponsor): USGS/DOI public-domain products (GeoDAWN 10.5066/P93LGLVQ, USGS faults, 3DEP), GDR OpenEI 1391 (CC BY 4.0), INGENIOUS (DOI 10.15121/1881483). Method citation: Hornby, Boschetti & Horowitz (1999), GJI 137(1):175–196, doi:10.1046/j.1365-246X.1999.00793.x.
+Data usage per competition rules (external data allowed with licenses permitting use and sharing with sponsor): USGS/DOI public-domain products (GeoDAWN 10.5066/P93LGLVQ, USGS faults, 3DEP), GDR OpenEI 1391 (CC BY 4.0), INGENIOUS (DOI 10.15121/1881483). Method citation: Hornby, Boschetti & Horowitz (1999), GJI 137(1):175–196, DOI 10.1046/j.1365-246X.1999.00788.x (Oxford Academic publisher record).

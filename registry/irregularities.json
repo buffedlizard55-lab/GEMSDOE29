@@ -1,13 +1,13 @@
 {
   "schema": 1,
-  "updated_utc": "2026-10-03T09:00:00Z",
-  "note": "Flagged for human review. 'fixed' means a guard/test/script in THIS repo enforces the resolution; 'open' means evidence is recorded but action is owed.",
+  "updated_utc": "2026-10-03T15:57:00Z",
+  "note": "Flagged for human review. 'fixed' means this repository now has a guard/test/action for the local defect; it does not imply organizer authentication or portal acceptance. 'open' means evidence is recorded but action remains.",
   "irregularities": [
     {
       "id": "IR-29-EMPTY-REPO",
       "sev": "critical",
       "status": "fixed",
-      "finding": "GEMSDOE29 was created with a single 'Initial commit' containing only '# GEMSDOE29' \u2014 none of the infrastructure described in the inherited prompt (pipeline, site, scripts) existed in this repo despite the prompt assuming it did.",
+      "finding": "GEMSDOE29 was created with a single 'Initial commit' containing only '# GEMSDOE29' — none of the infrastructure described in the inherited prompt (pipeline, site, scripts) existed in this repo despite the prompt assuming it did.",
       "action": "Rebuilt from the verified sibling lineage (GEMSDOE24/25/26/27 + 19GEMSDOE, cloned read-only for study): data bridge, metric, thinning, holdout, submission writer all re-implemented here with tests and attribution. Do not assume prior repos' uncommitted state persisted."
     },
     {
@@ -15,14 +15,14 @@
       "sev": "high",
       "status": "open",
       "finding": "training_features.tif (owner mirror, sha 4371c82e...) has 5,165,852 finite cells vs the sample_submission template's 5,167,373: 3,061 template-footprint cells are nodata inside the features, and 1,540 feature cells lie outside the template footprint. Any pipeline that assumes 'finite in features == finite in template' silently mis-scores/NaNs 3,061 scored pixels.",
-      "action": "This repo: worming computes on the FEATURES mask; submission emission is masked to the TEMPLATE footprint and every in-footprint pixel is written finite (0.0/1.0), so the difference cannot produce NaN-inside-footprint. Upstream (competition data) needs owner confirmation that both rasters are authentic copies."
+      "action": "The corrected pipeline computes features on the finite feature-stack mask but makes submission/scoring masks from the sample template; the strengthened verifier checks every template-footprint value, including the 3,061 feature-nodata pixels. Upstream authenticity of both owner-mirrored rasters remains unconfirmed."
     },
     {
       "id": "IR-29-CITATION",
       "sev": "info",
       "status": "fixed",
-      "finding": "The project prompt attributes 'worming' to 'Hornby, Boschetti, and Horowitz's multiscale wavelet edge-detection method (1999)' without a venue; the primary source is GJI 137(1):175-196 (wavelet-domain potential-field analysis). A common mis-citation is 'Hornby et al. 1999, Geophysics 64' (that volume/venue pair is the wrong journal).",
-      "action": "knowledge/01 + README cite GJI 137(1):175-196 with DOI; Horowitz (2018) recorded as the operational recipe source."
+      "finding": "The project previously used the wrong DOI 10.1046/j.1365-246X.1999.00793.x, which Crossref resolves to a different Schlottmann article. The Hornby, Boschetti & Horowitz paper is GJI 137(1):175–196, DOI 10.1046/j.1365-246X.1999.00788.x.",
+      "action": "Active code, source registry and explanatory citations now use the publisher-confirmed .00788.x DOI. README's preserved verbatim owner charter remains intact; its separate License/citation section is corrected. Audit: knowledge/05_pre_run_implementation_audit_2026-10-03.md."
     },
     {
       "id": "IR-29-SIBLING-LINEAGE",
@@ -42,50 +42,120 @@
       "id": "IR-29-LINE-PERSISTENCE-INVERSION",
       "sev": "medium",
       "status": "open",
-      "finding": "The acquisition-line audit (knowledge/01 \u00a72d) predicted E-W striking edges (flight-line aliasing, 200/400 m E-W lines) should be *less* persistent under continuation. Measured on the full grid: mean magnetic persistence by strike is E-W 0.656, Other 0.607, N-S 0.562 \u2014 E-W edges are, on average, the MOST persistent. The naive 'E-W = artifact' heuristic is therefore NOT usable as a filter on this grid; regional geology (E-W striking ranges in the Walker Lane transform corridor) plausibly dominates the aliasing signal.",
-      "action": "Line-suppression (H29-4 notch) remains registered as a future experiment; the persistence filter itself does not encode strike assumptions. See evidence/worming_receipt.json."
+      "finding": "After the corrected nearest-valid padding and persistence normalization, mean magnetic persistence by strike is E–W 0.540, Other 0.491, N–S 0.447 (6-level p95-edge implementation). E–W edges remain more persistent on average, but this strike summary alone neither proves nor rules out acquisition-line contamination.",
+      "action": "Do not use a simple E–W kill rule. A frequency-specific notch remains a separate registered hypothesis H29-3, conditional on measuring the spectral peak first. See current evidence/worming_receipt.json."
     },
     {
       "id": "IR-29-PARENT-OFF-EDGES",
       "sev": "medium",
       "status": "open",
-      "finding": "Only 2.7% of the live-scored dotted (0.2600) emission dots coincide with p95 level-0 potential-field edges; the parent detector's habitat is mostly terrain/thermal/structural, not geophysical edge maxima. A hard worming GATE therefore has almost no power over the parent emission; only re-ORDERING (or feature-level fusion) can express the hypothesis.",
-      "action": "Screened both ways (A1 gate, A2 rank, B1 head-features) per knowledge/01; report all three regardless of sign."
+      "finding": "On the current preregistered nearest-fill, bounded-persistence raster, 1,204 of the pinned 44,090 D2.8 pixels (2.731%) overlap the union of level-0 p95 magnetic/gravity edges; 579 (1.313%) overlap a joint edge with P≥0.5. A hard persistence gate can therefore affect only a small fraction of this parent emission. The score-to-file association remains owner-reported.",
+      "action": "The corrected H29 screen includes emission gate/rank and head-feature arms; all five tested arms failed the registered +0.005 screen criterion. Do not infer the mechanism is false; see current evidence/h29_holdout.json and knowledge/02_h29_results_2026-10-03.md."
     },
     {
       "id": "IR-29-GDR-BLOCKED",
       "sev": "medium",
       "status": "open",
       "finding": "gdr.openei.org is unreachable from the sandbox (curl 35 SSL_ERROR_SYSCALL), matching GEMSDOE25/27 limitations; paleo-geothermal and Q-volcanics polygons therefore remain unusable this session (pins recorded in data/manifest.json for the next networked runner).",
-      "action": "2 m probes already present via the 24GEMSDOE mirror and hash-verified \u2014 that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
+      "action": "2 m probes already present via the 24GEMSDOE mirror and hash-verified — that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
     },
     {
       "id": "IR-29-PROXY-BLIND-TO-FARFIELD",
       "sev": "high",
       "status": "open",
       "finding": "Carried from siblings and re-verified by inspection of the holdout construction: catalogue-internal hide-and-recover truth sits entirely ON catalogue pixels; the live 0.26 emission earns most of its credit far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
-      "action": "Disclosed in knowledge/01 \u00a76; no arm is ever promoted on proxy evidence alone \u2014 pass = 'eligible for a slot decision by the owner', not 'submit'."
+      "action": "Disclosed in knowledge/01 §6; no arm is ever promoted on proxy evidence alone — pass = 'eligible for a slot decision by the owner', not 'submit'."
     },
     {
       "id": "IR-29-LEADERBOARD-COLUMN",
       "sev": "info",
       "status": "open",
       "finding": "The public leaderboard ranks 'Best public DW-Tversky' (public test subset). Private initial-round scores (the ones that decide the $50k top-5) are hidden; our 0.2600 and the leader 0.3195 are public-column values only.",
-      "action": "All cross-team deltas in this repo are public-vs-public arithmetic; final-round label expansion (expert review of submissions) can reorder materially \u2014 a documented reason to prefer submissions that encode real, verifiable new lineaments."
+      "action": "All cross-team deltas in this repo are public-vs-public arithmetic; final-round label expansion (expert review of submissions) can reorder materially — a documented reason to prefer submissions that encode real, verifiable new lineaments."
     },
     {
       "id": "IR-29-PREV-SUBMIT-ERROR-CLASS",
       "sev": "high",
       "status": "fixed",
-      "finding": "The owner saw 'Predicted values must be in range [0, 1]' on a past upload. Public docs do not define the validator; sibling forensics show NaN *inside* the footprint fails the range test (NaN fails every comparison).",
-      "action": "submission.py + scripts/verify_submission.py: profile copied from the pinned template, all in-footprint pixels finite and in [0,1], NaN only outside; both -nan and -zeros conventions shipped; read-back verified independently. Format checks on every shipped file are in docs/downloads/checks-*.json."
+      "finding": "The owner reported a past “Predicted values must be in range [0, 1]” error. Sibling forensics attributed a different past raster to NaN inside its asserted footprint; this is not an organizer validator specification.",
+      "action": "src/gems29/submission.py and scripts/verify_downloads.py locally verify the one-band float32 grid, exact pinned template CRS/dimensions/geotransform, finite in-footprint [0,1] values, declared outside convention, ZIP contents and checksums. No portal access was made; local checks are not an acceptance guarantee."
     },
     {
       "id": "IR-29-RULES-URL",
       "sev": "info",
-      "status": "open",
-      "finding": "The owner prompt cites the submission-format PDF at docs.nlr.gov/docs/fy26osti/96647.pdf; the official herox rules resource page links www.nlr.gov/docs/fy26osti/96647.pdf. Neither subdomain resolved from the sandbox (SSL_ERROR_SYSCALL). The weekly-slot cadence (3/7 days) is therefore carried as sibling/owner-reported, not re-read.",
-      "action": "Owner: open https://www.nlr.gov/docs/fy26osti/96647.pdf in a browser and confirm the \u00a7on submissions cadence + deadline before spending a slot."
+      "status": "fixed",
+      "finding": "The owner prompt used the docs.nlr.gov subdomain while an earlier registry entry mistakenly used www.nlr.gov. The official DOE/NLR rules PDF at https://docs.nlr.gov/docs/fy26osti/96647.pdf was fetched and reviewed in six chunks on 2026-10-03.",
+      "action": "registry/sources.json now pins the working official PDF. Recorded rules: three automated-scoring submissions per week, private-set scoring, one final submission selected across prize phases, finalist code/assets/docs, and generative-AI narrative disclosure."
+    },
+    {
+      "id": "IR-29-PERSISTENCE-NORMALIZATION",
+      "sev": "high",
+      "status": "fixed",
+      "finding": "The old six-level worm persistence divided the 0-based level index by n_levels-2, allowing P=1.25; this also shifted the A1 threshold and saturated A2 ranks.",
+      "action": "Corrected to last_level_index/(n_levels-1), with P bounded [0,1], separate [0,2] strength retention raster, runtime range assertions and unit tests. Earlier normalization and padding variants are archived, with hashes, under evidence/history; current values are in evidence/worming_receipt.json."
+    },
+    {
+      "id": "IR-29-NEAREST-FILL",
+      "sev": "high",
+      "status": "fixed",
+      "finding": "prep_field computed nearest-valid padding for FFT continuation, then a following np.where replaced every invalid cell with the global valid-cell median. This contradicted the frozen H29 preregistration and changed the continued edge field; the initial bounded-persistence screen and WORMRANK build using that code are not valid for the preregistered method.",
+      "action": "Removed the median overwrite so nearest-valid padding survives through tapering; added a regression with an asymmetric mask that distinguishes nearest from median fill. Recomputed worming rasters and all eight screen rows under the registered method; all five arms still fail, so confirmations remain skipped. The intermediate evidence and downloads are hash-archived under evidence/history/pre_nearest_fill_2026-10-03/. A separate `--confirmation-only` run verified that no model fit occurs."
+    },
+    {
+      "id": "IR-29-CONFIRMATION-GATE",
+      "sev": "high",
+      "status": "fixed",
+      "finding": "The former gate aggregator populated per_draw for screen draws 0/1, then searched that mapping for confirmation draws 2/3; confirmation could never be observed and PASS could never be true. Review also caught that its first replacement required both confirmation draws to be complete, although the preregistered rule requires at least one complete passing confirmation.",
+      "action": "src/gems29/gating.py now requires exact unique fold IDs, finite deltas and both complete passing screens; any one complete passing confirmation draw (2 or 3) is sufficient. If none passes and another confirmation is missing, PASS remains indeterminate. Regression tests cover draw 2, draw 3, failed/missing confirmation, malformed folds and nonfinite metrics. The current nearest-fill screen failed for all five arms, so confirmation was correctly skipped. The run script defaults to screen draws only; `--confirmation-only` verifies a saved passing screen before it fits draws 2/3. On current evidence it exits without fitting."
+    },
+    {
+      "id": "IR-29-RESTORE-PINNED-PATHS",
+      "sev": "high",
+      "status": "fixed",
+      "finding": "The feature-stack manifest used generic part-000 names and lacked exact remote paths, while the pinned sibling blobs use gems-geodawn-numerical-features.tif.part-000 through part-004.",
+      "action": "Manifest schema 2 pins exact repository, commit and source path per input/part; restore_data.py uses gh api/raw fallback, verifies byte count and SHA-256 before atomic install, then verifies the complete assembled stack. Restore and --verify both passed; all rasters remain ignored."
+    },
+    {
+      "id": "IR-29-SOURCE-CLAIMS-RENDER",
+      "sev": "medium",
+      "status": "fixed",
+      "finding": "The source page requested the literal JSON key \"'claims'\" and rendered a dash for every source claim.",
+      "action": "build_site.py now reads the claims field directly; check_site.py verifies generated source content and both quote styles in hrefs."
+    },
+    {
+      "id": "IR-29-LINE-AUDIT-DOC",
+      "sev": "medium",
+      "status": "fixed",
+      "finding": "The old line_audit docstring promised spectral cross-line energy ratios that the function did not calculate; it only summarized persistence by strike.",
+      "action": "Renamed/documented it as a strike summary, explicitly disclaims spectral analysis and leaves H29-3 frequency measurement untested."
+    },
+    {
+      "id": "IR-29-LOCAL-FORMAT-OVERCLAIM",
+      "sev": "medium",
+      "status": "fixed",
+      "finding": "Prior site and writer text said local-format checks guaranteed the submission could not trigger the organizer range error or be accepted.",
+      "action": "Wording now says local checks reduce a known risk but do not guarantee portal acceptance; verification checks the full template grid, in-footprint finiteness/range, outside convention, ZIP content and receipt hashes."
+    },
+    {
+      "id": "IR-29-SITE-LINK-QUOTES",
+      "sev": "info",
+      "status": "fixed",
+      "finding": "The static link checker parsed only double-quoted href attributes, missing the single-quoted source table links.",
+      "action": "check_site.py checks both quoting styles, local file targets and HTML fragments."
+    },
+    {
+      "id": "IR-29-VERIFY-BASELINE-REBASING",
+      "sev": "high",
+      "status": "fixed",
+      "finding": "The first independent download verifier rewrote the receipt file hashes to the current on-disk hashes after checking them. A changed/corrupted artifact could therefore fail once and then become the new passing baseline on a second run.",
+      "action": "scripts/verify_downloads.py now preserves immutable build-time hashes in `files`, records observed hashes separately, and fails closed when the baseline is missing or differs. tests/test_download_receipts.py proves a mismatch remains a mismatch on repeated verification. Rebuild with scripts/build_candidate.py to intentionally establish a new baseline."
+    },
+    {
+      "id": "IR-29-STALE-PRE-CORRECTION-DOWNLOAD",
+      "sev": "medium",
+      "status": "fixed",
+      "finding": "Two superseded public WORMRANK builds were once present in docs/downloads: the original P>1 variant and an intermediate bounded-P build whose FFT exterior padding did not match the preregistration.",
+      "action": "The original four files are archived under evidence/history/pre_correction_downloads and the intermediate build under evidence/history/pre_nearest_fill_2026-10-03/downloads; each archive README lists SHA-256 and marks files invalid for submission. Both sets were removed from docs/downloads. Only the current nearest-fill, bounded-P WORMRANK build is publicly linked."
     }
   ]
 }

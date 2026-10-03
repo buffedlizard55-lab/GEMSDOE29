@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated_utc": "2026-10-03T08:58:00Z",
+  "updated_utc": "2026-10-03T14:40:58Z",
   "policy": "No automated access to drivendata.org (ToS). Single human-equivalent page reads via the agent's fetch tool are recorded with timestamp. Everything below was opened and content-checked this session unless marked 'sibling-verified'.",
   "sources": [
     {
@@ -8,14 +8,39 @@
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
       "accessed": "2026-10-03T08:23Z",
       "status": "read",
-      "claims": "task=faults indicative of geothermal resources; test=expert-labelled NEW faults outside USGS DB; DTI alpha=0.2 beta=0.8; k(d)=max(1-d/300m,0); TPw uses max over x; FPw=sum over p>0; submission=single-band float32 GeoTIFF, EPSG:32611, 100 m, same bounds, 0..1, null/nan outside; final round rescoring vs expanded labels; prize 10k*5 initial, 100/70/40/25/15k final."
+      "claims": "task=faults indicative of geothermal resources; test=expert-labelled NEW faults outside USGS DB; DTI alpha=0.2 beta=0.8; k(d)=max(1-d/300m,0); TPw uses max over x; FPw=sum over p>0; submission=single-band float32 GeoTIFF, EPSG:32611, 100 m, same bounds, 0..1, null/nan outside; final round rescoring vs expanded labels; prize 10k*5 initial, 100/70/40/25/15k final.",
+      "facts": {
+        "target": "faults indicative of geothermal resources",
+        "metric": {
+          "name": "distance-weighted Tversky index",
+          "false_positive_weight": 0.2,
+          "false_negative_weight": 0.8,
+          "support_distance_m": 300
+        },
+        "submission_format": {
+          "bands": 1,
+          "dtype": "float32",
+          "crs": "EPSG:32611",
+          "pixel_size_m": 100,
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "outside": "null or NaN"
+        },
+        "evaluation": {
+          "test_target": "expert-labelled faults outside the public USGS database",
+          "final_round": "rescored against expanded expert labels"
+        }
+      }
     },
     {
       "key": "dd_home",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/",
       "accessed": "2026-10-03T09:14Z",
       "status": "read",
-      "claims": "Competition End Date Dec. 3, 2026 11:59 p.m. UTC; prize pool $300,000 (Initial $50k top-5x$10k; Final $250k: 100/70/40/25/15k); same submission scored twice; external data ENCOURAGED with licenses permitting sponsor sharing; eligibility US citizens/PRs; single submission selected for both rounds."
+      "claims": "Competition End Date Dec. 3, 2026 11:59 p.m. UTC; prize pool $300,000 (Initial $50k top-5x$10k; Final $250k: 100/70/40/25/15k); same submission scored twice; external data ENCOURAGED with licenses permitting sponsor sharing; eligibility US citizens/PRs; single submission selected for both rounds.",
+      "facts": {
+        "competition_end_utc": "2026-12-03T23:59:00Z"
+      }
     },
     {
       "key": "dd_leaderboard",
@@ -35,13 +60,15 @@
       "key": "dd_rules_redirect",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/rules/",
       "accessed": "2026-10-03T08:24Z",
-      "status": "redirects to https://www.herox.com/GEMSPrize/resource/2274 (not fetched; external)"
+      "status": "redirects to https://www.herox.com/GEMSPrize/resource/2274 (not fetched; external)",
+      "claims": "The DrivenData rules link redirects to DOE/NLR official rules PDF; the rules were reviewed directly at https://docs.nlr.gov/docs/fy26osti/96647.pdf."
     },
     {
       "key": "hornby1999",
-      "url": "https://doi.org/10.1046/j.1365-246X.1999.00793.x",
-      "status": "sibling-verified via Horowitz2018/ResearchGate citations",
-      "claims": "Hornby, Boschetti & Horowitz 1999, Analysis of potential field data in the wavelet domain, GJI 137(1):175-196. Upward continuation = Poisson-wavelet scale change; multiscale edges track source discontinuities; decay of the transform modulus with height classifies the singularity (depth/Lipschitz)."
+      "url": "https://academic.oup.com/gji/article/137/1/175/700677",
+      "status": "publisher record and Crossref verified",
+      "claims": "Hornby, P., Boschetti, F. & Horowitz, F.G. (1999), “Analysis of potential field data in the wavelet domain,” Geophysical Journal International 137(1), 175–196. Correct DOI: 10.1046/j.1365-246X.1999.00788.x. Upward-continuation/wavelet scale ideas support multiscale edge analysis; persistence is not a unique depth estimate or proof of a fault.",
+      "accessed": "2026-10-03 (Oxford Academic publisher record; Crossref DOI check)"
     },
     {
       "key": "horowitz2018",
@@ -101,10 +128,24 @@
     },
     {
       "key": "rules_pdf",
-      "url": "https://www.nlr.gov/docs/fy26osti/96647.pdf",
+      "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
+      "accessed": "2026-10-03 (PDF chunks 1–6 reviewed)",
+      "status": "official rules PDF read",
+      "claims": "DOE/NLR official rules: three automated-scoring submissions per week; private-set scoring; one final submission chosen across the prize phases; finalists must provide code/assets and documentation; generative-AI use must be disclosed in the narrative.",
+      "facts": {
+        "automated_scoring_submissions_per_week": 3,
+        "private_set_scoring": true,
+        "single_final_submission_across_prize_phases": true,
+        "finalist_code_assets_documentation_required": true,
+        "generative_ai_narrative_disclosure_required": true
+      }
+    },
+    {
+      "key": "crossref_wrong_hornby_doi",
+      "url": "https://api.crossref.org/works/10.1046/j.1365-246X.1999.00793.x",
       "accessed": "2026-10-03",
-      "status": "unreachable-in-sandbox",
-      "claims": "GEMS Prize Official Rules (linked verbatim from herox.com/GEMSPrize/resource/2274, read 2026-10-03T09:12Z). The 3-submissions/7-days cadence and '5:00 p.m. ET' fine print are NOT independently re-read this session; they are sibling-reported (GEMSDOE25/27). Owner mirror PDF cited in the project prompt under docs.nlr.gov \u2014 different subdomain, flagged IR-29-RULES-URL."
+      "status": "identifier mismatch verified",
+      "claims": "The prior project DOI ending .00793.x resolves to R. B. Schlottmann, “A path integral formulation of acoustic wave propagation,” not the Hornby et al. paper. Use the publisher-confirmed .00788.x DOI instead."
     }
   ]
 }

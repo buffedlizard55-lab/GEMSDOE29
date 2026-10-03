@@ -13,3 +13,6 @@ __pycache__/
 # Everything under data/ except the manifest is derived cache (restored by scripts/restore_data.py).
 data/*
 !data/manifest.json
+
+# Local Python environment
+.venv/

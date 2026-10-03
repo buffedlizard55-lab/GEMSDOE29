@@ -1,5 +1,11 @@
 {
-  "generated_utc": "2026-10-03T08:38:14+00:00",
+  "generated_utc": "2026-10-03T15:59:28+00:00",
+  "historical_correction": "Current implementation follows the preregistered nearest-valid FFT padding and bounded persistence. Earlier median-overwritten padding and n_levels-2 normalization defects invalidated superseded H29 screens and WORMRANK artifacts; snapshots and hashes are under evidence/history/. See knowledge/05_pre_run_implementation_audit_2026-10-03.md and knowledge/06_post_screen_review_2026-10-03.md.",
+  "provenance": {
+    "feature_stack_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+    "sample_template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+    "source_status": "pinned owner mirrors, not organizer-authenticated"
+  },
   "magnetic": {
     "field": "mag",
     "ladder_m": [
@@ -13,10 +19,13 @@
     "edge_quantile": 0.95,
     "tol_px": 1.0,
     "tol_slope_px_per_100m": 0.5,
-    "n_edges_level0": 86967,
-    "frac_edges_full_ladder": 0.17352559016638494,
-    "frac_edges_level0_only": 0.17815953177642094,
-    "mean_persistence": 0.6006100177764893
+    "persistence_definition": "last_matched_level_index / (n_levels - 1); bounded [0,1]",
+    "n_edges_level0": 85427,
+    "frac_edges_full_ladder": 0.1731536867735025,
+    "frac_edges_level0_only": 0.17131586032518992,
+    "mean_persistence": 0.4846547544002533,
+    "max_persistence": 1.0,
+    "max_strength_ratio": 1.098159909248352
   },
   "gravity": {
     "field": "grav",
@@ -31,24 +40,29 @@
     "edge_quantile": 0.95,
     "tol_px": 1.0,
     "tol_slope_px_per_100m": 0.5,
-    "n_edges_level0": 30336,
-    "frac_edges_full_ladder": 0.17958860759493672,
-    "frac_edges_level0_only": 0.5099222046413502,
-    "mean_persistence": 0.4211333096027374
+    "persistence_definition": "last_matched_level_index / (n_levels - 1); bounded [0,1]",
+    "n_edges_level0": 25888,
+    "frac_edges_full_ladder": 0.19124690976514216,
+    "frac_edges_level0_only": 0.5874150185414091,
+    "mean_persistence": 0.30210137367248535,
+    "max_persistence": 1.0,
+    "max_strength_ratio": 1.0092248916625977
   },
   "line_audit_magnetic": {
-    "mean_persist_ew_strike": 0.6560561656951904,
-    "mean_persist_ns_strike": 0.5619056820869446,
-    "mean_persist_other": 0.6068148612976074,
-    "n_ew": 8223,
-    "n_ns": 21032,
-    "n_other": 57712,
-    "note": "E-W strike tolerance 15 deg; lines flown E-W => aliasing concentrates on E-W strikes. Ratios only; no claim that every E-W edge is artifact."
+    "mean_persist_ew_strike": 0.5396543145179749,
+    "mean_persist_ns_strike": 0.4473721981048584,
+    "mean_persist_other": 0.4908488988876343,
+    "n_ew": 7752,
+    "n_ns": 20873,
+    "n_other": 56802,
+    "interpretation_limit": "strike summaries only; no spectral line-frequency energy, no notch, and no claim that any individual E-W edge is an acquisition artifact"
   },
   "uc_crosscheck": {
-    "spearman_hgm_ours_vs_contractor_up150": 0.8779589867744882,
+    "spearman_hgm_ours_vs_contractor_up150": 0.879717208983889,
     "n_sampled_pixels": 298649,
-    "note": "ranks over valid footprint, 4-px stride; contractor grid is u8-quantised"
+    "height_m": 150.0,
+    "reference_layer": "TMI_up150",
+    "provenance": "owner-mirrored u8 contractor band; operator agreement is not source authentication"
   },
   "footprint_diff": {
     "template": 5167373,
@@ -57,8 +71,10 @@
     "in_features_not_template": 1540
   },
   "joint": {
-    "n_joint_persistent_deep": 67224,
-    "n_level0_edges_union": 114387
+    "n_joint_persistent_deep": 47684,
+    "n_level0_edges_union": 111115,
+    "max_persistence": 1.0,
+    "max_strength_ratio": 1.098159909248352
   },
   "constants": {
     "LADDER_M": [
@@ -71,8 +87,17 @@
     ],
     "EDGE_QUANTILE": 0.95,
     "TOL_PX": 1.0,
-    "TOL_SLOPE": 0.5,
-    "TAU_PERSIST": 0.5
+    "TOL_SLOPE_PX_PER_100M": 0.5,
+    "TAU_PERSIST": 0.5,
+    "persistence_bounds": [
+      0.0,
+      1.0
+    ],
+    "strength_ratio_bounds": [
+      0.0,
+      2.0
+    ],
+    "persistence_definition": "last_matched_level_index / (number_of_levels - 1)"
   },
   "rasters": [
     "worm_mag_persist.tif",
@@ -81,6 +106,9 @@
     "worm_joint_defined.tif",
     "worm_mag_hlast_m.tif",
     "worm_grav_hlast_m.tif",
+    "worm_mag_strength_ratio.tif",
+    "worm_grav_strength_ratio.tif",
+    "worm_joint_strength_ratio.tif",
     "worm_mag_edge0.tif",
     "worm_grav_edge0.tif",
     "worm_mag_strike.tif",

@@ -1,22 +1,27 @@
 {
-  "schema": 1,
+  "schema": 2,
   "generated_utc": "2026-10-03T08:30:00+00:00",
-  "note": "Every competition raster used by GEMSDOE29 is an owner-mirror restored from a sibling repository at a pinned commit and verified byte-for-byte against these SHA-256 values. They are NOT organiser-authenticated; the DrivenData data page is login-walled and gdr.openei.org is unreachable from the agent sandbox (SSL_ERROR_SYSCALL observed 2026-10-03T08:21Z, matching GEMSDOE25/27 limitations). Provenance chain: original official files -> owner's unrestricted runner -> GitHub mirrors pinned here. Reassembly of the 419 MB feature stack from five parts is verified against the whole-file hash before use.",
+  "note": "Every competition raster used by GEMSDOE29 is an owner-mirror restored from sibling repositories at pinned commits and verified byte-for-byte against the SHA-256 values below. They are NOT organizer-authenticated; the DrivenData data page redirects to login. The 419 MB feature stack is reassembled from five individually hash-verified GitHub blobs. The original GEMSDOE25 D2.8 raster is also mirrored to allow an exact pixel-mask comparison; its owner-reported score is not an organizer receipt.",
   "sources": {
     "sibling_gemsdoe": {
       "repo": "buffedlizard55-lab/GEMSDOE",
       "commit": "c0c06ac82178f26b94fce3397036ef8f12a2f3a0",
-      "role": "bridge parts (training feature stack) and bridge manifest"
+      "role": "five split feature-stack blobs"
     },
     "sibling24": {
       "repo": "buffedlizard55-lab/GEMSDOE24",
       "commit": "07345ea0604953d7efb858d9cfbc21e20c7aca0b",
-      "role": "labels, template, parent rasters, external layers"
+      "role": "labels, template, parent rasters, LiDAR/GeoDAWN feature derivatives, 2 m probe archive"
     },
     "sibling24_public_layers": {
       "repo": "buffedlizard55-lab/GEMSDOE24",
       "commit": "ee5d7c65ede2d0b891f747619ac8da81e8e76a15",
       "role": "public external rasters (lidar scarps, geodawn extensions/radiometrics, audit sources)"
+    },
+    "sibling25": {
+      "repo": "buffedlizard55-lab/GEMSDOE25",
+      "commit": "b8327057ee54fd321c587e8d9dc55226ea7ddfbd",
+      "role": "the original owner-mirrored D2.8 GeoTIFF used for pixel-mask reproduction audit; not score evidence"
     }
   },
   "files": [
@@ -26,72 +31,137 @@
       "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
       "what": "Official competition feature stack (owner mirror; = gems-geodawn-numerical-features.tif, 19 bands, float32, EPSG:32611, 3730x3292, 100 m). Assembled from 5 pinned parts of the GEMSDOE mirror; part hashes verified individually.",
       "assembled_from_parts": [
-        {"name": "part-000", "bytes": 94371840, "sha256": "0a330f8951af6c921029e25c84a579319d2db554d62d30d894d6ddc97f98cff7"},
-        {"name": "part-001", "bytes": 94371840, "sha256": "3c98037b2c997e3bbfcdfc2d9a982e8b820a77410dd7404b05cdb80594922c50"},
-        {"name": "part-002", "bytes": 94371840, "sha256": "c375c4dbc40c59bbaece572b5e348700b75935f9a30c879c82b6417e0836f31c"},
-        {"name": "part-003", "bytes": 94371840, "sha256": "b164159e6d0cb2595bc9f63a948af2646b124114a9c5921880c7516092137320"},
-        {"name": "part-004", "bytes": 41425484, "sha256": "fa0a6f9c936fac1d6f20ca37f5929b2d60bf7a80f3d477dcab886f941aee2696"}
-      ]
+        {
+          "name": "gems-geodawn-numerical-features.tif.part-000",
+          "bytes": 94371840,
+          "sha256": "0a330f8951af6c921029e25c84a579319d2db554d62d30d894d6ddc97f98cff7",
+          "source": "sibling_gemsdoe",
+          "source_path": "data/bridge/gems-geodawn-numerical-features.tif.part-000"
+        },
+        {
+          "name": "gems-geodawn-numerical-features.tif.part-001",
+          "bytes": 94371840,
+          "sha256": "3c98037b2c997e3bbfcdfc2d9a982e8b820a77410dd7404b05cdb80594922c50",
+          "source": "sibling_gemsdoe",
+          "source_path": "data/bridge/gems-geodawn-numerical-features.tif.part-001"
+        },
+        {
+          "name": "gems-geodawn-numerical-features.tif.part-002",
+          "bytes": 94371840,
+          "sha256": "c375c4dbc40c59bbaece572b5e348700b75935f9a30c879c82b6417e0836f31c",
+          "source": "sibling_gemsdoe",
+          "source_path": "data/bridge/gems-geodawn-numerical-features.tif.part-002"
+        },
+        {
+          "name": "gems-geodawn-numerical-features.tif.part-003",
+          "bytes": 94371840,
+          "sha256": "b164159e6d0cb2595bc9f63a948af2646b124114a9c5921880c7516092137320",
+          "source": "sibling_gemsdoe",
+          "source_path": "data/bridge/gems-geodawn-numerical-features.tif.part-003"
+        },
+        {
+          "name": "gems-geodawn-numerical-features.tif.part-004",
+          "bytes": 41425484,
+          "sha256": "fa0a6f9c936fac1d6f20ca37f5929b2d60bf7a80f3d477dcab886f941aee2696",
+          "source": "sibling_gemsdoe",
+          "source_path": "data/bridge/gems-geodawn-numerical-features.tif.part-004"
+        }
+      ],
+      "source": "sibling_gemsdoe"
     },
     {
       "path": "data/bridge/labels.tif",
       "bytes": 425830,
       "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
-      "what": "INGENIOUS/USGS catalogue raster (int8, -1 outside footprint), 60,988 positive pixels."
+      "what": "INGENIOUS/USGS catalogue raster (int8, -1 outside footprint), 60,988 positive pixels.",
+      "source": "sibling24",
+      "source_path": "data/bridge/labels.tif"
     },
     {
       "path": "data/bridge/existing_faults.tif",
       "bytes": 425830,
       "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
-      "what": "existing_faults.tif (identical content to labels.tif per sibling hash record)."
+      "what": "existing_faults.tif (identical content to labels.tif per sibling hash record).",
+      "source": "sibling24",
+      "source_path": "data/bridge/existing_faults.tif"
     },
     {
       "path": "data/bridge/sample_submission.tif",
       "bytes": 1599597,
       "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
-      "what": "Grid/footprint template (owner copy; NOT organiser-authenticated). Footprint = 5,167,373 finite pixels."
+      "what": "Grid/footprint template (owner copy; NOT organiser-authenticated). Footprint = 5,167,373 finite pixels.",
+      "source": "sibling24",
+      "source_path": "data/bridge/sample_submission.tif"
     },
     {
       "path": "data/inputs/h19_5_nan.tif",
       "bytes": 1712322,
       "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d",
       "what": "H19-4/H19-5 parent: h19-5-powerlaw-budget-multiline-corroborated emission (owner-reported live score 0.1922). 121,131 positive pixels.",
-      "sibling_path": "inputs/gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif"
+      "sibling_path": "inputs/gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif",
+      "source": "sibling24",
+      "source_path": "inputs/gems19-h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan.tif"
     },
     {
       "path": "data/inputs/dotted_h19_5_d1_5_nan.tif",
       "bytes": 1632732,
       "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
       "what": "dot_thin(H19-5, 1.5), owner-reported live score 0.2477 (24GEMSDOE h25-1).",
-      "sibling_path": "docs/downloads/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif"
+      "sibling_path": "docs/downloads/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif",
+      "source": "sibling24",
+      "source_path": "docs/downloads/gems24-h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan.tif"
     },
     {
       "path": "data/external/lidar_scarp_features_u8.tif",
       "bytes": 36943606,
       "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
-      "what": "12-band 100 m terrain descriptors derived from USGS 3DEP 1 m DEM tiles (quantised u8 ranks)."
+      "what": "12-band 100 m terrain descriptors derived from USGS 3DEP 1 m DEM tiles (quantised u8 ranks).",
+      "source": "sibling24",
+      "source_path": "data/external/lidar_scarp_features_u8.tif"
     },
     {
       "path": "data/external/geodawn_extensions_u8.tif",
       "bytes": 27132925,
       "sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
-      "what": "4-band GeoDAWN contractor grids: ThK, UK, UTh ratios and TMI upward-continued 150 m (u8 ranks). The TMI_up150 band is the independent cross-check anchor for our own upward continuation."
+      "what": "4-band GeoDAWN contractor grids: ThK, UK, UTh ratios and TMI upward-continued 150 m (u8 ranks). The TMI_up150 band is the independent cross-check anchor for our own upward continuation.",
+      "source": "sibling24",
+      "source_path": "data/external/geodawn_extensions_u8.tif"
     },
     {
       "path": "data/external/geodawn_rad_u8.tif",
       "bytes": 26612970,
       "sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
-      "what": "4-band GeoDAWN radiometric grids K, Th, U, TC (u8 ranks)."
+      "what": "4-band GeoDAWN radiometric grids K, Th, U, TC (u8 ranks).",
+      "source": "sibling24",
+      "source_path": "data/external/geodawn_rad_u8.tif"
     },
     {
       "path": "data/gdr/2m_temperature_probe_INGENIOUS_regional_data.zip",
       "bytes": 1080530,
       "sha256": "1301f70d230058e616ea5d34d1c7a32fabf7d49198172f376c59c89bd652eca3",
-      "what": "GDR 1391 INGENIOUS 2 m temperature-probe regional data (shapefile DBF 26,149,306 B + xlsx). Byte-verified 2026-10-03 against the 16GEMSDOE runner pin recorded in GEMSDOE27 fetch_external_layers.py. Unblocks H27-2 ('residualized 2 m probes') locally."
+      "what": "GDR 1391 INGENIOUS 2 m temperature-probe regional data (shapefile DBF 26,149,306 B + xlsx). Byte-verified 2026-10-03 against the 16GEMSDOE runner pin recorded in GEMSDOE27 fetch_external_layers.py. Unblocks H27-2 ('residualized 2 m probes') locally.",
+      "source": "sibling24",
+      "source_path": "data/external/2m_temperature_probe_INGENIOUS_regional_data.zip"
+    },
+    {
+      "path": "data/inputs/dotted_h19_5_d2_8_nan.tif",
+      "bytes": 1603424,
+      "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+      "what": "Original owner-mirrored GEMSDOE25 D2.8 GeoTIFF, retrieved from the public project repository and SHA-256-pinned. Its pixel mask is compared with the local deterministic re-thinning; the associated 0.2600 competition score remains owner-reported and is not authenticated by this file.",
+      "source": "sibling25",
+      "source_path": "docs/downloads/gems25-dotted-h19-5-d2-8-20261002-e56ea318af89-nan.tif"
     }
   ],
   "blocked_this_session": [
-    {"key": "paleo", "url": "https://gdr.openei.org/files/1391/paleo_geothermal_regional.zip", "reason": "gdr.openei.org unreachable from sandbox (curl exit 35 SSL_ERROR_SYSCALL, 2026-10-03T08:22Z). Pin if ever fetched: faffcf697f32dbbf6cbb317cd1effb3e305538ce38eb239d72d0c6fa071e91ca / 84,008 bytes."},
-    {"key": "volcanics", "url": "https://gdr.openei.org/files/1391/great_basin_q_volcanics.zip", "reason": "same network block. Pin: c4a2d2dfd5c44f42e0aba37290948881631aff312b8b9ca7934b6dc1e451e5be / 9,898,770 bytes."}
+    {
+      "key": "paleo",
+      "url": "https://gdr.openei.org/files/1391/paleo_geothermal_regional.zip",
+      "reason": "gdr.openei.org unreachable from sandbox (curl exit 35 SSL_ERROR_SYSCALL, 2026-10-03T08:22Z). Pin if ever fetched: faffcf697f32dbbf6cbb317cd1effb3e305538ce38eb239d72d0c6fa071e91ca / 84,008 bytes."
+    },
+    {
+      "key": "volcanics",
+      "url": "https://gdr.openei.org/files/1391/great_basin_q_volcanics.zip",
+      "reason": "same network block. Pin: c4a2d2dfd5c44f42e0aba37290948881631aff312b8b9ca7934b6dc1e451e5be / 9,898,770 bytes."
+    }
   ]
 }

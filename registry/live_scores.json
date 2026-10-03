@@ -1,44 +1,195 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-03T08:55:00Z",
+  "generated_utc": "2026-10-03T14:40:58Z",
   "verification_note": "Scores below are owner-reported claims collected by the user across the GEMSDOE site family. GEMSDOE29 independently read the DrivenData public leaderboard ONCE (fetch_page, 2026-10-03T08:26Z, rendered below) and confirmed: #1 DARD 0.3195 (12 submissions), #2 nchuzhoy 0.3128 (2 submissions), #5 xiaofanhu 0.2941, and a 0.2600 entry at #15 (wbg1). The leaderboard column is 'Best public DW-Tversky' — the PUBLIC split, not the final private score. No organizer receipt ties any specific file to a specific score; file<->score links remain owner-reported.",
   "leaderboard_public_2026-10-03T0826Z": [
-    {"rank": 1, "team": "DARD", "public_dti": 0.3195, "submissions": 12},
-    {"rank": 2, "team": "nchuzhoy", "public_dti": 0.3128, "submissions": 2},
-    {"rank": 3, "team": "alexoktaba", "public_dti": 0.3042, "submissions": 20},
-    {"rank": 4, "team": "Batik Shirt Brothers", "public_dti": 0.2998, "submissions": 18},
-    {"rank": 5, "team": "xiaofanhu", "public_dti": 0.2941, "submissions": 7},
-    {"rank": 15, "team": "wbg1", "public_dti": 0.2600, "submissions": 9}
+    {
+      "rank": 1,
+      "team": "DARD",
+      "public_dti": 0.3195,
+      "submissions": 12
+    },
+    {
+      "rank": 2,
+      "team": "nchuzhoy",
+      "public_dti": 0.3128,
+      "submissions": 2
+    },
+    {
+      "rank": 3,
+      "team": "alexoktaba",
+      "public_dti": 0.3042,
+      "submissions": 20
+    },
+    {
+      "rank": 4,
+      "team": "Batik Shirt Brothers",
+      "public_dti": 0.2998,
+      "submissions": 18
+    },
+    {
+      "rank": 5,
+      "team": "xiaofanhu",
+      "public_dti": 0.2941,
+      "submissions": 7
+    },
+    {
+      "rank": 15,
+      "team": "wbg1",
+      "public_dti": 0.26,
+      "submissions": 9
+    }
   ],
   "group_submissions": [
-    {"project": "GEMSDOE25", "file": "dotted-h19-5-d2-8-20261002-e56ea318af89-nan", "score": 0.2600, "parent": "19GEMSDOE h19-5 (0.1922) thinned by dot_thin(min_dist=2.8px); 44,090 px", "status": "group best; mask geometry reproduced byte-exactly in THIS repo (tests/test_sibling_reproduction.py); score owner-reported, public-LB value 0.2600 exists at rank 15"},
-    {"project": "GEMSDOE24", "file": "h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan", "score": 0.2477, "parent": "dot_thin(h19-5, 1.5); 60,069 px", "status": "reproduced bit-for-bit here"},
-    {"project": "GEMSDOE27", "file": "topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan", "score": 0.2449, "parent": "d1.5 + 1,259 far-field topology dots", "status": "far-field dot ADDITION lost -0.0028 vs its own base; key negative result"},
-    {"project": "GEMSDOE26", "file": "dilcond-oof-v1-20261003-47629f496133-nan", "score": 0.1223, "parent": "dilatation x conductivity coincidence OOF", "status": "failed preregistered gate; low"},
-    {"project": "GEMSDOE23", "file": "h30-arrangement-matched-habitat-20261002-0d4e02e8-nan", "score": 0.1352},
-    {"project": "GEMSDOE22", "file": "h23-a-dti-optimal-emission-6pct-20261002-e2ec4b49-nan", "score": 0.1002},
-    {"project": "GEMSDOE22", "file": "h23-b-dti-optimal-emission-10pct-20261002-86176698-nan", "score": 0.0748, "note": "budget over 6pct->10pct costs score: over-emission is punished"},
-    {"project": "19GEMSDOE", "file": "h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan", "score": 0.1922, "parent": "4-line corroborated solid, 121,131 px"},
-    {"project": "19GEMSDOE", "file": "h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan", "score": 0.1894},
-    {"project": "20GEMSDOE", "file": "h20-1-sarnnpu-powerlaw-pi0363-tilt-wingcrack-20260930-be0e8f6b-nan", "score": 0.1890},
-    {"project": "16GEMSDOE", "file": "h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan", "score": 0.1855},
-    {"project": "GEMSDOE10", "file": "h28-dotted-ridge-20260928T020256236880Z-6452ae1d00", "score": 0.1839, "note": "dot-thin of h25-ctx-ridge surface 0.1280 -> +44% from spacing alone"},
-    {"project": "GEMSDOE", "file": "gems-submission-20260925T001403Z-7f00890a", "score": 0.1563},
-    {"project": "8GEMSDOE", "file": "Hedge-v2_submission", "score": 0.1563, "note": "identical score to GEMSDOE after ADDING all catalogue pixels -> catalogue-masked scoring confirmed empirically"},
-    {"project": "7GEMSDOE", "file": "lidarscarp-ridge-top2pct-36c3a3f341c8", "score": 0.1461},
-    {"project": "12GEMSDOE", "file": "r7-nms3-dem10-scarp_0c9199f14e62", "score": 0.1294, "note": "same as _allfinite variant -> NaN-outside and 0-outside both accepted identically"},
-    {"project": "16GEMSDOE", "file": "h18-4-usgs-geologic-map-faults-gap-20260930-aef8f42c-nan", "score": 0.0360, "note": "far-field-only emission on SGMC bedrock gaps: LIVE-REFUTED habitat (1.62x blind)"},
-    {"project": "14GEMSDOE", "file": "GEMS_r5-geom-horse-ensemble...site_e96e942f", "score": 0.0020},
-    {"project": "9GEMSDOE", "file": "2314b599", "score": 0.0107},
-    {"project": "6GEMSDOE", "file": "gems6_hgb88-topk03_33cec71ff0", "score": 0.0286},
-    {"project": "4GEMSDOE", "file": "gems-submission-20260926T163915Z-237f0063", "score": 0.0343},
-    {"project": "17GEMSDOE", "file": "17GEMSDOE_F-ensemble-2pct_20260930T050626Z", "score": 0.0187},
-    {"project": "18GEMSDOE", "file": "H19-C_20260930T212401Z_c11e495e", "score": 0.0297},
-    {"project": "11GEMSDOE", "file": "gems-structural-area06-v1", "score": 0.0202},
-    {"project": "13GEMSDOE", "file": "20261001_r13-lattice-s5_v2_nan-outside", "score": 0.0904, "note": "blind spacing-5 lattice: pure-geometry anchor used by GEMSDOE25/27 to infer |G|~12.2-12.8k truth pixels"}
+    {
+      "project": "GEMSDOE25",
+      "file": "dotted-h19-5-d2-8-20261002-e56ea318af89-nan",
+      "score": 0.26,
+      "parent": "19GEMSDOE h19-5 (0.1922) thinned by dot_thin(min_dist=2.8px); 44,090 px",
+      "status": "owner-mirrored D2.8 raster's pixel mask reproduced exactly here (GeoTIFF bytes differ); 0.2600 is owner-reported and no organizer receipt ties the file to the score",
+      "positive_pixels": 44090,
+      "spacing_px": 2.8
+    },
+    {
+      "project": "GEMSDOE24",
+      "file": "h25-1-dotted-h19-5-d1-5-20261002-989f59505db1-nan",
+      "score": 0.2477,
+      "parent": "dot_thin(h19-5, 1.5); 60,069 px",
+      "status": "reproduced bit-for-bit here",
+      "positive_pixels": 60069,
+      "spacing_px": 1.5
+    },
+    {
+      "project": "GEMSDOE27",
+      "file": "topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan",
+      "score": 0.2449,
+      "parent": "d1.5 + 1,259 far-field topology dots",
+      "status": "far-field dot ADDITION lost -0.0028 vs its own base; key negative result"
+    },
+    {
+      "project": "GEMSDOE26",
+      "file": "dilcond-oof-v1-20261003-47629f496133-nan",
+      "score": 0.1223,
+      "parent": "dilatation x conductivity coincidence OOF",
+      "status": "failed preregistered gate; low"
+    },
+    {
+      "project": "GEMSDOE23",
+      "file": "h30-arrangement-matched-habitat-20261002-0d4e02e8-nan",
+      "score": 0.1352
+    },
+    {
+      "project": "GEMSDOE22",
+      "file": "h23-a-dti-optimal-emission-6pct-20261002-e2ec4b49-nan",
+      "score": 0.1002
+    },
+    {
+      "project": "GEMSDOE22",
+      "file": "h23-b-dti-optimal-emission-10pct-20261002-86176698-nan",
+      "score": 0.0748,
+      "note": "budget over 6pct->10pct costs score: over-emission is punished"
+    },
+    {
+      "project": "19GEMSDOE",
+      "file": "h19-5-powerlaw-budget-multiline-corroborated-20260930-e27054cf-nan",
+      "score": 0.1922,
+      "parent": "4-line corroborated solid, 121,131 px",
+      "positive_pixels": 121131
+    },
+    {
+      "project": "19GEMSDOE",
+      "file": "h19-4-multiline-corroborated-openness-thermal-pop-20260930-691e4dfa-nan",
+      "score": 0.1894,
+      "positive_pixels": 121131
+    },
+    {
+      "project": "20GEMSDOE",
+      "file": "h20-1-sarnnpu-powerlaw-pi0363-tilt-wingcrack-20260930-be0e8f6b-nan",
+      "score": 0.189
+    },
+    {
+      "project": "16GEMSDOE",
+      "file": "h16-1-topo-geophys-baseline-ridges-20260930-df20f65e-nan",
+      "score": 0.1855
+    },
+    {
+      "project": "GEMSDOE10",
+      "file": "h28-dotted-ridge-20260928T020256236880Z-6452ae1d00",
+      "score": 0.1839,
+      "note": "dot-thin of h25-ctx-ridge surface 0.1280 -> +44% from spacing alone"
+    },
+    {
+      "project": "GEMSDOE",
+      "file": "gems-submission-20260925T001403Z-7f00890a",
+      "score": 0.1563
+    },
+    {
+      "project": "8GEMSDOE",
+      "file": "Hedge-v2_submission",
+      "score": 0.1563,
+      "note": "identical score to GEMSDOE after ADDING all catalogue pixels -> catalogue-masked scoring confirmed empirically"
+    },
+    {
+      "project": "7GEMSDOE",
+      "file": "lidarscarp-ridge-top2pct-36c3a3f341c8",
+      "score": 0.1461
+    },
+    {
+      "project": "12GEMSDOE",
+      "file": "r7-nms3-dem10-scarp_0c9199f14e62",
+      "score": 0.1294,
+      "note": "same as _allfinite variant -> NaN-outside and 0-outside both accepted identically"
+    },
+    {
+      "project": "16GEMSDOE",
+      "file": "h18-4-usgs-geologic-map-faults-gap-20260930-aef8f42c-nan",
+      "score": 0.036,
+      "note": "far-field-only emission on SGMC bedrock gaps: LIVE-REFUTED habitat (1.62x blind)"
+    },
+    {
+      "project": "14GEMSDOE",
+      "file": "GEMS_r5-geom-horse-ensemble...site_e96e942f",
+      "score": 0.002
+    },
+    {
+      "project": "9GEMSDOE",
+      "file": "2314b599",
+      "score": 0.0107
+    },
+    {
+      "project": "6GEMSDOE",
+      "file": "gems6_hgb88-topk03_33cec71ff0",
+      "score": 0.0286
+    },
+    {
+      "project": "4GEMSDOE",
+      "file": "gems-submission-20260926T163915Z-237f0063",
+      "score": 0.0343
+    },
+    {
+      "project": "17GEMSDOE",
+      "file": "17GEMSDOE_F-ensemble-2pct_20260930T050626Z",
+      "score": 0.0187
+    },
+    {
+      "project": "18GEMSDOE",
+      "file": "H19-C_20260930T212401Z_c11e495e",
+      "score": 0.0297
+    },
+    {
+      "project": "11GEMSDOE",
+      "file": "gems-structural-area06-v1",
+      "score": 0.0202
+    },
+    {
+      "project": "13GEMSDOE",
+      "file": "20261001_r13-lattice-s5_v2_nan-outside",
+      "score": 0.0904,
+      "note": "blind spacing-5 lattice: pure-geometry anchor used by GEMSDOE25/27 to infer |G|~12.2-12.8k truth pixels"
+    }
   ],
   "structural_findings_carried_forward": {
-    "emission_geometry_exhausted": "GEMSDOE27 live inversion: budget-optimal spacing d=2.25-2.8 px gives modelled ~0.2550-0.2600 for the H19-5 surface; the 0.2600 anchor matches. Rearranging dots on this surface CANNOT reach 0.3195 (needs 0.570*|G| credit at 60k px; no submission ever earned > 0.508*|G|). Only a better detector (concentration > 5.7x blind) can.",
+    "emission_geometry_exhausted": "Owner-reported sibling inversion: spacing d≈2.25–2.8 on the H19-5 parent was estimated near 0.255–0.260. The local D2.8 mask is reproduced, but this does not prove all rearrangements or new detectors are exhausted; no causal inference or private-score prediction is made.",
     "metric_identity": "DTI = TPw / (0.2*TPw*(1-rho) + 0.2*N + 0.8*|G|), rho crowding discount — crowding near truth is cheap; far-field mass is what costs.",
     "far_field_habitat": "adding far-field dots was live-tested once (GEMSDOE27 T-v2): -0.0028. Any far-field emission needs independent support stronger than our best proxies.",
     "h19_5_family_plateau": "h19-4/h19-5/h16-1/dotted variants all land 0.185-0.26; same detector, different clothes (concentration 5.3-5.7x blind)."

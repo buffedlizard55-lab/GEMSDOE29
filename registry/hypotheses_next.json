@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "frozen_utc": "2026-10-03",
+  "title": "Preregistered next-hypothesis slate",
+  "ranking_basis": "Planning prior by expected catalogue-proxy holdout improvement per engineering cost and local-data feasibility; ranges are NOT measured or leaderboard predictions.",
+  "sources_manual_review": [
+    "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
+    "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
+    "https://gdr.openei.org/submissions/1391",
+    "https://academic.oup.com/gji/article/137/1/175/700677",
+    "https://pangea.stanford.edu/ERE/pdf/IGAstandard/SGW/2018/Horowitz.pdf"
+  ],
+  "hypotheses": [
+    {
+      "id": "H29-5",
+      "rank": 1,
+      "name": "Deformation-seismicity support along persistent basement corridors",
+      "layers": ["rtp (band 2)", "iso_grav_anom (band 13)", "geod_2ndinv (band 4)", "geod_shearrate (band 7)", "geod_dilatationrate (band 8)", "deq_n100a15 (band 10)", "ieq_n100a15 (band 16)"],
+      "signature": "Explicit interaction between corrected cross-scale potential-field persistence and coherent geodetic-strain / earthquake-density support, added to a dense head; matched per-quadrant budget.",
+      "why_unmapped": "A brittle fault can remain active beneath cover without a visible scarp or public Quaternary trace. Joint structural, strain and seismic support is more selective than any raw layer by itself.",
+      "difference_from_repo": "Persistence-only features and an independent 2 m probe feature arm exist; the sibling DILCOND test used dilatation x conductivity without a worm-selected corridor. No checked-in GEMSDOE29 feature explicitly interacts persistence with strain and earthquake density.",
+      "planning_holdout_delta_dti": [0.001, 0.006],
+      "cost": "~1 CPU day",
+      "data_availability": "Existing hash-pinned owner-mirror feature stack; no new external file. Owner mirror is not organizer-authenticated.",
+      "status_at_freeze": "registered; no result",
+      "gate": "mean paired delta >= +0.005; >=3/4 folds positive on draws 0 and 1, and same threshold on draw 2 or 3; also beat best same-fold/draw pre-existing control"
+    },
+    {
+      "id": "H29-3",
+      "rank": 2,
+      "name": "Flight-line-frequency notch before magnetic worming",
+      "layers": ["rtp (band 2)", "mag_anom (band 1)", "USGS GeoDAWN survey metadata"],
+      "signature": "Measure narrow cross-line spectral peaks at frequencies corresponding to officially documented 200/400 m flight-line spacing; only then apply a preregistered notch and recompute the continuation ladder.",
+      "why_unmapped": "A measured line-periodic acquisition artifact can mask weak basement contacts; removing a verified artifact could expose a fault that is not present in the published surface-trace catalogue.",
+      "difference_from_repo": "Existing work audits persistence by edge strike but implements no spectral-domain notch. The E-W persistence inversion refutes a simple strike filter, not this frequency-specific test.",
+      "planning_holdout_delta_dti": [0.0, 0.004],
+      "cost": "~1 day",
+      "data_availability": "Local grid plus public USGS ScienceBase GeoDAWN release DOI 10.5066/P93LGLVQ; no new external file required.",
+      "status_at_freeze": "registered; no result"
+    },
+    {
+      "id": "H29-6",
+      "rank": 3,
+      "name": "Potential-field curvature and junctions at transfer zones",
+      "layers": ["rtp (band 2)", "iso_grav_anom (band 13)", "potential-field gradient bands"],
+      "signature": "Hessian-eigenvalue / signed-curvature ridges and cross-field junctions, evaluated at fixed metric scales and tested for continuation persistence.",
+      "why_unmapped": "Buried fault tips, bends and transfer zones can produce localized density/magnetization curvature without a surface trace captured by existing maps.",
+      "difference_from_repo": "Current detectors use horizontal-gradient magnitude, fixed-scale ridge and continuation persistence; no Hessian-curvature skeleton or junction detector is implemented.",
+      "planning_holdout_delta_dti": [0.0, 0.005],
+      "cost": "1–2 days",
+      "data_availability": "Current owner-mirror potential fields; no new external file."
+    },
+    {
+      "id": "H29-4",
+      "rank": 4,
+      "name": "Paleothermal-deposit corridors as fossil fault evidence",
+      "layers": ["GDR 1391 paleo_geothermal_regional.zip", "potential-field persistence"],
+      "signature": "Distance-decayed sinter/tufa/travertine support and alignment with persistent potential-field worms, assessed away from mapped traces.",
+      "why_unmapped": "Fossil hydrothermal deposits may preserve evidence of former fluid pathways where modern fault traces are buried, eroded or unmapped.",
+      "difference_from_repo": "B2 used 2 m temperature probes, not fossil deposit geometry; no paleothermal overlay exists in this repo.",
+      "planning_holdout_delta_dti": null,
+      "cost": "~0.5–1 day after retrieval",
+      "data_availability": "Official GDR 1391 page lists the free 82.04 kB Paleo Geothermal Features ZIP under CC BY 4.0, but direct binary retrieval returned SSL_ERROR_SYSCALL in this sandbox. Not viable here until an accessible, hash-pinned copy is obtained.",
+      "status_at_freeze": "registered-but-blocked; no result"
+    }
+  ],
+  "selection": {
+    "id": "H29-5",
+    "reason": "Highest planning-value / cost among candidates with local inputs and a directly testable structural–permeability mechanism; H29-3 remains next and is not abandoned.",
+    "slot_spend": false
+  }
+}

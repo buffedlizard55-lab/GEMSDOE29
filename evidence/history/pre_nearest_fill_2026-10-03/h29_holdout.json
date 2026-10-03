@@ -1,0 +1,1096 @@
+{
+  "generated_utc": "2026-10-03T14:22:01Z",
+  "runtime_s": 570.8141887187958,
+  "run_mode": "screen-only-4-fold-2-draw; confirmation conditional on screen pass",
+  "rows": [
+    {
+      "draw": 0,
+      "fold": 0,
+      "name": "NW",
+      "n_hidden": 2122,
+      "n_pos_rows": 50202,
+      "n_neg_rows": 301212,
+      "A": {
+        "A0": {
+          "dti": 0.1036227171948531,
+          "TPw": 390.92886287555746,
+          "FPw": 9984.157989503012,
+          "n_emitted": 10161
+        },
+        "A1": {
+          "dti": 0.10402354561622855,
+          "TPw": 390.778788367719,
+          "FPw": 9904.410442607306,
+          "n_emitted": 10080,
+          "paired_delta": 0.00040082842137545427
+        },
+        "A2": {
+          "dti": 0.1069712885407278,
+          "TPw": 390.9459794365598,
+          "FPw": 9394.461060856105,
+          "n_emitted": 9567,
+          "paired_delta": 0.0033485713458746985
+        }
+      },
+      "B": {
+        "B0": {
+          "dti": 0.0253389402372348,
+          "TPw": 94.5204836967576,
+          "FPw": 10068.710153669981,
+          "n_emitted": 10161
+        },
+        "B1": {
+          "dti": 0.024607633936842805,
+          "TPw": 91.7973541064624,
+          "FPw": 10072.413244361858,
+          "n_emitted": 10161,
+          "paired_delta": -0.0007313063003919935
+        },
+        "B2": {
+          "dti": 0.024400439347339695,
+          "TPw": 91.02141876358141,
+          "FPw": 10072.572813916731,
+          "n_emitted": 10161,
+          "paired_delta": -0.0009385008898951039
+        },
+        "B3": {
+          "dti": 0.026004293101386092,
+          "TPw": 96.99334768654657,
+          "FPw": 10064.4941245909,
+          "n_emitted": 10161,
+          "paired_delta": 0.0006653528641512932,
+          "best_control_arm": "A2",
+          "best_control_dti": 0.1069712885407278,
+          "paired_delta_best_control": -0.0809669954393417,
+          "paired_delta_A0": -0.077618424093467
+        }
+      },
+      "candidate": {
+        "id": "H29-5",
+        "features": [
+          "h29_5_worm_strain",
+          "h29_5_worm_dep_eq",
+          "h29_5_worm_ind_eq",
+          "h29_5_corridor_interaction"
+        ],
+        "budget_pixels": 10161,
+        "best_control_arm": "A2"
+      }
+    },
+    {
+      "draw": 0,
+      "fold": 1,
+      "name": "NE",
+      "n_hidden": 2387,
+      "n_pos_rows": 48284,
+      "n_neg_rows": 289704,
+      "A": {
+        "A0": {
+          "dti": 0.09610250199800416,
+          "TPw": 417.189468741331,
+          "FPw": 11740.253160649569,
+          "n_emitted": 11930
+        },
+        "A1": {
+          "dti": 0.09604860458315323,
+          "TPw": 416.08489924166935,
+          "FPw": 11696.037131570485,
+          "n_emitted": 11885,
+          "paired_delta": -5.389741485092858e-05
+        },
+        "A2": {
+          "dti": 0.09145340091223707,
+          "TPw": 386.7512485381963,
+          "FPw": 11209.965332324413,
+          "n_emitted": 11381,
+          "paired_delta": -0.004649101085767091
+        }
+      },
+      "B": {
+        "B0": {
+          "dti": 0.01222647821240157,
+          "TPw": 52.52839529251256,
+          "FPw": 11880.8803876591,
+          "n_emitted": 11930
+        },
+        "B1": {
+          "dti": 0.011833324758238466,
+          "TPw": 50.83803935522407,
+          "FPw": 11882.039225779765,
+          "n_emitted": 11930,
+          "paired_delta": -0.0003931534541631032
+        },
+        "B2": {
+          "dti": 0.013261881420648406,
+          "TPw": 56.97715594761092,
+          "FPw": 11876.573665933804,
+          "n_emitted": 11930,
+          "paired_delta": 0.0010354032082468372
+        },
+        "B3": {
+          "dti": 0.013368235449668078,
+          "TPw": 57.42309435864243,
+          "FPw": 11872.01668200742,
+          "n_emitted": 11930,
+          "paired_delta": 0.0011417572372665087,
+          "best_control_arm": "A0",
+          "best_control_dti": 0.09610250199800416,
+          "paired_delta_best_control": -0.08273426654833609,
+          "paired_delta_A0": -0.08273426654833609
+        }
+      },
+      "candidate": {
+        "id": "H29-5",
+        "features": [
+          "h29_5_worm_strain",
+          "h29_5_worm_dep_eq",
+          "h29_5_worm_ind_eq",
+          "h29_5_corridor_interaction"
+        ],
+        "budget_pixels": 11930,
+        "best_control_arm": "A0"
+      }
+    },
+    {
+      "draw": 0,
+      "fold": 2,
+      "name": "SW",
+      "n_hidden": 3652,
+      "n_pos_rows": 39572,
+      "n_neg_rows": 237432,
+      "A": {
+        "A0": {
+          "dti": 0.07297910482707298,
+          "TPw": 398.1978216895073,
+          "FPw": 12275.434545941996,
+          "n_emitted": 12452
+        },
+        "A1": {
+          "dti": 0.0726219709729323,
+          "TPw": 393.99347856066595,
+          "FPw": 12124.334358248747,
+          "n_emitted": 12298,
+          "paired_delta": -0.0003571338541406843
+        },
+        "A2": {
+          "dti": 0.07344276501641733,
+          "TPw": 388.32608045979066,
+          "FPw": 11441.001024915415,
+          "n_emitted": 11608,
+          "paired_delta": 0.0004636601893443504
+        }
+      },
+      "B": {
+        "B0": {
+          "dti": 0.027867445941016467,
+          "TPw": 150.9793673403317,
+          "FPw": 12329.862512375534,
+          "n_emitted": 12452
+        },
+        "B1": {
+          "dti": 0.028466355393520635,
+          "TPw": 154.2485229415588,
+          "FPw": 12330.879628936538,
+          "n_emitted": 12452,
+          "paired_delta": 0.0005989094525041677
+        },
+        "B2": {
+          "dti": 0.026442452018970775,
+          "TPw": 143.2357915863886,
+          "FPw": 12333.202421817909,
+          "n_emitted": 12452,
+          "paired_delta": -0.0014249939220456927
+        },
+        "B3": {
+          "dti": 0.02816246485088252,
+          "TPw": 152.54470421489157,
+          "FPw": 12322.43702692699,
+          "n_emitted": 12452,
+          "paired_delta": 0.0002950189098660516,
+          "best_control_arm": "A2",
+          "best_control_dti": 0.07344276501641733,
+          "paired_delta_best_control": -0.04528030016553482,
+          "paired_delta_A0": -0.04481663997619047
+        }
+      },
+      "candidate": {
+        "id": "H29-5",
+        "features": [
+          "h29_5_worm_strain",
+          "h29_5_worm_dep_eq",
+          "h29_5_worm_ind_eq",
+          "h29_5_corridor_interaction"
+        ],
+        "budget_pixels": 12452,
+        "best_control_arm": "A2"
+      }
+    },
+    {
+      "draw": 0,
+      "fold": 3,
+      "name": "SE",
+      "n_hidden": 3309,
+      "n_pos_rows": 42710,
+      "n_neg_rows": 256260,
+      "A": {
+        "A0": {
+          "dti": 0.11984270737204597,
+          "TPw": 554.790715483685,
+          "FPw": 9355.829034576673,
+          "n_emitted": 9581
+        },
+        "A1": {
+          "dti": 0.11947689936209345,
+          "TPw": 551.2293497508884,
+          "FPw": 9281.219558868423,
+          "n_emitted": 9506,
+          "paired_delta": -0.00036580800995252016
+        },
+        "A2": {
+          "dti": 0.11669689413430355,
+          "TPw": 521.8304725109608,
+          "FPw": 8600.539746782517,
+          "n_emitted": 8808,
+          "paired_delta": -0.0031458132377424203
+        }
+      },
+      "B": {
+        "B0": {
+          "dti": 0.013988830150167341,
+          "TPw": 63.86163193191684,
+          "FPw": 9526.075649804974,
+          "n_emitted": 9581
+        },
+        "B1": {
+          "dti": 0.01602043259800105,
+          "TPw": 73.15269996462806,
+          "FPw": 9521.909918205132,
+          "n_emitted": 9581,
+          "paired_delta": 0.002031602447833708
+        },
+        "B2": {
+          "dti": 0.017304083787132392,
+          "TPw": 79.02663209755114,
+          "FPw": 9519.65016095701,
+          "n_emitted": 9581,
+          "paired_delta": 0.003315253636965051
+        },
+        "B3": {
+          "dti": 0.016768721523133898,
+          "TPw": 76.57307217255185,
+          "FPw": 9519.540892280796,
+          "n_emitted": 9581,
+          "paired_delta": 0.0027798913729665566,
+          "best_control_arm": "A0",
+          "best_control_dti": 0.11984270737204597,
+          "paired_delta_best_control": -0.10307398584891207,
+          "paired_delta_A0": -0.10307398584891207
+        }
+      },
+      "candidate": {
+        "id": "H29-5",
+        "features": [
+          "h29_5_worm_strain",
+          "h29_5_worm_dep_eq",
+          "h29_5_worm_ind_eq",
+          "h29_5_corridor_interaction"
+        ],
+        "budget_pixels": 9581,
+        "best_control_arm": "A0"
+      }
+    },
+    {
+      "draw": 1,
+      "fold": 0,
+      "name": "NW",
+      "n_hidden": 2374,
+      "n_pos_rows": 50202,
+      "n_neg_rows": 301212,
+      "A": {
+        "A0": {
+          "dti": 0.10768232740903705,
+          "TPw": 428.4008054426989,
+          "FPw": 9967.480050950173,
+          "n_emitted": 10161
+        },
+        "A1": {
+          "dti": 0.10873983566210302,
+          "TPw": 430.89370833090527,
+          "FPw": 9886.163102743634,
+          "n_emitted": 10080,
+          "paired_delta": 0.0010575082530659696
+        },
+        "A2": {
+          "dti": 0.10788188673631774,
+          "TPw": 416.3203358783088,
+          "FPw": 9382.871306676134,
+          "n_emitted": 9567,
+          "paired_delta": 0.0001995593272806906
+        }
+      },
+      "B": {
+        "B0": {
+          "dti": 0.01636699128776592,
+          "TPw": 64.33198764835957,
+          "FPw": 10092.634924727912,
+          "n_emitted": 10161
+        },
+        "B1": {
+          "dti": 0.01621643665010159,
+          "TPw": 63.734515260491634,
+          "FPw": 10091.473895704043,
+          "n_emitted": 10161,
+          "paired_delta": -0.00015055463766432825
+        },
+        "B2": {
+          "dti": 0.016944935519866165,
+          "TPw": 66.60009444523837,
+          "FPw": 10089.317248486585,
+          "n_emitted": 10161,
+          "paired_delta": 0.0005779442321002456
+        },
+        "B3": {
+          "dti": 0.016309055999034427,
+          "TPw": 64.10135028162108,
+          "FPw": 10091.971180398661,
+          "n_emitted": 10161,
+          "paired_delta": -5.793528873149212e-05,
+          "best_control_arm": "A1",
+          "best_control_dti": 0.10873983566210302,
+          "paired_delta_best_control": -0.09243077966306859,
+          "paired_delta_A0": -0.09137327141000262
+        }
+      },
+      "candidate": {
+        "id": "H29-5",
+        "features": [
+          "h29_5_worm_strain",
+          "h29_5_worm_dep_eq",
+          "h29_5_worm_ind_eq",
+          "h29_5_corridor_interaction"
+        ],
+        "budget_pixels": 10161,
+        "best_control_arm": "A1"
+      }
+    },
+    {
+      "draw": 1,
+      "fold": 1,
+      "name": "NE",
+      "n_hidden": 2477,
+      "n_pos_rows": 48284,
+      "n_neg_rows": 289704,
+      "A": {
+        "A0": {
+          "dti": 0.12544704791891864,
+          "TPw": 555.7305987884329,
+          "FPw": 11686.276435856122,
+          "n_emitted": 11930
+        },
+        "A1": {
+          "dti": 0.1254695145288759,
+          "TPw": 554.6905243910172,
+          "FPw": 11641.903028125373,
+          "n_emitted": 11885,
+          "paired_delta": 2.246660995725014e-05
+        },
+        "A2": {
+          "dti": 0.12605971547778186,
+          "TPw": 544.7159905007768,
+          "FPw": 11152.758384228295,
+          "n_emitted": 11381,
+          "paired_delta": 0.0006126675588632169
+        }
+      },
+      "B": {
+        "B0": {
+          "dti": 0.012222404013436815,
+          "TPw": 53.38406876557511,
+          "FPw": 11877.22832928009,
+          "n_emitted": 11930
+        },
+        "B1": {
+          "dti": 0.012844549310630012,
+          "TPw": 56.10427261903612,
+          "FPw": 11875.615931234424,
+          "n_emitted": 11930,
+          "paired_delta": 0.0006221452971931964
+        },
+        "B2": {
+          "dti": 0.013068355706737488,
+          "TPw": 57.08245688148104,
+          "FPw": 11874.871306676132,
+          "n_emitted": 11930,
+          "paired_delta": 0.0008459516933006731
+        },
+        "B3": {
+          "dti": 0.01194957502480944,
+          "TPw": 52.19318842611247,
+          "FPw": 11878.737617295086,
+          "n_emitted": 11930,
+          "paired_delta": -0.0002728289886273754,
+          "best_control_arm": "A2",
+          "best_control_dti": 0.12605971547778186,
+          "paired_delta_best_control": -0.11411014045297242,
+          "paired_delta_A0": -0.1134974728941092
+        }
+      },
+      "candidate": {
+        "id": "H29-5",
+        "features": [
+          "h29_5_worm_strain",
+          "h29_5_worm_dep_eq",
+          "h29_5_worm_ind_eq",
+          "h29_5_corridor_interaction"
+        ],
+        "budget_pixels": 11930,
+        "best_control_arm": "A2"
+      }
+    },
+    {
+      "draw": 1,
+      "fold": 2,
+      "name": "SW",
+      "n_hidden": 4013,
+      "n_pos_rows": 39572,
+      "n_neg_rows": 237432,
+      "A": {
+        "A0": {
+          "dti": 0.06805976242969836,
+          "TPw": 390.9512132600438,
+          "FPw": 12278.219658961772,
+          "n_emitted": 12452
+        },
+        "A1": {
+          "dti": 0.06654217317480839,
+          "TPw": 380.09732002553807,
+          "FPw": 12128.535875734102,
+          "n_emitted": 12298,
+          "paired_delta": -0.00151758925488997
+        },
+        "A2": {
+          "dti": 0.0686163559692827,
+          "TPw": 382.5519219560474,
+          "FPw": 11441.594846931079,
+          "n_emitted": 11608,
+          "paired_delta": 0.0005565935395843435
+        }
+      },
+      "B": {
+        "B0": {
+          "dti": 0.020792439728500194,
+          "TPw": 118.6071051078601,
+          "FPw": 12351.083147336662,
+          "n_emitted": 12452
+        },
+        "B1": {
+          "dti": 0.02147545066692011,
+          "TPw": 122.50221823805877,
+          "FPw": 12346.952380293033,
+          "n_emitted": 12452,
+          "paired_delta": 0.000683010938419916
+        },
+        "B2": {
+          "dti": 0.021643193618364528,
+          "TPw": 123.48395957819824,
+          "FPw": 12351.719962687735,
+          "n_emitted": 12452,
+          "paired_delta": 0.0008507538898643342
+        },
+        "B3": {
+          "dti": 0.02054611454330276,
+          "TPw": 117.20457749572805,
+          "FPw": 12353.117063088524,
+          "n_emitted": 12452,
+          "paired_delta": -0.0002463251851974324,
+          "best_control_arm": "A2",
+          "best_control_dti": 0.0686163559692827,
+          "paired_delta_best_control": -0.04807024142597994,
+          "paired_delta_A0": -0.047513647886395595
+        }
+      },
+      "candidate": {
+        "id": "H29-5",
+        "features": [
+          "h29_5_worm_strain",
+          "h29_5_worm_dep_eq",
+          "h29_5_worm_ind_eq",
+          "h29_5_corridor_interaction"
+        ],
+        "budget_pixels": 12452,
+        "best_control_arm": "A2"
+      }
+    },
+    {
+      "draw": 1,
+      "fold": 3,
+      "name": "SE",
+      "n_hidden": 3198,
+      "n_pos_rows": 42710,
+      "n_neg_rows": 256260,
+      "A": {
+        "A0": {
+          "dti": 0.11386995132902474,
+          "TPw": 516.5574663508329,
+          "FPw": 9373.34677223378,
+          "n_emitted": 9581
+        },
+        "A1": {
+          "dti": 0.11338324152041646,
+          "TPw": 512.6026539888701,
+          "FPw": 9300.26589200474,
+          "n_emitted": 9506,
+          "paired_delta": -0.0004867098086082794
+        },
+        "A2": {
+          "dti": 0.1135291401323644,
+          "TPw": 497.47480928265543,
+          "FPw": 8620.089937323071,
+          "n_emitted": 8808,
+          "paired_delta": -0.0003408111966603372
+        }
+      },
+      "B": {
+        "B0": {
+          "dti": 0.01758565709648952,
+          "TPw": 78.74683595101216,
+          "FPw": 9518.759429633224,
+          "n_emitted": 9581
+        },
+        "B1": {
+          "dti": 0.017829480182075436,
+          "TPw": 79.84263843842861,
+          "FPw": 9518.781659434848,
+          "n_emitted": 9581,
+          "paired_delta": 0.00024382308558591748
+        },
+        "B2": {
+          "dti": 0.020240423055495636,
+          "TPw": 90.64111755365408,
+          "FPw": 9508.471287337348,
+          "n_emitted": 9581,
+          "paired_delta": 0.0026547659590061175
+        },
+        "B3": {
+          "dti": 0.016692009428688235,
+          "TPw": 74.74245414459917,
+          "FPw": 9521.950309972686,
+          "n_emitted": 9581,
+          "paired_delta": -0.0008936476678012839,
+          "best_control_arm": "A0",
+          "best_control_dti": 0.11386995132902474,
+          "paired_delta_best_control": -0.0971779419003365,
+          "paired_delta_A0": -0.0971779419003365
+        }
+      },
+      "candidate": {
+        "id": "H29-5",
+        "features": [
+          "h29_5_worm_strain",
+          "h29_5_worm_dep_eq",
+          "h29_5_worm_ind_eq",
+          "h29_5_corridor_interaction"
+        ],
+        "budget_pixels": 9581,
+        "best_control_arm": "A0"
+      }
+    }
+  ],
+  "gate": {
+    "A1": {
+      "family": "A",
+      "arm": "A1",
+      "delta_key": "paired_delta",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -9.40027143921697e-05,
+          "positive_folds": 1,
+          "deltas": [
+            0.00040082842137545427,
+            -5.389741485092858e-05,
+            -0.0003571338541406843,
+            -0.00036580800995252016
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.0002310810501187574,
+          "positive_folds": 2,
+          "deltas": [
+            0.0010575082530659696,
+            2.246660995725014e-05,
+            -0.00151758925488997,
+            -0.0004867098086082794
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+    },
+    "A2": {
+      "family": "A",
+      "arm": "A2",
+      "delta_key": "paired_delta",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.0009956706970726155,
+          "positive_folds": 2,
+          "deltas": [
+            0.0033485713458746985,
+            -0.004649101085767091,
+            0.0004636601893443504,
+            -0.0031458132377424203
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.00025700230726697845,
+          "positive_folds": 3,
+          "deltas": [
+            0.0001995593272806906,
+            0.0006126675588632169,
+            0.0005565935395843435,
+            -0.0003408111966603372
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+    },
+    "B1": {
+      "family": "B",
+      "arm": "B1",
+      "delta_key": "paired_delta",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.00037651303644569475,
+          "positive_folds": 2,
+          "deltas": [
+            -0.0007313063003919935,
+            -0.0003931534541631032,
+            0.0005989094525041677,
+            0.002031602447833708
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.0003496061708836754,
+          "positive_folds": 3,
+          "deltas": [
+            -0.00015055463766432825,
+            0.0006221452971931964,
+            0.000683010938419916,
+            0.00024382308558591748
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+    },
+    "B2": {
+      "family": "B",
+      "arm": "B2",
+      "delta_key": "paired_delta",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.0004967905083177728,
+          "positive_folds": 2,
+          "deltas": [
+            -0.0009385008898951039,
+            0.0010354032082468372,
+            -0.0014249939220456927,
+            0.003315253636965051
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": 0.0012323539435678426,
+          "positive_folds": 4,
+          "deltas": [
+            0.0005779442321002456,
+            0.0008459516933006731,
+            0.0008507538898643342,
+            0.0026547659590061175
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+    },
+    "H29-5": {
+      "family": "B",
+      "arm": "B3",
+      "delta_key": "paired_delta_best_control",
+      "threshold_mean_delta": 0.005,
+      "min_positive_folds": 3,
+      "expected_folds": 4,
+      "screen_draws": [
+        0,
+        1
+      ],
+      "confirmation_draws": [
+        2,
+        3
+      ],
+      "screen_pass": false,
+      "complete_confirmation_draws": [],
+      "confirm_draw": null,
+      "PASS": false,
+      "per_draw": {
+        "draw0": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.07801388700053118,
+          "positive_folds": 0,
+          "deltas": [
+            -0.0809669954393417,
+            -0.08273426654833609,
+            -0.04528030016553482,
+            -0.10307398584891207
+          ],
+          "passed_threshold": false
+        },
+        "draw1": {
+          "complete": true,
+          "n_folds": 4,
+          "folds": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "fold_ids_valid": true,
+          "all_deltas_finite": true,
+          "mean_delta": -0.08794727586058937,
+          "positive_folds": 0,
+          "deltas": [
+            -0.09243077966306859,
+            -0.11411014045297242,
+            -0.04807024142597994,
+            -0.0971779419003365
+          ],
+          "passed_threshold": false
+        },
+        "draw2": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        },
+        "draw3": {
+          "complete": false,
+          "n_folds": 0,
+          "folds": [],
+          "fold_ids_valid": false,
+          "all_deltas_finite": true,
+          "mean_delta": null,
+          "positive_folds": 0,
+          "deltas": [],
+          "passed_threshold": false
+        }
+      },
+      "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+    }
+  },
+  "confirmation_status": "not_run_screen_failed_per_preregistered_compute_saver",
+  "protocol": "knowledge/01_preregistration_h29_worming_2026-10-03.md; knowledge/04_preregistered_next_hypothesis_slate_2026-10-03.md",
+  "candidate": {
+    "id": "H29-5",
+    "name": "persistent basement corridor \u00d7 deformation/seismicity",
+    "feature_set": [
+      "raw_mag_anom",
+      "raw_rtp",
+      "raw_tmi_hg",
+      "raw_geod_2ndinv",
+      "raw_iso_grav_anom_slope",
+      "raw_tc_radiometric",
+      "raw_geod_shearrate",
+      "raw_geod_dilatationrate",
+      "raw_tmi_vg",
+      "raw_deq_n100a15",
+      "raw_iso_grav_anom_vg",
+      "raw_det_elev",
+      "raw_iso_grav_anom",
+      "raw_tmi",
+      "raw_depth_to_base_surf",
+      "raw_ieq_n100a15",
+      "raw_cond_surf",
+      "raw_iso_grav_anom_hg",
+      "raw_det_elev_slope",
+      "lid_ex_max",
+      "lid_ex_mean",
+      "lid_step_max",
+      "lid_lapneg_max",
+      "lid_lappos_max",
+      "lid_downface_max",
+      "lid_upface_max",
+      "lid_cross_max",
+      "lid_relief",
+      "lid_coh100",
+      "dist_known_px_norm",
+      "dist_known_collapse",
+      "worm_mag_persist",
+      "worm_grav_persist",
+      "worm_joint_persist",
+      "worm_joint_defined",
+      "worm_mag_strength_ratio",
+      "worm_grav_strength_ratio",
+      "worm_joint_strength_ratio",
+      "h29_5_worm_strain",
+      "h29_5_worm_dep_eq",
+      "h29_5_worm_ind_eq",
+      "h29_5_corridor_interaction"
+    ],
+    "interaction_features": [
+      "h29_5_worm_strain",
+      "h29_5_worm_dep_eq",
+      "h29_5_worm_ind_eq",
+      "h29_5_corridor_interaction"
+    ],
+    "control_rule": "best same-fold/same-draw DTI among A0/A1/A2/B0/B1/B2",
+    "note": "screening is catalogue-internal proxy evidence only"
+  },
+  "note": "All numbers are catalogue-internal proxy DTI, not live or private leaderboard scores. Owner-mirror inputs are not organizer-authenticated.",
+  "gate_reaggregated_utc": "2026-10-03T14:39:59Z"
+}

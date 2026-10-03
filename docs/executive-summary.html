@@ -18,51 +18,40 @@ pre{padding:10px;overflow:auto}code{padding:1px 5px}a{color:var(--acc)}
 <nav><a href="../index.html">Home</a><a href="executive-summary.html">Executive summary &amp; submission guide</a><a href="research.html">Research &amp; method</a><a href="sources.html">Sources, scores &amp; flags</a></nav>
 <h1>How to submit — GEMSDOE29</h1>
 
-<h2 style="border:0">Do this in 60 seconds</h2>
+<h2 style="border:0">Submission steps</h2>
 <ol>
-<li>Click <a href="../index.html#download">the download button</a> on the home page
-(<code>gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif</code> or the <code>.zip</code>).</li>
-<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the competition
-<i>My Submissions → New submission</i> form</a> (you must be logged in as the enrolled team — the agent never
-touches the portal; the ToS prohibits automated access).</li>
-<li>Attach the file. The form states it accepts a single-band GeoTIFF (.tif) or a .zip containing exactly one
-GeoTIFF, and that the CRS, shape and geotransform must match the submission format — our verifier enforces all of
-those against the pinned template <i>before</i> you download.</li>
-<li>Paste the note (unique name + short comment, ≤200 chars):
-<pre>GEMSDOE29 WORMRANK | d2.8 spacing, worm-persistence+ridge ranked order | gate=FAIL proxy ΔDTI see repo | 73a8c4d12139 | live-unverified</pre></li>
-<li>Submit. You have <b>3 submissions per rolling 7 days</b>; the Initial Prize Round scores against a hidden
-private set; you later choose ONE submission for both rounds.</li>
+<li>Download the TIFF from the <a href="../index.html#download">home-page download card</a>; the exact unique name,
+short portal note, ZIP alternative and local receipts are shown there.</li>
+<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">DrivenData My Submissions</a>
+while logged in as the enrolled team. This agent does not access the portal.</li>
+<li>Attach the single-band GeoTIFF or ZIP (which must contain exactly one GeoTIFF); paste the note exactly as shown.</li>
+<li>Check the competition response yourself. This repo makes no claim about organizer acceptance or score.</li>
 </ol>
-<h2>Why the old upload failed “Predicted values must be in range [0, 1]” — and why this one can't</h2>
-<div class="card"><p>Diagnosis (from byte-forensics of the failed file, GEMSDOE25 IR-25-NAN-FOOTPRINT): it wrote
-<b>NaN inside the footprint</b> (2,344,929 of 5,167,373 pixels). NaN fails any “≤1” range test, so the portal's
-range check rejects it regardless of what values you think you're submitting. The public docs don't publish the
-validator, so we defend in depth, and every shipped file is re-verified here from disk by
-<code>scripts/verify_downloads.py</code>:</p>
+<p>DOE/NLR rules: 3 automated-scoring submissions per week; the Initial Prize Round uses a private set; a single final
+submission is selected across prize phases. Finalists must provide code/assets and documentation; generative-AI use must
+be disclosed in the narrative. See the official PDF link on the Sources page.</p>
+<h2>Local format verification and its limits</h2>
+<div class="card"><p>The owner reported a past “Predicted values must be in range [0, 1]” error. Sibling byte-forensics
+attributed one prior failing raster to NaN inside its asserted footprint; this is not an organizer validator specification.
+The current local checker verifies against the pinned, owner-mirrored template:</p>
 <ul>
-<li>profile (CRS EPSG:32611, transform, 3730×3292, float32) copied from the pinned sample template;</li>
-<li><b>every</b> in-footprint pixel finite and exactly 0.0 or 1.0 — including the 3,061 pixels that are nodata
-in the features stack (IR-29-FOOTPRINT-DIFF) — written as 0.0;</li>
-<li>NaN only <i>outside</i> the footprint (the sample's own convention) plus a <code>-zeros.tif</code> fallback
-with 0.0 outside (both conventions are scored historically identically — 12GEMSDOE pair);</li>
-<li>the .zip variant contains exactly one GeoTIFF, byte-checked after read-back;</li>
-<li>SHA-256 + check receipts next to the file in <code>docs/downloads/</code>.</li>
-</ul></div>
-<h2>What you are submitting — honest status</h2>
-<div class="card"><span class="badge b-warn">FROZEN GATE NOT PASSED on the local proxy — research artifact; see research page. No slot spend is recommended by this repo.</span>
-<p>This file reorders (not reselects) the dots of the owner's live-scored 0.2600 geometry using a persistence
-score computed from a Fourier upward-continuation ladder on the official magnetic and gravity bands
-(see <a href="research.html">research page</a>). Same spacing guarantee, same pixel budget scale, new claiming
-order. 41,349 px emitted; catalogue-masked; 0 px on catalogue pixels.</p>
-<p class="mut">The repo's rule, unchanged from prior sessions: a proxy pass makes a file <i>eligible</i> for a slot decision;
-it is never evidence of a live score. If the gate above says NOT PASSED, spending a weekly slot is the owner's
-explicit call against the numbers shown — not this repo's recommendation.</p></div>
-<h2>Rollback / reference</h2>
-<p><code>gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif</code> is a bit-for-bit reproduction of the
-44,090-px geometry that the owner reports scored 0.2600 (tests/test_sibling_reproduction.py). It exists to prove
-format validity and for emergency rollback; resubmitting it would waste a slot without changing anything.</p>
+<li>1-band float32; exact CRS, dimensions and geotransform match;</li>
+<li>all template-footprint values are finite and in [0,1];</li>
+<li>NaN-outside and zero-outside TIFF variants follow their declared convention;</li>
+<li>ZIP has exactly one GeoTIFF and is read back and compared with the NaN TIFF;</li>
+<li>file hashes match build-time receipts.</li>
+</ul><p>These checks reduce the known range-error risk but cannot guarantee portal acceptance. The source template is not
+organizer-authenticated; the private validator is not public; no upload was made.</p></div>
+<h2>Current artifact status</h2>
+<div class="card"><span class="badge b-bad">FROZEN A2 GATE NOT PASSED on catalogue proxy — research artifact only; no weekly slot is recommended</span>
+<p>WORMRANK passed local format checks and is a research artifact. Its corrected A2 catalogue-proxy gate failed; it is not recommended
+for a weekly submission slot. The selected H29-5 corridor candidate failed its screen against the best same-fold controls;
+confirmation was not run under the frozen compute-saving rule, and it was not packaged as a submission.</p></div>
+<h2>Reference: owner-reported D2.8 score</h2>
+<p><a href="downloads/gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif">Download the locally reproduced D2.8 mask</a>.
+Its 44,090 pixels exactly reproduce the pinned owner mirror. The associated 0.2600 score is
+owner-reported; resubmitting an identical mask would be a duplicate, not a new experiment.</p>
 
-<footer>GEMSDOE29 · built 2026-10-03 08:57 UTC · every figure on this page is generated from the repo's own JSON
-evidence (scripts/build_site.py) · competition: DrivenData #306 DOE GEMS Prize · owner-reported
-scores are labelled as such and are not organizer receipts.</footer>
+<footer>GEMSDOE29 · figures are rendered from the repo's JSON registries/evidence ·
+competition: DrivenData #306 DOE GEMS · owner-reported scores are labelled and are not organizer receipts.</footer>
 </main></body></html>

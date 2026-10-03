@@ -1,0 +1,437 @@
+{
+  "A1": {
+    "family": "A",
+    "arm": "A1",
+    "delta_key": "paired_delta",
+    "threshold_mean_delta": 0.005,
+    "min_positive_folds": 3,
+    "expected_folds": 4,
+    "screen_draws": [
+      0,
+      1
+    ],
+    "confirmation_draws": [
+      2,
+      3
+    ],
+    "screen_pass": false,
+    "complete_confirmation_draws": [],
+    "confirm_draw": null,
+    "PASS": false,
+    "per_draw": {
+      "draw0": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": -9.40027143921697e-05,
+        "positive_folds": 1,
+        "deltas": [
+          0.00040082842137545427,
+          -5.389741485092858e-05,
+          -0.0003571338541406843,
+          -0.00036580800995252016
+        ],
+        "passed_threshold": false
+      },
+      "draw1": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": -0.0002310810501187574,
+        "positive_folds": 2,
+        "deltas": [
+          0.0010575082530659696,
+          2.246660995725014e-05,
+          -0.00151758925488997,
+          -0.0004867098086082794
+        ],
+        "passed_threshold": false
+      },
+      "draw2": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      },
+      "draw3": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      }
+    },
+    "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+  },
+  "A2": {
+    "family": "A",
+    "arm": "A2",
+    "delta_key": "paired_delta",
+    "threshold_mean_delta": 0.005,
+    "min_positive_folds": 3,
+    "expected_folds": 4,
+    "screen_draws": [
+      0,
+      1
+    ],
+    "confirmation_draws": [
+      2,
+      3
+    ],
+    "screen_pass": false,
+    "complete_confirmation_draws": [],
+    "confirm_draw": null,
+    "PASS": false,
+    "per_draw": {
+      "draw0": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": -0.0009956706970726155,
+        "positive_folds": 2,
+        "deltas": [
+          0.0033485713458746985,
+          -0.004649101085767091,
+          0.0004636601893443504,
+          -0.0031458132377424203
+        ],
+        "passed_threshold": false
+      },
+      "draw1": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": 0.00025700230726697845,
+        "positive_folds": 3,
+        "deltas": [
+          0.0001995593272806906,
+          0.0006126675588632169,
+          0.0005565935395843435,
+          -0.0003408111966603372
+        ],
+        "passed_threshold": false
+      },
+      "draw2": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      },
+      "draw3": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      }
+    },
+    "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+  },
+  "B1": {
+    "family": "B",
+    "arm": "B1",
+    "delta_key": "paired_delta",
+    "threshold_mean_delta": 0.005,
+    "min_positive_folds": 3,
+    "expected_folds": 4,
+    "screen_draws": [
+      0,
+      1
+    ],
+    "confirmation_draws": [
+      2,
+      3
+    ],
+    "screen_pass": false,
+    "complete_confirmation_draws": [],
+    "confirm_draw": null,
+    "PASS": false,
+    "per_draw": {
+      "draw0": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": 0.00037651303644569475,
+        "positive_folds": 2,
+        "deltas": [
+          -0.0007313063003919935,
+          -0.0003931534541631032,
+          0.0005989094525041677,
+          0.002031602447833708
+        ],
+        "passed_threshold": false
+      },
+      "draw1": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": 0.0003496061708836754,
+        "positive_folds": 3,
+        "deltas": [
+          -0.00015055463766432825,
+          0.0006221452971931964,
+          0.000683010938419916,
+          0.00024382308558591748
+        ],
+        "passed_threshold": false
+      },
+      "draw2": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      },
+      "draw3": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      }
+    },
+    "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+  },
+  "B2": {
+    "family": "B",
+    "arm": "B2",
+    "delta_key": "paired_delta",
+    "threshold_mean_delta": 0.005,
+    "min_positive_folds": 3,
+    "expected_folds": 4,
+    "screen_draws": [
+      0,
+      1
+    ],
+    "confirmation_draws": [
+      2,
+      3
+    ],
+    "screen_pass": false,
+    "complete_confirmation_draws": [],
+    "confirm_draw": null,
+    "PASS": false,
+    "per_draw": {
+      "draw0": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": 0.0004967905083177728,
+        "positive_folds": 2,
+        "deltas": [
+          -0.0009385008898951039,
+          0.0010354032082468372,
+          -0.0014249939220456927,
+          0.003315253636965051
+        ],
+        "passed_threshold": false
+      },
+      "draw1": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": 0.0012323539435678426,
+        "positive_folds": 4,
+        "deltas": [
+          0.0005779442321002456,
+          0.0008459516933006731,
+          0.0008507538898643342,
+          0.0026547659590061175
+        ],
+        "passed_threshold": false
+      },
+      "draw2": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      },
+      "draw3": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      }
+    },
+    "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+  },
+  "H29-5": {
+    "family": "B",
+    "arm": "B3",
+    "delta_key": "paired_delta_best_control",
+    "threshold_mean_delta": 0.005,
+    "min_positive_folds": 3,
+    "expected_folds": 4,
+    "screen_draws": [
+      0,
+      1
+    ],
+    "confirmation_draws": [
+      2,
+      3
+    ],
+    "screen_pass": false,
+    "complete_confirmation_draws": [],
+    "confirm_draw": null,
+    "PASS": false,
+    "per_draw": {
+      "draw0": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": -0.07801388700053118,
+        "positive_folds": 0,
+        "deltas": [
+          -0.0809669954393417,
+          -0.08273426654833609,
+          -0.04528030016553482,
+          -0.10307398584891207
+        ],
+        "passed_threshold": false
+      },
+      "draw1": {
+        "complete": true,
+        "n_folds": 4,
+        "folds": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "fold_ids_valid": true,
+        "all_deltas_finite": true,
+        "mean_delta": -0.08794727586058937,
+        "positive_folds": 0,
+        "deltas": [
+          -0.09243077966306859,
+          -0.11411014045297242,
+          -0.04807024142597994,
+          -0.0971779419003365
+        ],
+        "passed_threshold": false
+      },
+      "draw2": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      },
+      "draw3": {
+        "complete": false,
+        "n_folds": 0,
+        "folds": [],
+        "fold_ids_valid": false,
+        "all_deltas_finite": true,
+        "mean_delta": null,
+        "positive_folds": 0,
+        "deltas": [],
+        "passed_threshold": false
+      }
+    },
+    "interpretation": "catalogue-internal proxy eligibility only; not live/private leaderboard evidence"
+  }
+}
