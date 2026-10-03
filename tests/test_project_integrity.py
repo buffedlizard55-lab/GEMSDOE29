@@ -281,3 +281,45 @@ def test_public_pages_do_not_republish_score_claims_or_leaderboard_links() -> No
         if path.name not in quoting_allowed:
             assert not any(value in text for value in ("0.3195", "0.2941", "0.2477", "0.2600")), path.name
         assert not re.search(r'href=["\'][^"\']*leaderboard', text, flags=re.IGNORECASE), path.name
+
+
+def test_h43_screen_evidence_is_internally_consistent() -> None:
+    import hashlib
+    import subprocess
+    import sys
+
+    base = ROOT / "evidence" / "h43_screen"
+    prereg = ROOT / "knowledge" / "27_preregistered_h43_screen_2026-10-03.md"
+    results = ROOT / "knowledge" / "28_h43_results_2026-10-03.md"
+    assert prereg.is_file() and results.is_file()
+    design = json.loads((base / "design_screen.json").read_text())
+    summary = json.loads((base / "summary_screen.json").read_text())
+    analyzer = json.loads((base / "analyzer_report.json").read_text())
+    gate = json.loads((base / "promotion_gate.json").read_text())
+    cells = [json.loads(line) for line in (base / "cells_screen.jsonl").read_text().splitlines() if line.strip()]
+    assert len(cells) == 40
+    assert design["draws"] == [32, 33]
+    assert design["git"]["dirty_worktree"] is False
+    assert design["preregistration"]["sha256"] == hashlib.sha256(prereg.read_bytes()).hexdigest()
+    assert design["drainage"]["n_interior_trapped"] == 0
+    assert design["drainage"]["mass_conserved"] is True
+    assert summary["viability_guard"]["passed"] is True
+    assert analyzer["integrity_problems"] == []
+    assert all(summary["arms"][arm]["G1_SCREEN_PASS"] is False for arm in design["arms"][1:])
+    assert summary["arms"]["A4_h43_union"]["positive_folds_per_draw"] == [3, 4]
+    assert all(g > 0.0 for g in summary["arms"]["A4_h43_union"]["fold_gains"])
+    assert summary["arms"]["A3_h43_scarp_free"]["sgmc_gate_pass"] is True
+    assert not (base / "cells_confirm.jsonl").exists()
+    assert all(v["G3_ELIGIBLE"] is False for v in gate["arms"].values())
+    out = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "run_h43_screen.py"), "--confirm"],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert out.returncode == 0, out.stdout + out.stderr
+    assert "No arm passed G1 on the screen; confirmation exits before any fit." in out.stdout
+    assert not (base / "cells_confirm.jsonl").exists()
+
+

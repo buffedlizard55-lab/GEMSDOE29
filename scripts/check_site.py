@@ -89,8 +89,15 @@ try:
     if "H41 screen" not in screen or "A1_h41_off PASS" not in screen or "A2_h41_support FAIL" not in screen:
         print("STATUS REGISTER lacks the session-4 H41 screen verdict (per-arm PASS/FAIL)")
         fail += 1
+    if "H43 screen" not in screen or "A4_h43_union" not in screen or "A3_h43_scarp_free" not in screen:
+        print("STATUS REGISTER lacks the session-5 H43 screen verdict (draws 32/33)")
+        fail += 1
     if "SGMC second proxy" not in screen:
         print("STATUS REGISTER states the H41 screen without its negative SGMC second proxy")
+        fail += 1
+    research_html = (DOCS / "research.html").read_text(encoding="utf-8")
+    if "evidence/h43_screen/" not in research_html:
+        print("RESEARCH PAGE lacks the session-5 H43 frozen screen card")
         fail += 1
 except (KeyError, json.JSONDecodeError, OSError) as exc:
     print(f"BAD CURRENT STATUS: {exc}")

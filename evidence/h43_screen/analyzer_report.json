@@ -1,0 +1,215 @@
+{
+  "generated_by": "scripts/analyze_h43_screen.py",
+  "date": "2026-10-03",
+  "gates": {
+    "mean_gain": 0.005,
+    "min_positive_folds": 3,
+    "worst_floor": -0.01,
+    "budget_band": [
+      0.75,
+      1.25
+    ],
+    "sgmc_min_positive_folds": 3,
+    "holdout_best": 0.14479018210246675,
+    "min_nonzero_fraction": 0.002
+  },
+  "design_check": {
+    "gates_match": true,
+    "draws": [
+      32,
+      33
+    ],
+    "arms": [
+      "C0_base",
+      "A1_h43_off_front",
+      "A2_h43_omega_area",
+      "A3_h43_scarp_free",
+      "A4_h43_union"
+    ],
+    "arm_columns_frozen": true,
+    "prereg_hash_matches_current_file": true
+  },
+  "note": "Independent recomputation from raw cells only; summary cross-checked. Gate constants copied from knowledge/27_preregistered_h43_screen_2026-10-03.md \u00a74. DTI here is the catalogue-hidden spatial proxy, not a competition score.",
+  "integrity_problems": [],
+  "report": {
+    "screen": {
+      "draws": [
+        32,
+        33
+      ],
+      "n_cells": 40,
+      "arms": {
+        "C0_base": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.1431676384889805,
+          "mean_auc": 0.7882918726663153,
+          "fold_gains": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          },
+          "mean_gain": 0.0,
+          "positive_folds_per_draw": {
+            "32": 0,
+            "33": 0
+          },
+          "worst_fold_gain": 0.0,
+          "sgmc_fold_gains": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          },
+          "budget_ratio_min": 1.0,
+          "budget_ratio_max": 1.0
+        },
+        "A1_h43_off_front": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.14206320169828834,
+          "mean_auc": 0.7857603853203208,
+          "fold_gains": {
+            "0": -0.0030606401147285633,
+            "1": -0.0003594110798025296,
+            "2": -0.0015973906273306776,
+            "3": 0.0005996946590932639
+          },
+          "mean_gain": -0.0011044367906921267,
+          "positive_folds_per_draw": {
+            "32": 2,
+            "33": 2
+          },
+          "worst_fold_gain": -0.0030606401147285633,
+          "sgmc_fold_gains": {
+            "0": 0.0028310326205284037,
+            "1": -0.001812056621722069,
+            "2": 0.0007537519425006578,
+            "3": -0.003241152530846142
+          },
+          "budget_ratio_min": 0.988043252235392,
+          "budget_ratio_max": 1.0147216274089936,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 2,
+          "sgmc_gate_pass": false,
+          "above_holdout_best": false
+        },
+        "A2_h43_omega_area": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.1450484364706371,
+          "mean_auc": 0.7888617610044337,
+          "fold_gains": {
+            "0": 0.002201705683937849,
+            "1": -0.00031836232454071633,
+            "2": 0.0018249262823518964,
+            "3": 0.003814922284877287
+          },
+          "mean_gain": 0.001880797981656579,
+          "positive_folds_per_draw": {
+            "32": 3,
+            "33": 3
+          },
+          "worst_fold_gain": -0.00031836232454071633,
+          "sgmc_fold_gains": {
+            "0": 0.0038512988150920247,
+            "1": 0.003298768055248799,
+            "2": -0.002052366243133319,
+            "3": -0.004301421472315298
+          },
+          "budget_ratio_min": 0.993006993006993,
+          "budget_ratio_max": 1.0241836316436672,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 2,
+          "sgmc_gate_pass": false,
+          "above_holdout_best": true
+        },
+        "A3_h43_scarp_free": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.14510409325665805,
+          "mean_auc": 0.7907422865154041,
+          "fold_gains": {
+            "0": -0.0024504506860089093,
+            "1": 0.002741423386241393,
+            "2": -0.0034098586715613777,
+            "3": 0.010864705042039124
+          },
+          "mean_gain": 0.0019364547676775576,
+          "positive_folds_per_draw": {
+            "32": 2,
+            "33": 3
+          },
+          "worst_fold_gain": -0.0034098586715613777,
+          "sgmc_fold_gains": {
+            "0": 0.0068246691454767194,
+            "1": 0.001607059498108132,
+            "2": 0.003913649710270001,
+            "3": -0.006921181208713864
+          },
+          "budget_ratio_min": 0.9857126785915176,
+          "budget_ratio_max": 1.013389807350731,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 3,
+          "sgmc_gate_pass": true,
+          "above_holdout_best": true
+        },
+        "A4_h43_union": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.14716521172345753,
+          "mean_auc": 0.7912714631865624,
+          "fold_gains": {
+            "0": 0.0038727702287451593,
+            "1": 0.003498764177031821,
+            "2": 0.0064227890901391305,
+            "3": 0.0021959694419921294
+          },
+          "mean_gain": 0.00399757323447706,
+          "positive_folds_per_draw": {
+            "32": 3,
+            "33": 4
+          },
+          "worst_fold_gain": 0.0021959694419921294,
+          "sgmc_fold_gains": {
+            "0": 0.0026414265492579053,
+            "1": 0.0007948414621975208,
+            "2": -0.003019348616624451,
+            "3": -0.004917863352651819
+          },
+          "budget_ratio_min": 0.9880751490606368,
+          "budget_ratio_max": 1.014939643838891,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 2,
+          "sgmc_gate_pass": false,
+          "above_holdout_best": true
+        }
+      },
+      "summary_cross_check": {
+        "C0_base.mean_dti": 1.0,
+        "A1_h43_off_front.mean_gain": 1.0,
+        "A1_h43_off_front.mean_dti": 1.0,
+        "A1_h43_off_front.G1_SCREEN_PASS": 1.0,
+        "A1_h43_off_front.sgmc_gate_pass": 1.0,
+        "A2_h43_omega_area.mean_gain": 1.0,
+        "A2_h43_omega_area.mean_dti": 1.0,
+        "A2_h43_omega_area.G1_SCREEN_PASS": 1.0,
+        "A2_h43_omega_area.sgmc_gate_pass": 1.0,
+        "A3_h43_scarp_free.mean_gain": 1.0,
+        "A3_h43_scarp_free.mean_dti": 1.0,
+        "A3_h43_scarp_free.G1_SCREEN_PASS": 1.0,
+        "A3_h43_scarp_free.sgmc_gate_pass": 1.0,
+        "A4_h43_union.mean_gain": 1.0,
+        "A4_h43_union.mean_dti": 1.0,
+        "A4_h43_union.G1_SCREEN_PASS": 1.0,
+        "A4_h43_union.sgmc_gate_pass": 1.0
+      }
+    }
+  }
+}

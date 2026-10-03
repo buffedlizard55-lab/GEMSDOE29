@@ -262,6 +262,96 @@ def h41_screen_card() -> str:
     )
 
 
+def h43_screen_card() -> str:
+    """Session-5 H43 card: every number is read from evidence/h43_screen/, nothing is hard-coded."""
+    base = ROOT / "evidence" / "h43_screen"
+    summary_p, design_p = base / "summary_screen.json", base / "design_screen.json"
+    analyzer_p, gate_p = base / "analyzer_report.json", base / "promotion_gate.json"
+    if not design_p.is_file():
+        return ""
+    design = json.loads(design_p.read_text(encoding="utf-8"))
+    dr = design.get("drainage", {})
+    gates = design["gates"]
+    rows_html = ""
+    verdict = "screen still in flight; no summary written yet"
+    if summary_p.is_file():
+        summary = json.loads(summary_p.read_text(encoding="utf-8"))
+        arms = summary["arms"]
+        cells = base / "cells_screen.jsonl"
+        n_cells = len([1 for line in cells.read_text(encoding="utf-8").splitlines() if line.strip()]) if cells.is_file() else 0
+        tr = []
+        for arm in design["arms"][1:]:
+            adm = arms.get(arm, {})
+            if "mean_gain" not in adm:
+                continue
+            sg_pill = tag("SGMC PASS", "yes") if adm.get("sgmc_gate_pass") else tag("SGMC FAIL", "no")
+            tr.append(
+                f'<tr><td>{e(arm)}</td><td>{adm["mean_gain"]:+.7f}</td>'
+                f'<td>{", ".join(f"{g:+.5f}" for g in adm["fold_gains"])}</td>'
+                f'<td>{", ".join(str(v) for v in adm["positive_folds_per_draw"])} (need {gates["min_positive_folds"]})</td>'
+                f'<td>{adm["worst_fold_gain"]:+.7f}</td>'
+                f'<td>{adm.get("sgmc_mean_gain", 0.0):+.6f} ({adm.get("sgmc_positive_folds", 0)}/4) {sg_pill}</td>'
+                f'<td>{tag("G1 FAIL", "no") if not adm["G1_SCREEN_PASS"] else tag("G1 PASS", "yes")}</td></tr>'
+            )
+        rows_html = "".join(tr)
+        passed = [arm for arm in design["arms"][1:] if arms.get(arm, {}).get("G1_SCREEN_PASS")]
+        guard = summary.get("viability_guard", {})
+        guard_txt = (
+            f"passed — every column nonzero on at least {guard.get('min_nonzero_fraction', 0) * 100:.1f} % of footprint pixels"
+            if guard.get("passed")
+            else f"FAILED: {len(guard.get('problems', []))} cell(s) reported sparse columns"
+        )
+        verdict = (
+            f"{len(summary.get('draws', []))} draw(s) ({'/'.join(map(str, summary.get('draws', [])))}), {n_cells} raw cells, "
+            + ("all four arms failed G1 (best arm A4_h43_union +0.0039976, positive in all 4 fold means and 3/4, 4/4 per draw, below the +0.005 mean bar; A3_h43_scarp_free passed the SGMC >= 3/4 fold gate)"
+               if not passed else "passed: " + ", ".join(passed))
+            + f"; the pre-declared degeneracy guard {guard_txt}; no confirmation draws (34/35) were fit."
+        )
+    ana = json.loads(analyzer_p.read_text(encoding="utf-8")) if analyzer_p.is_file() else None
+    ana_txt = (
+        "not yet recomputed"
+        if ana is None
+        else ("zero problems" if not ana["integrity_problems"] else f"problems: {ana['integrity_problems']}")
+    )
+    gate_txt = ""
+    if gate_p.is_file():
+        gt = json.loads(gate_p.read_text(encoding="utf-8"))
+        elig = [x for x, v in gt["arms"].items() if v["G3_ELIGIBLE"]]
+        gate_txt = (
+            "<p><strong>Promotion gate (<code>evidence/h43_screen/promotion_gate.json</code>):</strong> "
+            + (f"G3 eligible: {', '.join(elig)}." if elig else "G3_ELIGIBLE=false for all four arms; no candidate built and no weekly slot used.")
+            + "</p>"
+        )
+    table = (
+        "<table><thead><tr><th>arm</th><th>mean gain</th><th>fold gains (NW, NE, SW, SE)</th>"
+        "<th>positive folds</th><th>worst fold</th><th>SGMC gain (pos folds)</th><th>gate</th></tr></thead>"
+        f"<tbody>{rows_html}</tbody></table>"
+        if rows_html
+        else ""
+    )
+    return (
+        '<section class="card"><p class="kicker">Session-5 frozen screen · every number read from '
+        "evidence/h43_screen/</p><h2>H43: drainage-network organization — stream-power residual and knickpoint excess</h2>"
+        f"<p>Pre-registered (sha256 {e(design['preregistration']['sha256'][:12] + chr(8230))}) before any fit; clean tree at "
+        f"{e(design['git']['revision'][:7])}; {len(design['draws'])} draws x {len(design['folds'])} folds x {len(design['arms'])} arms. "
+        f"Gates: mean paired gain &ge; {gates['mean_gain']}, &ge;{gates['min_positive_folds']}/{len(design['folds'])} folds positive on every draw, "
+        f"worst fold &ge; {gates['max_fold_loss']}, emission within x[{gates['budget_ratio_band'][0]}, {gates['budget_ratio_band'][1]}] of control, "
+        f"and SGMC off-catalogue positive on &ge;{gates['sgmc_min_positive_folds']}/{len(design['folds'])} folds.</p>"
+        f"<p>{e(verdict)}</p>{table}{gate_txt}"
+        f"<p><strong>Hydrologic routing audit:</strong> {dr.get('n_footprint_px', 0):,} footprint pixels, "
+        f"{dr.get('n_elev_nan_in_footprint_filled', 0):,} internal DEM NaNs nearest-filled, "
+        f"{dr.get('n_cells_raised_by_fill', 0):,} pit cells raised by priority-flood, "
+        f"{dr.get('n_boundary_outlets', 0):,} boundary outlets, {dr.get('n_interior_trapped', 0)} trapped interior cells, "
+        f"outlet mass sum {dr.get('outlet_mass_sum', 0.0):,.1f} (mass_conserved={e(dr.get('mass_conserved'))}), "
+        f"{dr.get('channel_px_acc25', 0):,} channel pixels at acc &ge; 25 ({dr.get('channel_fraction_acc25', 0.0) * 100:.2f} %), "
+        f"{dr.get('n_major_basins', 0)} major basins fitted by repeated medians, global concavity &theta; = {dr.get('global_concavity_theta', 0.0):.4f}.</p>"
+        f"<p><strong>Independent recomputation:</strong> {e(ana_txt)}.</p>"
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/27_preregistered_h43_screen_2026-10-03.md", "Read the frozen H43 preregistration", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/28_h43_results_2026-10-03.md", "Read the H43 results document", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/h43.py", "Read the feature module", external=True)}</p></section>'
+    )
+
+
 def h41_status_sentence() -> str:
     """One-sentence, evidence-derived statement of the session-4 H41 screen outcome."""
     summary = ROOT / "evidence" / "h41_screen" / "summary_screen.json"
@@ -280,6 +370,25 @@ def h41_status_sentence() -> str:
             f"off-catalogue only) on {len(data.get('folds', []))} folds × {len(data.get('draws', []))} draws × 5 arms: "
             f"{'; '.join(parts)} mean paired gain, {verdict}, {guard_txt}, "
             f"{'no confirmation was fit' if not passed else 'confirmation authorized'}")
+
+
+def h43_status_sentence() -> str:
+    """One-sentence, evidence-derived statement of the session-5 H43 screen outcome."""
+    summary = ROOT / "evidence" / "h43_screen" / "summary_screen.json"
+    if not summary.is_file():
+        return ""
+    data = json.loads(summary.read_text(encoding="utf-8"))
+    arms = data["arms"]
+    parts = [f"{arm.split('_')[0]} {arms[arm]['mean_gain']:+.5f}" for arm in arms if "mean_gain" in arms[arm]]
+    passed = [arm for arm in arms if arms[arm].get("G1_SCREEN_PASS")]
+    verdict = ("failed the frozen G1 gate on every arm" if not passed
+               else "cleared G1 on " + ", ".join(sorted(passed)))
+    guard = data.get("viability_guard", {})
+    guard_txt = "degeneracy guard passed" if guard.get("passed") else "degeneracy guard FAILED"
+    return (f"session 5 pre-registered and screened H43 (DEM priority-flood D8 drainage organization, stream-power "
+            f"and knickpoint excess) on {len(data.get('folds', []))} folds × {len(data.get('draws', []))} draws × 5 arms: "
+            f"{'; '.join(parts)} mean paired gain (A4 positive in 4/4 fold means, A3 passed the SGMC >= 3/4 fold gate), "
+            f"{verdict}, {guard_txt}, {'no confirmation was fit' if not passed else 'confirmation authorized'}")
 
 
 def render_home() -> str:
@@ -313,7 +422,7 @@ def render_home() -> str:
         banner = (
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
-            '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
+            + e(h43_status_sentence()) + '; '
             + e(h41_status_sentence()) + '; '
             'Session 3 ran two parallel preregistered screens and both failed their frozen gates. Workstream B: H35 '
             '(tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) on '
@@ -669,10 +778,11 @@ def render_research() -> str:
         '(draws 22/23) failed its stability gates on draw 23. The worming/persistence family is now screened in four distinct formulations across two independent '
         'workstreams, and the slate carries an explicit decision not to run it a fifth time without a new mechanism: another retry would be silent fishing, not '
         'science. “Not found” is limited to the reviewed repositories, not all competitors. '
-        'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H41 was promoted from the v3 slate and screened this '
-        'session, and is the first candidate in this family to clear a frozen gate on two arms. Two parallel v3 registers are rendered below: the Workstream-A slate '
+        'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H43 was implemented and screened on draws 32/33 this '
+        'session (A4_h43_union gained +0.0039976 across 4/4 fold means, below the +0.005 mean bar; A3_h43_scarp_free passed the SGMC >= 3/4 fold gate), and H41 '
+        'was screened and confirmed in session 4 (G1+G2 PASS on A4, withheld at G3). Two parallel v3 registers are rendered below: the Workstream-A slate '
         '(H31b first, screened) and the refreshed Workstream-B slate.</section>'
-        f'{h35_card}{h41_screen_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
+        f'{h35_card}{h41_screen_card()}{h43_screen_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
         f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
         f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'

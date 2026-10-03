@@ -2,8 +2,25 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
-> **Current decision (2026-10-03, session 4): H41 became the first candidate in this family to clear a frozen
-> gate — on two arms — and the preregistered confirmation, not the screen, decides what happens next.** Session 4
+> **Current decision (2026-10-03, session 5): H43 (DEM drainage-network organization, rank 1 of the v4 slate) was
+> preregistered, implemented, and screened across 40 cells on draws 32/33 — `A4_h43_union` gained `+0.0039976` across all
+> 4 quadrant fold means (`NW +0.00387, NE +0.00350, SW +0.00642, SE +0.00220`, `3/4` and `4/4` positive folds per draw,
+> worst fold `+0.0021960`, holdout AUC `0.7883 -> 0.7913`) and missed G1 solely by `0.00100` against the `+0.005` mean bar;
+> `A3_h43_scarp_free` (`+0.0019365` primary) became the first feature arm in the H35/H40/H41/H43 family to pass the
+> SGMC off-catalogue `>= 3/4` fold gate (`+0.0013560`, 3/4 folds positive). Because no arm passed G1, confirmation draws
+> `34/35` were not fit, no candidate file was built, and no weekly slot was used.** Session 5 implemented
+> `src/gemsdoe/h43.py` (Barnes-Lehman-Mulla priority-flood depression filling with `0` trapped interior cells and `100 %`
+> mass conservation across all `5,167,373` footprint pixels and `17,865` boundary outlets, D8 steepest-descent flow
+> accumulation, unit stream power $\Omega = A^{0.5}\cdot S$, and per-basin repeated-median log-log $S\text{–}A$ knickpoint
+> excess across `108` major basins), froze the protocol with explicit G1+G2+G3 gates in
+> [`knowledge/27_preregistered_h43_screen_2026-10-03.md`](knowledge/27_preregistered_h43_screen_2026-10-03.md)
+> (sha256 `f6d6b33e…`) before any fit, ran the 40-cell screen on draws `32/33` (`1,330.3 s`, clean tree at `09e81264`),
+> and verified every cell and gate independently via `scripts/analyze_h43_screen.py` (`integrity_problems: []`).
+> Full write-up: [`knowledge/28_h43_results_2026-10-03.md`](knowledge/28_h43_results_2026-10-03.md); raw cells and gates:
+> [`evidence/h43_screen/`](evidence/h43_screen/).
+>
+> **Session 4 close-out: H41 became the first candidate in this family to clear a frozen
+> gate — on two arms — and the preregistered confirmation, not the screen, decided what happened next.** Session 4
 > implemented `src/gemsdoe/h41.py`, the first use anywhere in this project of the hash-pinned INGENIOUS Quaternary
 > fault attribute table for prediction (slip-rate × recency weighted trace-centroid support, restricted to centroids
 > ≥500 m from the visible catalogue, plus an anisotropic scarp-strike corridor, a scarp product and an off-support
@@ -79,8 +96,13 @@
 
 ## Start here
 
-- **[H41 results (read first)](knowledge/26_h41_results_2026-10-03.md)** — the screen table, why the two passing
-  arms are a ranking gain rather than an emission fluke, the SGMC conflict, and every disclosed process defect.
+- **[H43 results — session 5 (read first)](knowledge/28_h43_results_2026-10-03.md)** — the 40-cell H43 drainage-organization
+  screen on draws 32/33 (`A4_h43_union` `+0.0039976` across 4/4 fold means, `A3_h43_scarp_free` `+0.0019365` primary and
+  `+0.0013560` SGMC `3/4` folds), priority-flood D8 mass-conservation audit, and why confirmation draws `34/35` were not fit.
+  Its frozen protocol is **[knowledge/27](knowledge/27_preregistered_h43_screen_2026-10-03.md)** and its feature module is
+  **[src/gemsdoe/h43.py](src/gemsdoe/h43.py)**.
+- **[H41 results — session 4](knowledge/26_h41_results_2026-10-03.md)** — the screen and confirmation tables, why the two passing
+  arms are a ranking gain rather than an emission fluke, the SGMC conflict that withheld promotion at G3, and every disclosed process defect.
   Its frozen protocol is **[knowledge/24](knowledge/24_preregistered_h41_screen_2026-10-03.md)**.
 - **[Session-4 brief, frozen screen and slate](knowledge/25_candidates_v4_2026-10-03.md)** — the
   v4 candidate slate (H43 drainage organization, H44 discharge chain, H45 seismicity strands, H46 1-m LiDAR
@@ -115,8 +137,9 @@
 
 ## Evidence boundary and current status
 
-- **Next free draw is 32** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27 plus 2/3 count as spent because they were authorized under a recorded receipt and never fitted.
+- **Next free draw is 34 (with 34/35 recorded as authorized-then-released unused for H43 confirmation)** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27, 2/3, and 34/35 are recorded as authorized-then-released unused because their screens failed G1 and confirmation was never fitted.
 - **One download by hand** — the *leaderboard score itself*. The manual link is on the site's leaderboard card and in `knowledge/03`; `scripts/check_site.py` deliberately fails if anything on the site links the score page, and `registry/score_claims.json` keeps every score as a claim until the owner confirms it.
+- **H43 (session 5):** DEM priority-flood D8 drainage organization, stream-power and per-basin knickpoint excess (`src/gemsdoe/h43.py`, `knowledge/27_preregistered_h43_screen_2026-10-03.md`). Screened across 40 cells on draws 32/33 (`evidence/h43_screen/`, `scripts/analyze_h43_screen.py` `integrity_problems: []`). All four arms failed G1 (`+0.005` mean bar): `A4_h43_union` gained `+0.0039976` and cleared every stability/floor/budget criterion (positive in 4/4 fold means, `3/4` and `4/4` positive folds per draw, worst fold `+0.0021960`, holdout AUC `0.7883 -> 0.7913`), missing only the `+0.005` effect bar by `0.00100`; `A3_h43_scarp_free` (`+0.0019365`) passed the SGMC off-catalogue `>= 3/4` fold gate (`+0.0013560`, 3/4 folds positive); `A2_h43_omega_area` (`+0.0018808`) and `A1_h43_off_front` (`-0.0011044`) also failed G1. Confirmation draws `34/35` were not fit; no candidate built, no slot used. Write-up: [`knowledge/28_h43_results_2026-10-03.md`](knowledge/28_h43_results_2026-10-03.md).
 - **H41 (session 4):** slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only — the first G1 pass in
   this family (`A1` +0.0066173, `A4` +0.0073436 on 40 cells; `A2`/`A3` fail; AUC 0.8037 → 0.8159; SGMC second proxy
   negative on every arm, and again on the confirmation). **Confirmation verdict (draws 30/31, 40 cells): `A4_h41_union` reproduces at +0.0077283 and passes G1+G2, `A1_h41_off` fails G2 at +0.0044157, and G3 — the inherited secondary-proxy requirement — withholds promotion for every arm (SGMC 1/4 folds in both stages), so nothing was built or submitted.** `knowledge/26` additionally discloses seven process defects, including five wrong sentences in the frozen preregistration (left byte-identical on purpose) and a fabricated citation. No leaderboard was fetched: that check stays manual by policy. Raw cells: [`evidence/h41_screen/`](evidence/h41_screen/) (including the preserved

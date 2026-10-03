@@ -237,7 +237,7 @@
       "id": "H43",
       "rank": 1,
       "title": "Drainage-network organization: stream-power residual and knickpoint excess",
-      "status": "proposed in the v4 slate (knowledge/25); not implemented; top candidate to build after the H41 verdict",
+      "status": "screened 2026-10-03 (v4 slate, knowledge/25 & knowledge/28): G1 FAIL on draws 32/33 (40 cells). A4_h43_union gained +0.0039976 mean paired DTI (positive in all 4 fold means: NW +0.00387, NE +0.00350, SW +0.00642, SE +0.00220; 3/4 and 4/4 positive folds per draw; worst fold +0.0021960; holdout AUC 0.7883 -> 0.7913), missing only the +0.005 mean bar by 0.00100. A3_h43_scarp_free (+0.0019365 primary) passed the SGMC secondary-proxy fold gate (+0.0013560, 3/4 folds positive); A2 (+0.0018808) and A1 (-0.0011044) failed. No confirmation draws (34/35) were fit; no slot used.",
       "layers": [
         "det_elev (cached 100 m grid)",
         "det_elev_slope",
@@ -247,11 +247,14 @@
       "signature": "Ridge of stream power A^m*S along range-front trends plus excess steepness above a per-basin log-log S-A envelope (knickpoint density).",
       "why_unmapped": "Drainage integration is a catchment-scale network property; the supplied 100 m bands are all local-window filters, and the catalogue carries no hydrologic routing at all.",
       "difference": "Verified by grep: no flow_accum/d8/knickpoint/stream_power implementation exists in src/, scripts/ or tests/. H27/H30 filter scarp geometry, H31/H40 filter potential-field ridges, H35 builds catalogue interaction zones; none uses the topographic boundary condition.",
-      "planning_delta_dti": "0 to +0.012 (low confidence; judgement bracket, never a gate)",
-      "cost": "about half a day; zero downloads, D8 + envelope fit on the cached DEM band",
+      "planning_delta_dti": "measured: A4_h43_union +0.0039976 mean paired gain (4/4 fold means positive), A3_h43_scarp_free +0.0019365 (+0.0013560 SGMC, 3/4 folds), A2 +0.0018808, A1 -0.0011044 (planning bracket was 0 to +0.012)",
+      "cost": "implemented and screened (src/gemsdoe/h43.py, scripts/run_h43_screen.py; 1,330.3 s for 40 cells)",
       "external_data": "none required; optional refinement from USGS 3DEP 1/3-arc-second DEM (free, public, official) which is owner-side fetch only (IR-29-SANDBOX-NET)",
-      "validation": "frozen four-fold blocked screen, fresh draw pair, same G1/G2 gates as knowledge/19 and knowledge/24; must beat holdout_best 0.14479018210246675 before any slot",
-      "slate": "v4 (knowledge/25_candidates_v4_2026-10-03.md)"
+      "validation": "frozen four-fold blocked screen on draws 32/33 complete and independently recomputed from raw cells by scripts/analyze_h43_screen.py (integrity_problems: none); G1 failed on all four arms, so confirmation draws 34/35 were not fit",
+      "slate": "v4 (knowledge/25_candidates_v4_2026-10-03.md)",
+      "screened": "knowledge/27_preregistered_h43_screen_2026-10-03.md",
+      "evidence": "evidence/h43_screen/",
+      "promotion_gate": "evidence/h43_screen/promotion_gate.json — all four arms G3_ELIGIBLE=false; knowledge/28_h43_results_2026-10-03.md carries the verdict"
     },
     {
       "id": "H44",

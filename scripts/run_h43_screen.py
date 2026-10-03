@@ -247,6 +247,16 @@ def main() -> int:
     summary_path = EVIDENCE / f"summary_{stage}.json"
     if design_path.exists() or cells_path.exists() or summary_path.exists():
         raise SystemExit(f"refusing to overwrite existing {stage} evidence in {EVIDENCE}")
+    if args.confirm:
+        screen_summary_path = EVIDENCE / "summary_screen.json"
+        if not screen_summary_path.is_file():
+            raise SystemExit("confirmation requires the screen summary to exist first")
+        screen = json.loads(screen_summary_path.read_text())
+        passed = [arm for arm in ARMS[1:] if screen["arms"].get(arm, {}).get("G1_SCREEN_PASS")]
+        if not passed:
+            print("No arm passed G1 on the screen; confirmation exits before any fit.", flush=True)
+            return 0
+        print(f"confirmation authorised for: {passed}", flush=True)
     state = git_state()
     if state["dirty_worktree"]:
         raise SystemExit("refusing to run from a dirty worktree; commit the implementation first")
@@ -264,16 +274,6 @@ def main() -> int:
         if not p.is_file():
             raise SystemExit(f"missing feature cache {p}; run scripts/prepare_data.py and scripts/build_features.py first")
 
-    if args.confirm:
-        screen_summary_path = EVIDENCE / "summary_screen.json"
-        if not screen_summary_path.is_file():
-            raise SystemExit("confirmation requires the screen summary to exist first")
-        screen = json.loads(screen_summary_path.read_text())
-        passed = [arm for arm in ARMS[1:] if screen["arms"].get(arm, {}).get("G1_SCREEN_PASS")]
-        if not passed:
-            print("No arm passed G1 on the screen; confirmation exits before any fit.", flush=True)
-            return 0
-        print(f"confirmation authorised for: {passed}", flush=True)
     folds = [0, 1, 2, 3]
     draws = list(CONFIRM_DRAWS if args.confirm else SCREEN_DRAWS)
 
