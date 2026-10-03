@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.metadata
+import re
 import json
 import subprocess
 import sys
@@ -52,18 +53,28 @@ def package_version(name: str) -> str:
         return "not-installed"
 
 
-def require_clean_fixed_branch() -> str:
+ARENA_BRANCH_RE = re.compile(r"^arena/[0-9a-f]{8}-gemsdoe29$")
+
+
+def require_clean_fixed_branch() -> tuple[str, str]:
+    """Refuse to fit outside an Arena session branch of this repository, with a clean committed tree.
+
+    The earlier revision of this guard hard-coded the first session's branch name; that pinned the
+    frozen protocol to one ephemeral branch id. The guard now accepts any Arena session branch of this
+    repository (the preregistration is frozen by hash, the source by commit) and the design records the
+    actual branch name that was used.
+    """
     try:
         branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=ROOT, text=True).strip()
         revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         status = subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True)
     except (OSError, subprocess.CalledProcessError) as exc:
         raise SystemExit(f"cannot record frozen Git state: {exc}") from exc
-    if branch != "arena/01a10075-gemsdoe29":
-        raise SystemExit(f"refusing to fit outside the fixed Arena branch; found {branch!r}")
+    if not ARENA_BRANCH_RE.match(branch):
+        raise SystemExit(f"refusing to fit outside an Arena session branch of this repository; found {branch!r}")
     if status.strip():
         raise SystemExit("refusing to fit with a dirty worktree; freeze the preregistration, code, and tests first")
-    return revision
+    return branch, revision
 
 
 def frozen_source_revision(current_revision: str, stage: str) -> str:
@@ -189,7 +200,7 @@ def main() -> None:
     parser.add_argument("--out", default=None, help="new run directory; refuses to overwrite nonempty evidence")
     args = parser.parse_args()
 
-    execution_revision = require_clean_fixed_branch()
+    execution_branch, execution_revision = require_clean_fixed_branch()
     prereg_sha = sha256_file(PREREG_PATH)
     if args.stage == "confirm":
         verify_passing_screen(ROOT / "evidence" / "h31_worm_screen")
@@ -243,7 +254,7 @@ def main() -> None:
         "preregistration_sha256": prereg_sha,
         "code_revision": revision,
         "execution_revision": execution_revision,
-        "branch": "arena/01a10075-gemsdoe29",
+        "branch": execution_branch,
         "clean_worktree_before_fit": True,
         "draws": DRAWS[args.stage],
         "spatial_folds": FOLDS,
