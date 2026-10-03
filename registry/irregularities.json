@@ -675,6 +675,15 @@
       "detail": "Session 5 (arena/01a10342) added knowledge/27_preregistered_emission_density_sweep, 28_emission_density_sweep_results, 29_preregistered_h43_screen, 30_h43_drainage_results and 31_session5_data_and_emission; the parallel session merged as PR #13 added 27_preregistered_h41a4_h34protocol, 28_h41a4_results and 29_remaining_work_and_limitations. After the merge, 27, 28 and 29 each name two different documents, and there is no session-level reservation of numbers.",
       "impact": "Citations by number alone ('knowledge/28') are ambiguous. No content is lost: the descriptive part of every filename is unique and every design file pins the full path plus its SHA-256.",
       "mitigation": "Register entries, design receipts and cross-references must use full filenames; the wording in this merge was checked so that 'knowledge/28' alone is never used as a citation."
+    },
+    {
+      "id": "IR-29-PROXY-VETO-PATTERN",
+      "severity": "high",
+      "status": "open; flagged for owner review",
+      "subject": "The SGMC secondary proxy has vetoed every arm that ever cleared the primary promotion gate.",
+      "detail": "scripts/review_proxy_agreement.py recomputed both proxies from all archived raw cells (evidence/proxy_agreement_review.json): 23 arm-stages carry both proxies, 6 are positive on both, and of the 5 arm-stages that a committed summary records as clearing their stage's primary promotion gate, 0 had a positive SGMC mean gain (H41 screen A1 -0.00106 / A4 -0.00226; H41 confirmation A4 -0.00211; H43 screen A3_knick -0.00012 / A4_union -0.00190). knowledge/19 section 5 declares such a conflict grounds to withhold promotion, so the repository's own dual-proxy rule has withheld promotion from every primary-gate pass so far. The two proxies are also anchored differently: knowledge/17 records that the catalogue-hidden primary reproduced the ordering of the only three unverified owner-reported historical scores (Spearman +1.0 on three points) while the SGMC proxy ordered the same three in reverse (Spearman -0.5). The SGMC class is a state-map fault population that the metric does not measure, so its disagreement is expected and is not evidence against a candidate.",
+      "impact": "No file can ever be recommended for a weekly slot under a rule that requires both proxies to agree, even where the calibrated proxy says the method beats the bar. Conversely, the SGMC proxy's largest gains in the archive (H34 C2 +0.058, C3 +0.080) come with catastrophic primary losses (0/4 positive folds), so it is not a proxy to promote on either.",
+      "mitigation": "Surfaced, not silently relaxed: this entry asks the owner to choose between (a) keeping the veto, (b) demoting the SGMC proxy to a published risk flag while keeping the calibrated primary gate plus the exact-file audit as the promotion requirement, or (c) preregistering a proxy-calibration study with more anchors before any change. No label, gate or register entry was changed by writing this review, and no candidate is asserted to be slot-approved here."
     }
   ],
   "updated": "2026-10-03"

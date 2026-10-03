@@ -23,8 +23,10 @@
 > means were **draw-specific**, the family's line is **closed for promotion**, no candidate file was built and no
 > weekly slot was used. Every number is recomputed from the raw cells by
 > [`scripts/analyze_h41a4_h34protocol.py`](scripts/analyze_h41a4_h34protocol.py) (problems: none); the write-up is
-> [`knowledge/28_h41a4_results_2026-10-03.md`](knowledge/28_h41a4_results_2026-10-03.md). Nothing is slot-approved
-> and the next free draw is still 32. Pass 2 of this session also closed two process defects it found: the
+> [`knowledge/28_h41a4_results_2026-10-03.md`](knowledge/28_h41a4_results_2026-10-03.md). Nothing is slot-approved,
+> and that stage consumed no draws: the next free draw was still 32 when it finished (the parallel H43 stage then
+> claimed 32/33 and reserved 34/35 — [`registry/draw_ledger.json`](registry/draw_ledger.json) is the only
+> authority — see the draw-ledger bullet further down). Pass 2 closed two process defects it found: the
 > documented download verifier covered only two of the five registered artifacts
 > ([`IR-29-VERIFY-DOWNLOADS-COVERAGE`](registry/irregularities.json), now **5/5 ok** plus the two H29 builds at
 > 28 checks each with 0 failures) and one register mitigation named a script that does not exist in this
@@ -119,6 +121,12 @@
 - **[Session-5 note](knowledge/31_session5_data_and_emission_2026-10-03.md)** — the data-placement receipt (the
   standing blocker, closed), the emission-density sweep (negative: keep the pinned artifact) and the H43 execution
   record, with every re-check command.
+- **[Proxy-policy review (session 5, decision requested)](knowledge/32_proxy_policy_review_2026-10-03.md)** —
+  recomputed from every archived raw cell: **0 of the 5 arm-stages that ever cleared a primary promotion gate
+  had a positive SGMC sign**, and only the primary proxy has an external anchor (+1.0 vs the SGMC proxy's −0.5
+  on the same three unverified owner-reported points). Registered as `IR-29-PROXY-VETO-PATTERN` with three
+  options for the owner; **no label or gate was changed**. Evidence:
+  [`evidence/proxy_agreement_review.json`](evidence/proxy_agreement_review.json).
 - **[H41-A4 vs the slot bar (session 5)](knowledge/28_h41a4_results_2026-10-03.md)** — the frozen re-score on the
   draws that define the bar, the bit-for-bit control reproduction that validates the comparison, and why the
   family's promotion path is now closed. Frozen protocol:
