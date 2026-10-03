@@ -9,7 +9,7 @@
       "evidence": {
         "evidence/h29_gate.json": {
           "present": true,
-          "sha256": null
+          "sha256": "67af1db8f57eed747837f212bf6a032f3f2574ad16f9236e92f562a81fca23ad"
         }
       }
     },
@@ -23,7 +23,7 @@
       "evidence": {
         "evidence/h31_worm_screen/design.json": {
           "present": true,
-          "sha256": null
+          "sha256": "71691de2e7efc167cb299e8bc79d7d61822c8bf757a3e6b5b8edb6a868eebea6"
         }
       }
     },
@@ -37,7 +37,7 @@
       "evidence": {
         "evidence/factorial_families/design.json": {
           "present": true,
-          "sha256": null
+          "sha256": "427d0da7f29b4b8ad7d1c4e0b29bad0dde904a6b165b27a8c7904de4c5d18e16"
         }
       }
     },
@@ -51,7 +51,7 @@
       "evidence": {
         "evidence/h34_coverage_screen/design.json": {
           "present": true,
-          "sha256": null,
+          "sha256": "e943c19a5ef45560fedefc0fb51b2493db8b90b330e73f19a56faf6174018fd7",
           "git_revision": "b098c3b1852c9164ba61439b98a36f20d4a013f3"
         }
       }
@@ -66,7 +66,7 @@
       "evidence": {
         "evidence/h35_h40_screen/design_screen.json": {
           "present": true,
-          "sha256": null,
+          "sha256": "d256f02358adf988eda0b1f6a08069995a12ba43649b07481d6afcaf8c8cab50",
           "prereg_sha256": "5432b42ae044d44aedd4cd6663a18a96a0f91ded6aa34ea8a164f8ce6080fa62",
           "git_revision": "1442d1bf27956aaf88adb00f9a9ae940e103ebc3"
         }
@@ -82,7 +82,7 @@
       "evidence": {
         "evidence/h41_screen/design_screen.json": {
           "present": true,
-          "sha256": null,
+          "sha256": "25b7cfd1cb3543374287937ba8a95b8bdf852da67b709a7481ee201f7f814d7c",
           "prereg_sha256": "2f25c06fe67f05b720bae5aab0378de71f96e871a9fbff4910af71176abb499d",
           "git_revision": "a9d880e7ac1cdd1c2bd527b7d7374036a8709b2e"
         }
@@ -94,15 +94,16 @@
         31
       ],
       "draws_reserved_not_fitted": [],
-      "raw_cells": 4,
+      "raw_cells": 21,
       "evidence": {
         "evidence/h41_screen/design_confirm.json": {
           "present": true,
-          "sha256": null,
+          "sha256": "6ce1b835c6b37e379d73277b6e83b559ad27f1f238dffb783b0cf9238d38d09e",
           "prereg_sha256": "2f25c06fe67f05b720bae5aab0378de71f96e871a9fbff4910af71176abb499d",
           "git_revision": "2568dc0d1287d8218ceed732161da8192070cd52"
         }
-      }
+      },
+      "status_note": "IN FLIGHT: the confirmation process was still appending rows to cells_confirm.jsonl when this ledger was generated, so raw_cells is a lower bound and no verdict is implied. Regenerate after the run writes summary_confirm.json."
     }
   },
   "prose_claimed": {

@@ -371,6 +371,55 @@
       "detail": "scripts/analyze_h41_screen.py compared bool(problems) against bool(passed) with !=, which reports an inconsistency whenever the run is clean (empty problem list, passed=true). It fired on the finished screen as 'viability_guard passed flag inconsistent with its problem list'. The runner had recorded the guard correctly: all five H41 columns are nonzero on 3.3-30.1 % of footprint pixels against a 0.2 % floor.",
       "impact": "The check touches no gate, threshold or cell value, so the H41 G1 verdict is unaffected: the same analyzer recomputes every gate from the raw cells and agrees with the runner summary to <1e-12 on all 30 compared quantities, and the corrected check now reports zero integrity problems. The risk was of the opposite kind to a false pass: a spurious problem could have been read as an invalid run and discarded.",
       "mitigation": "Comparison corrected to flag only when passed and the problem list actually disagree, with an inline note that the fix postdates the screen. Re-running the analyzer on the same cells returns 'problems: none' and design_gate_match true; the frozen preregistration hash still matches, so no gate was edited after seeing results."
+    },
+    {
+      "id": "IR-29-H41-PROPREREG",
+      "status": "process_defect",
+      "severity": "medium",
+      "date": "2026-10-03",
+      "summary": "The H41 screen was authorized by a message quoting knowledge/24's provisional wording before the document was frozen; the run itself used the frozen hash and gates.",
+      "detail": "Sequence: I launched the frozen run from the message that authorized it, but the authorization text ('freeze it, then run') predated the freeze. Impact: none on the recorded numbers (design_screen.json pins the sha256 of the frozen document actually used, and no gate was touched after results existed); impact on process: the order of operations was wrong and is disclosed rather than smoothed over. Fix: the runner now records the hash, so any wording change after a run is detectable; knowledge/26 states this in the open.",
+      "affected_artifacts": [
+        "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+        "evidence/h41_screen/design_screen.json"
+      ]
+    },
+    {
+      "id": "IR-29-H41-FROZEN-STATS",
+      "status": "open",
+      "severity": "medium",
+      "date": "2026-10-03",
+      "summary": "Five prose statistics in the FROZEN H41 preregistration are wrong; the module and code are right, so no gate is affected, and the frozen file stays byte-identical.",
+      "detail": "Found by line-by-line re-verification after the screen ran: (1) the median clipped trace length is 9.99 km, not 7.1 km (7.1 km is the unclipped median); (2) slip_rate_mmyr spans 0.0001-4.5, not the quoted range; (3) the '16.0 % of the whole grid' sentence was computed inside the footprint only; (4) H41_SUPP nonzero fraction is 30.13 % whole-grid / 13.17 % in-footprint, not the quoted figure; (5) _trace_grids has no 0.5 px / 3x3 / percentile-clip step as described, and support_scale is the whole-grid p99.9 (1.024998), not an in-footprint statistic. The field definitions in src/gemsdoe/h41.py and the recorded diagnostics in evidence/h41_screen/design_screen.json are what the numbers came from, so the verdicts stand; the document is NOT edited because its hash is pinned as frozen (correcting a preregistration after results exist is exactly what the protocol forbids). Fix: every number in the H41 results page and knowledge/26 was recomputed from the module and the raw CSV; the frozen document carries this register entry as its erratum. Also found in the same pass: knowledge/24 cites a nonexistent knowledge/23 and states a candidate-score formula ('1.5 x mean screen delta-DTI, capped at +0.030') that exists nowhere in the repo history or any registry - fabricated by me in an earlier session and left in a frozen file. Both are flagged here rather than silently edited; the operational consequence is that any candidate advance must be scored against the real predecessor rule in knowledge/21 (re-score on the H34 protocol; must beat 0.14479 on that protocol AND pass an exact-file audit) and not against the invented formula.",
+      "affected_artifacts": [
+        "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+        "src/gemsdoe/h41.py"
+      ]
+    },
+    {
+      "id": "IR-29-REF-DOWNLOAD",
+      "status": "resolved",
+      "severity": "low",
+      "date": "2026-10-03",
+      "summary": "The predecessor's reference download could not be independently verified (two mutually inconsistent digests, and the file was absent from disk).",
+      "detail": "The worming reference .tif is documented as 2,004,608 bytes with sha256 d79c6a5b... in one place and a02e6c8b... in another, while the file itself was not present, so no local check could settle it. Resolution: scripts/verify_downloads.py (added with the H31-group download) downloads the reference file from the registered predecessor Pages release and computes its digest: 2,004,608 bytes and a02e6c8b3052b2c8c8c4fee69440eb5eacb4045b241f21072725763bfe7794fe. The a02e6c8b... value is correct, d79c6a5b... is wrong, and both registry records now say so with the download as provenance. The bytes were used only to hash-verify; nothing was submitted, and no organizer endpoint was contacted.",
+      "affected_artifacts": [
+        "knowledge/20_multiscale_worming_2026-10-03.md",
+        "registry/submissions.json"
+      ]
+    },
+    {
+      "id": "IR-29-H41-LOCAL-PINS",
+      "status": "open",
+      "severity": "low",
+      "date": "2026-10-03",
+      "summary": "Three verification pins in the frozen H41 module are local-only: an official source exists but cannot be fetched from this sandbox.",
+      "detail": "The 2026-09-24 rules PDF, the GDR 1391 landing page and the GeoDAWN flight-path binary all fail TLS handshakes from this environment, while pypi.org and api.github.com respond, so the sandbox has an egress allowlist rather than a general network fault (measured with ssl.create_default_context(), timeout 8 s: opengrid.org, gdr.openei.org, docs.nlr.gov and usgs.gov all closed; gdr.usgs.gov resolved to a 'no such host' NXDOMAIN). Those three facts therefore rest on locally mirrored copies (the repo's own transcription for the rules and the CSV, plus the predecessor's published digests) and on the pinned CSV already in the repository, not on a fresh official fetch. Consequence: the pinned inputs are reproducible and hash-checked, but the third-party attestation step is deferred to the owner; it is not evidence that changed any verdict, since the frozen run used only the pinned CSV and the mirrored rasters. Do not treat 'source reachable' as established for those three.",
+      "affected_artifacts": [
+        "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+        "registry/sources.json"
+      ]
     }
-  ]
+  ],
+  "updated": "2026-10-03"
 }

@@ -25,9 +25,6 @@ RADIUS_PX = 3.0
 # Two restore layouts are in use: ``scripts/restore_data.py`` writes the core manifest to
 # ``data/bridge/`` and ``scripts/restore_h31_data.py`` writes the H31 group manifest to ``data/``. The
 # template is the same hash-pinned file in both, so resolvers must accept either (IR-29-CHECK-TEMPLATE-ROOT).
-TEMPLATE_NAMES = ("bridge/sample_submission.tif", "sample_submission.tif")
-
-
 def resolve(relative: str, *, base: Path | None = None) -> Path:
     """Return the first existing candidate for ``relative`` under the data dir; ``bridge/`` is preferred.
 
@@ -45,8 +42,4 @@ def resolve(relative: str, *, base: Path | None = None) -> Path:
 def template_path(*, base: Path | None = None) -> Path:
     """The submission template, whichever restore layout is present."""
     root = DATA if base is None else base
-    for name in TEMPLATE_NAMES:
-        p = root / name
-        if p.is_file():
-            return p
-    return root / TEMPLATE_NAMES[0]
+    return resolve("sample_submission.tif", base=root)

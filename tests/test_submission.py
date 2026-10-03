@@ -16,6 +16,38 @@ def test_cli_default_template_uses_manifest_bridge_path(monkeypatch, tmp_path):
     assert default_template_path() == tmp_path / "bridge" / "sample_submission.tif"
 
 
+def test_both_resolvers_share_one_candidate_rule(monkeypatch, tmp_path):
+    """gemsdoe and the gems29 sibling shim keep separate roots on purpose but must agree on the layout rule.
+
+    ``gemsdoe.paths`` honours ``GEMS_DATA_DIR`` because the current screens and caches run through it;
+    ``gems29.paths.DATA`` is the fixed ``<repo>/data`` the legacy H29 pipeline expects. Only the *ordering*
+    rule is shared: prefer an existing bridge file, then an existing data-root file, else the bridge path
+    that ``data/manifest.json`` names.
+    """
+    from gems29 import paths as g29
+    from gemsdoe.paths import template_path as gemsdoe_template
+
+    for layout, expect in (("root", tmp_path / "sample_submission.tif"),
+                           ("bridge", tmp_path / "bridge" / "sample_submission.tif")):
+        (tmp_path / "bridge").mkdir(exist_ok=True)
+        for f in list(tmp_path.glob("*.tif")) + list((tmp_path / "bridge").glob("*.tif")):
+            f.unlink()
+        (tmp_path / "sample_submission.tif").write_bytes(b"x")
+        (tmp_path / "bridge" / "sample_submission.tif").write_bytes(b"x")
+        if layout == "root":
+            (tmp_path / "bridge" / "sample_submission.tif").unlink()
+        else:
+            (tmp_path / "sample_submission.tif").unlink()
+        monkeypatch.setenv("GEMS_DATA_DIR", str(tmp_path))
+        assert gemsdoe_template() == expect, layout
+        assert g29.template_path(base=tmp_path) == expect, layout  # same rule, explicit root
+    # nothing on disk -> both fall back to the manifest's legacy bridge location
+    (tmp_path / "bridge" / "sample_submission.tif").unlink()
+    monkeypatch.setenv("GEMS_DATA_DIR", str(tmp_path))
+    assert gemsdoe_template() == tmp_path / "bridge" / "sample_submission.tif"
+    assert g29.template_path(base=tmp_path) == tmp_path / "bridge" / "sample_submission.tif"
+
+
 def test_cli_default_template_falls_back_to_h31_restore_location(monkeypatch, tmp_path):
     """The H31 group restore puts the template at the data root; the documented command must find it."""
     monkeypatch.setenv("GEMS_DATA_DIR", str(tmp_path))

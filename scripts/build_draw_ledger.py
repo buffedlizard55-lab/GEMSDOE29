@@ -15,6 +15,7 @@ authorized then released without a fit, and refuses to write a ledger in which a
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
@@ -32,7 +33,11 @@ STAGE_SOURCES = {
     "h34_coverage_screen": dict(files=["evidence/h34_coverage_screen/design.json"], fitted_key="draws"),
     "h35_h40_screen": dict(files=["evidence/h35_h40_screen/design_screen.json"], fitted_key="draws"),
     "h41_screen": dict(files=["evidence/h41_screen/design_screen.json"], fitted_key="draws"),
-    "h41_confirmation": dict(files=["evidence/h41_screen/design_confirm.json"], fitted_key="draws"),
+    "h41_confirmation": dict(files=["evidence/h41_screen/design_confirm.json"], fitted_key="draws",
+                             status_note="IN FLIGHT: the confirmation process was still appending rows to "
+                                          "cells_confirm.jsonl when this ledger was generated, so raw_cells is a "
+                                          "lower bound and no verdict is implied. Regenerate after the run writes "
+                                          "summary_confirm.json."),
 }
 # Ranges documented in prose that predate the per-stage evidence files kept here (or whose only record is an
 # archived pre-correction run). They are claimed so the "next free draw" arithmetic stays conservative.
@@ -77,7 +82,8 @@ def derive() -> dict:
                 files[rel] = {"present": False}
                 continue
             data = json.loads(p.read_text(encoding="utf-8"))
-            files[rel] = {"present": True, "sha256": None}
+            files[rel] = {"present": True,
+                         "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
             got = data.get(spec["fitted_key"]) or []
             draws.extend(int(x) for x in got)
             if spec.get("reserved_key"):
@@ -87,8 +93,11 @@ def derive() -> dict:
             if "git" in data and isinstance(data["git"], dict):
                 files[rel]["git_revision"] = data["git"].get("revision")
         n = cell_count(stage)
-        stages[stage] = dict(draws_fitted=sorted(set(draws)), draws_reserved_not_fitted=sorted(set(reserved)),
-                             raw_cells=n, evidence=files)
+        entry = dict(draws_fitted=sorted(set(draws)), draws_reserved_not_fitted=sorted(set(reserved)),
+                     raw_cells=n, evidence=files)
+        if spec.get("status_note"):
+            entry["status_note"] = spec["status_note"]
+        stages[stage] = entry
     claimed = sorted({d for st in stages.values() for d in st["draws_fitted"]}
                      | {d for lst in PROSE_CLAIMED.values() for d in lst})
     reserved_only = sorted({d for lst in RELEASED_UNUSED.values() for d in lst} - set(claimed))
@@ -123,9 +132,20 @@ def main() -> int:
         if not OUT.is_file():
             print(f"missing ledger: {OUT.relative_to(ROOT)}")
             return 1
-        if json.loads(OUT.read_text(encoding="utf-8")) != fresh:
+        committed = json.loads(OUT.read_text(encoding="utf-8"))
+        # a stage recorded as IN FLIGHT is being appended to by a live process, so its row count is a
+        # lower bound rather than a fact; every other field (draws, hashes, prereg digest) stays strict
+        loose = []
+        for stage, spec in committed.get("stages", {}).items():
+            note = str(spec.get("status_note", ""))
+            if note.startswith("IN FLIGHT") and stage in fresh["stages"]:
+                fresh["stages"][stage]["raw_cells"] = spec.get("raw_cells")
+                loose.append(stage)
+        if committed != fresh:
             print("draw ledger is stale; re-run scripts/build_draw_ledger.py")
             return 1
+        if loose:
+            print(f"(row counts for live stages not pinned: {', '.join(loose)})")
         print(f"draw ledger current: next_free_draw={fresh['next_free_draw']}, "
               f"{len(fresh['claimed_by_any_fit'])} draws claimed")
         return 0
