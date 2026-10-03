@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "updated_utc": "2026-10-03T09:01:00Z",
+  "ranking_basis": "expected local-proxy ΔDTI improvement vs implementation cost, after deduplicating against every hypothesis already implemented or blocked in GEMSDOE..GEMSDOE27 (grep-verified this session). Rank 1 is the owner-mandated worming programme.",
+  "hypotheses": [
+    {"id": "H29-1", "rank": 1, "name": "Worming persistence as emission reliability + head feature (owner-mandated)",
+     "layers": ["training_features band 2 rtp (magnetic, reduced to pole)", "band 13 iso_grav_anom (isostatic gravity)"],
+     "signature": "Fourier upward-continuation ladder 0/100/200/400/800/1600 m; local maxima of horizontal-gradient modulus per level; cross-level worm tracking with height-growing match tolerance; persistence P and amplitude-retention S rasters; joint = min over fields.",
+     "why_unmapped": "Deep-rooted basement fabric feeding geothermal fluid keeps a coherent gradient edge up to km of continuation; shallow artifacts (acquisition lineation, near-surface conductors, cultural noise) die at the first continuation steps. Catalogue-missing faults under thin cover have no scarp but do keep a potential-field discontinuity.",
+     "differs": "19GEMSDOE L4 used a SINGLE fixed 1.5 km strike-coherent gradient (no ladder, no survival). GEMSDOE26 XEDGE / 27 H28-1 used Gaussian scale-space ratios as head features only. Here: true UC (depth-interpretable, Horowitz 2018), explicit survival + vanishing statistics, used as an emission gate (A1), an emission re-ranker (A2) AND a head feature (B1).",
+     "cost": "1 day (implemented); ladder pass measured 49 s on 2 cores", "gates": "A1-A0, A2-A0, B1-B0 frozen gate knowledge/01 §5"},
+    {"id": "H29-2", "rank": 2, "name": "Residualized 2 m thermal probes as independent far-field corroboration",
+     "layers": ["GDR 1391 INGENIOUS 2 m probe shapefile (hash-pinned 1301f70d...), F2mDAB background-normalized anomaly"],
+     "signature": "Nearest-probe distance + F2mDAB anomaly surfaces; in an amagmatic extensional province a thermal anomaly without a mapped structure raises the prior for an unmapped permeable fault (Siler & Faulds).",
+     "why_unmapped": "Probes were sited by field crews for thermal effect, not by mapping convenience; anomalous F2mDAB away from catalogue traces is evidence of a pathway the USGS/INGENIOUS maps lack.",
+     "differs": "GEMSDOE25's H27-2 was BLOCKED: the binary could not be fetched. The bytes are verified locally for the first time this session. No prior repo rasterised F2mDAB onto the competition grid.",
+     "cost": "0.5 day (implemented); gated as B2-B0", "gates": "B2-B0 frozen gate"},
+    {"id": "H29-3", "rank": 3, "name": "Acquisition-line notch before worming",
+     "layers": ["rtp spectrum; GeoDAWN flight geometry: 4 blocks, E-W lines, 200/400 m spacing"],
+     "signature": "Spectral notch at cross-line frequencies 1/200,1/400 m^-1, then re-run the worming ladder; candidates whose edges only exist pre-notch are line-aliasing.",
+     "why_unmapped": "Suppressing aliasing sharpens sub-parallel basement edges that catalogue mapping skipped because survey artifacts masked them.",
+     "differs": "IR-29-LINE-PERSISTENCE-INVERSION: raw persistence does NOT preferentially kill E-W edges on this grid (E-W most persistent: 0.656 vs 0.562), so a notch is the only clean way to test line-removal; no sibling repo ever computed the line spectrum.",
+     "cost": "1-2 days", "gates": "NOT gated this session — preregistration §5 covers only arms run; registers for next session with its own gate."},
+    {"id": "H29-4", "rank": 4, "name": "Paleo-geothermal deposits far from visible traces",
+     "layers": ["GDR 1391 paleo_geothermal_regional.zip (sinter/tufa/travertine, CC BY 4.0)"],
+     "signature": "Distance-weighted support from extinct/fossil thermal deposits as a map of now-buried vent systems, gated to >=300 m from catalogue.",
+     "why_unmapped": "Fossil deposits mark paleo-pathways that need no modern scarp; Quaternary mapping is scarp-biased.",
+     "differs": "GEMSDOE25 H27-3 was blocked on fetch; pin recorded (faffcf69...) — STILL unreachable from this sandbox (curl exit 35). Must be run on a networked runner before any claim.",
+     "cost": "blocked on network; 0.5 day once fetched", "gates": "none assigned this session"},
+    {"id": "H29-5", "rank": 5, "name": "Earthquake-density + strain-invariant coherence as active-fault prior",
+     "layers": ["bands 4 geod_2ndinv, 7 geod_shearrate, 8 geod_dilatationrate, 10 deq_n100a15, 16 ieq_n100a15"],
+     "signature": "Coherence of microseismicity density with dilatation maxima along persistent (worming-selected) basement lineaments.",
+     "why_unmapped": "Slip below scarp-forming threshold keeps faults active-but-unmapped; seismicity is instrumented, scarps are visual.",
+     "differs": "GEMSDOE26 DILCOND used dilatation x conductivity coincidence only; no repo coupled the strain/earthquake family THROUGH a persistence-selected corridor.",
+     "cost": "1 day; needs H29-1 output as input", "gates": "not run this session — registered for the next slate."}
+  ],
+  "explicitly_not_redone": [
+    {"idea": "emission-on-SGMC-bedrock-gap as a habitat", "why": "LIVE-REFUTED (16GEMSDOE h18-4: 0.0360; GEMSDOE27 inversion: 1.62x blind, credit 0.062|G|)"},
+    {"idea": "more dot-spacing/budget sweeps on the h19-5 surface", "why": "GEMSDOE27: lever exhausted ~0.255-0.260; identical-surface variants plateau at 5.3-5.7x blind concentration"},
+    {"idea": "uniform-pi truth models / blind lattice re-derivation", "why": "done at 25/27; |G| = 12.2-12.8k px, retention rule validated to 0.1-4%"}
+  ]
+}
