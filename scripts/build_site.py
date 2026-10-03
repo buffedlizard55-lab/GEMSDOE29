@@ -361,6 +361,182 @@ def h41_status_sentence() -> str:
             f"{'no confirmation was fit' if not passed else 'confirmation authorized'}")
 
 
+def data_placement_card() -> str:
+    """Session-5 card: what is actually on disk, read from the script-written placement receipt."""
+    path = ROOT / "evidence" / "data_placement_receipt.json"
+    if not path.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-5 data work</p>'
+            "<h2>Data-placement receipt not present in this checkout</h2>"
+            "<p>Run <code>python scripts/record_data_placement.py</code> after restoring the pinned mirrors to "
+            "generate <code>evidence/data_placement_receipt.json</code>. The receipt never claims organizer "
+            "authentication: it records byte-correct owner mirrors and the derived working arrays.</p></section>"
+        )
+    rec = json.loads(path.read_text(encoding="utf-8"))
+    groups = " · ".join(f"{g['tag']} {g['n_present']}/{g['n_entries']}" for g in rec["manifests"])
+    detail = rec.get("prepared_detail", {})
+    caches = detail.get("caches", {})
+    cache_txt = ", ".join(f"{name.split('.')[0]}" for name, row in caches.items() if row.get("present"))
+    status = tag("all pinned files byte-correct", "yes") if rec.get("prepared") else tag("placement incomplete", "no")
+    return (
+        '<section class="card"><p class="kicker">Session-5 data work · the standing blocker, closed with a receipt</p>'
+        "<h2>Competition inputs are placed, hash-verified and prepared in this checkout</h2>"
+        f"<p>The brief's open item was that the organizer data page needs a login. The repository answer is the "
+        f"owner-mirror restore path: <code>bash scripts/download_competition_data.sh</code> (never contacts DrivenData) "
+        f"followed by <code>python scripts/prepare_data.py</code>, <code>scripts/build_features.py</code> and "
+        f"<code>scripts/build_addons.py</code>. A script-written receipt now records the result: "
+        f"<strong>{groups}</strong> pinned files present and byte-correct, footprint "
+        f"<strong>{int(detail.get('footprint_pixels', 0)):,}</strong> px, catalogue "
+        f"<strong>{int(detail.get('label_pixels', 0)):,}</strong> px, {int(detail.get('bands', {}).get('n_files', 0))} "
+        f"aligned arrays, caches: {e(cache_txt)}. {status} "
+        f"{tag('owner mirrors, not organizer-authenticated', 'warning')}</p>"
+        f"<p>Re-check it at any time with <code>python scripts/record_data_placement.py --check</code>. "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/data_placement_receipt.json', 'Open the receipt', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/registry/data_manifest.json', 'Open the hash-pinned manifest', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/31_session5_data_and_emission_2026-10-03.md', 'Read the session-5 note', external=True)}</p></section>"
+    )
+
+
+def emission_sweep_card() -> str:
+    """Session-5 card: the frozen emission-density sweep, every number read from evidence/emission_sweep/."""
+    path = ROOT / "evidence" / "emission_sweep" / "summary.json"
+    if not path.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-5 frozen sweep · emission density</p>'
+            "<h2>Emission-density sweep: no evidence in this checkout yet</h2>"
+            "<p>Pre-registered in <code>knowledge/27_preregistered_emission_density_sweep_2026-10-03.md</code>; "
+            "the runner is <code>scripts/run_emission_sweep.py</code>.</p></section>"
+        )
+    data = json.loads(path.read_text(encoding="utf-8"))
+    rows = data["rows"]
+    dec = data["decision"]
+    cal = dec["proxy_calibration_check"]
+    curve = " · ".join(
+        f"{key.replace('_', ' ')} {rows[key]['catalogue_hidden_mean']:.5f} ({rows[key]['emitted_pixels']:,} px)"
+        for key in ("cal_solid", "cal_d1_5", "cal_d2_8", "thin_3.2", "thin_4.8", "thin_6.4")
+    )
+    verdict = ("the proxy reproduces the reported live ladder order, so its density axis is usable"
+               if cal["calibrated"] else "the proxy does NOT reproduce the live ladder order — measurement only")
+    return (
+        '<section class="card"><p class="kicker">Session-5 frozen sweep · emission density</p>'
+        "<h2>Re-spacing the best-known emission does not beat it — the ladder was already converged</h2>"
+        f"<p>A fifteen-row sweep of the <em>same</em> frozen habitat (deterministic Poisson-disk re-spacing at nine "
+        f"spacings plus three score-aware placements, with the pinned files as calibration rows) was scored on both "
+        f"registered file-level proxies with no model fitted and no holdout draw spent. Curve on the catalogue-hidden "
+        f"proxy: {e(curve)}. The pinned 2.8 px artifact is the maximum; both denser and sparser rows are worse, and "
+        f"score-aware placement at the same spacing loses "
+        f"{rows['aware_2.8']['paired_vs_reference']['mean']:+.5f}. Calibration check: {e(verdict)}. "
+        f"Frozen rule returned: <code>{e(dec['recommendation'])}</code>. {tag('no slot implication', 'no')}</p>"
+        f"<p>Two geometry facts came out of the same run: <code>dot_thin(·, 2.8)</code> reproduces the pinned artifact "
+        f"pixel-for-pixel, and the spacing parameter is quantised by an integer disc, so 2.4 px and 2.8 px are literally "
+        f"the same transform (which closes the old D2.8 naming question). "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/27_preregistered_emission_density_sweep_2026-10-03.md', 'Read the frozen protocol', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/28_emission_density_sweep_results_2026-10-03.md', 'Read the results', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/emission_sweep/summary.json', 'Open the raw summary', external=True)}</p></section>"
+    )
+
+
+def h43_screen_card() -> str:
+    """Session-5 card: the frozen H43 drainage-network screen, read from evidence/h43_screen/."""
+    base = ROOT / "evidence" / "h43_screen"
+    summary_p, design_p = base / "summary_screen.json", base / "design_screen.json"
+    if not design_p.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-5 frozen screen · H43</p>'
+            "<h2>H43 drainage-network screen: no evidence in this checkout yet</h2>"
+            "<p>Pre-registered in <code>knowledge/29_preregistered_h43_screen_2026-10-03.md</code>; the runner is "
+            "<code>scripts/run_h43_screen.py</code> and refuses to run from a dirty worktree or overwrite existing "
+            "evidence.</p></section>"
+        )
+    design = json.loads(design_p.read_text(encoding="utf-8"))
+    diag = design.get("h43_diagnostics", {})
+    knick_block = diag.get("knick", {})
+    knick = knick_block.get("fit", {})
+    rev = str(design.get("git", {}).get("revision", ""))[:8]
+    parts = [
+        '<section class="card"><p class="kicker">Session-5 frozen screen · H43 drainage organization</p>',
+        "<h2>Drainage-network columns from the 100 m surface</h2>",
+        "<p>Five columns — contributing area, stream power A^0.5·S, knickpoint excess over a binned-median "
+        "concavity fit, off-catalogue knickpoint excess, and channel&#215;scarp — built from the cached detrended "
+        "surface plus the visible catalogue only (the off-catalogue mask removes information). Diagnostics measured "
+        "on the real band: ",
+        f"{int(diag.get('pits', 0)):,} strict pits filled, {int(knick_block.get('channel_pixels', 0)):,} channel pixels, ",
+        f"knickpoint coverage {100 * design.get('h43_columns_nonzero_fraction', {}).get('H43_KNICK', 0):.2f}%, ",
+        f"fitted concavity theta = {float(knick.get('theta', 0.0)):.3f}.</p>",
+    ]
+    if not summary_p.is_file():
+        parts.append(f"<p>Screen launched (git {e(rev)}); the summary lands in "
+                     "<code>evidence/h43_screen/summary_screen.json</code> and this card fills itself from it.</p></section>")
+        return "".join(parts)
+    summary = json.loads(summary_p.read_text(encoding="utf-8"))
+    arms = summary["arms"]
+    items = []
+    for arm, entry in arms.items():
+        if arm == "C0_base":
+            continue
+        gains = entry["fold_gains"]
+        gain_list = list(gains.values()) if isinstance(gains, dict) else list(gains)
+        n_pos = sum(1 for g in gain_list if g > 0)
+        # The gate counts positive folds *within each draw*; show both that statistic and the fold-mean count so a
+        # reader cannot mistake the looser fold-mean count for the gate (A2_network: fold-mean 1/4 but draw counts 0/4, 3/4).
+        pos_draws = list(entry.get("positive_folds_per_draw") or [])
+        per_draw = ", ".join(f"{p}/4" for p in pos_draws) if pos_draws else "n/a"
+        verdict = "G1 PASS" if entry["G1_SCREEN_PASS"] else "G1 FAIL"
+        items.append(
+            f"<li><code>{e(arm)}</code>: mean paired gain {entry['mean_gain']:+.5f}, per-draw positive folds {per_draw} (gate), "
+            f"fold-mean positives {n_pos}/4, worst {entry['worst_fold_gain']:+.5f}, budget ok: {entry['budget_ok']}, "
+            f"SGMC {entry['sgmc_mean_gain']:+.5f} ({entry['sgmc_positive_folds']}/4 folds) &#8594; <strong>{verdict}</strong></li>"
+        )
+    passed = sorted(arm for arm, entry in arms.items() if arm != "C0_base" and entry.get("G1_SCREEN_PASS"))
+    verdict_txt = ("cleared the frozen G1 gate: " + ", ".join(passed)) if passed else (
+        "failed the frozen G1 gate on every arm — no confirmation was fit and no candidate was built")
+    guard = summary.get("viability_guard", {})
+    guard_txt = "passed" if guard.get("passed") else "FAILED"
+    ctrl = float(arms["C0_base"]["mean_dti"])
+    prereg = a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/"
+               "knowledge/29_preregistered_h43_screen_2026-10-03.md", "Read the frozen preregistration", external=True)
+    module = a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/h43.py",
+               "Read the feature module", external=True)
+    parts.append(f'<p><strong>Verdict:</strong> {e(verdict_txt)}.</p><ul class="list-clean">')
+    parts.append("".join(items))
+    parts.append(f"</ul><p>Sparse-column guard: {guard_txt} (floor {guard.get('min_nonzero_fraction')}); "
+                 f"control mean {ctrl:.5f}. {tag('proxy DTI only, not a competition score', 'warning')} "
+                 f"{prereg} · {module}</p></section>")
+    return "".join(parts)
+
+
+def session5_status_sentence() -> str:
+    """Evidence-derived one-liner for the home banner: data placement, emission sweep, H43 verdict."""
+    parts = []
+    rec_p = ROOT / "evidence" / "data_placement_receipt.json"
+    if rec_p.is_file():
+        rec = json.loads(rec_p.read_text(encoding="utf-8"))
+        n = sum(g["n_present"] for g in rec["manifests"])
+        parts.append(f"session 5 closed the data-placement blocker with a script-written receipt "
+                     f"({n} pinned files byte-correct, footprint {int(rec.get('prepared_detail', {}).get('footprint_pixels', 0)):,} px, "
+                     f"caches prepared)")
+    sw_p = ROOT / "evidence" / "emission_sweep" / "summary.json"
+    if sw_p.is_file():
+        sw = json.loads(sw_p.read_text(encoding="utf-8"))
+        dec = sw["decision"]
+        parts.append("the frozen emission-density sweep found the pinned 2.8 px artifact is the optimum of its own "
+                     f"family (calibration check: {'passed' if dec['proxy_calibration_check']['calibrated'] else 'failed'}; "
+                     f"recommendation: {dec['recommendation']})")
+    h43_p = ROOT / "evidence" / "h43_screen" / "summary_screen.json"
+    if h43_p.is_file():
+        h43 = json.loads(h43_p.read_text(encoding="utf-8"))
+        arms = h43["arms"]
+        passed = [arm for arm in arms if arm != "C0_base" and arms[arm].get("G1_SCREEN_PASS")]
+        gains = "; ".join(f"{arm} {arms[arm]['mean_gain']:+.5f}" for arm in arms if arm != "C0_base")
+        parts.append("the frozen H43 drainage-network screen "
+                     + (f"cleared G1 on {', '.join(sorted(passed))}" if passed
+                        else f"failed G1 on every arm ({gains})")
+                     + ("; confirmation authorized" if passed else "; no confirmation was fit"))
+    elif (ROOT / "evidence" / "h43_screen" / "design_screen.json").is_file():
+        parts.append("the frozen H43 drainage-network screen was launched on draws 32/33 (summary pending in this checkout)")
+    return "; ".join(parts) + "."
+
+
 def render_home() -> str:
     status = read_json("status_feed.json")
     submissions = read_json("submissions.json")
@@ -392,19 +568,12 @@ def render_home() -> str:
         banner = (
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
-            '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
             + e(h41a4_status_sentence()) + '; '
-            + e(h41_status_sentence()) + '; '
-            'Session 3 ran two parallel preregistered screens and both failed their frozen gates. Workstream B: H35 '
-            '(tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) on '
-            'four folds × two draws — all four arms failed the frozen gate, the union arm by fold-robustness alone. '
-            'Workstream A: H31b (dense continuous worming persistence, an independent rebuild of the same idea) on fresh '
-            'draws 22/23 — draw 22 positive in 4/4 folds, draw 23 in 2/4; the frozen stability gates failed, so no '
-            'confirmation, no candidate file, no slot (knowledge/21_h31b_screen_results_2026-10-03.md). Earlier records '
-            'stand: H34 failed its primary proxy gate, the fractional factorial is complete, H31 failed on feature '
-            'sparsity, and the corrected H29 screen failed every arm. See the local evidence feed and research report for '
-            'the complete records. '
-            'Every download is format-verified locally and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
+            + e(session5_status_sentence()) + ' Earlier records: '
+            + e(h41_status_sentence()) + '; the session-3 H35/H40 and H31b screens failed their frozen gates; '
+            'H34 failed its primary proxy gate, the fractional factorial is complete, H31 failed on feature '
+            'sparsity, and the corrected H29 screen failed every arm. Every download is format-verified locally '
+            'and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
         )
         main_artifact = (
             '<article class="card span-6"><p class="kicker">Current submission status</p>'
@@ -493,7 +662,6 @@ def render_home() -> str:
 
 def render_summary() -> str:
     submissions = read_json("submissions.json")
-    status = read_json("status_feed.json")["current"]
     contract = read_json("submission_contract.json")
     fmt = contract["format"]
     rules = contract["rules"]
@@ -513,13 +681,14 @@ def render_summary() -> str:
         )
 
     body = (
-        f'{render_downloads()}{candidate_block}'
+        f'{render_downloads()}{candidate_block}{data_placement_card()}'
         '<section class="grid"><article class="card span-7"><p class="kicker">Purpose</p><h2>Submission in one sentence</h2>'
         f'<p>Submit one probability raster for faults across the full GeoDAWN study area, using the provided template grid and the official manual interface. '
         f'The organizer’s {int(rules["rules_year"])} rules allow up to {int(rules["weekly_feedback_max"])} weekly feedback submissions and require '
         f'{int(rules["final_prediction_count"])} final selection for both {int(rules["prize_round_count"])} prize rounds. '
         'Check the current official rules and competition timeline before acting.</p>'
-        '<div class="callout"><strong>Current stop:</strong> '+ e(str(status.get("screen_status", "not run")).rstrip(". ")) + '. H31 has local holdout proxy results, but no official competition result is claimed.</div>'
+        '<div class="callout"><strong>Current stop:</strong> '
+        + e(h41a4_status_sentence() + ' ' + session5_status_sentence()) + ' No official competition result is claimed; the slot rule is unchanged.</div>'
         '</article><article class="card span-5"><p class="kicker">Official references</p><h2>Verify before upload</h2><ul class="list-clean">'
         f'<li>{a("https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/", "Problem description and format", external=True)}</li>'
         f'<li>{a("https://docs.nlr.gov/docs/fy26osti/96647.pdf", rules_label, external=True)}</li>'
@@ -780,7 +949,7 @@ def render_research() -> str:
         'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H41 was promoted from the v3 slate and screened this '
         'session, and is the first candidate in this family to clear a frozen gate on two arms. Two parallel v3 registers are rendered below: the Workstream-A slate '
         '(H31b first, screened) and the refreshed Workstream-B slate.</section>'
-        f'{h35_card}{h41_screen_card()}{h41a4_bar_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
+        f'{h35_card}{h41_screen_card()}{h41a4_bar_card()}{emission_sweep_card()}{h43_screen_card()}{data_placement_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
         f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
         f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'

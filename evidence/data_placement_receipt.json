@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-10-03T20:01:34Z",
+  "generated_by": "scripts/record_data_placement.py",
+  "claim": "every hash-pinned owner-mirror entry needed by the training pipeline is present and byte-correct in this checkout, and the derived working arrays exist; the files are NOT organizer-authenticated (the DrivenData data page requires a login)",
+  "owner_mirror": true,
+  "organizer_authenticated": false,
+  "prepared": true,
+  "data_dir": "/home/user/GEMSDOE29/data",
+  "work_dir": "/home/user/GEMSDOE29/data/work",
+  "manifests": [
+    {
+      "manifest": "registry/data_manifest.json",
+      "tag": "h31",
+      "n_entries": 11,
+      "n_present": 11,
+      "files": [
+        {
+          "id": "training_features",
+          "dest": "data/training_features.tif",
+          "bytes": 418912844,
+          "status": "present",
+          "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+          "expected_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5"
+        },
+        {
+          "id": "labels",
+          "dest": "data/labels.tif",
+          "bytes": 425830,
+          "status": "present",
+          "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+          "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+        },
+        {
+          "id": "existing_faults",
+          "dest": "data/existing_faults.tif",
+          "bytes": 425830,
+          "status": "present",
+          "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+          "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+        },
+        {
+          "id": "sample_submission",
+          "dest": "data/sample_submission.tif",
+          "bytes": 1599597,
+          "status": "present",
+          "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+          "expected_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+        },
+        {
+          "id": "ext_lidar_scarp_features_u8",
+          "dest": "data/external/lidar_scarp_features_u8.tif",
+          "bytes": 36943606,
+          "status": "present",
+          "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+          "expected_sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568"
+        },
+        {
+          "id": "ext_geodawn_rad_u8",
+          "dest": "data/external/geodawn_rad_u8.tif",
+          "bytes": 26612970,
+          "status": "present",
+          "sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+          "expected_sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682"
+        },
+        {
+          "id": "ext_geodawn_extensions_u8",
+          "dest": "data/external/geodawn_extensions_u8.tif",
+          "bytes": 27132925,
+          "status": "present",
+          "sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+          "expected_sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b"
+        },
+        {
+          "id": "ext_derived_sgmc_faults_100m_u8",
+          "dest": "data/external/derived_sgmc_faults_100m_u8.tif",
+          "bytes": 198602,
+          "status": "present",
+          "sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+          "expected_sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0"
+        },
+        {
+          "id": "ext_gdr_wellspring_in_footprint",
+          "dest": "data/external/gdr_wellspring_in_footprint.csv",
+          "bytes": 2146771,
+          "status": "present",
+          "sha256": "122718e65bdf55aab0ee12ad20d80062f0deb1de957225a61ad880dd5dc196ea",
+          "expected_sha256": "122718e65bdf55aab0ee12ad20d80062f0deb1de957225a61ad880dd5dc196ea"
+        },
+        {
+          "id": "ext_gdr_qfaults_traces",
+          "dest": "data/external/gdr_qfaults_traces.csv",
+          "bytes": 126177,
+          "status": "present",
+          "sha256": "9702f2e5c382a4f472ae834d22b94990983b059677a37adfafd51c50f75e643c",
+          "expected_sha256": "9702f2e5c382a4f472ae834d22b94990983b059677a37adfafd51c50f75e643c"
+        },
+        {
+          "id": "ext_gdr_volcanic_vents_in_footprint",
+          "dest": "data/external/gdr_volcanic_vents_in_footprint.csv",
+          "bytes": 672,
+          "status": "present",
+          "sha256": "f91bafbaccaaf2754e71d60434fc0f9eb2c7b880c6e714883f4974542ff6a0bf",
+          "expected_sha256": "f91bafbaccaaf2754e71d60434fc0f9eb2c7b880c6e714883f4974542ff6a0bf"
+        }
+      ]
+    },
+    {
+      "manifest": "data/manifest.json",
+      "tag": "core",
+      "n_entries": 11,
+      "n_present": 11,
+      "files": [
+        {
+          "id": "training_features.tif",
+          "dest": "data/bridge/training_features.tif",
+          "bytes": 418912844,
+          "status": "present",
+          "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+          "expected_sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5"
+        },
+        {
+          "id": "labels.tif",
+          "dest": "data/bridge/labels.tif",
+          "bytes": 425830,
+          "status": "present",
+          "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+          "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+        },
+        {
+          "id": "existing_faults.tif",
+          "dest": "data/bridge/existing_faults.tif",
+          "bytes": 425830,
+          "status": "present",
+          "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+          "expected_sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+        },
+        {
+          "id": "sample_submission.tif",
+          "dest": "data/bridge/sample_submission.tif",
+          "bytes": 1599597,
+          "status": "present",
+          "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+          "expected_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+        },
+        {
+          "id": "h19_5_nan.tif",
+          "dest": "data/inputs/h19_5_nan.tif",
+          "bytes": 1712322,
+          "status": "present",
+          "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d",
+          "expected_sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d"
+        },
+        {
+          "id": "dotted_h19_5_d1_5_nan.tif",
+          "dest": "data/inputs/dotted_h19_5_d1_5_nan.tif",
+          "bytes": 1632732,
+          "status": "present",
+          "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
+          "expected_sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310"
+        },
+        {
+          "id": "lidar_scarp_features_u8.tif",
+          "dest": "data/external/lidar_scarp_features_u8.tif",
+          "bytes": 36943606,
+          "status": "present",
+          "sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+          "expected_sha256": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568"
+        },
+        {
+          "id": "geodawn_extensions_u8.tif",
+          "dest": "data/external/geodawn_extensions_u8.tif",
+          "bytes": 27132925,
+          "status": "present",
+          "sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+          "expected_sha256": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b"
+        },
+        {
+          "id": "geodawn_rad_u8.tif",
+          "dest": "data/external/geodawn_rad_u8.tif",
+          "bytes": 26612970,
+          "status": "present",
+          "sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+          "expected_sha256": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682"
+        },
+        {
+          "id": "2m_temperature_probe_INGENIOUS_regional_data.zip",
+          "dest": "data/gdr/2m_temperature_probe_INGENIOUS_regional_data.zip",
+          "bytes": 1080530,
+          "status": "present",
+          "sha256": "1301f70d230058e616ea5d34d1c7a32fabf7d49198172f376c59c89bd652eca3",
+          "expected_sha256": "1301f70d230058e616ea5d34d1c7a32fabf7d49198172f376c59c89bd652eca3"
+        },
+        {
+          "id": "dotted_h19_5_d2_8_nan.tif",
+          "dest": "data/inputs/dotted_h19_5_d2_8_nan.tif",
+          "bytes": 1603424,
+          "status": "present",
+          "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+          "expected_sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8"
+        }
+      ]
+    }
+  ],
+  "prepared_detail": {
+    "bands": {
+      "directory": "data/work/bands",
+      "n_files": 21,
+      "names": [
+        "01_mag_anom.npy",
+        "02_rtp.npy",
+        "03_tmi_hg.npy",
+        "04_geod_2ndinv.npy",
+        "05_iso_grav_anom_slope.npy",
+        "06_tc.npy",
+        "07_geod_shearrate.npy",
+        "08_geod_dilaterate.npy",
+        "09_tmi_vg.npy",
+        "10_deq_n100a15.npy",
+        "11_iso_grav_anom_vg.npy",
+        "12_det_elev.npy",
+        "13_iso_grav_anom.npy",
+        "14_tmi.npy",
+        "15_depth_to_base_surf.npy",
+        "16_ieq_n100a15.npy",
+        "17_cond_surf.npy",
+        "18_iso_grav_anom_hg.npy",
+        "19_det_elev_slope.npy",
+        "_footprint.npy",
+        "_labels.npy"
+      ]
+    },
+    "footprint_pixels": 5167373,
+    "label_pixels": 60988,
+    "caches": {
+      "static_ABCD.npy": {
+        "path": "data/work/static_ABCD.npy",
+        "present": true,
+        "sha256": "fe584a12ed3e1ed7d26b272c49f6da0bbe16e072d98f6b1694938d858305b084",
+        "bytes": 1322847616
+      },
+      "static_ABCD.npy.names.json": {
+        "path": "data/work/static_ABCD.npy.names.json",
+        "present": true,
+        "sha256": "60d48fb99c0c032e5c33a774298112104c9e1cdd15482ac58cddefc948fb85de",
+        "bytes": 893
+      },
+      "addons.npy": {
+        "path": "data/work/addons.npy",
+        "present": true,
+        "sha256": "ad31ff14a804b6956efa13b8c3caf6b322d6942b0f57911050ba243ac92e57bc",
+        "bytes": 103347588
+      },
+      "addons.npy.names.json": {
+        "path": "data/work/addons.npy.names.json",
+        "present": true,
+        "sha256": "b1562d7d1f5e57de2002f67038d6b1b4668e3ae10354fac648722f6d33db7f27",
+        "bytes": 51
+      }
+    }
+  },
+  "problems": [],
+  "commands": {
+    "restore": "bash scripts/download_competition_data.sh   # --group core|h31|all, or --verify",
+    "prepare": "python scripts/prepare_data.py",
+    "features": "python scripts/build_features.py && python scripts/build_addons.py",
+    "rerun_receipt": "python scripts/record_data_placement.py --check"
+  },
+  "environment": {
+    "python": "3.11.2",
+    "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+    "numpy": "2.4.6"
+  },
+  "git": {
+    "revision": "a244032ae8b1d5c051787bdcc070f903b66c1c1a",
+    "branch": "arena/01a10342-gemsdoe29"
+  },
+  "seconds": 5.944
+}
