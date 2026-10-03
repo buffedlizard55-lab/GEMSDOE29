@@ -3,16 +3,70 @@
   "updated_local_date": "2026-10-03",
   "feed_type": "project-local research and release status; not a DrivenData leaderboard feed",
   "current": {
-    "research_stage": "Session 3 close-out: H35 (tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) were pre-registered before any fit (knowledge/19), implemented with tests, and screened on draws 24/25 x four spatial folds x five arms (40 cells, 1,475.1 s, clean tree at 1442d1b). All four arms failed the frozen G1 gate; the independent analyzer found zero problems. No confirmation fit and no weekly slot is authorized. The thinning-family (D2.8) emission geometry analyzed in knowledge/07 was re-derived from the mirrored rasters into evidence/d28_geometry.json. Earlier session 2 records (factorial, H31, H34, corrected H29) stand unchanged.",
-    "screen_status": "H35/H40 screen (draws 24/25): all four arms FAIL G1 - A1_h35_struct +0.0018058, A2_h35_corrob +0.0045885, A3_h40_persist +0.0004827, A4_union +0.0056209 (mean criterion passed; violated the >=3/4 positive-folds rule with 2/4 on draw 24). Emission budgets 0.9818-1.0149x control; 0/32 cells identical to control (no H31-style sparsity pathology). Evidence: evidence/h35_h40_screen/ with analyzer_report.json (integrity_problems: none). H34: FAIL on catalogue-hidden primary proxy, PASS on SGMC secondary; factorial: B/E effects and interactions are in its frozen report; H31: FAIL from sparse features; corrected H29 nearest-fill screen: all five arms FAIL, including H29-5 versus best control at -0.07894/-0.08703 mean paired proxy DTI. The HGB C0 candidate method scores 0.14086, below the H34 C1 current control best (0.14479) on the 8-cell catalogue-hidden proxy; it does not clear the slot policy.",
-    "confirmation_status": "H35/H40 confirmation draws 26/27 were not fit because no arm passed G1; they are released as unused. H29 draws 2/3 were not fit because no arm passed both complete screen draws; the guarded --confirmation-only command exited before fitting. H31/H34 confirmation is also not eligible. No weekly slot has been used; current C0 is below the spatial holdout best and no file is slot-approved.",
+    "research_stage": "Session 3 close-out: H35 (tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) were pre-registered before any fit (knowledge/19), implemented with tests, and screened on draws 24/25 x four spatial folds x five arms (40 cells, 1,475.1 s, clean tree at 1442d1b). All four arms failed the frozen G1 gate; the independent analyzer found zero problems. No confirmation fit and no weekly slot is authorized. The thinning-family (D2.8) emission geometry analyzed in knowledge/07 was re-derived from the mirrored rasters into evidence/d28_geometry.json. Earlier session 2 records (factorial, H31, H34, corrected H29) stand unchanged. In parallel, Workstream A (branch arena/01a102cf) re-verified the official sources line-by-line (registry/sources.json), byte-pinned the GEMSDOE25 D2.8 historical artifact, registered a five-hypothesis v3 slate (registry/hypotheses_v3_2026-10-03.json + knowledge/20b_candidates_v3_h31b_slate_2026-10-03.md), preregistered H31b dense continuous worming persistence (knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md) and screened it on draws 22/23: FAIL on draw 23 (knowledge/21_h31b_screen_results_2026-10-03.md). No slot is authorized on either line.",
+    "screen_status": "H35/H40 screen (draws 24/25): all four arms FAIL G1 - A1_h35_struct +0.0018058, A2_h35_corrob +0.0045885, A3_h40_persist +0.0004827, A4_union +0.0056209 (mean criterion passed; violated the >=3/4 positive-folds rule with 2/4 on draw 24). Emission budgets 0.9818-1.0149x control; 0/32 cells identical to control (no H31-style sparsity pathology). Evidence: evidence/h35_h40_screen/ with analyzer_report.json (integrity_problems: none). H34: FAIL on catalogue-hidden primary proxy, PASS on SGMC secondary; factorial: B/E effects and interactions are in its frozen report; H31: FAIL from sparse features; corrected H29 nearest-fill screen: all five arms FAIL, including H29-5 versus best control at -0.07894/-0.08703 mean paired proxy DTI. The HGB C0 candidate method scores 0.14086, below the H34 C1 current control best (0.14479) on the 8-cell catalogue-hidden proxy; it does not clear the slot policy. H31b (Workstream A, draws 22/23): FAIL - draw 22 mean paired gain +0.005037 (4/4 folds positive), draw 23 +0.001801 (2/4 folds); 8-cell primary-arm mean 0.15547 (highest same-protocol screen mean in the repo; not a promotion anchor); SGMC off-catalogue class flat across arms; 40/40 cells finite. Evidence: evidence/h31b_dense_screen/ with summary.json gates (G1/G2 FAIL on draw 23; G3/G4/G5 pass).",
+    "confirmation_status": "H35/H40 confirmation draws 26/27 were not fit because no arm passed G1; they are released as unused. H29 draws 2/3 were not fit because no arm passed both complete screen draws; the guarded --confirmation-only command exited before fitting. H31/H34 confirmation is also not eligible. No weekly slot has been used; current C0 is below the spatial holdout best and no file is slot-approved. H31b (Workstream A): confirmation was not fit because the screen FAILED; its reserved confirmation draws 24/25 had been consumed by the H35/H40 screen, so any retest of the dense-persistence family would need a new preregistration on fresh draws (26/27 are released unused above).",
     "data_status": "All 11 data/manifest.json owner-mirror entries were restored and SHA-256 verified in the checkout; large rasters remain ignored and must be restored in a fresh checkout. Inputs are owner mirrors, not organizer-authenticated. The session-3 H40 cache work/h40_dense_persistence.npy (sha256 444cc851e203f41e...) is a derived untracked artifact pinned to the frozen preregistration hash by its metadata sidecar; the runner refuses any cache built against a different preregistration. The separate H31 data group keeps its own manifest/restore path.",
-    "holdout_best": "H34 C1 geodesic-dot control: 0.14479 mean catalogue-hidden proxy DTI on 8 cells (knowledge/09_h34_results_2026-10-03.md); internal proxy only, not competition score",
+    "holdout_best": "H34 C1 geodesic-dot control: 0.14479 mean catalogue-hidden proxy DTI on 8 cells (knowledge/09_h34_results_2026-10-03.md); internal proxy only, not competition score; H31b C_wall 0.15547 (draws 22/23) is a higher absolute screen mean but failed its frozen stability gates, so the anchor is unchanged",
     "competition_score": null,
     "weekly_slot_used": false,
     "slot_approved_artifact": null
   },
   "events": [
+    {
+      "date": "2026-10-03",
+      "type": "research",
+      "title": "Official sources verified live (problem page 967, NLR rules PDF, leaderboard top-10 with owner-claim cross-che",
+      "detail": "Official sources verified live (problem page 967, NLR rules PDF, leaderboard top-10 with owner-claim cross-checks, official reference solution TverskyLoss(0.2,0.8)). GEMSDOE25 D2.8 file byte-verified against its published site (sha prefix 91eae1ca..., 1.53 MiB). registry/sources.json created with per-claim extraction and fetch links."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "research",
+      "title": "H31b dense worming screen complete: FAIL (draw-unstable; draw 23 gains +0.0018 mean, 2/4 folds). Positive 8-ce",
+      "detail": "H31b dense worming screen complete: FAIL (draw-unstable; draw 23 gains +0.0018 mean, 2/4 folds). Positive 8-cell mean 0.15547 recorded for the scientific record. No confirmation, no candidate, no slot. knowledge/21 written."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "preregistration",
+      "title": "H31b frozen: dense worming screen on fresh draws 22/23",
+      "detail": "12 dense family-W columns (RTP/PSG/GRAV x FRAC/LAST/E0/DEEP) on the 81-column H34 control layout; fail-closed gates G1-G5 include beating the 0.14479 holdout best; confirmation draws 24/25 only if the screen passes. Preregistration: knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "hypotheses",
+      "title": "Candidates v3 ranked: five new untried hypotheses",
+      "detail": "H31b dense continuous worming persistence (rank 1, validated this session), H36 MT conductance structural edges (rank 2, local), H35 structural interaction zones with stress/dilation filter (rank 3, highest ceiling, Siler 2022 data fetch required), H37 geothermometry residual (rank 4, local GDR mirror), H38 cross-field azimuth coherence (rank 5). Registry: registry/hypotheses_v3_2026-10-03.json; note: knowledge/20."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "verification",
+      "title": "Top-scoring historical file D2.8 byte-verified",
+      "detail": "docs/downloads/gemsdoe29-historical-d28-...tif is byte-identical to the GEMSDOE25 site download (sha256 91eae1ca42ec845e..., 1,603,424 bytes) and to the pinned manifest entry; tests/test_sibling_reproduction.py reproduces dot_thin(H19-5, 1.5) -> d1.5 and dot_thin(H19-5, 2.8) -> D2.8 (44,090 px) bit-for-bit from the restored owner mirrors."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "verification",
+      "title": "Official sources re-verified line-by-line with links",
+      "detail": "Problem page (metric alpha=0.2 beta=0.8, R=300 m, float32 [0,1] format), NLR 96647 rules (single GeoTIFF, three submissions per week, generative-AI disclosure), reference-solution notebook (TverskyLoss alpha=0.2 beta=0.8), and one single owner-requested leaderboard fetch confirming the owner-supplied top-score figure (value kept in registry/score_claims.json, not displayed on the site). Links for manual review: registry/sources.json."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "preregistration",
+      "title": "H35/H40 frozen before any fit or cache build",
+      "detail": "knowledge/19_preregistered_h35_h40_screen_2026-10-03.md (sha256 5432b42ae044d44a...) froze arms, constants (sigma3 azimuth 105.0 deg from Bellier & Zoback 1995 midpoint; frozen continuation ladder), folds, draws 24/25 + 26/27 and gates G1/G2/G3 before the dense-persistence cache was built or any model was fit."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "research",
+      "title": "H35/H40 screen complete - all four arms FAIL G1",
+      "detail": "40 cells, 1,475.1 s, clean-tree run 1442d1b. A4 union passed the mean-gain (+0.0056) and worst-fold (-0.0001) criteria and failed only fold robustness on draw 24 (2/4 positive); A2 missed the mean by 0.0004. The pre-declared fold-concentration fork fired for A1/A2/A4. Independent analyzer recomputed every gate from raw cells: zero disagreements. No confirmation, no slot, no submission file."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "verification",
+      "title": "D2.8 thinning-family emission geometry re-derived from the mirrored rasters",
+      "detail": "scripts/audit_d28_geometry.py reproduces every figure in knowledge/07 section 3: parent 121,131 px (2.19 mean 8-neighbours, 10.3% isolated, median 14.56 px to catalogue, zero catalogue overlap), d1.5 60,069 px (82.15% parent-mass capture, 1.6566 credit/px), d2.8 44,090 px (36.399% of parent, 73.119% capture, 2.0088 credit/px, fully isolated). SHA-256s match the registry pins. Owner-reported competition scores remain unverified claims excluded from this receipt."
+    },
     {
       "date": "2026-10-03",
       "type": "policy",
@@ -129,24 +183,6 @@
       "type": "verification",
       "title": "Merge candidate passed full local verification",
       "detail": "112 pytest tests pass; Ruff passes; all 11 core manifest inputs verify by SHA-256; corrected H29 remains failed with no confirmation fits; WORMRANK/REFD28 and all five download TIFFs pass local format/hash checks; static Pages rebuild and check pass. No leaderboard access, upload, or slot spend."
-    },
-    {
-      "date": "2026-10-03",
-      "type": "preregistration",
-      "title": "H35/H40 frozen before any fit or cache build",
-      "detail": "knowledge/19_preregistered_h35_h40_screen_2026-10-03.md (sha256 5432b42ae044d44a...) froze arms, constants (sigma3 azimuth 105.0 deg from Bellier & Zoback 1995 midpoint; frozen continuation ladder), folds, draws 24/25 + 26/27 and gates G1/G2/G3 before the dense-persistence cache was built or any model was fit."
-    },
-    {
-      "date": "2026-10-03",
-      "type": "research",
-      "title": "H35/H40 screen complete - all four arms FAIL G1",
-      "detail": "40 cells, 1,475.1 s, clean-tree run 1442d1b. A4 union passed the mean-gain (+0.0056) and worst-fold (-0.0001) criteria and failed only fold robustness on draw 24 (2/4 positive); A2 missed the mean by 0.0004. The pre-declared fold-concentration fork fired for A1/A2/A4. Independent analyzer recomputed every gate from raw cells: zero disagreements. No confirmation, no slot, no submission file."
-    },
-    {
-      "date": "2026-10-03",
-      "type": "verification",
-      "title": "D2.8 thinning-family emission geometry re-derived from the mirrored rasters",
-      "detail": "scripts/audit_d28_geometry.py reproduces every figure in knowledge/07 section 3: parent 121,131 px (2.19 mean 8-neighbours, 10.3% isolated, median 14.56 px to catalogue, zero catalogue overlap), d1.5 60,069 px (82.15% parent-mass capture, 1.6566 credit/px), d2.8 44,090 px (36.399% of parent, 73.119% capture, 2.0088 credit/px, fully isolated). SHA-256s match the registry pins. Owner-reported competition scores remain unverified claims excluded from this receipt."
     }
   ]
 }
