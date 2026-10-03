@@ -33,6 +33,14 @@ MIN_NONZERO_FRACTION = 0.002
 PREREG = ROOT / "knowledge" / "24_preregistered_h41_screen_2026-10-03.md"
 
 
+def _sgmc_mean(entry: dict) -> float | None:
+    """Mean SGMC paired gain across folds, from whichever representation the stage record carries."""
+    gains = entry.get("sgmc_fold_gains")
+    if isinstance(gains, dict) and gains:
+        return round(float(np.mean(list(gains.values()))), 9)
+    return entry.get("sgmc_mean_gain")
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as source:
@@ -210,6 +218,40 @@ def main() -> int:
         integrity_problems=problems,
         report=report,
     )
+    # Promotion arithmetic is reported separately so that no pass field inside this file can be misread as
+    # eligibility: knowledge/19 §4 G3 (inherited by knowledge/24 §4's "identical gates" clause) also requires the
+    # SGMC secondary class to gain on >=3/4 folds in BOTH stages, and its §5 fork says "no promotion" when the
+    # primary proxy gains while SGMC is negative on >=3/4 folds.
+    if "screen" in report and "confirm" in report:
+        promotion = {}
+        for arm in ARMS:
+            if arm == "C0_base":
+                continue
+            sc, cf = report["screen"]["arms"].get(arm, {}), report["confirm"]["arms"].get(arm, {})
+            checks = {
+                "G1_screen_pass": bool(sc.get("G1_PASS")),
+                "G2_confirmation_pass": bool(cf.get("G1_PASS")),
+                "screen_mean_above_holdout_best": bool(sc.get("mean_dti", -1) > HOLDOUT_BEST),
+                "confirm_mean_above_holdout_best": bool(cf.get("mean_dti", -1) > HOLDOUT_BEST),
+                "sgmc_positive_folds_screen_at_least_3": bool(sc.get("sgmc_positive_folds", 0) >= 3),
+                "sgmc_positive_folds_confirm_at_least_3": bool(cf.get("sgmc_positive_folds", 0) >= 3),
+            }
+            promotion[arm] = dict(checks, G3_ELIGIBLE=all(checks.values()),
+                                  sgmc=dict(screen=sc.get("sgmc_positive_folds"), confirm=cf.get("sgmc_positive_folds"),
+                                            mean_gain_screen=_sgmc_mean(sc), mean_gain_confirm=_sgmc_mean(cf)))
+        gate_path = base / "promotion_gate.json"
+        gate_path.write_text(json.dumps(dict(
+            generated_by="scripts/analyze_h41_screen.py", date="2026-10-03",
+            rule=("knowledge/19 §4 G3 (inherited verbatim by knowledge/24 §4) plus its §5 pre-declared fork: an "
+                  "arm that beats C0 on the catalogue-hidden proxy while the SGMC secondary gain is negative on "
+                  ">=3/4 folds is reported as a proxy conflict with NO promotion. The summary and report fields "
+                  "G1_PASS / G1_SCREEN_PASS / above_holdout_best cover the primary-proxy gates only."),
+            holdout_best=HOLDOUT_BEST, arms=promotion), indent=2) + "\n")
+        for arm, e in promotion.items():
+            print(f"G3 {arm}: {'ELIGIBLE' if e['G3_ELIGIBLE'] else 'not eligible'} "
+                  f"(G1={e['G1_screen_pass']} G2={e['G2_confirmation_pass']} "
+                  f"sgmc folds {e['sgmc']['screen']}/{e['sgmc']['confirm']})")
+        print(f"wrote {gate_path}")
     out_path = base / "analyzer_report.json"
     out_path.write_text(json.dumps(payload, indent=2) + "\n")
     print(json.dumps({s: {a: {k: v for k, v in e.items()

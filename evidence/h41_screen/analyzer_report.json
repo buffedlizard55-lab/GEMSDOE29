@@ -196,6 +196,172 @@
         "A4_h41_union.mean_dti": 1.0,
         "A4_h41_union.G1_SCREEN_PASS": 1.0
       }
+    },
+    "confirm": {
+      "draws": [
+        30,
+        31
+      ],
+      "n_cells": 40,
+      "arms": {
+        "C0_base": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.14766845016233687,
+          "fold_gains": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          },
+          "mean_gain": 0.0,
+          "positive_folds_per_draw": {
+            "30": 0,
+            "31": 0
+          },
+          "worst_fold_gain": 0.0,
+          "sgmc_fold_gains": {
+            "0": 0.0,
+            "1": 0.0,
+            "2": 0.0,
+            "3": 0.0
+          },
+          "budget_ratio_min": 1.0,
+          "budget_ratio_max": 1.0
+        },
+        "A1_h41_off": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.1520841031814402,
+          "fold_gains": {
+            "0": 0.0011265697456639412,
+            "1": 0.010634861732706002,
+            "2": -0.0009970810379480999,
+            "3": 0.006898261635991387
+          },
+          "mean_gain": 0.004415653019103308,
+          "positive_folds_per_draw": {
+            "30": 3,
+            "31": 3
+          },
+          "worst_fold_gain": -0.0009970810379480999,
+          "sgmc_fold_gains": {
+            "0": -0.003071568097181787,
+            "1": -0.004420884379694012,
+            "2": -0.0023600968903118302,
+            "3": 0.001645182048697194
+          },
+          "budget_ratio_min": 0.9732655766681396,
+          "budget_ratio_max": 1.0094955489614243,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 1,
+          "above_holdout_best": true
+        },
+        "A2_h41_support": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.15246830755144464,
+          "fold_gains": {
+            "0": 0.004499818449017284,
+            "1": 0.00742455699933664,
+            "2": 0.0026784797199622956,
+            "3": 0.0045965743881147825
+          },
+          "mean_gain": 0.004799857389107751,
+          "positive_folds_per_draw": {
+            "30": 2,
+            "31": 3
+          },
+          "worst_fold_gain": 0.0026784797199622956,
+          "sgmc_fold_gains": {
+            "0": -0.006925554841672121,
+            "1": -0.003997950569242251,
+            "2": -0.005123775852829665,
+            "3": 8.50395854120195e-05
+          },
+          "budget_ratio_min": 0.9601193106495802,
+          "budget_ratio_max": 0.9988988300068823,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 1,
+          "above_holdout_best": true
+        },
+        "A3_h41_corridor": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.15447178028176373,
+          "fold_gains": {
+            "0": 0.00606951553863766,
+            "1": 0.014323278555668978,
+            "2": 0.00286821801654083,
+            "3": 0.003952308366859919
+          },
+          "mean_gain": 0.006803330119426847,
+          "positive_folds_per_draw": {
+            "30": 3,
+            "31": 2
+          },
+          "worst_fold_gain": 0.00286821801654083,
+          "sgmc_fold_gains": {
+            "0": -0.008309108631915404,
+            "1": -0.004783869537790503,
+            "2": 0.001532146399358364,
+            "3": -0.0028831285575845467
+          },
+          "budget_ratio_min": 0.972492266902342,
+          "budget_ratio_max": 1.0178940123881624,
+          "G1_PASS": false,
+          "sgmc_positive_folds": 1,
+          "above_holdout_best": true
+        },
+        "A4_h41_union": {
+          "cells_present": 8,
+          "nonfinite_cells": 0,
+          "paired_cells_missing": 0,
+          "mean_dti": 0.15539674389666616,
+          "fold_gains": {
+            "0": 0.008959210113821198,
+            "1": 0.01122383943457389,
+            "2": 0.006426872232147662,
+            "3": 0.004303253156774323
+          },
+          "mean_gain": 0.007728293734329268,
+          "positive_folds_per_draw": {
+            "30": 4,
+            "31": 3
+          },
+          "worst_fold_gain": 0.004303253156774323,
+          "sgmc_fold_gains": {
+            "0": -0.0037851412131688633,
+            "1": -0.004590212456765927,
+            "2": 0.0009308903826457937,
+            "3": -0.0009833322161651448
+          },
+          "budget_ratio_min": 0.9737094199042043,
+          "budget_ratio_max": 0.9973887240356083,
+          "G1_PASS": true,
+          "sgmc_positive_folds": 1,
+          "above_holdout_best": true
+        }
+      },
+      "summary_cross_check": {
+        "C0_base.mean_dti": 1.0,
+        "A1_h41_off.mean_gain": 1.0,
+        "A1_h41_off.mean_dti": 1.0,
+        "A1_h41_off.G1_SCREEN_PASS": 1.0,
+        "A2_h41_support.mean_gain": 1.0,
+        "A2_h41_support.mean_dti": 1.0,
+        "A2_h41_support.G1_SCREEN_PASS": 1.0,
+        "A3_h41_corridor.mean_gain": 1.0,
+        "A3_h41_corridor.mean_dti": 1.0,
+        "A3_h41_corridor.G1_SCREEN_PASS": 1.0,
+        "A4_h41_union.mean_gain": 1.0,
+        "A4_h41_union.mean_dti": 1.0,
+        "A4_h41_union.G1_SCREEN_PASS": 1.0
+      }
     }
   }
 }
