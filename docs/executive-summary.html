@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to submit — GEMSDOE29</title><style>
+:root{--bg:#0f1419;--card:#171e26;--tx:#e6edf3;--mut:#8b98a5;--acc:#4aa3df;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--bd:#2d3640}
+@media(prefers-color-scheme:light){:root{--bg:#f6f8fa;--card:#fff;--tx:#1f2328;--mut:#59636e;--bd:#d0d7de;--acc:#0969da;--ok:#1a7f37;--warn:#9a6700;--bad:#cf222e}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--tx)}
+main{max-width:1060px;margin:0 auto;padding:16px}nav{display:flex;gap:14px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--bd);margin-bottom:18px}
+nav a{color:var(--acc);text-decoration:none;font-weight:600}h1{font-size:26px;margin:.2em 0}h2{font-size:20px;margin-top:1.4em;border-bottom:1px solid var(--bd);padding-bottom:6px}h3{font-size:16px;margin-top:1.2em}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px;margin:14px 0}
+.dl{display:inline-block;background:var(--acc);color:#fff!important;font-size:18px;font-weight:700;padding:14px 22px;border-radius:10px;text-decoration:none}
+.dl:hover{filter:brightness(1.1)}table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{border:1px solid var(--bd);padding:6px 9px;text-align:left;vertical-align:top}th{background:var(--card)}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700}
+.b-ok{background:rgba(63,185,80,.15);color:var(--ok)}.b-warn{background:rgba(210,153,34,.15);color:var(--warn)}.b-bad{background:rgba(248,81,73,.15);color:var(--bad)}
+code,pre{background:rgba(127,127,127,.12);border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+pre{padding:10px;overflow:auto}code{padding:1px 5px}a{color:var(--acc)}
+.mut{color:var(--mut);font-size:13px}.num{font-variant-numeric:tabular-nums}footer{margin:34px 0;color:var(--mut);font-size:12.5px}
+</style></head><body><main>
+<nav><a href="../index.html">Home</a><a href="executive-summary.html">Executive summary &amp; submission guide</a><a href="research.html">Research &amp; method</a><a href="sources.html">Sources, scores &amp; flags</a></nav>
+<h1>How to submit — GEMSDOE29</h1>
+
+<h2 style="border:0">Do this in 60 seconds</h2>
+<ol>
+<li>Click <a href="../index.html#download">the download button</a> on the home page
+(<code>gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif</code> or the <code>.zip</code>).</li>
+<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">the competition
+<i>My Submissions → New submission</i> form</a> (you must be logged in as the enrolled team — the agent never
+touches the portal; the ToS prohibits automated access).</li>
+<li>Attach the file. The form states it accepts a single-band GeoTIFF (.tif) or a .zip containing exactly one
+GeoTIFF, and that the CRS, shape and geotransform must match the submission format — our verifier enforces all of
+those against the pinned template <i>before</i> you download.</li>
+<li>Paste the note (unique name + short comment, ≤200 chars):
+<pre>GEMSDOE29 WORMRANK | d2.8 spacing, worm-persistence+ridge ranked order | gate=FAIL proxy ΔDTI see repo | 73a8c4d12139 | live-unverified</pre></li>
+<li>Submit. You have <b>3 submissions per rolling 7 days</b>; the Initial Prize Round scores against a hidden
+private set; you later choose ONE submission for both rounds.</li>
+</ol>
+<h2>Why the old upload failed “Predicted values must be in range [0, 1]” — and why this one can't</h2>
+<div class="card"><p>Diagnosis (from byte-forensics of the failed file, GEMSDOE25 IR-25-NAN-FOOTPRINT): it wrote
+<b>NaN inside the footprint</b> (2,344,929 of 5,167,373 pixels). NaN fails any “≤1” range test, so the portal's
+range check rejects it regardless of what values you think you're submitting. The public docs don't publish the
+validator, so we defend in depth, and every shipped file is re-verified here from disk by
+<code>scripts/verify_downloads.py</code>:</p>
+<ul>
+<li>profile (CRS EPSG:32611, transform, 3730×3292, float32) copied from the pinned sample template;</li>
+<li><b>every</b> in-footprint pixel finite and exactly 0.0 or 1.0 — including the 3,061 pixels that are nodata
+in the features stack (IR-29-FOOTPRINT-DIFF) — written as 0.0;</li>
+<li>NaN only <i>outside</i> the footprint (the sample's own convention) plus a <code>-zeros.tif</code> fallback
+with 0.0 outside (both conventions are scored historically identically — 12GEMSDOE pair);</li>
+<li>the .zip variant contains exactly one GeoTIFF, byte-checked after read-back;</li>
+<li>SHA-256 + check receipts next to the file in <code>docs/downloads/</code>.</li>
+</ul></div>
+<h2>What you are submitting — honest status</h2>
+<div class="card"><span class="badge b-warn">FROZEN GATE NOT PASSED on the local proxy — research artifact; see research page. No slot spend is recommended by this repo.</span>
+<p>This file reorders (not reselects) the dots of the owner's live-scored 0.2600 geometry using a persistence
+score computed from a Fourier upward-continuation ladder on the official magnetic and gravity bands
+(see <a href="research.html">research page</a>). Same spacing guarantee, same pixel budget scale, new claiming
+order. 41,349 px emitted; catalogue-masked; 0 px on catalogue pixels.</p>
+<p class="mut">The repo's rule, unchanged from prior sessions: a proxy pass makes a file <i>eligible</i> for a slot decision;
+it is never evidence of a live score. If the gate above says NOT PASSED, spending a weekly slot is the owner's
+explicit call against the numbers shown — not this repo's recommendation.</p></div>
+<h2>Rollback / reference</h2>
+<p><code>gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif</code> is a bit-for-bit reproduction of the
+44,090-px geometry that the owner reports scored 0.2600 (tests/test_sibling_reproduction.py). It exists to prove
+format validity and for emergency rollback; resubmitting it would waste a slot without changing anything.</p>
+
+<footer>GEMSDOE29 · built 2026-10-03 08:57 UTC · every figure on this page is generated from the repo's own JSON
+evidence (scripts/build_site.py) · competition: DrivenData #306 DOE GEMS Prize · owner-reported
+scores are labelled as such and are not organizer receipts.</footer>
+</main></body></html>

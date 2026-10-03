@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "updated_utc": "2026-10-03T09:00:00Z",
+  "note": "Flagged for human review. 'fixed' means a guard/test/script in THIS repo enforces the resolution; 'open' means evidence is recorded but action is owed.",
+  "irregularities": [
+    {
+      "id": "IR-29-EMPTY-REPO",
+      "sev": "critical",
+      "status": "fixed",
+      "finding": "GEMSDOE29 was created with a single 'Initial commit' containing only '# GEMSDOE29' \u2014 none of the infrastructure described in the inherited prompt (pipeline, site, scripts) existed in this repo despite the prompt assuming it did.",
+      "action": "Rebuilt from the verified sibling lineage (GEMSDOE24/25/26/27 + 19GEMSDOE, cloned read-only for study): data bridge, metric, thinning, holdout, submission writer all re-implemented here with tests and attribution. Do not assume prior repos' uncommitted state persisted."
+    },
+    {
+      "id": "IR-29-FOOTPRINT-DIFF",
+      "sev": "high",
+      "status": "open",
+      "finding": "training_features.tif (owner mirror, sha 4371c82e...) has 5,165,852 finite cells vs the sample_submission template's 5,167,373: 3,061 template-footprint cells are nodata inside the features, and 1,540 feature cells lie outside the template footprint. Any pipeline that assumes 'finite in features == finite in template' silently mis-scores/NaNs 3,061 scored pixels.",
+      "action": "This repo: worming computes on the FEATURES mask; submission emission is masked to the TEMPLATE footprint and every in-footprint pixel is written finite (0.0/1.0), so the difference cannot produce NaN-inside-footprint. Upstream (competition data) needs owner confirmation that both rasters are authentic copies."
+    },
+    {
+      "id": "IR-29-CITATION",
+      "sev": "info",
+      "status": "fixed",
+      "finding": "The project prompt attributes 'worming' to 'Hornby, Boschetti, and Horowitz's multiscale wavelet edge-detection method (1999)' without a venue; the primary source is GJI 137(1):175-196 (wavelet-domain potential-field analysis). A common mis-citation is 'Hornby et al. 1999, Geophysics 64' (that volume/venue pair is the wrong journal).",
+      "action": "knowledge/01 + README cite GJI 137(1):175-196 with DOI; Horowitz (2018) recorded as the operational recipe source."
+    },
+    {
+      "id": "IR-29-SIBLING-LINEAGE",
+      "sev": "high",
+      "status": "open",
+      "finding": "Every competition raster (features, labels, template, parent emissions) is an owner-mirror restored from sibling repos at pinned commits; byte-identity to the DrivenData originals is unverifiable from this sandbox (login wall). Live scores are owner-reported; the public leaderboard was read once and matches the claimed 0.2600 value at rank 15 but does NOT tie a file to a score.",
+      "action": "data/manifest.json pins SHA-256 for all inputs; registry/live_scores.json records the verification state per claim. Owner: confirm the mirror matches your downloaded files (sha256sum)."
+    },
+    {
+      "id": "IR-29-TC-BAND-CARRIED",
+      "sev": "high",
+      "status": "open",
+      "finding": "GEMSDOE25 flagged that band 6 'tc' of the official stack (described as magnetic tilt/total-curvature) actually equals the radiometric total-count channel. Re-verified here on read: values are positive (3.7-70.6 range) consistent with radiometric TC, not a magnetic derivative; our RAW_BANDS renames it 'tc_radiometric'.",
+      "action": "Kept as a radiometric band; no magnetic-edge claims derive from it. Report to organizers if a data erratum channel exists."
+    },
+    {
+      "id": "IR-29-LINE-PERSISTENCE-INVERSION",
+      "sev": "medium",
+      "status": "open",
+      "finding": "The acquisition-line audit (knowledge/01 \u00a72d) predicted E-W striking edges (flight-line aliasing, 200/400 m E-W lines) should be *less* persistent under continuation. Measured on the full grid: mean magnetic persistence by strike is E-W 0.656, Other 0.607, N-S 0.562 \u2014 E-W edges are, on average, the MOST persistent. The naive 'E-W = artifact' heuristic is therefore NOT usable as a filter on this grid; regional geology (E-W striking ranges in the Walker Lane transform corridor) plausibly dominates the aliasing signal.",
+      "action": "Line-suppression (H29-4 notch) remains registered as a future experiment; the persistence filter itself does not encode strike assumptions. See evidence/worming_receipt.json."
+    },
+    {
+      "id": "IR-29-PARENT-OFF-EDGES",
+      "sev": "medium",
+      "status": "open",
+      "finding": "Only 2.7% of the live-scored dotted (0.2600) emission dots coincide with p95 level-0 potential-field edges; the parent detector's habitat is mostly terrain/thermal/structural, not geophysical edge maxima. A hard worming GATE therefore has almost no power over the parent emission; only re-ORDERING (or feature-level fusion) can express the hypothesis.",
+      "action": "Screened both ways (A1 gate, A2 rank, B1 head-features) per knowledge/01; report all three regardless of sign."
+    },
+    {
+      "id": "IR-29-GDR-BLOCKED",
+      "sev": "medium",
+      "status": "open",
+      "finding": "gdr.openei.org is unreachable from the sandbox (curl 35 SSL_ERROR_SYSCALL), matching GEMSDOE25/27 limitations; paleo-geothermal and Q-volcanics polygons therefore remain unusable this session (pins recorded in data/manifest.json for the next networked runner).",
+      "action": "2 m probes already present via the 24GEMSDOE mirror and hash-verified \u2014 that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
+    },
+    {
+      "id": "IR-29-PROXY-BLIND-TO-FARFIELD",
+      "sev": "high",
+      "status": "open",
+      "finding": "Carried from siblings and re-verified by inspection of the holdout construction: catalogue-internal hide-and-recover truth sits entirely ON catalogue pixels; the live 0.26 emission earns most of its credit far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
+      "action": "Disclosed in knowledge/01 \u00a76; no arm is ever promoted on proxy evidence alone \u2014 pass = 'eligible for a slot decision by the owner', not 'submit'."
+    },
+    {
+      "id": "IR-29-LEADERBOARD-COLUMN",
+      "sev": "info",
+      "status": "open",
+      "finding": "The public leaderboard ranks 'Best public DW-Tversky' (public test subset). Private initial-round scores (the ones that decide the $50k top-5) are hidden; our 0.2600 and the leader 0.3195 are public-column values only.",
+      "action": "All cross-team deltas in this repo are public-vs-public arithmetic; final-round label expansion (expert review of submissions) can reorder materially \u2014 a documented reason to prefer submissions that encode real, verifiable new lineaments."
+    },
+    {
+      "id": "IR-29-PREV-SUBMIT-ERROR-CLASS",
+      "sev": "high",
+      "status": "fixed",
+      "finding": "The owner saw 'Predicted values must be in range [0, 1]' on a past upload. Public docs do not define the validator; sibling forensics show NaN *inside* the footprint fails the range test (NaN fails every comparison).",
+      "action": "submission.py + scripts/verify_submission.py: profile copied from the pinned template, all in-footprint pixels finite and in [0,1], NaN only outside; both -nan and -zeros conventions shipped; read-back verified independently. Format checks on every shipped file are in docs/downloads/checks-*.json."
+    },
+    {
+      "id": "IR-29-RULES-URL",
+      "sev": "info",
+      "status": "open",
+      "finding": "The owner prompt cites the submission-format PDF at docs.nlr.gov/docs/fy26osti/96647.pdf; the official herox rules resource page links www.nlr.gov/docs/fy26osti/96647.pdf. Neither subdomain resolved from the sandbox (SSL_ERROR_SYSCALL). The weekly-slot cadence (3/7 days) is therefore carried as sibling/owner-reported, not re-read.",
+      "action": "Owner: open https://www.nlr.gov/docs/fy26osti/96647.pdf in a browser and confirm the \u00a7on submissions cadence + deadline before spending a slot."
+    }
+  ]
+}

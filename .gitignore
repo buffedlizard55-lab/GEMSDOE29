@@ -1,0 +1,15 @@
+# Large data caches are restored by scripts/restore_data.py from hash-pinned sources; never committed.
+data/bridge/*.tif
+data/external/
+data/gdr/
+data/work/
+data/raw/
+*.part-*
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+# Evidence JSONs are small and auditable -> they ARE committed (evidence/ stays in git).
+# Everything under data/ except the manifest is derived cache (restored by scripts/restore_data.py).
+data/*
+!data/manifest.json
