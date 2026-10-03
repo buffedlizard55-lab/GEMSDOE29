@@ -1,0 +1,59 @@
+Session 7 brief — faithful working transcription (2026-10-03)
+=============================================================
+
+This file records the instructions given to the agent in session 7. It is a faithful working
+transcription of the substantive asks, NOT a byte-exact copy of the chat message (which also repeats
+the full standing brief and the historical submission-score table preserved elsewhere in this
+repository). The authoritative full texts remain `knowledge/owner_brief_verbatim.txt` and the README
+sections "Standing brief — current session" and "Session 3 brief — preserved verbatim".
+
+Topic sentence of this session's brief (quoted verbatim from the owner's message):
+
+    Multiscale "worming" to separate deep structure from shallow noise. A single-scale gradient map
+    can't distinguish a genuinely deep-rooted fault from a shallow artifact — cultural noise, a thin
+    near-surface conductor, acquisition-line aliasing — because both can produce a sharp edge at one
+    scale. Hornby, Boschetti, and Horowitz's multiscale wavelet edge-detection method (1999), known
+    informally in exploration geophysics as "worming," computes edges across a sequence of
+    upward-continued versions of the same grid and tracks which ones persist as the field is
+    progressively smoothed toward deeper equivalent sources; an edge surviving several continuation
+    steps is associated with a genuinely deep source, one that vanishes immediately is almost
+    certainly shallow. Compute this across the magnetic and gravity layers and use
+    persistence-with-height as an explicit feature or filter, rather than treating a fixed-scale
+    gradient as if it carries no information about its own reliability — a candidate that only exists
+    at zero continuation is exactly what the acquisition-artifact audit should already distrust, and
+    this gives that distrust a number instead of a hunch.
+
+Additional instructions in this session's brief:
+
+  * "There should be an easy to download submission tif file as described by the prompt. Read the
+    entire prompt." — i.e. the downloadable artefact must implement the worming method above, not
+    merely mention it.
+  * The downloaded file was rejected by the submission form with "Predicted values must be in range
+    [0, 1]" — the recommended download must pass a strict whole-array range check.
+  * Each submission needs a unique file name and a short "Note" comment for the portal form.
+  * An executive-summary subpage must explain exactly how to submit.
+  * Generate 3-5 candidate geological hypotheses not yet tried, each naming the layers, the physical
+    signature, why it should catch a fault missing from the USGS/INGENIOUS catalogue, and how it
+    differs from anything already implemented; rank by expected DTI improvement and implementation
+    cost; validate the top candidate on the spatially-blocked holdout before spending a weekly slot.
+  * If a candidate needs external data, name the specific free official source and check it is
+    obtainable before proposing it as viable.
+  * Work line by line from official verified sources with links for manual review; no manual input
+    required; flag irregularities; no hallucinations; verify no hallucinations.
+  * Study why the owner-reported best score (0.2600, GEMSDOE25 dotted-h19-5-d2-8) won, and whether a
+    score above the owner-reported leaderboard best 0.3195 is reachable; design a unique strategy.
+  * Deep research into the scientific discovery of geothermal vents, storing verified knowledge for
+    future projects; be contrarian but grounded; find overlooked free official data.
+  * Put the prompt into the README and re-read it every session as the starting point.
+  * Core Values: Maximize P(Win); Own the Outcome.
+  * Do three passes (implement, bug review, full recheck), then create a pull request and merge it to
+    main, and list remaining work and limitations.
+
+Session 7 deliverables (pointers, so this file stays short):
+
+  * knowledge/37 — frozen preregistration for the worming *filter* stage on the H34 bar protocol.
+  * knowledge/38 — candidate slate v6 (H53/H50/H54/H56/H59, ranked, with novelty greps).
+  * knowledge/39 — frozen preregistration for the fresh-draw feature-role confirmation (draws 36/37).
+  * knowledge/40 — results of both stages and the disposition of the standing brief, item by item.
+  * src/gemsdoe/wormfilter.py, scripts/build_wormfilter_fields.py, scripts/run_wormfilter_screen.py,
+    scripts/run_wormfilter_confirm.py, scripts/build_wormfilter_candidate.py.

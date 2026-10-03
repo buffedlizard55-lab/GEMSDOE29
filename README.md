@@ -408,6 +408,54 @@ remaining work). Register changes: H43 status corrected (`IR-29-H43-REGISTRY-STA
 (`registry/hypotheses_v5_2026-10-03.json`), status-feed event appended. No experiment ran, no slot
 was used, nothing is slot-approved.
 
+## Session 7 intake — multiscale worming, built and scored (2026-10-03)
+
+Session 7's brief repeated the standing charter and made one new demand: **compute Hornby, Boschetti &
+Horowitz's multiscale "worming" across the magnetic and gravity layers and use persistence-with-height
+as an explicit feature or filter, so that a candidate which exists only at zero continuation carries a
+number instead of a hunch** — plus the report that the previously downloaded file was rejected by the
+submission form with `Predicted values must be in range [0, 1]`. The brief is transcribed in
+[knowledge/owner_brief_session7_verbatim.txt](knowledge/owner_brief_session7_verbatim.txt) (a faithful
+working transcription, labelled as such; the pinned byte-exact texts remain the owner-brief block below
+and the session-3 block). Session 7's deliverables:
+
+* **`src/gemsdoe/wormfilter.py`** — amplitude-*survival* worming fields over a 5-level upward-continuation
+  ladder on the magnetic and gravity bands: `WF_SURV_MAG/GRAV/JOINT/DEEP`, `WF_P_JOINT`, `WF_CONV`,
+  `WF_AZ_AGREE` and the audit field **`WF_SHALLOW_ONLY`**. Built label-free by
+  `scripts/build_wormfilter_fields.py` (32.6 s, cached to `data/work/wormfilter_fields.npy`).
+* **[knowledge/37](knowledge/37_preregistered_wormfilter_h34protocol_2026-10-03.md)** — the filter stage,
+  frozen before any fit (sha256 `bfcbc8a3741a…`), scored on the H34 bar protocol (4 quadrants × draws
+  20/21).
+* **[knowledge/40](knowledge/40_session7_worming_filter_and_feature_results_2026-10-03.md)** — the
+  result: **no promotion**. The filter arm scored **0.143359** against the frozen bar **0.144790**
+  (mean gain −0.001429, 1/4 folds positive, G1 and G2 fail); the feature arm scored 0.147271 but its
+  mean *paired* gain is −0.006121 with 2/4 folds positive, so it fails too. G4 passed: the frozen
+  controls reproduced the stored H34 cells with max |Δ| = 0.0. The one positive result — the veto helps
+  the off-catalogue SGMC proxy on **4/4 folds** (+0.004223) — is recorded as the worming family's only
+  surviving lead.
+* **The acquisition-artifact number the owner asked for:** 11.14 % of footprint pixels are shallow-only,
+  and the owner's best-scoring D2.8 file has **15.26 %** of its dots flagged shallow-only with a mean
+  survival of 0.50530 against a footprint mean of 0.57703 — it sits preferentially on *low*-persistence
+  ground, so persistence is not the hidden ingredient behind 0.2600.
+* **`docs/downloads/gemsdoe29-wormsurv-filter-20261003-921f10960d6e-zeros.tif`** — the worming artifact,
+  cross-fitted (8 cells), 38,907 dots, unique filename, paste-ready note
+  `GEMSDOE29 worm-survival filter | worming survival veto at emission | id 921f10960d6e | proxy-only, not slot-cleared`,
+  zero outside the footprint so the strict `[0, 1]` check passes. It is the site's lead download and it
+  is labelled **research download, not slot-cleared**, with the gate outcome printed on the card.
+  Every download card now points at a zero-outside variant, which fixes the owner's portal rejection
+  (`IR-PORTAL-01`) rather than only documenting it.
+* **[knowledge/38](knowledge/38_candidates_v6_2026-10-03.md)** — five new hypotheses ranked by expected
+  DTI gain over cost: **H53** cross-scale DEM fabric coherence (rank 1, no downloads), **H50**
+  mountain-front sinuosity `Smf` (Bull & McFadden 1977; `Smf ≤ 1.4` active, `> 3` inactive), **H54**
+  gravity-profile skewness, **H56** alteration-halo elongation, **H59** independent-layer edge census.
+  None has been screened, so no slot was spent.
+* Two defects found in pass 2 and fixed: the screen runner held both prediction matrices and died after
+  5 of 8 cells (partial rows archived, **no verdict claimed**, rerun reproduced the same cells exactly),
+  and the first artifact's portal note was truncated mid-word by `make_note` (`--repackage` added).
+* One process defect self-reported: `knowledge/39` was frozen after only 4 of 8 screen cells and names an
+  arm that then failed its own screen, so the confirmation stage was **cancelled rather than run**
+  (`IR-29-PREREG-PARTIAL-DATA`, now `AGENTS.md` rule 10). Draws 36/37 remain unspent.
+
 ## Session 3 brief — preserved verbatim (2026-10-03)
 
 The following is this session's owner brief, preserved verbatim as the standing starting point to

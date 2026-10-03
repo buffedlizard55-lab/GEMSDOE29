@@ -18,3 +18,7 @@
    aborts if a new feature block turns out to be inert.
 9. Publish the zero-outside variant as the recommended download. A strict whole-array `[0, 1]` check rejects
    NaN, which is the owner's reported `Predicted values must be in range [0, 1]` failure (`IR-PORTAL-01`).
+10. Never write a confirmation preregistration before the full screen summary exists. `knowledge/39`
+    was frozen after 4 of 8 screen cells and named an arm that subsequently failed G1 on its own screen,
+    so the stage was cancelled rather than spending draws 36/37 (`IR-29-PREREG-PARTIAL-DATA`). Screen
+    results first, then freeze; if a confirmation is frozen early, cancel it rather than run it.

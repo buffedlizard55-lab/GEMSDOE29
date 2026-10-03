@@ -1,0 +1,176 @@
+{
+  "arms": [
+    "C0_base",
+    "C1_geodesic_dots",
+    "W1_surv_veto",
+    "W2_surv_refill",
+    "W3_azimuth_refill",
+    "W4_union_refill",
+    "W5_surv_features"
+  ],
+  "artifact_audit": {
+    "azimuth_defined_fraction": 0.17249983695777332,
+    "d28_reference": {
+      "emitted_px": 44090,
+      "file": "data/inputs/dotted_h19_5_d2_8_nan.tif",
+      "flagged_fraction": 0.15264232252211385,
+      "flagged_shallow": 6730,
+      "mean_surv_joint_on_dots": 0.5053022503852844
+    },
+    "footprint_mean_surv_joint": 0.5770326852798462,
+    "footprint_shallow_fraction": 0.11137516103443665
+  },
+  "constants": {
+    "emit_C0": "score_ordered_dots(score_crop, candidates, 2.4)",
+    "emit_C1": "dot_thin(candidates, 2.4)",
+    "k_frac": 0.0245,
+    "min_dist_px": 2.4,
+    "refill": "select_top_positive(score, ridge & ~known & ~veto, k) then dot_thin(2.4)"
+  },
+  "draw_seed_inventory": {
+    "note": "spent draws reused for a paired comparison against the bar they define; next_free_draw stays 36",
+    "this_stage": [
+      20,
+      21
+    ],
+    "used_before": "0-15, 20-25, 28-35 (registry/draw_ledger.json)"
+  },
+  "draws": [
+    20,
+    21
+  ],
+  "drivendata_contacted": false,
+  "environment": {
+    "numpy": "2.4.6",
+    "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+    "python": "3.11.2",
+    "rasterio": "1.4.4",
+    "scikit_learn": "1.9.1",
+    "scipy": "1.17.1"
+  },
+  "experiment": "H52 worming survival as an emission filter, on the H34 bar protocol",
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "gates": {
+    "budget_ratio_band": [
+      0.75,
+      1.25
+    ],
+    "holdout_best": 0.14479018210246675,
+    "max_fold_loss": -0.01,
+    "mean_gain": 0.005,
+    "min_positive_folds": 3,
+    "min_split_cells_for_feature_arm": 3,
+    "primary_arm": "W2_surv_refill",
+    "reproduction_tolerance": 1e-06,
+    "sgmc_min_mean_gain": 0.0,
+    "sgmc_min_positive_folds": 3,
+    "veto_rate_band": [
+      0.02,
+      0.6
+    ]
+  },
+  "git": {
+    "branch": "arena/01a103c6-gemsdoe29",
+    "dirty_worktree": false,
+    "revision": "45d7da27e2b2eaed7a714661e2f1d62caa04214b"
+  },
+  "modules": {
+    "scripts/run_wormfilter_screen.py": "d6402cc2c3037153b3ad14980fa92baded4190105b5c19fdb019e07c9b8ab29d",
+    "src/gemsdoe/experiment.py": "1a1fcd306bc5014491fa6b6ef1c0ae0b48fb2a1b122e75da73d0381a0d331622",
+    "src/gemsdoe/metric.py": "c0be2a023b413309561138c9eee64a81e07bb0df6ab4841c9f0c55d37ea2afd3",
+    "src/gemsdoe/thinning.py": "63bdfd1c11455e18446f0e1be0fbf7c93ae94c49f98624d3f4ef4ef76f79c55e",
+    "src/gemsdoe/wormfilter.py": "7f674f8eaf9b176aae735a7672f48bd0bcd1ed9509ef026031030428fd69f0a4",
+    "src/gemsdoe/worms.py": "7921fc228ad3d3006567df5df478b5e4aaba212455a8e8116d0bdd39c14e9839"
+  },
+  "preregistration": {
+    "path": "knowledge/37_preregistered_wormfilter_h34protocol_2026-10-03.md",
+    "sha256": "bfcbc8a3741ab2391b344373b0a666b2bb450d95ea74d26ed6babde66d7a10de"
+  },
+  "primary_arm": "W2_surv_refill",
+  "sgmc": {
+    "off_catalogue": 62703,
+    "on_catalogue": 3978,
+    "sgmc_positive": 83593,
+    "within_300m": 16912
+  },
+  "stage": "wormfilter_screen",
+  "started_utc": "2026-10-03T22:37:25Z",
+  "worm_fields": {
+    "cache_sha256": {
+      "wormfilter_az_defined.npy": "a707cb687e2415b12a38971fa43c868c9b01e4e1cc64d19ac928014253446de1",
+      "wormfilter_fields.json": "8f4f9b28f6a932dd3eb0cf17016c84b0db14b1b91ef0f6db5f0e8d674551e195",
+      "wormfilter_fields.npy": "896da63453e2749d197cc591e88db11b779cc96869f2693deb5619cc10ad4fa2"
+    },
+    "config": {
+      "azimuth_sigma_px": 1.5,
+      "coherence_min": 0.2,
+      "convergence_radius_px": 6.0,
+      "min_contrast_fraction": 0.001,
+      "rho_retention": 0.25,
+      "smooth_sigma_px": 1.0,
+      "tau_azimuth": 0.5,
+      "tau_survival": 0.5,
+      "tol_px": 2.0
+    },
+    "gravity_edge_counts": [
+      47958,
+      33010,
+      29057,
+      25694,
+      22201,
+      19925
+    ],
+    "ladder": {
+      "boundary_guard_px": 16,
+      "cell_size_m": 100.0,
+      "edge_percentile": 90.0,
+      "heights_m": [
+        0,
+        100,
+        200,
+        400,
+        800,
+        1200
+      ],
+      "pad_px": 128,
+      "taper_px": 64
+    },
+    "level_detector": "across-strike gradient-modulus ridge (45-degree quantized), not an isotropic point maximum",
+    "magnetic_edge_counts": [
+      157431,
+      122435,
+      99262,
+      71969,
+      47046,
+      35095
+    ],
+    "mean": {
+      "WF_AZ_AGREE": 0.5053499937057495,
+      "WF_AZ_DEFINED": 0.17249983549118042,
+      "WF_CONV": 0.08293517678976059,
+      "WF_P_JOINT": 0.0018488438799977303,
+      "WF_SHALLOW_ONLY": 0.11137516051530838,
+      "WF_SURV_DEEP": 0.4316306412220001,
+      "WF_SURV_GRAV": 0.9362466931343079,
+      "WF_SURV_JOINT": 0.5770326852798462,
+      "WF_SURV_MAG": 0.5822981595993042
+    },
+    "nonzero_fraction": {
+      "WF_AZ_AGREE": 1.0,
+      "WF_AZ_DEFINED": 0.17249983695777332,
+      "WF_CONV": 0.10071732774080756,
+      "WF_P_JOINT": 0.027269755831444722,
+      "WF_SHALLOW_ONLY": 0.11137516103443665,
+      "WF_SURV_DEEP": 0.8760979708644993,
+      "WF_SURV_GRAV": 0.9676023000468517,
+      "WF_SURV_JOINT": 0.9675519843448499,
+      "WF_SURV_MAG": 0.9675519843448499
+    },
+    "survival_rule": "continued modulus >= rho_retention x local level-0 modulus"
+  }
+}

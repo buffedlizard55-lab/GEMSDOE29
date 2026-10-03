@@ -731,6 +731,22 @@
         "knowledge/27b_preregistered_h43b_screen_2026-10-03.md",
         "knowledge/37_h43b_mass_conserving_drainage_results_2026-10-03.md"
       ]
+    },
+    {
+      "id": "IR-29-PREREG-PARTIAL-DATA",
+      "severity": "medium",
+      "status": "resolved",
+      "date": "2026-10-03",
+      "subject": "confirmation preregistration knowledge/39 was frozen after only 4 of 8 screen cells existed",
+      "detail": "knowledge/39 preregistered a fresh-draw (36/37) confirmation of the W5_surv_features arm while scripts/run_wormfilter_screen.py was still running, and its header claimed it was written 'after the H52 filter screen finished' and that its SHA-256 was recorded in evidence/wormfilter_confirm/design.json. Both statements were false: 4 of 8 cells were visible, and no design.json was ever written. The arm looked strong on those 4 cells (+0.0077 NW, +0.0104 NE) but its completed-screen mean paired gain is -0.006121 with 2/4 folds positive, i.e. it failed G1 on its own screen.",
+      "impact": "No slot, file or gate decision rested on it: the stage was cancelled before any fit, draws 36/37 were not consumed, and no evidence directory was created. The risk was procedural - a reader could have believed a fresh-draw confirmation had been run.",
+      "mitigation": "knowledge/39 now carries a prominent STAGE NOT EXECUTED banner that corrects both false statements and preserves the frozen text; AGENTS.md rule 10 forbids freezing a confirmation before the full screen summary exists; scripts/run_wormfilter_confirm.py keeps its guards (clean worktree, draw-ledger floor, no evidence overwrite) for a future correctly timed stage. Accounted in knowledge/40 section 4.",
+      "affected_artifacts": [
+        "knowledge/39_preregistered_wormfilter_confirm_2026-10-03.md",
+        "scripts/run_wormfilter_confirm.py",
+        "registry/draw_ledger.json",
+        "AGENTS.md"
+      ]
     }
   ],
   "updated": "2026-10-03"

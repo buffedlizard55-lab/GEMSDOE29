@@ -1,11 +1,26 @@
 {
   "schema_version": 1,
-  "checked_utc": "2026-10-03T21:47:18Z",
+  "checked_utc": "2026-10-03T23:08:36Z",
   "checker": "scripts/verify_downloads.py::verify_registered",
   "template": "data/bridge/sample_submission.tif",
-  "n_registered": 7,
-  "n_ok": 7,
+  "n_registered": 8,
+  "n_ok": 8,
   "files": [
+    {
+      "id": "wormsurv-filter-h52f",
+      "file": "gemsdoe29-wormsurv-filter-20261003-921f10960d6e-zeros.tif",
+      "slot_approved": false,
+      "path": "docs/downloads/gemsdoe29-wormsurv-filter-20261003-921f10960d6e-zeros.tif",
+      "present": true,
+      "ok": true,
+      "ok_to_upload": true,
+      "sha256": "8a85485ed0877d240ece6b07883641d04fa64cdf8d3687ff767a068346350313",
+      "bytes": 798295,
+      "positive_pixels": 38907,
+      "hard_failures": [],
+      "zip_ok": null,
+      "zip_detail": "no .zip companion published for this artifact"
+    },
     {
       "id": "xfit-h41-union",
       "file": "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif",
@@ -98,18 +113,18 @@
     },
     {
       "id": "wormrank-current",
-      "file": "gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.tif",
+      "file": "gems29-wormrank-d28-20261003-59dcaf6dd11d-zeros.tif",
       "slot_approved": false,
-      "path": "docs/downloads/gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.tif",
+      "path": "docs/downloads/gems29-wormrank-d28-20261003-59dcaf6dd11d-zeros.tif",
       "present": true,
       "ok": true,
       "ok_to_upload": true,
-      "sha256": "7036b8dfcb76444e7bb51b02fa770156a0c7b345ce1d40fb820d8d65f31c8995",
-      "bytes": 1567816,
+      "sha256": "3ea61e719af4c0d0df9f8d279560ae4a6b5063cca0a43991c8f66a56cb63c51f",
+      "bytes": 801710,
       "positive_pixels": 41338,
       "hard_failures": [],
-      "zip_ok": true,
-      "zip_detail": "single member, byte-identical to the GeoTIFF"
+      "zip_ok": null,
+      "zip_detail": "no .zip companion published for this artifact"
     }
   ],
   "note": "Local checks only: they cannot authenticate the owner-mirror template or guarantee organizer acceptance, and they never rewrite a build-time receipt."

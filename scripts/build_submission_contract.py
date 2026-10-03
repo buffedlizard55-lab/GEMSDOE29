@@ -28,6 +28,18 @@ CONTRACT = {
         "probability_max": 1.0,
         "outside_footprint": "NaN",
     },
+    # Observed portal behaviour, owner-reported 2026-10-03 (IR-PORTAL-01). This does NOT contradict the
+    # official format above: the sample template is null/NaN outside the data bounds, but the upload form
+    # validates the whole array against [0, 1] and rejects NaN. Both files are published; the zero-outside
+    # one is the recommended upload, and the site says so wherever it mentions the outside-footprint rule.
+    "portal_validation": {
+        "observed_local_date": "2026-10-03",
+        "rejection_message_owner_reported": "Predicted values must be in range [0, 1]",
+        "reproduced_locally": "the NaN-outside raster fails a strict whole-array [0,1] check and the "
+                              "zero-outside raster of the same emission passes it (scripts/check_submission.py)",
+        "recommended_upload": "the zero-outside variant of every artifact",
+        "irregularity_id": "IR-PORTAL-01",
+    },
     "metric": {"support_radius_m": 300, "alpha": 0.2, "beta": 0.8},
     "rules": {
         "rules_year": 2026,
