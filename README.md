@@ -35,6 +35,7 @@
 ## Start here
 
 - **[Session 3 results (read first)](knowledge/21_h35_h40_results_2026-10-03.md)** — H35/H40 frozen-screen verdict, gate-by-gate reading of the A4 near-miss, and registry consequences.
+- **[Limitations & next-session plan](knowledge/22_limitations_and_next_2026-10-03.md)** — pass-3 honest status, prioritized remaining work, and the standing limitations that must not be "fixed" by assertion.
 - **[Refreshed untried slate v3](knowledge/20_candidates_v3_2026-10-03.md)** — H41 (INGENIOUS slip-rate centroid corridors) ranked first, with H36/H37/H42 and the H38/H39 filter-role pair behind it.
 - **[Prior session handoff](knowledge/18_h29_corrected_screen_handoff_2026-10-03.md)** — H29 gate corrections, artifact status, and final local verification (historical).
 - **[Executive summary and manual submission guide](docs/executive-summary.html)** — acceptance checks, current download status, file naming, optional comment, and manual upload steps.
