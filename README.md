@@ -87,7 +87,7 @@ submits manually through the portal using the note text above.
 src/gems29/   worming (UC ladder, tracking, audits), metric (DTI), thinning (Poisson-disk + ranked),
               holdout (quadrant hide-and-recover), features, head, emission arms, submission writer, thermal
 scripts/      restore_data · run_worming · run_holdout_screen · build_candidate · verify_downloads · build_site
-knowledge/    01 preregistration (frozen gates) · 02 results write-up
+knowledge/    01 preregistration (frozen gates) · 02 results write-up · 03 verified knowledge base
 registry/     live_scores · sources · irregularities · hypotheses_h29 · artifact_ledger
 evidence/     worming_receipt.json · h29_holdout.json · h29_gate.json · screen logs
 docs/         executive-summary.html · research.html · sources.html · downloads/ (shipped TIFs + checks)
