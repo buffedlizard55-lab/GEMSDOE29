@@ -262,6 +262,85 @@ def h41_screen_card() -> str:
     )
 
 
+def h41a4_bar_card() -> str:
+    """Session-5 H41-A4/H34-protocol card: every number is read from evidence/h41a4_h34protocol/."""
+    base = ROOT / "evidence" / "h41a4_h34protocol"
+    design_p, summary_p = base / "design.json", base / "summary.json"
+    if not design_p.is_file() or not summary_p.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-5 frozen stage · H41-A4 vs the slot bar</p>'
+            "<h2>Bar-protocol re-score: no evidence in this checkout yet</h2>"
+            "<p>Pre-registered in <code>knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md</code>; the "
+            "runner is <code>scripts/run_h41a4_h34protocol.py</code> and refuses to run from a dirty worktree or "
+            "to overwrite existing evidence.</p></section>"
+        )
+    design = json.loads(design_p.read_text(encoding="utf-8"))
+    summary = json.loads(summary_p.read_text(encoding="utf-8"))
+    gates, checks = summary["gates"], summary["gate_checks"]
+    rows = "".join(
+        f"<tr><td>{e(arm)}</td><td>{summary['arms'][arm]:.8f}</td>"
+        f"<td>{'the recorded bar' if arm == 'C1_geodesic_dots' else ('frozen control' if arm == 'C0_base' else 'H41 columns added')}</td></tr>"
+        for arm in ("C0_base", "C1_geodesic_dots", "A4_h41_union")
+    )
+    fold_rows = "".join(
+        f"<tr><td>{e(name)}</td><td>{g:+.6f}</td><td>{s:+.6f}</td></tr>"
+        for name, g, s in zip(design["folds"], gates["fold_gains"], gates["sgmc_fold_gains"])
+    )
+    gate_rows = "".join(
+        f"<tr><td>{e(name)}</td><td>{tag('PASS', 'yes') if ok else tag('FAIL', 'no')}</td><td>{e(text)}</td></tr>"
+        for name, ok, text in (
+            ("G1 effect", checks["G1"],
+             f"mean gain {gates['mean_gain']:+.6f} (needs ≥ {design['gates']['mean_gain']}), "
+             f"{gates['positive_folds']}/4 folds positive, worst fold {gates['worst_fold']:+.6f} "
+             f"(floor {design['gates']['max_fold_loss']})"),
+            ("G2 bar", checks["G2"],
+             f"A4 mean {summary['arms']['A4_h41_union']:.8f} vs recorded bar {design['gates']['holdout_best']:.8f}"),
+            ("G3 second proxy", checks["G3"],
+             f"SGMC off-catalogue mean gain {gates['sgmc_mean_gain']:+.6f} with {gates['sgmc_positive_folds']}/4 folds positive"),
+            ("G4 integrity", checks["G4"],
+             f"24/24 finite cells; frozen controls reproduce the stored H34 cells with max |delta| = "
+             f"{gates['reproduction_max_abs_delta']:.3e} (tolerance {design['gates']['reproduction_tolerance']:.0e})"),
+        )
+    )
+    return (
+        '<section class="card"><p class="kicker">Session-5 frozen stage · every number read from '
+        'evidence/h41a4_h34protocol/</p><h2>H41-A4 re-scored against the slot bar: the replicated gain does not transfer</h2>'
+        f"<p>Pre-registered (sha256 {e(design['preregistration']['sha256'][:12] + chr(8230))}) before any fit; clean tree at "
+        f"{e(design['git']['revision'][:7])}; {len(design['draws'])} spent draws ({', '.join(map(str, design['draws']))}) that define the bar, "
+        f"{len(design['folds'])} blocked folds, {len(design['arms'])} arms, {summary['n_cells']} cells in {summary['elapsed_s']:.0f} s. "
+        "The point of the stage is that the bar was measured on these same cells in session 2, so the only fair comparison is on them.</p>"
+        f'<table><thead><tr><th>arm</th><th>mean DTI (8 cells)</th><th>role</th></tr></thead><tbody>{rows}</tbody></table>'
+        f"<p><strong>Verdict:</strong> {e(summary['verdict'])} No candidate file was built, no weekly slot was used, and "
+        f"<code>registry/draw_ledger.json</code> still shows the next free draw at {read_json('draw_ledger.json')['next_free_draw']}.</p>"
+        f'<table><thead><tr><th>fold</th><th>A4 gain vs best control</th><th>SGMC off-catalogue gain</th></tr></thead><tbody>{fold_rows}</tbody></table>'
+        f'<table><thead><tr><th>gate</th><th>result</th><th>criterion</th></tr></thead><tbody>{gate_rows}</tbody></table>'
+        "<p><strong>Why the comparison can be trusted:</strong> the two frozen controls rebuilt here from the restored mirrors match "
+        "the session-2 stored cells bit-for-bit on all 16 control cells, so the 0.14479 bar is a number this checkout regenerates, "
+        "not a remembered one. The negative result is therefore about the H41 columns, not about the environment.</p>"
+        f"<p>{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md', 'Read the frozen bar-protocol preregistration', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/28_h41a4_results_2026-10-03.md', 'Read the results document', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/h41a4_h34protocol/', 'Open the raw cells and analyzer report', external=True)}</p></section>"
+    )
+
+
+def h41a4_status_sentence() -> str:
+    """One-sentence, evidence-derived statement of the session-5 bar-protocol re-score."""
+    summary_p = ROOT / "evidence" / "h41a4_h34protocol" / "summary.json"
+    if not summary_p.is_file():
+        return "the session-5 bar-protocol re-score of H41 is frozen in knowledge/27 (no summary in this checkout)"
+    data = json.loads(summary_p.read_text(encoding="utf-8"))
+    gates, checks = data["gates"], data["gate_checks"]
+    failed = ", ".join(name for name, ok in (("G1", checks["G1"]), ("G2", checks["G2"]), ("G3", checks["G3"]),
+                                             ("G4", checks["G4"])) if not ok)
+    return (
+        f"session 5 re-scored the H41 union arm on the spent draws {data['draws'][0]}/{data['draws'][1]} that define the slot bar: "
+        f"mean paired gain {gates['mean_gain']:+.6f} (bar +0.005), worst fold {gates['worst_fold']:+.6f}, SGMC second proxy "
+        f"{gates['sgmc_mean_gain']:+.6f} with {gates['sgmc_positive_folds']}/4 folds positive, while the frozen controls reproduced "
+        f"the stored H34 cells exactly (max |delta| = {gates['reproduction_max_abs_delta']:.1e}) — {failed} failed, no promotion, "
+        "no candidate file, no slot"
+    )
+
+
 def h41_status_sentence() -> str:
     """One-sentence, evidence-derived statement of the session-4 H41 screen outcome."""
     summary = ROOT / "evidence" / "h41_screen" / "summary_screen.json"
@@ -314,6 +393,7 @@ def render_home() -> str:
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
+            + e(h41a4_status_sentence()) + '; '
             + e(h41_status_sentence()) + '; '
             'Session 3 ran two parallel preregistered screens and both failed their frozen gates. Workstream B: H35 '
             '(tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) on '
@@ -439,7 +519,7 @@ def render_summary() -> str:
         f'The organizer’s {int(rules["rules_year"])} rules allow up to {int(rules["weekly_feedback_max"])} weekly feedback submissions and require '
         f'{int(rules["final_prediction_count"])} final selection for both {int(rules["prize_round_count"])} prize rounds. '
         'Check the current official rules and competition timeline before acting.</p>'
-        '<div class="callout"><strong>Current stop:</strong> '+ e(status.get("screen_status", "not run")) + '. H31 has local holdout proxy results, but no official competition result is claimed.</div>'
+        '<div class="callout"><strong>Current stop:</strong> '+ e(str(status.get("screen_status", "not run")).rstrip(". ")) + '. H31 has local holdout proxy results, but no official competition result is claimed.</div>'
         '</article><article class="card span-5"><p class="kicker">Official references</p><h2>Verify before upload</h2><ul class="list-clean">'
         f'<li>{a("https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/", "Problem description and format", external=True)}</li>'
         f'<li>{a("https://docs.nlr.gov/docs/fy26osti/96647.pdf", rules_label, external=True)}</li>'
@@ -478,6 +558,7 @@ def render_summary() -> str:
         'This project has a draft disclosure in its repository; it must be updated against the actual final work before submission.</p>'
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/05_genai_disclosure_draft.md", "Review the current disclosure draft", external=True)}</p>'
         '</article></section>'
+        + range_rejection_card() +
         '<section class="card"><h2>Important distinction</h2><p>Spatially blocked catalogue-gap holdouts are an internal proxy. They do not reproduce the competition’s newly expert-labelled test faults, '
         'its public leaderboard score, private test score, or second-round revised-label score. Never use a holdout value as a claimed submission result.</p></section>'
     )
@@ -490,6 +571,33 @@ def render_summary() -> str:
         "No file is currently cleared for a weekly slot. The one-click GeoTIFF downloads sit at the very top of this page, each with its paste-ready note and format receipt; below them is the manual process and the exact format contract, so the next approved artifact is easy to identify and audit.",
         body,
         a("index.html", "Back to current status", class_name="button") + a("sources.html", "Official source links", class_name="button secondary"),
+    )
+
+
+def range_rejection_card() -> str:
+    """What is known about the earlier [0,1] upload rejection — text and numbers read from the registers."""
+    registry = json.loads((ROOT / "registry" / "irregularities.json").read_text(encoding="utf-8"))
+    entries = {item.get("id"): item for item in registry["items"]}
+    submission_error = entries.get("IR-29-PREV-SUBMIT-ERROR-CLASS", {})
+    template = entries.get("IR-TEMPLATE-01", {})
+    submissions = read_json("submissions.json")
+    rows = submissions.get("files", [])
+    locally_checked = sum(1 for row in rows if row.get("format_ok_local"))
+    return (
+        '<section class="card"><p class="kicker">Reported rejection · register-driven</p>'
+        "<h2>“Predicted values must be in range [0, 1]”: what is known and what changed</h2>"
+        f"<p>{e(submission_error.get('detail', ''))}</p>"
+        f"<p><strong>Status:</strong> {e(submission_error.get('status', 'not recorded'))}. "
+        f"<strong>Mitigation in force:</strong> {e(submission_error.get('mitigation', ''))}</p>"
+        f"<p><strong>Related template finding:</strong> {e(template.get('detail', ''))} "
+        f"<strong>Consequence:</strong> {e(template.get('impact', ''))}</p>"
+        f"<p><strong>Current state:</strong> {locally_checked} of {len(rows)} registered downloads carry a local "
+        "format receipt with <code>ok_to_upload = true</code> (each card above links its receipt). The local "
+        "checker is necessary but cannot guarantee organizer acceptance — the portal validator is not public. "
+        "If the portal ever rejects a file, record the exact message, do not edit the file, and report it so the "
+        "register and this page can be updated from evidence rather than from guesswork.</p>"
+        f"<p>{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/registry/irregularities.json', 'Open the irregularity register', external=True)} · "
+        f"{a('https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/submission.py', 'Read the writer and independent checker', external=True)}</p></section>"
     )
 
 
@@ -672,7 +780,7 @@ def render_research() -> str:
         'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H41 was promoted from the v3 slate and screened this '
         'session, and is the first candidate in this family to clear a frozen gate on two arms. Two parallel v3 registers are rendered below: the Workstream-A slate '
         '(H31b first, screened) and the refreshed Workstream-B slate.</section>'
-        f'{h35_card}{h41_screen_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
+        f'{h35_card}{h41_screen_card()}{h41a4_bar_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
         f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
         f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'

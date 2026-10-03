@@ -1,0 +1,66 @@
+{
+  "stage": "h41a4_h34protocol",
+  "analyzer": "scripts/analyze_h41a4_h34protocol.py",
+  "n_cells": 24,
+  "gates": {
+    "mean_gain": 0.005,
+    "min_positive_folds": 3,
+    "max_fold_loss": -0.01,
+    "budget_ratio_band": [
+      0.75,
+      1.25
+    ],
+    "sgmc_min_mean_gain": 0.0,
+    "sgmc_min_positive_folds": 3,
+    "min_nonzero_fraction": 0.002,
+    "holdout_best": 0.14479018210246675,
+    "reproduction_tolerance": 1e-06
+  },
+  "recomputed": {
+    "mean_gain": 0.0011829762747477962,
+    "fold_gains": [
+      0.005622000358811663,
+      0.0063703621671269695,
+      -0.00920202488484076,
+      0.0019415674578933118
+    ],
+    "worst_fold": -0.00920202488484076,
+    "positive_folds": 3,
+    "cells_present": true,
+    "a4_mean_dti": 0.14597315837721453,
+    "control_means": {
+      "0": 0.16401750243268381,
+      "1": 0.1348995415995732,
+      "2": 0.12774497034805157,
+      "3": 0.1524987140295584
+    },
+    "sgmc_mean_gain": -0.00717983400776254,
+    "sgmc_positive_folds": 0,
+    "sgmc_fold_gains": [
+      -0.006390659875697355,
+      -0.00945241508652668,
+      -0.0036881752031661524,
+      -0.009188085865659973
+    ],
+    "budget_ratio_min": 0.956778889899909,
+    "budget_ratio_max": 1.0065137739177636,
+    "budget_ok": true,
+    "reproduction_max_abs_delta": 0.0,
+    "reproduction_cells": 16,
+    "gate_checks": {
+      "G1": false,
+      "G2": true,
+      "G3": false,
+      "G4": true
+    }
+  },
+  "reported_gate_checks": {
+    "G1": false,
+    "G2": true,
+    "G3": false,
+    "G4": true
+  },
+  "reported_verdict": "NO PROMOTION: the H41 union arm does not clear the frozen gates on the bar protocol.",
+  "problems": [],
+  "note": "Independently recomputed from raw cells; the stored H34 control cells define gate G4's reproduction test. Both DTIs are local proxies, not the organizer metric."
+}

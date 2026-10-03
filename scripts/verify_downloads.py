@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 """Independently verify the registered candidate TIFF/ZIP downloads against the local template.
 
-Reads the build-time receipt in ``docs/downloads/checks-<stem>.json``, re-checks the published files against the
-hashes recorded there (never refreshing the baseline), and rewrites only the verification fields.
+Two scopes, both local-only:
+
+* the two H29 builds (WORMRANK, REFD28): re-check the published files against the build-time hashes recorded in
+  ``docs/downloads/checks-<stem>.json`` (never refreshing the baseline) and rewrite only the verification fields;
+* every artifact registered in ``registry/submissions.json``: run the strict ``gemsdoe.submission.check_file``
+  against the resolved template, confirm the ``.zip`` companion contains exactly the same GeoTIFF bytes, and
+  record the outcome in ``evidence/format_checks/registered_downloads_recheck.json`` (a separate file, so no
+  build-time baseline is ever rewritten).
 """
 from __future__ import annotations
 
@@ -101,8 +107,71 @@ def main() -> int:
         receipt_path.write_text(json.dumps(receipt, indent=2, allow_nan=False) + "\n")
         failures += n_fails
         print(f"{key}: {len(checks)} checks, fails={n_fails}")
+
+    failures += verify_registered(dl, template)
     print("verify_downloads:", "ALL LOCAL CHECKS PASS" if failures == 0 else f"{failures} FAILURES")
     return 1 if failures else 0
+
+
+def verify_registered(downloads_dir: Path, template: Path) -> int:
+    """Strict template check plus ZIP-integrity check for every entry in registry/submissions.json.
+
+    Read-only with respect to the build-time receipts: the outcome goes to a separate evidence file so a later
+    verifier run can never bless a replaced artifact by rewriting its baseline.
+    """
+    import zipfile
+
+    from gemsdoe.submission import check_file  # local import: keeps the H29 scope above dependency-light
+
+    submissions = json.loads((ROOT / "registry" / "submissions.json").read_text(encoding="utf-8"))
+    rows: list[dict] = []
+    failures = 0
+    for entry in submissions.get("files", []):
+        path = Path(entry.get("path", ""))
+        tif = path if path.is_absolute() else ROOT / path
+        record = dict(id=entry.get("id"), file=entry.get("file"), slot_approved=bool(entry.get("slot_approved")),
+                      path=str(path), present=tif.is_file())
+        if not tif.is_file():
+            record.update(ok=False, detail="registered artifact missing from this checkout")
+            failures += 1
+        else:
+            result = check_file(tif, template)
+            zip_path = tif.with_suffix(".zip")
+            if zip_path.is_file():
+                with zipfile.ZipFile(zip_path) as archive:
+                    names = archive.namelist()
+                    zip_ok = bool(names == [tif.name] and archive.read(tif.name) == tif.read_bytes())
+                zip_detail = "single member, byte-identical to the GeoTIFF" if zip_ok else "ZIP does not match the GeoTIFF"
+            else:
+                # The portal accepts a bare .tif; a missing companion is not a defect unless one is published
+                # and corrupt, so this is recorded as not-applicable rather than counted as a failure.
+                zip_ok, zip_detail = None, "no .zip companion published for this artifact"
+            record.update(
+                ok=bool(result["ok_to_upload"]) and zip_ok is not False,
+                ok_to_upload=bool(result["ok_to_upload"]),
+                sha256=result["sha256"], bytes=result["bytes"],
+                positive_pixels=result.get("positive_pixels"),
+                hard_failures=result.get("hard_failures", []),
+                zip_ok=zip_ok, zip_detail=zip_detail,
+            )
+            if not record["ok"]:
+                failures += 1
+        rows.append(record)
+        print(f"  {record['id']}: {'ok' if record['ok'] else 'FAIL'} "
+              f"(ok_to_upload={record.get('ok_to_upload')}, zip={record.get('zip_ok')})")
+    out = ROOT / "evidence" / "format_checks" / "registered_downloads_recheck.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(dict(
+        schema_version=1,
+        checked_utc=datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+        checker="scripts/verify_downloads.py::verify_registered",
+        template=str(template.relative_to(ROOT)),
+        n_registered=len(rows), n_ok=sum(1 for row in rows if row["ok"]), files=rows,
+        note=("Local checks only: they cannot authenticate the owner-mirror template or guarantee organizer "
+              "acceptance, and they never rewrite a build-time receipt."),
+    ), indent=2, allow_nan=False) + "\n")
+    print(f"registered downloads: {sum(1 for row in rows if row['ok'])}/{len(rows)} ok -> {out.relative_to(ROOT)}")
+    return failures
 
 
 if __name__ == "__main__":
