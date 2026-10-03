@@ -2,6 +2,28 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
+> **Current decision (2026-10-03, session 3): no slot-approved submission; the dense-worming
+> correction (H31b) is preregistered and being screened on fresh spatial draws.** This session
+> re-verified the official sources line-by-line with links for manual review ([`registry/sources.json`](registry/sources.json)):
+> the problem page (metric α=0.2/β=0.8, 300 m triangular kernel, single float32 band in [0,1]),
+> the NLR 96647 rules (single GeoTIFF, up to three weekly feedback submissions, one final
+> selection, generative-AI disclosure), the official reference solution's `TverskyLoss(α=0.2,
+> β=0.8)`, and — with the owner's explicit request — one single fetch of the public leaderboard,
+> which displayed the owner-supplied **0.3195** as rank #1 at fetch time (no table stored, no
+> polling; audit note in `registry/score_claims.json`). The top-scoring historical artifact
+> (GEMSDOE25 "D2.8", 0.2600 owner-reported) is byte-verified against the GEMSDOE25 site
+> (sha256 `91eae1ca42ec845e…`, 1,603,424 B) and its transformation chain
+> (`dot_thin(H19-5, 1.5)` → d1.5; `dot_thin(H19-5, 2.8)` → D2.8, 44,090 px) reproduces
+> bit-for-bit locally. A five-candidate slate v3 is registered
+> ([`registry/hypotheses_v3_2026-10-03.json`](registry/hypotheses_v3_2026-10-03.json),
+> [`knowledge/20_candidates_v3_2026-10-03.md`](knowledge/20_candidates_v3_2026-10-03.md));
+> rank 1, **H31b dense continuous worming persistence** (the diagnosed fix for H31's sparsity
+> failure: persistence is now a dense [0,1] column for every pixel, ~8 % nonzero vs 0.084 %),
+> is preregistered at [`knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md`](knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md)
+> and screened on fresh draws 22/23 with fail-closed gates that include beating the 0.14479
+> holdout best. The session-3 prompt is preserved verbatim below. The prior session-2 decision
+> block is retained below it, unedited.
+>
 > **Current decision (2026-10-03, session 2 close-out): no slot-approved submission, but the site now
 > leads with the repository's own best-evidenced candidate.** The 2^(5−1) fractional factorial over the
 > five feature families is complete: supported inclusion effects are **B** (DEM curvature/scarp,
@@ -21,7 +43,9 @@
 
 ## Start here
 
-- **[Latest session handoff](knowledge/18_h29_corrected_screen_handoff_2026-10-03.md)** — current H29 gate, corrections, artifact status, and final local verification.
+- **[Session 3 brief — preserved verbatim](#session-3-brief--preserved-verbatim-2026-10-03)** — this session's standing starting point (re-read every session).
+- **[Candidates v3 — five new ranked hypotheses](knowledge/20_candidates_v3_2026-10-03.md)** — H31b dense worming (validated this session), H36 MT conductance edges, H35 interaction zones, H37 geothermometry, H38 azimuth coherence.
+- **[Latest session handoff (session 2)](knowledge/18_h29_corrected_screen_handoff_2026-10-03.md)** — current H29 gate, corrections, artifact status, and final local verification.
 - **[Executive summary and manual submission guide](docs/executive-summary.html)** — acceptance checks, current download status, file naming, optional comment, and manual upload steps.
 - **[Live project site](https://buffedlizard55-lab.github.io/GEMSDOE29/)** — research status, local evidence feed, sources, and downloads. The status page is not a DrivenData leaderboard feed.
 - **[Research and hypotheses](docs/research.html)** — ranked H31–H33 hypotheses, prior work, and holdout/confirmation policy.
@@ -50,7 +74,7 @@
 - **H29 corrected re-screen:** after fixing the persistence denominator and nearest-valid FFT padding, the current frozen two-draw × four-fold screen failed all five arms. H29-5 versus the best same-fold/same-draw control was −0.07894/−0.08703 (0/4 positive folds on both draws); A1/A2/B1/B2 also missed the `+0.005` criterion. Draws 2–3 were not fit; the guarded confirmation-only command exited before fitting. The earlier 16-row run is byte-preserved under `evidence/history/` and remains historical only. See [`knowledge/02_h29_results_2026-10-03.md`](knowledge/02_h29_results_2026-10-03.md), [`knowledge/06_post_screen_review_2026-10-03.md`](knowledge/06_post_screen_review_2026-10-03.md), and current [`evidence/h29_gate.json`](evidence/h29_gate.json). All values are spatial-proxy outcomes, not competition scores.
 - **H31:** the existing preregistration and pre-fit synthetic amendment are in [`knowledge/02_preregistered_h31_worming_2026-10-03.md`](knowledge/02_preregistered_h31_worming_2026-10-03.md). The prototype tests the narrower regularized vertical-integration transform of RTP plus explicit lateral drift beyond H29's raw-RTP/gravity persistence work. The screen has now been run (see the H31 bullet above): the features were rebuilt from a clean committed revision and the gate failed on feature sparsity.
 - **Holdouts:** four spatial quadrants, hidden-catalogue gaps, and collars are a spatial proxy, not the private expert-labelled test set. Only raw-cell verified, paired gains across spatial blocks may permit fresh confirmation.
-- **Score claims:** 0.3195, 0.2941 and 0.2477 are retained as historical user/owner-reported claims only. No DrivenData leaderboard content, account identity, screenshot, receipt, rank, or score-to-file mapping has been independently verified here. They are not fit targets or promotion gates.
+- **Score claims:** 0.2941 and 0.2477 remain historical user/owner-reported claims only (not fit targets or promotion gates). The 0.3195 figure supplied by the owner was verified on 2026-10-03 by a single manual fetch of the public leaderboard page (it displayed as the rank-1 public score at fetch time); no leaderboard table content, account identity, or score-to-file mapping is stored or verified in this repository, and no polling is performed. See `registry/score_claims.json` and `registry/sources.json` (dd-leaderboard-verify-2026-10-03).
 - **Submission budget:** no weekly slot has been used for this work. The live competition rules say a competitor may submit up to three per week for feedback and must choose one final submission for both prize rounds. Recheck the official timeline/rules before any entry.
 - **Generative AI disclosure:** the official rules require a narrative disclosure when generative AI is used. A transparent draft is in [`knowledge/05_genai_disclosure_draft.md`](knowledge/05_genai_disclosure_draft.md); it must be updated to the actual final work before submission.
 
@@ -127,6 +151,58 @@ Do not attempt to access the DrivenData website programmatically beyond fetching
 
 When done: do three passes (implement, review for bugs/edge cases, recheck), then create a pull request and merge it to main. List any remaining work and limitations. Put this prompt into the repo README and read it every time you work on the project as a starting point.
 ```
+
+## Session 3 brief — preserved verbatim (2026-10-03)
+
+The following is this session's owner brief, preserved verbatim as the standing starting point to
+re-read every session (as the original brief is in `knowledge/owner_brief_verbatim.txt` and in the
+next section). Its factual claims are cross-checked against the verified sources in
+`registry/sources.json`; where a later verified source conflicts, the verified source and the
+registered irregularities control.
+
+````text
+Apply multiscale potential-field worming to the two independent potential-field layers in the stack (gravity, magnetic). Worming means, for a given field, at each height of a small fixed set, taking the upward continuation of that field, computing the horizontal gradient magnitude to obtain edge strength, and treating how these edges persist and evolve across heights as the physics signal. This captures buried fault structures and magnetic susceptibility boundaries that surface DEMs miss and that are not in the existing geology. In particular, exploit the known FFT/vertical-integration route from magnetic TMI to pseudogravity.
+
+Then do the following:
+
+1. Review this entire repository and make the submission TIF on the website a trivial one-click download — it must be extremely obvious on the landing page (the executive summary, or the very beginning, etc.): "as easy as download to click a File to submit."
+
+2. The submission was rejected with: "Predicted values must be in range [0, 1]" — understand why and fix it. Also, each submission needs a unique name + a short note (like "clustering with k=25").
+
+3. Deep-dive into the highest-scoring local scorer. I want to know why and how it scored the highest: https://buffedlizard55-lab.github.io/GEMSDOE25/ — "dotted-h19-5-d2-8-20261002-e56ea318af89-nan" = 0.2600. Can we beat the current leaderboard top (0.3195) with a different, novel strategy? Show PhD-level judgment: the gap, the mechanism, and what specifically to do.
+
+4. Generate 3–5 NEW untried candidate geological hypotheses — each naming: the layers involved, the physical signature/transform, why it could catch a fault MISSING from the USGS/INGENIOUS catalogue, and how it differs from anything already in this repo. Rank them by expected DTI improvement and implementation cost. Validate the top candidate on the spatially-blocked holdout BEFORE spending the weekly submission slot (do not spend a slot on an idea that has not beaten the current holdout best). If a candidate cannot be validated without new external data, name the specific free official source needed and confirm it is obtainable before proposing the idea as viable.
+
+5. Put this prompt into the repo's README so it can be re-read every session as the standing starting point.
+
+6. Download and organize the competition data. I tried the DrivenData data page: https://www.drivendata.org/competitions/306/competition-doe-gems/data/ but it requires login: "Please log in to download the data for this competition." If you can't download it, find another way to get it (the DrivenData page, or the official USGS/GeoDAWN open sources). If you truly cannot, tell me exactly which file and where to get it, and I'll download it on my own machine. Note the Dropbox links in the original prompt are mirrors of those files.
+
+7. Do not stop after pass 1 — run this task in three passes; pass 2 fixes pass 1's bugs, missing requirements, and edge cases, and pass 3 re-checks the whole implementation against the original ask.
+
+8. Create a pull request and merge it to main. Then list the remaining work and limitations for the next session.
+
+9. The site must be a clean, user-friendly GitHub Pages with all the relevant info and official verified links so I can manually review everything.
+
+10. Ongoing: be autonomous, no manual input. Work line-by-line verifying from official verified trusted sources, with links for manual review. Flag any irregularities for review. No hallucinations.
+
+Core values to keep as the focal point: "Maximize P(Win)" and "Own the Outcome".
+
+11. The official problem statement and sample files:
+- Problem: https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/
+- About: https://www.drivendata.org/competitions/306/competition-doe-gems/page/968/
+- Data page (login-walled): https://www.drivendata.org/competitions/306/competition-doe-gems/data/
+- Rules: https://docs.nlr.gov/docs/fy26osti/96647.pdf
+- Reference solution: https://github.com/drivendataorg/gems-prize-reference-solution
+- Dropbox mirrors (owner side): https://www.dropbox.com/scl/fi/fx16v528w5x348777z74w/GEMS_96647.pdf?rlkey=3zq1184v391227b46800k0z90&dl=0 , https://www.dropbox.com/scl/fi/hd2x15k666l4z43b04q1i/example_submission.tif?rlkey=n49996643b01l30k90747z74w&dl=0 , https://www.dropbox.com/scl/fi/hn57564l391x385b00000/existing_faults.tif?rlkey=9116q9w0678z06826q1k22222&dl=0 , https://www.dropbox.com/scl/fi/hp9w58484y3y353b04644/gems-geodawn-numerical-features.tif?rlkey=967070805440139940003&dl=0 , https://www.dropbox.com/scl/fi/hq3x2358b59200179994a/Digital-elevation-model-links-JSON.pdf?rlkey=x5l55589647460879616k66q0&dl=0
+
+12. Historical GEMSDOE scores (from the repos' READMEs), for context (all unverified): GEMSDOE25 "dotted-h19-5-d2-8" 0.2600 (the top local scorer); GEMSDOE24 "h25-1-dotted-h19-5-d1-5" 0.2477; GEMSDOE27 "topo-gap-closure-t-v2-on-d1-5" 0.2449; GEMSDOE19 "h19-5" 0.1922 and "h19-4" 0.1894; GEMSDOE26 "dilcond-oof-v1" 0.1223; GEMSDOE23 "h30" 0.1352; GEMSDOE 0.1563; GEMSDOE2 0.1560; 7GEMSDOE "lidarscarp" 0.1461; 12GEMSDOE "r7-nms3" 0.1294; and several low early entries (6GEMSDOE 0.0286, 17GEMSDOE 0.0187, 9GEMSDOE 0.0107, 14GEMSDOE 0.0020). [Transcription note: the brief's score list is reproduced here by value and short artifact name; exact full filenames/content IDs are as recorded in the respective sibling READMEs and are unverified, except where byte-pinned in this repository (D2.8 = e56ea318af89, sha256 91eae1ca42ec845e...).]
+
+These are all unverified claims from the READMEs. The top one is 0.2600 (GEMSDOE25), and I want to know whether we can beat the current leaderboard top of 0.3195 with a distinct, novel strategy.
+
+13. What I want reported at the end: (a) the line-by-line analysis of why the D2.8/0.2600 file scored the highest, (b) the verdict on whether 0.3195 is beatable and how, (c) the 3–5 new hypotheses table ranked by expected DTI improvement and cost, (d) the site status (one-click TIF download + note), (e) the submission-fix status ([0,1] issue), (f) the list of what remains for the next session.
+
+Core values to keep as the focal point: "Maximize P(Win)" and "Own the Outcome".
+````
 
 ## Full original project prompt — preserved verbatim
 

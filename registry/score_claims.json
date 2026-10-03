@@ -7,7 +7,7 @@
       "value": 0.3195,
       "description": "Reported as the then-current highest GEMS leaderboard score in the preserved original project brief.",
       "source": "knowledge/owner_brief_verbatim.txt and predecessor repository README",
-      "verification": "unverified; no organizer receipt, screenshot, public-page contents, account identity, or score-to-file mapping retained",
+      "verification": "2026-10-03: a single manual fetch of the public leaderboard page, made at the owner's explicit request to verify this supplied figure, displayed 0.3195 as the rank-1 public score at fetch time (account 'DARD', 12 submissions). Account identity, file mapping, and the meaning of the public vs private score remain unverified; no leaderboard table content is stored in the repository and no polling is performed. See registry/sources.json (dd-leaderboard-verify-2026-10-03) for the link and policy note.",
       "used_for_modeling": false
     },
     {

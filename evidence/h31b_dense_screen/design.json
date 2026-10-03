@@ -1,0 +1,98 @@
+{
+  "experiment": "H31b dense continuous worming persistence screen",
+  "stage": "screen",
+  "preregistration": "knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md",
+  "preregistration_sha256": "ff66c20c84c93de35b88a723ebfbe95506aa3c5d3eedc67a07e9f0b5f5b6ce02",
+  "protocol": "paired, one fit per arm per (fold, draw); arms differ only in appended W columns",
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "draws": [
+    22,
+    23
+  ],
+  "draw_seed_inventory": {
+    "used_before": "0-13 (factorial/addons/H27/H28/H30/H31), 14/15 (factorial confirmation), 20/21 (H34)",
+    "this_stage": [
+      22,
+      23
+    ]
+  },
+  "arms": [
+    "C_base",
+    "C_wrtp",
+    "C_wpsg",
+    "C_wgrav",
+    "C_wall"
+  ],
+  "primary": "C_wall",
+  "gates": {
+    "min_mean_gain_per_draw": 0.005,
+    "min_positive_folds_per_draw": 3,
+    "max_fold_loss": -0.01,
+    "holdout_best": 0.14479
+  },
+  "constants": {
+    "k_frac": 0.0245,
+    "dot_min_dist_px": 2.4,
+    "hgb": {
+      "max_iter": 100,
+      "learning_rate": 0.12,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 50,
+      "l2_regularization": 1.0,
+      "class_weight": {
+        "0": 1,
+        "1": 5
+      },
+      "early_stopping": false
+    }
+  },
+  "git": {
+    "branch": "arena/01a102cf-gemsdoe29",
+    "revision": "14b8c68ea21c0c182606b27bc7e1d4c18384d6a6"
+  },
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6",
+    "packages": {
+      "rasterio": "1.4.4",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.17.1",
+      "numpy": "2.4.6"
+    }
+  },
+  "inputs": {
+    "training_features.tif": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+    "labels.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+    "existing_faults.tif": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+    "sample_submission.tif": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+    "external/lidar_scarp_features_u8.tif": "d580bb8bdcdb941e32fefb8b38044bc5bf04e199bf2e83498c3576e6fc465568",
+    "external/geodawn_rad_u8.tif": "c22420f75999030d7cc65c9e31e50d232ea6158423bca051613a18a8b20ba682",
+    "external/geodawn_extensions_u8.tif": "a35a9c6d2a14786f4dab85481ee59769213072f5dab5b2535ea82ae4d9bb7d9b",
+    "external/derived_sgmc_faults_100m_u8.tif": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+    "external/gdr_wellspring_in_footprint.csv": "122718e65bdf55aab0ee12ad20d80062f0deb1de957225a61ad880dd5dc196ea",
+    "external/gdr_qfaults_traces.csv": "9702f2e5c382a4f472ae834d22b94990983b059677a37adfafd51c50f75e643c",
+    "external/gdr_volcanic_vents_in_footprint.csv": "f91bafbaccaaf2754e71d60434fc0f9eb2c7b880c6e714883f4974542ff6a0bf"
+  },
+  "frozen_inputs": {
+    "cache_sha256": "08831a00debf4183ee4d8b986278a1d7bac0658c87155b5789c61455dc797abb",
+    "cache_names": [
+      "W_RTP_FRAC",
+      "W_RTP_LAST",
+      "W_RTP_E0",
+      "W_RTP_DEEP",
+      "W_PSG_FRAC",
+      "W_PSG_LAST",
+      "W_PSG_E0",
+      "W_PSG_DEEP",
+      "W_GRAV_FRAC",
+      "W_GRAV_LAST",
+      "W_GRAV_E0",
+      "W_GRAV_DEEP"
+    ]
+  }
+}

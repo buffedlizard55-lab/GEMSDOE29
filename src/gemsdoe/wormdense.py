@@ -20,7 +20,7 @@ from typing import Any
 import numpy as np
 from scipy import fft
 
-from .worms import H31_HEIGHTS_M, WormConfig, _prepare_spectrum
+from .worms import WormConfig, _prepare_spectrum
 
 W_NAMES = [
     "W_RTP_FRAC", "W_RTP_LAST", "W_RTP_E0", "W_RTP_DEEP",
