@@ -2,6 +2,36 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
+> **Session 5 (2026-10-03): the standing data blocker is cleared, and its first experiment is a decisive
+> negative.** `bash scripts/download_competition_data.sh --group all` restored and hash-verified **22/22 manifest
+> entries** (11 in `data/manifest.json` + 11 in `registry/data_manifest.json` — 14 distinct files, six of
+> them pinned in both layouts) into the ignored `data/` tree; `python scripts/prepare_data.py` built the aligned
+> arrays (footprint 5,167,373 px, labels 60,988 px, 19 bands, 54.6 s); `build_features.py` / `build_addons.py`
+> produced the 64-column static block and the 5 add-on columns; and a new
+> [`scripts/verify_pipeline.py --reproduce`](scripts/verify_pipeline.py) wrote
+> [`evidence/pipeline_verification.json`](evidence/pipeline_verification.json): both manifests verify, the
+> template grid matches, the caches are complete, and the registered candidate **rebuilds byte-identically**
+> (`sha256 3537e9fc47a46503…`, 1,591,482 bytes, 37,913 dots, `ok_to_upload=true`). The full
+> train → inference → validate path therefore runs here, end to end, on the pinned bytes. The session then spent
+> that capability on the gap `knowledge/22` §4 left open: the H41 union arm was **re-scored on the H34 C0
+> protocol** whose `C1_geodesic_dots` control is the recorded slot bar (0.14479018). Under a new frozen
+> preregistration ([`knowledge/27`](knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md), sha256
+> `af1d8188…`, committed before the run) the arm measured **0.14597316** with a mean paired gain of only
+> **+0.001183** against the frozen **+0.005** bar (worst fold −0.009202; 3/4 folds positive), and the SGMC second
+> proxy **lost on all four folds** (−0.007180). The two frozen controls reproduced the stored session-2 H34 cells
+> **bit-for-bit** (max |Δ| = 0.0), so the comparison is not an environment artifact: H41's earlier +0.0073/+0.0077
+> means were **draw-specific**, the family's line is **closed for promotion**, no candidate file was built and no
+> weekly slot was used. Every number is recomputed from the raw cells by
+> [`scripts/analyze_h41a4_h34protocol.py`](scripts/analyze_h41a4_h34protocol.py) (problems: none); the write-up is
+> [`knowledge/28_h41a4_results_2026-10-03.md`](knowledge/28_h41a4_results_2026-10-03.md). Nothing is slot-approved
+> and the next free draw is still 32. Pass 2 of this session also closed two process defects it found: the
+> documented download verifier covered only two of the five registered artifacts
+> ([`IR-29-VERIFY-DOWNLOADS-COVERAGE`](registry/irregularities.json), now **5/5 ok** plus the two H29 builds at
+> 28 checks each with 0 failures) and one register mitigation named a script that does not exist in this
+> repository (`IR-29-REGISTER-STALE-SCRIPT`). The executive-summary page now explains the historical
+> `[0, 1]` rejection from the register itself, with the honest caveat that the portal validator is not public.
+> Remaining work and limitations: [`knowledge/29`](knowledge/29_remaining_work_and_limitations_2026-10-03.md).
+>
 > **Current decision (2026-10-03, session 4): H41 became the first candidate in this family to clear a frozen
 > gate — on two arms — and the preregistered confirmation, not the screen, decides what happens next.** Session 4
 > implemented `src/gemsdoe/h41.py`, the first use anywhere in this project of the hash-pinned INGENIOUS Quaternary
@@ -79,6 +109,15 @@
 
 ## Start here
 
+- **[Remaining work and limitations (session 5)](knowledge/29_remaining_work_and_limitations_2026-10-03.md)** —
+  what the data blocker's clearance changed, the priority list for the next session (H43 first, fresh draws
+  32/33), the standing limitations, and the three-pass record.
+- **[H41-A4 vs the slot bar (session 5)](knowledge/28_h41a4_results_2026-10-03.md)** — the frozen re-score on the
+  draws that define the bar, the bit-for-bit control reproduction that validates the comparison, and why the
+  family's promotion path is now closed. Frozen protocol:
+  **[knowledge/27](knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md)**.
+- **[Data/pipeline receipt](evidence/pipeline_verification.json)** — 22/22 manifest entries hash-verified, caches
+  complete, candidate rebuilt byte-identically (`scripts/verify_pipeline.py --reproduce`).
 - **[H41 results (read first)](knowledge/26_h41_results_2026-10-03.md)** — the screen table, why the two passing
   arms are a ranking gain rather than an emission fluke, the SGMC conflict, and every disclosed process defect.
   Its frozen protocol is **[knowledge/24](knowledge/24_preregistered_h41_screen_2026-10-03.md)**.
@@ -115,6 +154,17 @@
 
 ## Evidence boundary and current status
 
+- **Data blocker cleared and verified (session 5):** 22/22 manifest entries hash-verified in this
+  checkout (11 core + 11 H31-group), aligned caches built, template grid checked, and the registered candidate
+  rebuilt byte-identically — the receipt is [`evidence/pipeline_verification.json`](evidence/pipeline_verification.json),
+  produced by [`scripts/verify_pipeline.py`](scripts/verify_pipeline.py) (`--reproduce` re-runs the build). The
+  inputs remain hash-pinned owner mirrors, not organizer-authenticated bytes (`IR-DATA-01`); `data/` is ignored by Git.
+- **H41-A4 vs the slot bar (session 5):** frozen preregistration
+  [`knowledge/27`](knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md), 24 cells on the spent draws 20/21,
+  `A4_h41_union` 0.14597316 with mean paired gain **+0.001183** (bar +0.005) and SGMC **−0.007180 (0/4 folds)**;
+  the frozen controls reproduced the stored H34 cells **exactly** (max |Δ| = 0.0). Verdict: **no promotion, no
+  candidate built, no slot** — [`knowledge/28`](knowledge/28_h41a4_results_2026-10-03.md),
+  [`evidence/h41a4_h34protocol/`](evidence/h41a4_h34protocol/).
 - **Next free draw is 32** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27 plus 2/3 count as spent because they were authorized under a recorded receipt and never fitted.
 - **One download by hand** — the *leaderboard score itself*. The manual link is on the site's leaderboard card and in `knowledge/03`; `scripts/check_site.py` deliberately fails if anything on the site links the score page, and `registry/score_claims.json` keeps every score as a claim until the owner confirms it.
 - **H41 (session 4):** slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only — the first G1 pass in
@@ -176,6 +226,7 @@ python scripts/build_draw_ledger.py --check   # which holdout draws are already 
 python scripts/build_site.py
 python scripts/check_site.py
 python scripts/verify_downloads.py            # re-verify every registered download (never its build hashes)
+python scripts/verify_pipeline.py --reproduce # hash-verify the restored inputs + rebuild the candidate (~2 min)
 ```
 
 **One command, both layouts:** `bash scripts/download_competition_data.sh` added on 2026-10-03 as the
