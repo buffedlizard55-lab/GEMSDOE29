@@ -74,11 +74,14 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def git_state() -> dict:
+def git_state(include_untracked: bool = True) -> dict:
     try:
         revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=ROOT, text=True).strip()
-        dirty = bool(subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip())
+        cmd = ["git", "status", "--porcelain"]
+        if not include_untracked:
+            cmd.append("--untracked-files=no")
+        dirty = bool(subprocess.check_output(cmd, cwd=ROOT, text=True).strip())
     except (OSError, subprocess.CalledProcessError) as exc:  # pragma: no cover - environment guard
         raise SystemExit(f"git state unavailable ({exc}); the screen requires a clean committed tree") from exc
     return dict(revision=revision, branch=branch, dirty_worktree=dirty)
@@ -317,7 +320,9 @@ def main() -> int:
         for p in (cells_path, design_path, summary_path):
             if p.exists():
                 raise SystemExit(f"refusing to overwrite existing {stage} evidence: {p}")
-    state = git_state()
+    # A resumed stage legitimately leaves its own raw-cell/design files untracked; in that mode only tracked-file
+    # modifications count as drift (the design hash check above already pins every input and module).
+    state = git_state(include_untracked=not args.resume)
     if state["dirty_worktree"]:
         raise SystemExit("refusing to run from a dirty worktree; commit the implementation first")
     if args.confirm:
