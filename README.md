@@ -2,27 +2,32 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
-> **Current decision (2026-10-03, session 3): no slot-approved submission; the dense-worming
-> correction (H31b) is preregistered and being screened on fresh spatial draws.** This session
-> re-verified the official sources line-by-line with links for manual review ([`registry/sources.json`](registry/sources.json)):
-> the problem page (metric α=0.2/β=0.8, 300 m triangular kernel, single float32 band in [0,1]),
-> the NLR 96647 rules (single GeoTIFF, up to three weekly feedback submissions, one final
-> selection, generative-AI disclosure), the official reference solution's `TverskyLoss(α=0.2,
-> β=0.8)`, and — with the owner's explicit request — one single fetch of the public leaderboard,
-> which displayed the owner-supplied **0.3195** as rank #1 at fetch time (no table stored, no
-> polling; audit note in `registry/score_claims.json`). The top-scoring historical artifact
-> (GEMSDOE25 "D2.8", 0.2600 owner-reported) is byte-verified against the GEMSDOE25 site
-> (sha256 `91eae1ca42ec845e…`, 1,603,424 B) and its transformation chain
-> (`dot_thin(H19-5, 1.5)` → d1.5; `dot_thin(H19-5, 2.8)` → D2.8, 44,090 px) reproduces
-> bit-for-bit locally. A five-candidate slate v3 is registered
-> ([`registry/hypotheses_v3_2026-10-03.json`](registry/hypotheses_v3_2026-10-03.json),
-> [`knowledge/20_candidates_v3_2026-10-03.md`](knowledge/20_candidates_v3_2026-10-03.md));
-> rank 1, **H31b dense continuous worming persistence** (the diagnosed fix for H31's sparsity
-> failure: persistence is now a dense [0,1] column for every pixel, ~8 % nonzero vs 0.084 %),
-> is preregistered at [`knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md`](knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md)
-> and screened on fresh draws 22/23 with fail-closed gates that include beating the 0.14479
-> holdout best. The session-3 prompt is preserved verbatim below. The prior session-2 decision
-> block is retained below it, unedited.
+> **Current decision (2026-10-03, session 3 close-out): no slot-approved submission. The H31b
+> dense-worming screen is complete and FAILED its frozen stability gates (draw-unstable), so no
+> confirmation, no candidate TIFF, no slot** — see
+> [`knowledge/21_h31b_screen_results_2026-10-03.md`](knowledge/21_h31b_screen_results_2026-10-03.md).
+> Result detail: draw 22 mean paired gain +0.0050 (4/4 folds positive), draw 23 +0.0018 (2/4);
+> the 8-cell primary-arm mean 0.15547 is the highest same-protocol screen mean in the repository
+> but, having failed its frozen gates, is not a promotion anchor (anchor remains H34 C1, 0.14479).
+> The dense columns *did* move the output (unlike H31's null), so the worming family is
+> unproven-at-the-bar, not closed; branch ranking: pseudogravity-proxy and RTP routes lead, the
+> isostatic-gravity branch is inert. **H36 (MT conductance structural edges, local bands) is now
+> the lead local candidate**; H35 awaits the owner-side fetch of Siler (2022). This session
+> re-verified the official sources line-by-line with links for manual review
+> ([`registry/sources.json`](registry/sources.json)): the problem page (metric α=0.2/β=0.8,
+> 300 m triangular kernel, single float32 band in [0,1]), the NLR 96647 rules (single GeoTIFF,
+> up to three weekly feedback submissions, one final selection, generative-AI disclosure), the
+> official reference solution's `TverskyLoss(α=0.2, β=0.8)`, and — with the owner's explicit
+> request — one single fetch of the public leaderboard, which displayed the owner-supplied
+> **0.3195** as rank #1 at fetch time (no table stored, no polling; audit note in
+> `registry/score_claims.json`). The top-scoring historical artifact (GEMSDOE25 "D2.8", 0.2600
+> owner-reported) is byte-verified against the GEMSDOE25 site (sha256 `91eae1ca42ec845e…`,
+> 1,603,424 B) and its transformation chain (`dot_thin(H19-5, 1.5)` → d1.5;
+> `dot_thin(H19-5, 2.8)` → D2.8, 44,090 px) reproduces bit-for-bit locally. The five-candidate
+> slate v3 is registered ([`registry/hypotheses_v3_2026-10-03.json`](registry/hypotheses_v3_2026-10-03.json),
+> [`knowledge/20_candidates_v3_2026-10-03.md`](knowledge/20_candidates_v3_2026-10-03.md)).
+> The session-3 prompt is preserved verbatim below. The prior session-2 decision block is
+> retained below it, unedited.
 >
 > **Current decision (2026-10-03, session 2 close-out): no slot-approved submission, but the site now
 > leads with the repository's own best-evidenced candidate.** The 2^(5−1) fractional factorial over the
@@ -44,7 +49,7 @@
 ## Start here
 
 - **[Session 3 brief — preserved verbatim](#session-3-brief--preserved-verbatim-2026-10-03)** — this session's standing starting point (re-read every session).
-- **[Candidates v3 — five new ranked hypotheses](knowledge/20_candidates_v3_2026-10-03.md)** — H31b dense worming (validated this session), H36 MT conductance edges, H35 interaction zones, H37 geothermometry, H38 azimuth coherence.
+- **[Candidates v3 — five new ranked hypotheses](knowledge/20_candidates_v3_2026-10-03.md)** — H31b dense worming (screened this session: FAIL on stability gates — [`knowledge/21`](knowledge/21_h31b_screen_results_2026-10-03.md)), H36 MT conductance edges (now the lead local candidate), H35 interaction zones, H37 geothermometry, H38 azimuth coherence.
 - **[Latest session handoff (session 2)](knowledge/18_h29_corrected_screen_handoff_2026-10-03.md)** — current H29 gate, corrections, artifact status, and final local verification.
 - **[Executive summary and manual submission guide](docs/executive-summary.html)** — acceptance checks, current download status, file naming, optional comment, and manual upload steps.
 - **[Live project site](https://buffedlizard55-lab.github.io/GEMSDOE29/)** — research status, local evidence feed, sources, and downloads. The status page is not a DrivenData leaderboard feed.
@@ -160,7 +165,7 @@ next section). Its factual claims are cross-checked against the verified sources
 `registry/sources.json`; where a later verified source conflicts, the verified source and the
 registered irregularities control.
 
-````text
+```text
 Apply multiscale potential-field worming to the two independent potential-field layers in the stack (gravity, magnetic). Worming means, for a given field, at each height of a small fixed set, taking the upward continuation of that field, computing the horizontal gradient magnitude to obtain edge strength, and treating how these edges persist and evolve across heights as the physics signal. This captures buried fault structures and magnetic susceptibility boundaries that surface DEMs miss and that are not in the existing geology. In particular, exploit the known FFT/vertical-integration route from magnetic TMI to pseudogravity.
 
 Then do the following:
@@ -202,7 +207,7 @@ These are all unverified claims from the READMEs. The top one is 0.2600 (GEMSDOE
 13. What I want reported at the end: (a) the line-by-line analysis of why the D2.8/0.2600 file scored the highest, (b) the verdict on whether 0.3195 is beatable and how, (c) the 3–5 new hypotheses table ranked by expected DTI improvement and cost, (d) the site status (one-click TIF download + note), (e) the submission-fix status ([0,1] issue), (f) the list of what remains for the next session.
 
 Core values to keep as the focal point: "Maximize P(Win)" and "Own the Outcome".
-````
+```
 
 ## Full original project prompt — preserved verbatim
 

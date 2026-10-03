@@ -3,7 +3,7 @@
   "updated_local_date": "2026-10-03",
   "feed_type": "project-local research and release status; not a DrivenData leaderboard feed",
   "current": {
-    "research_stage": "Session 3: the owner's standing brief is preserved in README.md; official sources re-verified line-by-line (problem page metric/format, NLR 96647 rules, reference solution alpha=0.2/beta=0.8, single owner-requested leaderboard check confirming 0.3195); the top-scoring historical file (D2.8) is byte-verified against the GEMSDOE25 site and its dot_thin transformation chain reproduces bit-for-bit locally. New: five-candidate slate v3 (H31b dense worming, H36 MT conductance edges, H35 interaction zones, H37 geothermometry, H38 azimuth coherence) and preregistered H31b dense continuous worming persistence screen (draws 22/23) running on the frozen 81-column H34 control layout.",
+    "research_stage": "Session 3: the owner's standing brief is preserved in README.md; official sources re-verified line-by-line (problem page metric/format, NLR 96647 rules, reference solution alpha=0.2/beta=0.8, a single owner-requested verification fetch of the owner-supplied top-score figure (value kept in registry/score_claims.json, not displayed on the site)); the top-scoring historical file (D2.8) is byte-verified against the GEMSDOE25 site and its dot_thin transformation chain reproduces bit-for-bit locally. New: five-candidate slate v3 (H31b dense worming, H36 MT conductance edges, H35 interaction zones, H37 geothermometry, H38 azimuth coherence) and preregistered H31b dense continuous worming persistence screen (draws 22/23) running on the frozen 81-column H34 control layout.",
     "screen_status": "H31b dense worming screen: RUNNING (frozen preregistration knowledge/19; 5 paired arms, 40 cells; W-cache dense at ~8% nonzero for persistence columns vs 0.001-0.084% for the failed H31). Prior: H34 FAIL on catalogue-hidden primary proxy (PASS SGMC secondary); factorial B/E supported; H31 FAIL from sparse features; corrected H29 all five arms FAIL; C0 method 0.14086 below the 0.14479 holdout best.",
     "confirmation_status": "H29 draws 2/3 were not fit because no arm passed both complete screen draws; the guarded --confirmation-only command exited before fitting. H31/H34 confirmation is also not eligible. No weekly slot has been used; current C0 is below the spatial holdout best and no file is slot-approved.",
     "data_status": "All 11 data/manifest.json owner-mirror entries were restored and SHA-256 verified in the checkout for the corrected H29 run; large rasters remain ignored and must be restored in a fresh checkout. Inputs are owner mirrors, not organizer-authenticated. The separate H31 data group has its own manifest/restore path.",
@@ -13,6 +13,16 @@
     "slot_approved_artifact": null
   },
   "events": [
+    {
+      "date": "2026-10-03",
+      "event": "Official sources verified live (problem page 967, NLR rules PDF, leaderboard top-10 with owner-claim cross-checks, official reference solution TverskyLoss(0.2,0.8)). GEMSDOE25 D2.8 file byte-verified against its published site (sha prefix 91eae1ca..., 1.53 MiB). registry/sources.json created with per-claim extraction and fetch links.",
+      "evidence": "registry/sources.json"
+    },
+    {
+      "date": "2026-10-03",
+      "event": "H31b dense worming screen complete: FAIL (draw-unstable; draw 23 gains +0.0018 mean, 2/4 folds). Positive 8-cell mean 0.15547 recorded for the scientific record. No confirmation, no candidate, no slot. knowledge/21 written.",
+      "evidence": "evidence/h31b_dense_screen/"
+    },
     {
       "date": "2026-10-03",
       "type": "preregistration",
@@ -35,7 +45,7 @@
       "date": "2026-10-03",
       "type": "verification",
       "title": "Official sources re-verified line-by-line with links",
-      "detail": "Problem page (metric alpha=0.2 beta=0.8, R=300 m, float32 [0,1] format), NLR 96647 rules (single GeoTIFF, three submissions per week, generative-AI disclosure), reference-solution notebook (TverskyLoss alpha=0.2 beta=0.8), and one single owner-requested leaderboard fetch confirming the supplied 0.3195 claim. Links for manual review: registry/sources.json."
+      "detail": "Problem page (metric alpha=0.2 beta=0.8, R=300 m, float32 [0,1] format), NLR 96647 rules (single GeoTIFF, three submissions per week, generative-AI disclosure), reference-solution notebook (TverskyLoss alpha=0.2 beta=0.8), and one single owner-requested leaderboard fetch confirming the owner-supplied top-score figure (value kept in registry/score_claims.json, not displayed on the site). Links for manual review: registry/sources.json."
     },
     {
       "date": "2026-10-03",
@@ -53,7 +63,7 @@
       "date": "2026-10-03",
       "type": "preregistration",
       "title": "H31 spatial screen preregistered",
-      "detail": "Screen draws 10–11; confirmation draws 12–13 only if the raw-cell analyzer independently verifies all screen gates. No model fit or DTI evaluation has yet occurred."
+      "detail": "Screen draws 10\u201311; confirmation draws 12\u201313 only if the raw-cell analyzer independently verifies all screen gates. No model fit or DTI evaluation has yet occurred."
     },
     {
       "date": "2026-10-03",
@@ -154,5 +164,10 @@
       "title": "Merge candidate passed full local verification",
       "detail": "112 pytest tests pass; Ruff passes; all 11 core manifest inputs verify by SHA-256; corrected H29 remains failed with no confirmation fits; WORMRANK/REFD28 and all five download TIFFs pass local format/hash checks; static Pages rebuild and check pass. No leaderboard access, upload, or slot spend."
     }
-  ]
+  ],
+  "updated_utc": "2026-10-03T02:55:00Z",
+  "submission_status": "No candidate file exists and no slot is recommended. The H31b screen FAILED its frozen stability gates, so no confirmation, no candidate, no slot (see knowledge/21). The repository's recommendation is unchanged: any slot spend is the owner's call, made once, on a gate-passing method.",
+  "screen_status": "H31b dense worming screen COMPLETE - FAIL (knowledge/21). Draw 22: mean paired gain +0.0050, 4/4 folds positive; draw 23: +0.0018, 2/4 folds positive (G1/G2 fail on draw 23). 8-cell primary-arm mean 0.15547 - the highest same-protocol screen mean in the repo, but draw-unstable, so not promotable; the promotion anchor remains H34 C1 at 0.14479. No confirmation, no candidate TIFF, no slot.",
+  "holdout_best": "H34 C1 (geodesic dots, full HGB, seeds 0/1/2): 0.14479 over draws 20/21 x 4 quadrants. H31b C_wall's 0.15547 on draws 22/23 is a higher absolute screen mean but failed its frozen stability gates (knowledge/21), so it is not a promotion anchor and does not change this line.",
+  "research_stage": "Session 3 COMPLETE: official sources verified line-by-line (problem page, rules, leaderboard top-10, reference solution); GEMSDOE25 D2.8 byte-pinned (sha prefix 91eae1ca...); 3-5 new hypotheses delivered (knowledge/20); H31b preregistered (knowledge/19) and screened - FAIL on frozen stability gates (knowledge/21); site rebuilt with v3 slate; PR created."
 }
