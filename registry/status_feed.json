@@ -15,6 +15,18 @@
   "events": [
     {
       "date": "2026-10-03",
+      "type": "defect",
+      "title": "Headline candidate artifact found to be a distance-to-catalogue look-up; fixed by cross-fitting",
+      "detail": "scripts/build_repo_candidate.py trained on every catalogue pixel with catalogue family E built from that same catalogue, so its first column log1p(min(dist_to_catalogue, 60)) was exactly 0.0 on all 60,988 positives and >= 1.098612 on all 300,000 negatives. Measured on the restored data: train AUC 1.0, tree-1 root split E_dist at threshold 0.0, only 2 distinct columns used across all 100 trees (E_dist 100 splits, mag_anom 200), 0 splits on appended H41 columns, and a byte-identical emitted mask (sha256 3537e9fc47a46503..., content id a4d439b07426 shared with the published repo-c0 download). Independent corroboration: 65.95% of its dots sat within 300 m of the known catalogue, versus ~15% for a leak-free build. The screens in evidence/ are unaffected because Cell builds E from draw.visible with the hidden components removed. New scripts/build_crossfit_candidate.py trains the way the validated cells do: 78-86 columns used per cell, 1,207 H41 splits over 8 cells, and two distinct masks - C0 33,766 dots (ca879db0089a) and A4_h41_union 33,739 dots (9edb34b99e3a). It aborts if the H41 block is inert or the arms are indistinguishable. Registered IR-29-ARTIFACT-LEAK; write-up knowledge/33. Fixing the leak changed the artifact, not the verdict: A4 still fails the H34 slot bar (0.14597 vs 0.16402) and is G3-vetoed, so no weekly slot is recommended."
+    },
+    {
+      "date": "2026-10-03",
+      "type": "format",
+      "title": "The reported [0,1] upload rejection is reproduced locally and answered with a zero-outside variant",
+      "detail": "scripts/check_submission.py's strict whole-array check ((a>=0)&(a<=1)).all() is False for the -nan.tif variant of every new cross-fitted candidate and True for its -zeros.tif twin, measured on both. All four files have zero hard-check failures. The zero-outside variant is now the site's recommended download format and the hero button target; the NaN-outside file stays available because NaN-outside is the documented convention."
+    },
+    {
+      "date": "2026-10-03",
       "type": "experiment",
       "title": "Data blocker cleared with a byte-identical pipeline reproduction; H41-A4 fails the bar protocol",
       "detail": "scripts/download_competition_data.sh --group all restored and hash-verified all 22 pinned owner-mirror files (11 core + 11 H31-group); prepare_data/features/addons built the aligned caches; verify_pipeline.py --reproduce rebuilt the registered candidate byte-identically (sha256 3537e9fc47a46503...). On those bytes, scripts/run_h41a4_h34protocol.py re-scored the H41 union arm on the spent draws 20/21 that define the slot bar under the frozen protocol of knowledge/27: mean paired gain +0.001183 (needs +0.005), worst fold -0.009202, SGMC second proxy -0.007180 with 0/4 folds positive; the frozen C0/C1 controls reproduced the stored H34 cells bit-for-bit (max |delta| = 0.0). Verdict NO PROMOTION: no candidate file, no slot, next free draw still 32. knowledge/28_h41a4_results_2026-10-03.md; evidence/h41a4_h34protocol/."
@@ -35,7 +47,7 @@
       "date": "2026-10-03",
       "type": "preregistration",
       "title": "H31 spatial screen preregistered",
-      "detail": "Screen draws 10\u201311; confirmation draws 12\u201313 only if the raw-cell analyzer independently verifies all screen gates. No model fit or DTI evaluation has yet occurred."
+      "detail": "Screen draws 10–11; confirmation draws 12–13 only if the raw-cell analyzer independently verifies all screen gates. No model fit or DTI evaluation has yet occurred."
     },
     {
       "date": "2026-10-03",
@@ -164,7 +176,7 @@
       "date": "2026-10-03",
       "type": "screen",
       "title": "H41 frozen screen: two arms PASS G1 - the first passes in this family",
-      "detail": "40 cells (draws 28/29 x four blocked folds x five arms), 1,470 s, clean tree at a9d880e, preregistration sha256 2f25c06f\u2026 pinned before the fit. A1_h41_off +0.0066173 and A4_h41_union +0.0073436 pass the \u00b10.005 mean-gain, 3-of-4 positive-fold, -0.010 worst-fold and 0.75-1.25 budget gates; A2 (+0.0047673) and A3 (+0.0038133) fail. Holdout AUC 0.8037 -> 0.8159; sparse-column guard passed by 17-150x. The SGMC second proxy is negative for every arm (-0.0009 to -0.0023), so the preregistered confirmation on draws 30/31 was authorized but no slot is implied."
+      "detail": "40 cells (draws 28/29 x four blocked folds x five arms), 1,470 s, clean tree at a9d880e, preregistration sha256 2f25c06f… pinned before the fit. A1_h41_off +0.0066173 and A4_h41_union +0.0073436 pass the ±0.005 mean-gain, 3-of-4 positive-fold, -0.010 worst-fold and 0.75-1.25 budget gates; A2 (+0.0047673) and A3 (+0.0038133) fail. Holdout AUC 0.8037 -> 0.8159; sparse-column guard passed by 17-150x. The SGMC second proxy is negative for every arm (-0.0009 to -0.0023), so the preregistered confirmation on draws 30/31 was authorized but no slot is implied."
     },
     {
       "date": "2026-10-03",
@@ -218,7 +230,7 @@
       "date": "2026-10-03",
       "type": "screen",
       "title": "H41 confirmation complete: A4 replicates (+0.0077283), G3 withholds promotion for every arm",
-      "detail": "40 fresh cells on draws 30/31 under the frozen protocol, clean tree at 2568dc0d, 2,005.8 s, scripts/analyze_h41_screen.py re-derived every gate from raw cells with problems: none. A4_h41_union passed G1+G2 (screen +0.0073436, confirm +0.0077283, worst fold +0.0043033, budgets 0.974-0.997x, holdout AUC 0.7918 -> 0.7997); A1_h41_off missed the mean bar at +0.0044157, so the minimal two-column arm does not replicate while the five-column union does. Promotion is blocked by knowledge/19 \u00a74 G3 \u2014 inherited by knowledge/24 \u00a74's identical-gates clause \u2014 because the SGMC off-catalogue class gained on only 1/4 folds in both stages (A4 -0.00226/-0.00211), the pattern knowledge/19 \u00a75 pre-declared as 'proxy conflict, no promotion'. No candidate built, no weekly slot used. New register entries: IR-29-H41-G3-OMISSION (the frozen text omitted the G3 SGMC clause while claiming identity with knowledge/19; the stricter reading was applied and it cost this session its own best result). New artifact: evidence/h41_screen/promotion_gate.json, and the ledger now shows h41_confirmation at 40 cells with next free draw pair 32/33."
+      "detail": "40 fresh cells on draws 30/31 under the frozen protocol, clean tree at 2568dc0d, 2,005.8 s, scripts/analyze_h41_screen.py re-derived every gate from raw cells with problems: none. A4_h41_union passed G1+G2 (screen +0.0073436, confirm +0.0077283, worst fold +0.0043033, budgets 0.974-0.997x, holdout AUC 0.7918 -> 0.7997); A1_h41_off missed the mean bar at +0.0044157, so the minimal two-column arm does not replicate while the five-column union does. Promotion is blocked by knowledge/19 §4 G3 — inherited by knowledge/24 §4's identical-gates clause — because the SGMC off-catalogue class gained on only 1/4 folds in both stages (A4 -0.00226/-0.00211), the pattern knowledge/19 §5 pre-declared as 'proxy conflict, no promotion'. No candidate built, no weekly slot used. New register entries: IR-29-H41-G3-OMISSION (the frozen text omitted the G3 SGMC clause while claiming identity with knowledge/19; the stricter reading was applied and it cost this session its own best result). New artifact: evidence/h41_screen/promotion_gate.json, and the ledger now shows h41_confirmation at 40 cells with next free draw pair 32/33."
     },
     {
       "date": "2026-10-03",

@@ -124,14 +124,25 @@ def render_downloads() -> str:
     for row in candidates:
         present = has_local_artifact(row)
         download = (
-            f'<a class="button" href="{e(artifact_href(row))}" download>Download GeoTIFF</a>'
+            f'<a class="button" href="{e(artifact_href(row))}" download>{e(row.get("download_label", "Download GeoTIFF"))}</a>'
             if present
             else '<p class="muted">Registered file is not present in this checkout.</p>'
         )
-        zip_path = Path(row["path"]).with_suffix(".zip")
+        # Preferred download is the zero-outside variant where one is registered: a portal that
+        # range-checks the whole array rejects NaN, which is the reported "Predicted values must be in
+        # range [0, 1]" failure (IR-PORTAL-01).
+        # Pair the ZIP with whichever variant is the primary download, so the button and the file agree.
+        zip_name = (row.get("zeros_zip") if str(row["path"]).endswith("-zeros.tif") else None) or row.get("zip")
+        zip_path = Path(row["path"]).parent / (zip_name or Path(row["path"]).with_suffix(".zip").name)
         zip_link = (
             f' <a class="button light" href="{e(zip_path.relative_to("docs").as_posix())}" download>Download .zip</a>'
             if (ROOT / zip_path).is_file()
+            else ""
+        )
+        alt_link = (
+            f' <a class="button light" href="{e(Path(row["alt_path"]).relative_to("docs").as_posix())}" download>'
+            f'{e(row.get("alt_label", "Other variant"))}</a>'
+            if row.get("alt_path") and (ROOT / row["alt_path"]).is_file()
             else ""
         )
         # Score claims stay in the JSON registry only; public pages must not republish them
@@ -140,6 +151,7 @@ def render_downloads() -> str:
         eligibility = (
             tag("slot-approved", "yes") if row.get("slot_approved") is True else
             tag("not slot-cleared · do not submit", "no") if row.get("do_not_submit") is True else
+            tag("G1+G2 pass · G3 proxy conflict · owner decision", "warning") if row.get("g3_veto") is True else
             tag("not approved · holdout/confirmation required", "warning")
         )
         card = (
@@ -150,8 +162,10 @@ def render_downloads() -> str:
             f'<p class="small">sha256 <code>{e(str(row.get("sha256", ""))[:16])}…</code> · '
             f'{int(row.get("positive_pixels", 0)):,} emitted px · format ok: {e(row.get("format_ok_local"))}</p>'
             f'{proxy} {tag("local format only", "warning")} {eligibility}'
-            f'<p class="small"><strong>Paste-ready Note:</strong> <code>{e(row.get("optional_comment", ""))}</code></p>'
-            f'{download}{zip_link}'
+            + (f'<p class="small"><strong>Gate evidence:</strong> {e(row["gate_evidence"])}</p>'
+               if row.get("gate_evidence") else "")
+            + f'<p class="small"><strong>Paste-ready Note:</strong> <code>{e(row.get("optional_comment", ""))}</code></p>'
+            f'{download}{alt_link}{zip_link}'
             "</article>"
         )
         cards.append(card)

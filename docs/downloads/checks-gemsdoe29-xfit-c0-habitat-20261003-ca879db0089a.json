@@ -1,0 +1,143 @@
+{
+  "stem": "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a",
+  "note_to_paste": "GEMSDOE29 C0 habitat xfit | cross-fitted leak-free control arm; comparison baseline | id ca879db0089a | unscored",
+  "grid": {
+    "crs": "EPSG:32611",
+    "width": 3292,
+    "height": 3730,
+    "pixel_size_m": [
+      100.0,
+      100.0
+    ],
+    "footprint_pixels": 5167373
+  },
+  "format": {
+    "driver": "GTiff",
+    "bands": 1,
+    "dtype": "float32",
+    "inside_value_range": [
+      0.0,
+      1.0
+    ],
+    "outside": "NaN",
+    "note_max_characters": 200
+  },
+  "local_format_verified": true,
+  "organizer_portal_acceptance": "not verified; owner must upload manually",
+  "checks": {
+    "foot_mask_matches_pinned_template": {
+      "pass": true,
+      "detail": "footprint pixels=5167373"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif:exists": {
+      "pass": true,
+      "detail": "1,552,469 bytes"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif:outside_nan_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif:pixel_count": {
+      "pass": true,
+      "detail": "33766 positive pixels vs expected 33766"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=33766"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif:exists": {
+      "pass": true,
+      "detail": "788,833 bytes"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif:outside_zero_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif:pixel_count": {
+      "pass": true,
+      "detail": "33766 positive pixels vs expected 33766"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=33766"
+    },
+    "zip:exists": {
+      "pass": true,
+      "detail": "271,029 bytes"
+    },
+    "zip:exactly_one_geotiff": {
+      "pass": true,
+      "detail": "members=['gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif']"
+    },
+    "zip:geotiff:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "zip:geotiff:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "zip:geotiff:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "zip:geotiff:outside_nan_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "zip:geotiff:pixel_count": {
+      "pass": true,
+      "detail": "33766 positive pixels vs expected 33766"
+    },
+    "zip:geotiff:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=33766"
+    },
+    "zip:content_identical_to_nan_tif": {
+      "pass": true,
+      "detail": ""
+    },
+    "__summary__": {
+      "pass": true,
+      "detail": "24 checks, 0 failures"
+    }
+  },
+  "files": {
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.tif": {
+      "bytes": 1552469,
+      "sha256": "b9ca8c093d3b0812112f2c62b06e2047a48156e71136c735962ececfb20372bf"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-zeros.tif": {
+      "bytes": 788833,
+      "sha256": "ac4ebc913a172f3415f14a3b47b169af03798cff3a643ffd0a89451b869259be"
+    },
+    "gemsdoe29-xfit-c0-habitat-20261003-ca879db0089a-nan.zip": {
+      "bytes": 271029,
+      "sha256": "07135ec320c6ccd7179232ed2b06af64d23c60cce546a5d6d578bf720071e588"
+    }
+  }
+}

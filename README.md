@@ -34,6 +34,34 @@
 > `[0, 1]` rejection from the register itself, with the honest caveat that the portal validator is not public.
 > Remaining work and limitations: [`knowledge/29`](knowledge/29_remaining_work_and_limitations_2026-10-03.md).
 >
+> **Session 5, parallel workstream (2026-10-03): the published headline candidate was a distance-to-catalogue
+> look-up, and the fix is a cross-fitted builder — but fixing it did not change any verdict.** Building an
+> `A4_h41_union` artifact with the existing recipe produced a file **byte-identical** to the published repo-c0
+> candidate (sha256 `3537e9fc47a46503…`, content id `a4d439b07426`), i.e. the H41 physics changed nothing. The
+> cause is measured, not guessed: `scripts/build_repo_candidate.py` builds catalogue family `E` from the same
+> full catalogue its positives come from, and `E`'s first column `log1p(min(dist_to_catalogue, 60))` is
+> **exactly 0.0 on all 60,988 positives** and **≥ 1.098612 on all 300,000 sampled negatives** — train AUC
+> **1.0**, tree-1 root split `E_dist` at threshold `0.0`, and only **2 distinct columns used across all 100
+> trees** (`E_dist` 100 splits, `mag_anom` 200). Independent corroboration: that artifact placed **65.95 %** of
+> its dots within 300 m of the known catalogue. The screens in `evidence/` are **unaffected** — `Cell` builds
+> `E` from `draw.visible`, which has the hidden components removed. The fix,
+> `scripts/build_crossfit_candidate.py`, trains per (fold, draw) exactly as the validated cells do (features
+> from `draw.visible`, positives = `draw.hidden_train`, negatives ≤300 k at >1.5 px, seed `777+31·fold+draw`),
+> applies the models to the whole footprint with `E` from the full catalogue (legitimate at prediction time),
+> averages over 4 folds × draws 30/31, and runs the unchanged frozen emission. It now uses **78–86 columns per
+> cell with 1,207 H41 splits**, catalogue-hugging falls to **≈15 %**, and the two arms are distinct: `C0_base`
+> 33,766 dots (`ca879db0089a`) and `A4_h41_union` 33,739 dots (`9edb34b99e3a`). It **aborts** if no split lands
+> on an H41 column or if the arms come out identical — the guard the old path lacked. **The honest bottom
+> line:** the leak-free A4 artifact is still **not** slot-recommended. Re-scored on the H34 slot-bar protocol it
+> reaches **0.14597 against a bar of 0.16402** (worst fold −0.00920, SGMC positive on 0/4 folds) and G3
+> withholds promotion; its own-fold +0.0073/+0.0077 gains were measured against `C0_base`, not against the best
+> control. Fixing the leak changed the artifact, not the verdict. Separately, the owner's reported
+> `Predicted values must be in range [0, 1]` rejection is reproduced exactly: `((a>=0)&(a<=1)).all()` over the
+> **whole** array is **False** for every `-nan.tif` and **True** for every `-zeros.tif`, so both variants ship
+> and the zero-outside file is the recommended format. All four new files have **zero hard-check failures**.
+> Registered [`IR-29-ARTIFACT-LEAK`](registry/irregularities.json); full write-up and the disclosed narrowing of
+> one test assertion: [`knowledge/33`](knowledge/33_artifact_leakage_and_crossfit_2026-10-03.md).
+>
 > **Current decision (2026-10-03, session 4): H41 became the first candidate in this family to clear a frozen
 > gate — on two arms — and the preregistered confirmation, not the screen, decides what happens next.** Session 4
 > implemented `src/gemsdoe/h41.py`, the first use anywhere in this project of the hash-pinned INGENIOUS Quaternary
@@ -130,6 +158,11 @@
   on the same three unverified owner-reported points). Registered as `IR-29-PROXY-VETO-PATTERN` with three
   options for the owner; **no label or gate was changed**. Evidence:
   [`evidence/proxy_agreement_review.json`](evidence/proxy_agreement_review.json).
+- **[Artifact leakage and the cross-fitted fix (session 5, parallel workstream)](knowledge/33_artifact_leakage_and_crossfit_2026-10-03.md)** —
+  the measured defect in the single-fit artifact path (`E_dist` separates the training labels perfectly, 2 distinct
+  columns used out of 81), why the screens are unaffected, the cross-fitted protocol, the `-nan` vs `-zeros`
+  answer to the `Predicted values must be in range [0, 1]` rejection, and the disclosed narrowing of one test
+  assertion (§7). Registered `IR-29-ARTIFACT-LEAK`.
 - **[H41-A4 vs the slot bar (session 5)](knowledge/28_h41a4_results_2026-10-03.md)** — the frozen re-score on the
   draws that define the bar, the bit-for-bit control reproduction that validates the comparison, and why the
   family's promotion path is now closed. Frozen protocol:

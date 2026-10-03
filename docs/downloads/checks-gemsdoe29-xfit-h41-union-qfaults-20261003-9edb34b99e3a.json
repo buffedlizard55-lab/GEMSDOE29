@@ -1,0 +1,143 @@
+{
+  "stem": "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a",
+  "note_to_paste": "GEMSDOE29 H41 union xfit | cross-fitted, leak-free; G1+G2 pass, G3 proxy conflict | id 9edb34b99e3a | unscored",
+  "grid": {
+    "crs": "EPSG:32611",
+    "width": 3292,
+    "height": 3730,
+    "pixel_size_m": [
+      100.0,
+      100.0
+    ],
+    "footprint_pixels": 5167373
+  },
+  "format": {
+    "driver": "GTiff",
+    "bands": 1,
+    "dtype": "float32",
+    "inside_value_range": [
+      0.0,
+      1.0
+    ],
+    "outside": "NaN",
+    "note_max_characters": 200
+  },
+  "local_format_verified": true,
+  "organizer_portal_acceptance": "not verified; owner must upload manually",
+  "checks": {
+    "foot_mask_matches_pinned_template": {
+      "pass": true,
+      "detail": "footprint pixels=5167373"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif:exists": {
+      "pass": true,
+      "detail": "1,552,576 bytes"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif:outside_nan_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif:pixel_count": {
+      "pass": true,
+      "detail": "33739 positive pixels vs expected 33739"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=33739"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif:exists": {
+      "pass": true,
+      "detail": "788,810 bytes"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif:outside_zero_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif:pixel_count": {
+      "pass": true,
+      "detail": "33739 positive pixels vs expected 33739"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=33739"
+    },
+    "zip:exists": {
+      "pass": true,
+      "detail": "270,771 bytes"
+    },
+    "zip:exactly_one_geotiff": {
+      "pass": true,
+      "detail": "members=['gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif']"
+    },
+    "zip:geotiff:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s), dtype=float32"
+    },
+    "zip:geotiff:exact_template_grid": {
+      "pass": true,
+      "detail": "shape=(3730, 3292), CRS=EPSG:32611, transform=(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)"
+    },
+    "zip:geotiff:in_footprint_finite_and_01": {
+      "pass": true,
+      "detail": "finite=5167373/5167373, min=0.0, max=1.0"
+    },
+    "zip:geotiff:outside_nan_convention": {
+      "pass": true,
+      "detail": "outside_pixels=7111787"
+    },
+    "zip:geotiff:pixel_count": {
+      "pass": true,
+      "detail": "33739 positive pixels vs expected 33739"
+    },
+    "zip:geotiff:binary_01": {
+      "pass": true,
+      "detail": "positive pixels=33739"
+    },
+    "zip:content_identical_to_nan_tif": {
+      "pass": true,
+      "detail": ""
+    },
+    "__summary__": {
+      "pass": true,
+      "detail": "24 checks, 0 failures"
+    }
+  },
+  "files": {
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.tif": {
+      "bytes": 1552576,
+      "sha256": "d34ad9224ccbd7c7c2bad4382272c80afc2f1850daf46ae7b1f9c6edcf1939f4"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-zeros.tif": {
+      "bytes": 788810,
+      "sha256": "ab9076de63bd76fd8857b0dba81f6c19be4a95377cb52802f71ccf177cf9b9ce"
+    },
+    "gemsdoe29-xfit-h41-union-qfaults-20261003-9edb34b99e3a-nan.zip": {
+      "bytes": 270771,
+      "sha256": "ed7e6347a7f9a0f45cfcb6356a2ffd271b26d9ccdd09b867780c82b3fc56864f"
+    }
+  }
+}
