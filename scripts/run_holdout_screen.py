@@ -124,6 +124,50 @@ def aggregate_gates(results: list[dict]) -> dict:
     }
 
 
+def summarize_gate(results: list[dict], *, quick: bool = False) -> dict:
+    """Compatibility summarizer for the archived four-arm gate reconciliation.
+
+    The current H29/H29-5 runner and persisted gate use :func:`aggregate_gates` and the stricter
+    unique-fold/finite-value checks. This helper reproduces the original A1/A2/B1/B2 summary schema
+    so the preserved pre-correction reconciliation remains regression-testable.
+    """
+    out: dict[str, dict] = {}
+    for family, arms in (("A", ("A1", "A2")), ("B", ("B1", "B2"))):
+        for arm in arms:
+            rows = [row for row in results if family in row and arm in row[family]]
+            draw_ids = sorted({int(row["draw"]) for row in rows})
+            per_draw: dict[str, dict] = {}
+            for draw in draw_ids:
+                cells = [row for row in rows if int(row["draw"]) == draw]
+                deltas = [float(row[family][arm]["paired_delta"]) for row in cells]
+                per_draw[f"draw{draw}"] = {
+                    "mean_delta": float(np.mean(deltas)),
+                    "positive_folds": int(np.sum(np.asarray(deltas) > 0.0)),
+                    "n_folds": len(deltas),
+                    "deltas": deltas,
+                }
+            if quick:
+                out[arm] = {"screen_pass": "quick-mode", "confirm_draw": None,
+                            "confirmation_eligible": False, "per_draw": per_draw, "PASS": None}
+                continue
+            screen_ok = all(
+                f"draw{draw}" in per_draw
+                and per_draw[f"draw{draw}"]["n_folds"] == 4
+                and per_draw[f"draw{draw}"]["mean_delta"] + 1e-12 >= 0.005
+                and per_draw[f"draw{draw}"]["positive_folds"] >= 3
+                for draw in (0, 1)
+            )
+            confirm = next((f"draw{draw}" for draw in (2, 3)
+                            if f"draw{draw}" in per_draw
+                            and per_draw[f"draw{draw}"]["n_folds"] == 4
+                            and per_draw[f"draw{draw}"]["mean_delta"] + 1e-12 >= 0.005
+                            and per_draw[f"draw{draw}"]["positive_folds"] >= 3), None) if screen_ok else None
+            out[arm] = {"screen_pass": bool(screen_ok), "confirm_draw": confirm,
+                        "confirmation_eligible": bool(screen_ok), "per_draw": per_draw,
+                        "PASS": bool(screen_ok and confirm is not None)}
+    return out
+
+
 def reaggregate_existing() -> int:
     """Refresh only the gate summary from saved fold rows; do not refit any models."""
     hold_path = paths.EVIDENCE / "h29_holdout.json"

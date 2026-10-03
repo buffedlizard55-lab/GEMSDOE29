@@ -168,7 +168,7 @@ def restore_assembled(item: dict, dest: Path, *, verify_only: bool) -> tuple[str
             status.append("cached-part")
         elif verify_only:
             # A mirror may contain the split parts under its original upstream names.
-            key, src, rel = (part.get("source"), MANIFEST["sources"].get(part.get("source"), {}), part.get("source_path"))
+            key, rel = part.get("source"), part.get("source_path")
             mirror = LOCAL_MIRRORS.get(key) if key else None
             mirror_part = mirror / rel if mirror and rel else None
             if mirror_part and matches(mirror_part, part):

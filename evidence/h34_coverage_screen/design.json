@@ -1,0 +1,79 @@
+{
+  "experiment": "H34 metric-native coverage emission screen",
+  "preregistration": "knowledge/08_preregistered_h34_coverage_emission_2026-10-03.md",
+  "protocol": "paired, same fitted model and score field per (fold, draw); four fresh/registered arms",
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "draws": [
+    20,
+    21
+  ],
+  "draw_seed_inventory": {
+    "used_before": "0-13 (0-9 on main, 10-13 frozen H31)",
+    "this_screen": [
+      20,
+      21
+    ]
+  },
+  "arms": [
+    "C0_ordered_dots",
+    "C1_geodesic_dots",
+    "C2_coverage_rule",
+    "C3_coverage_binary"
+  ],
+  "primary": "C2_coverage_rule",
+  "controls": [
+    "C0_ordered_dots",
+    "C1_geodesic_dots"
+  ],
+  "gates": {
+    "min_mean_gain": 0.001,
+    "min_positive_folds": 3,
+    "max_fold_loss": -0.01,
+    "max_budget_ratio": 3.0
+  },
+  "constants": {
+    "k_frac": 0.0245,
+    "min_dist_px": 2.4,
+    "radius_px": 3.0,
+    "min_sep_px": 2.0,
+    "gain_floor": 0.02
+  },
+  "git": {
+    "branch": "arena/01a10240-gemsdoe29",
+    "revision": "b098c3b1852c9164ba61439b98a36f20d4a013f3",
+    "dirty": true
+  },
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6",
+    "packages": {
+      "rasterio": "1.4.4",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.17.1",
+      "numpy": "2.4.6"
+    }
+  },
+  "inputs": {
+    "labels.tif": {
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "bytes": 425830
+    },
+    "sample_submission.tif": {
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "bytes": 1599597
+    },
+    "training_features.tif": {
+      "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+      "bytes": 418912844
+    },
+    "external/derived_sgmc_faults_100m_u8.tif": {
+      "sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+      "bytes": 198602
+    }
+  }
+}

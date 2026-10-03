@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-03",
+  "novelty_boundary": "The initial candidate slate was drafted before the H31 feature prototype was implemented on arena/01a10075-gemsdoe29, based at ad130c8. After rebasing onto current main, the review includes the in-repository H29 raw-RTP/gravity worming screen. H31 is not a novel worming category: its regularized RTP vertical-integration transform and explicit drift increment remain unfit and untested on spatial holdouts. After the H34 screen (2026-10-03), H34 is reported as a negative method result, and H35-H39 are registered as the next candidate slate (H35 interaction zones, H36 MT conductance edges, H37 geothermometry, H38 worm convergence/azimuth, H39 Euler depths). Novelty claims apply only to the reviewed repositories, not all competitors.",
+  "items": [
+    {
+      "id": "H32",
+      "rank": 1,
+      "title": "Asymmetric fault-scarp cross-profile shape",
+      "status": "unimplemented; first candidate for a new preregistration after the main-branch review",
+      "layers": [
+        "L_step_max",
+        "L_cross_max",
+        "L_downface_max",
+        "L_upface_max",
+        "L_coh100",
+        "detrended elevation",
+        "detrended slope"
+      ],
+      "signature": "Compare opposing-face steepness and width at a coherent terrain step; a one-sided scarp may be more fault-like than a symmetric channel bank, ridge or bench.",
+      "why_unmapped": "Fault scarps may retain terrain expression even when USGS/INGENIOUS trace layers omit the fault.",
+      "difference": "At GEMSDOE25 commit efc4be7bb3cfdf2def12a7fb83284d3311ac9220, the code dequantizes downface_max/upface_max as separate inputs; H30-1 uses a step × cross-profile × coherence composite and H30-3 registers cross-profile scale persistence. The raw 1-m scarp-template idea is deferred. A repository-wide search of code, tests, hypotheses and knowledge at that commit found no normalized opposing-face asymmetry ratio. H32 tests that specific derived shape ratio, not another scarp-magnitude product.",
+      "planning_delta_dti": "0 to +0.006 (low-confidence planning bracket only; not an observed result)",
+      "cost": "about 1 day; uses existing owner-derived 3DEP descriptors",
+      "external_data": "none for an initial test; any new DEM tiles would require free official USGS 3DEP availability and coverage verification first",
+      "validation": "must be preregistered and evaluated on spatially blocked folds before any slot is considered"
+    },
+    {
+      "id": "H31",
+      "rank": 2,
+      "title": "Regularized pseudogravity transform and edge-drift increment",
+      "status": "prototype implemented; frozen screen ran and failed (feature sparsity); no confirmation; new continuous field requires a separate preregistration",
+      "layers": [
+        "rtp",
+        "iso_grav_anom"
+      ],
+      "signature": "Apply a documented low-wavenumber-regularized vertical-integration pseudogravity proxy to RTP, track horizontal-gradient maxima across the fixed continuation ladder, and test lateral drift separately from persistence; include a symmetric 200-m cross-field support term.",
+      "why_unmapped": "A buried susceptibility boundary may yield a coherent gravity-equivalent edge and scale-dependent lateral path where no surface trace is mapped in USGS/INGENIOUS; this is a structural hypothesis, not a depth/fault proof.",
+      "difference": "The H29 experiment already ran raw-RTP and isostatic-gravity worming, joint persistence, and persistence as gate/rank/head features; all four arms failed its +0.005 proxy bar. H31 tests only a different magnetic transform (regularized vertical integration before continuation) and an explicit drift feature. It must not be presented as a first test of worming or persistence.",
+      "planning_delta_dti": "0 to +0.003 (low-confidence planning bracket, reduced after the H29 negative proxy screen)",
+      "cost": "about 1–2 days for restored inputs, cache rebuild, paired screen and audit; feature code exists but no fit has run",
+      "external_data": "none required for this first test",
+      "validation": "four spatial catalogue-gap folds; two screen draws; fresh confirmation draws only after all gates pass"
+    },
+    {
+      "id": "H33",
+      "rank": 3,
+      "title": "Acquisition-line nuisance subspace / cross-line support",
+      "status": "blocked; no implementation",
+      "layers": [
+        "rtp",
+        "tmi",
+        "isostatic gravity edges",
+        "verified GeoDAWN flight-line geometry",
+        "optional terrain or radiometric support"
+      ],
+      "signature": "Detect magnetic edge energy aligned to repeated survey flight lines and down-rank it unless it persists across continuation scales or is corroborated by another physical field.",
+      "why_unmapped": "A real structural edge missed by USGS/INGENIOUS should not be systematically locked to the survey-flight geometry; geometry-aware artifact control could preserve cross-line fault evidence while suppressing acquisition imprints. This is an artifact-control test, not a direct fault detector.",
+      "difference": "H29 measured an E–W/N–S persistence audit and registered a spectral-notch experiment (H29-3); H33 would instead use verified spatial flight-path geometry as a per-location nuisance control. The concept is adjacent to prior line-artifact work and is lower-ranked/blocked until the official binary and its schema/CRS/coverage/licence are validated.",
+      "planning_delta_dti": "0 to +0.005 (very-low-confidence planning bracket only)",
+      "cost": "about 2–4 days after prerequisites",
+      "external_data": "USGS ScienceBase DOI 10.5066/P93LGLVQ lists flight-path ZIPs, but binaries, schema, CRS, coverage and rights remain unvalidated. Do not download/use until verified.",
+      "validation": "blocked until official files are obtained through permitted means and their bytes, schema, CRS, coverage and licence are independently checked"
+    },
+    {
+      "id": "H34",
+      "rank": "method",
+      "title": "Metric-native coverage emission (preregistered method test)",
+      "status": "screened 2026-10-03: FAIL on the catalogue-hidden primary proxy (mean paired gain -0.0212, 0/4 folds), PASS on the SGMC off-catalogue secondary (+0.0535, 4/4); not eligible for confirmation",
+      "layers": [
+        "ridge NMS probability field (BDE+X1-X3+H27 model)",
+        "triangular kernel r=3 px",
+        "greedy residual covering",
+        "per-dot budget snapping"
+      ],
+      "signature": "Residual-greedy covering of the fitted probability field with the budget chosen by the metric's own marginal rule (emit while c/f > tau = 0.2*TP/(0.2*FP+0.8*|G|)), replacing distance-rule dot thinning.",
+      "why_unmapped": "Not a geological layer: it changes where a fixed detector's prediction mass goes, and is measured on the same holdout and the same off-catalogue class as the geological arms.",
+      "difference": "Every prior emission in the group is a spacing rule (dot_thin, geodesic dots, wormrank ordering). H34 is the first emission chosen by the metric's marginal algebra and the first with a calibrated-budget obligation; its negative primary result is retained.",
+      "planning_delta_dti": "measured: -0.0212 mean paired gain on the catalogue-hidden proxy; +0.0535 on the SGMC off-catalogue proxy (32 paired cells)",
+      "cost": "done; evidence/h34_coverage_screen/summary.json",
+      "external_data": "none",
+      "validation": "frozen gate in knowledge/08_preregistered_h34_coverage_emission_2026-10-03.md; result in knowledge/09_h34_results_2026-10-03.md"
+    },
+    {
+      "id": "H35",
+      "rank": 1,
+      "title": "Structural-interaction-zone field with dilation-tendency weighting",
+      "status": "specified; not implemented; ranked first for the next preregistration",
+      "layers": [
+        "visible-catalogue geometry (labels/existing_faults)",
+        "L_step_max/L_cross_max/L_coh100/L_strike_c2/s2",
+        "A_mag_hg_ridge/A_grav_hg_ridge",
+        "geod_shearrate/geod_dilaterate/geod_2ndinv",
+        "D_ThK/D_UK"
+      ],
+      "signature": "Explicit interaction-zone objects: overlapping sub-parallel trace tips inside a 0.5-3 km relay window, terminations/horse-tails, and normal x transverse intersections; each weighted by dilation tendency from the regional stress field and corroborated by an independent field (scarp step+coherence, potential-field ridge, or radiometric contrast).",
+      "why_unmapped": "Step-overs/relay ramps host 32-47% of Great Basin geothermal systems and terminations 22-25%, while range-front faults host ~1% (Faulds & Hinz 2015; Gidden & Faulds 2025). Catalogue mapping follows through-going strands and systematically misses short overlapping strands - the geometry the organizer says the hidden labels add.",
+      "difference": "Family E is distance/orientation/density around visible faults; H27_tip is a single-tip continuation; H30-1 (paired-tip bridge x scarp) failed fresh-draw confirmation. H35 pairs tips inside a relay window, weights by dilation tendency rather than distance-to-trace, and adds transverse-intersection objects.",
+      "planning_delta_dti": "0 to +0.030 (low-confidence planning bracket; not observed)",
+      "cost": "about 1-2 days",
+      "external_data": "optional USGS slip/dilation-tendency shapefile (Siler 2022, DOI 10.5066/P9YL58W6); metadata verified, sciencebase.gov unreachable from the sandbox, so the hypothesis is written to run without it",
+      "validation": "two-proxy admission (off-catalogue class >=3/4 folds positive; catalogue-hidden loss <=0.005) on fresh draws, preregistered before fitting"
+    },
+    {
+      "id": "H36",
+      "rank": 2,
+      "title": "Magnetotelluric conductance structural edges and cross-fault asymmetry",
+      "status": "specified; not implemented",
+      "layers": [
+        "cond_surf",
+        "depth_to_base_surf",
+        "tc",
+        "family-A ridges"
+      ],
+      "signature": "Ridge of |grad cond| with across-edge non-maximum suppression plus a discrete conductance-step (asymmetry) test and coherence with a potential-field lineament.",
+      "why_unmapped": "MT sees through cover: a blind fault that still controls fluid flow produces a subsurface conductivity boundary with no surface scarp, so a scarp-based catalogue cannot contain it.",
+      "difference": "The repository carries raw conductance gradients as features; no reviewed repository applies a structural edge plus step-asymmetry transform to the MT surfaces.",
+      "planning_delta_dti": "0 to +0.010 (low confidence; the thermal/geochemical family was inert as tested in the predecessor factorial)",
+      "cost": "about 0.5-1 day",
+      "external_data": "optional Peacock & Bedrosian (2022) electrical-conductance maps, DOI 10.5066/P9TWT2LU (same sandbox limitation)",
+      "validation": "off-catalogue proxy primary, catalogue-hidden reported"
+    },
+    {
+      "id": "H37",
+      "rank": 3,
+      "title": "Geothermometry residual and spring-cluster geometry",
+      "status": "specified; the naive 2 m-probe version (H29-2) failed its registered proxy gate",
+      "layers": [
+        "GDR 1391 well/spring chemistry (quartz, chalcedony, Na-K-Ca temperatures)",
+        "radiometric heat-production ratios",
+        "MT depth-to-base"
+      ],
+      "signature": "Kernel-smoothed residual of chemistry-derived reservoir temperature against the regional heat-flow trend, weighted by spring/well clustering and restricted to off-catalogue habitat.",
+      "why_unmapped": "A heat-flow anomaly with no mapped fault is the classic blind-system signature: heat requires a permeable pathway, and the pathway is a fault that mapping missed.",
+      "difference": "H29-2 used residualized 2 m air-affected probe temperature; the chemistry-derived geothermometer columns of the same hash-pinned file have not been used as a spatial field anywhere in the reviewed repositories.",
+      "planning_delta_dti": "0 to +0.015 (very low confidence; prior negative on the naive temperature version)",
+      "cost": "about 1 day",
+      "external_data": "none beyond the mirrored GDR 1391 table",
+      "validation": "off-catalogue proxy primary"
+    },
+    {
+      "id": "H38",
+      "rank": 4,
+      "title": "Worm convergence size and cross-field azimuth consistency",
+      "status": "specified; not implemented",
+      "layers": [
+        "rtp magnetic",
+        "iso_grav_anom gravity",
+        "continuation ladder 0-1200 m (H31 machinery)"
+      ],
+      "signature": "(a) convergence size: how many 0-m edge seeds merge into one worm at the top of the ladder (a large basin of attraction implies one deep extensive source); (b) azimuth agreement between magnetic and gravity gradient directions within 300 m.",
+      "why_unmapped": "Blind faults keep a coherent deep potential-field edge with no surface expression; convergence plus cross-field azimuth coherence discriminates real buried structure from acquisition lineation and cultural noise better than amplitude or persistence alone.",
+      "difference": "H29 tested persistence only (gate/rank/features) and a line-orientation audit; H31 tests pseudogravity persistence and lateral drift. Convergence statistics and directional (azimuth) agreement are new to this family.",
+      "planning_delta_dti": "0 to +0.008 (very low confidence; prior negatives on related persistence variants)",
+      "cost": "about 1 day",
+      "external_data": "none",
+      "validation": "off-catalogue proxy primary; azimuth agreement must be reported against the flight-line azimuth"
+    },
+    {
+      "id": "H39",
+      "rank": 5,
+      "title": "Euler-deconvolution depth selection with two-field depth consistency",
+      "status": "specified; not implemented",
+      "layers": [
+        "rtp",
+        "iso_grav_anom",
+        "H31 pseudogravity proxy as cross-check"
+      ],
+      "signature": "Window-based Euler deconvolution (structural index 0-1 for contacts/thin sheets; Reid et al. 1990) producing a per-cluster depth; retain edges only where the depth is resolved and deep, magnetic and gravity depths agree within tolerance, and the edge is off-catalogue.",
+      "why_unmapped": "Explicit depth filtering removes shallow cultural and near-surface-conductor edges that a persistence proxy only weakly separates; a deep two-field-consistent edge with no surface trace is a blind-fault candidate.",
+      "difference": "Persistence under upward continuation is an implicit depth proxy; no reviewed repository computes Euler depths or a cross-field depth-agreement test.",
+      "planning_delta_dti": "0 to +0.008 (very low confidence; Euler is sensitive to structural index and window size)",
+      "cost": "about 1-2 days",
+      "external_data": "none",
+      "validation": "report the SI/window sensitivity table alongside the screen"
+    }
+  ]
+}

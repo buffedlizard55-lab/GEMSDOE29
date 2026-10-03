@@ -135,7 +135,7 @@
     },
     "sha256_receipt:gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.zip": {
       "pass": true,
-      "detail": "actual=e4103c30714e97510681322cfc583f6e99f2bb7940d8be1c113aa3997cfb6081, build_receipt=e4103c30714e97510681322cfc583f6e99f2bb7940d8be1c113aa3997cfb6081"
+      "detail": "actual=152432713373371eb22055fdd8990b31d8d8cb2ca522564603f58d536b5f77e2, build_receipt=152432713373371eb22055fdd8990b31d8d8cb2ca522564603f58d536b5f77e2"
     }
   },
   "files": {
@@ -149,11 +149,11 @@
     },
     "gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.zip": {
       "bytes": 311391,
-      "sha256": "e4103c30714e97510681322cfc583f6e99f2bb7940d8be1c113aa3997cfb6081"
+      "sha256": "152432713373371eb22055fdd8990b31d8d8cb2ca522564603f58d536b5f77e2"
     }
   },
   "independent_verification": "scripts/verify_downloads.py",
-  "independent_verification_utc": "2026-10-03T16:08:38Z",
+  "independent_verification_utc": "2026-10-03T16:33:03Z",
   "independent_verification_files": {
     "gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.tif": {
       "bytes": 1567816,
@@ -165,7 +165,7 @@
     },
     "gems29-wormrank-d28-20261003-59dcaf6dd11d-nan.zip": {
       "bytes": 311391,
-      "sha256": "e4103c30714e97510681322cfc583f6e99f2bb7940d8be1c113aa3997cfb6081"
+      "sha256": "152432713373371eb22055fdd8990b31d8d8cb2ca522564603f58d536b5f77e2"
     }
   }
 }

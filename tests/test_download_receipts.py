@@ -1,6 +1,6 @@
 import hashlib
 
-from scripts.verify_downloads import receipt_after_verification, verify_build_hashes
+from verify_downloads import receipt_after_verification, verify_build_hashes
 
 
 def test_hash_mismatch_cannot_rebase_build_receipt(tmp_path):

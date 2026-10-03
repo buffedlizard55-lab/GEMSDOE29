@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/build_submission_contract.py",
+  "verified_local_date": "2026-10-03",
+  "source_ids": [
+    "dd-problem",
+    "dd-rules"
+  ],
+  "provenance": "Official submission/metric facts transcribed from the linked competition page and NLR rules; manually checked in the 2026-10-03 source review. No leaderboard or DrivenData API was accessed.",
+  "format": {
+    "band_count": 1,
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "pixel_size_m": 100,
+    "probability_min": 0.0,
+    "probability_max": 1.0,
+    "outside_footprint": "NaN"
+  },
+  "metric": {
+    "support_radius_m": 300,
+    "alpha": 0.2,
+    "beta": 0.8
+  },
+  "rules": {
+    "rules_year": 2026,
+    "weekly_feedback_max": 3,
+    "final_prediction_count": 1,
+    "prize_round_count": 2,
+    "ai_use_disclosure_required_when_applicable": true
+  }
+}

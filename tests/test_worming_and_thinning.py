@@ -6,7 +6,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from gems29.thinning import dot_thin
 from gems29.thinning import dot_thin_ranked
-from gems29.worming import prep_field, upward_continue, hgm, directional_max  # noqa: E402
+from gems29.worming import prep_field, upward_continue  # noqa: E402
 
 
 def test_dot_thin_subset_and_spacing():
@@ -90,7 +90,8 @@ def test_upward_continuation_equals_source_depth_shift():
     _, _, mag_r = hgm(ref - ref.mean())
     # correlation of the gradient profiles away from the taper
     lo, hi = 60, W - 60
-    a = mag_c[H // 2, lo:hi].ravel(); rr = mag_r[H // 2, lo:hi].ravel()
+    a = mag_c[H // 2, lo:hi].ravel()
+    rr = mag_r[H // 2, lo:hi].ravel()
     corr = float(np.corrcoef(a, rr)[0, 1])
     assert corr > 0.97, f"UC profile not depth-equivalent: corr={corr}"
     # amplitude retention: peak |HGM| of the continued deep dike exceeds the continued shallow one

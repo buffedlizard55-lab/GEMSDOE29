@@ -10,7 +10,6 @@ from gems29.features import add_h29_5_interactions  # noqa: E402
 
 
 def toy_features():
-    shape = (2, 2)
     return {
         "worm_joint_persist": np.array([[1.0, 1.0], [0.5, 0.8]], np.float32),
         "worm_joint_defined": np.array([[1.0, 0.0], [1.0, 1.0]], np.float32),

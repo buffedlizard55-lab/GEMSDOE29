@@ -9,9 +9,10 @@ catalogue components with the catalogue-masking metric semantics disclosed in me
        priority = 0.5*jointP + 0.5*ridge_score,  ridge = mean of lidar ex_max, step_max, relief
   B0/B1/B2 heads   : top-K of dense head probability (K = A0 quadrant pixel count), raw / +worm / +thermal
 
-The parent solid is the mirrored H19-5 emission (owner-reported live 0.1922), NOT a re-run of the
-19GEMSDOE recipe: this session tests the emission-side effect of worming on the exact bytes that
-produced the live scores, which keeps every comparison same-run and paired.
+The parent solid is an owner-mirrored H19-5 emission associated with an unverified owner-reported
+score claim; it is NOT a re-run of the 19GEMSDOE recipe. This screen tests the emission-side effect
+of worming on fixed local bytes, which keeps every comparison same-run and paired. No leaderboard
+receipt or score is used by the code.
 """
 
 from __future__ import annotations

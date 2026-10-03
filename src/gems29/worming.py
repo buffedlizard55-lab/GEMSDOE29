@@ -232,7 +232,10 @@ def run_field(field_name: str, values: np.ndarray, valid: np.ndarray, *, out_dir
     gridio.write_raster(strike, tag.parent / f"{tag.name}_strike.tif", valid=mask)
 
     n_edges = int(edges[0].sum())
-    frac = lambda condition: float(np.mean(condition)) if n_edges else 0.0
+
+    def frac(condition: np.ndarray) -> float:
+        return float(np.mean(condition)) if n_edges else 0.0
+
     receipt = {
         "field": field_name, "ladder_m": list(ladder),
         "edge_quantile": EDGE_QUANTILE, "tol_px": TOL_PX,

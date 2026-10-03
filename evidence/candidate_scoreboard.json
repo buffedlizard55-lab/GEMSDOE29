@@ -1,0 +1,571 @@
+{
+  "targets": {
+    "catalogue_hidden": "masked DTI on hidden catalogue components, 4 folds x draws 20/21 (catalogue-gap proxy)",
+    "sgmc_off_catalogue": "masked DTI against state-map faults >=300 m from the supplied catalogue"
+  },
+  "files": {
+    "docs/downloads/gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif": {
+      "name": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+      "catalogue_hidden_mean": 0.04461429913430731,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.04733632747233392,
+        "draw21": 0.04189227079628071
+      },
+      "catalogue_hidden_folds": {
+        "draw20_fold0": {
+          "dti": 0.032618432993081176,
+          "coverage": 0.04858889716196119,
+          "tp": 92.85338247650785,
+          "fp": 6496.41504169051,
+          "n_truth": 1911,
+          "emitted": 6627
+        },
+        "draw20_fold1": {
+          "dti": 0.050833721716751844,
+          "coverage": 0.11262327605567134,
+          "tp": 264.7773220068833,
+          "fp": 16374.694713854768,
+          "n_truth": 2351,
+          "emitted": 16681
+        },
+        "draw20_fold2": {
+          "dti": 0.04143042455731208,
+          "coverage": 0.052179649264385286,
+          "tp": 192.28200753925978,
+          "fp": 8273.12918359235,
+          "n_truth": 3685,
+          "emitted": 8454
+        },
+        "draw20_fold3": {
+          "dti": 0.06446273062219056,
+          "coverage": 0.0924346930011015,
+          "tp": 298.10188492855235,
+          "fp": 9923.931733942685,
+          "n_truth": 3225,
+          "emitted": 10252
+        },
+        "draw21_fold0": {
+          "dti": 0.02560849718114508,
+          "coverage": 0.036450841068179224,
+          "tp": 76.94772549492635,
+          "fp": 6502.9181710599605,
+          "n_truth": 2111,
+          "emitted": 6627
+        },
+        "draw21_fold1": {
+          "dti": 0.04560936468230347,
+          "coverage": 0.10347115069937793,
+          "tp": 234.362156334091,
+          "fp": 16397.96637772934,
+          "n_truth": 2265,
+          "emitted": 16681
+        },
+        "draw21_fold2": {
+          "dti": 0.035472152793151704,
+          "coverage": 0.04509152715662553,
+          "tp": 161.60803332934591,
+          "fp": 8281.95573718403,
+          "n_truth": 3584,
+          "emitted": 8454
+        },
+        "draw21_fold3": {
+          "dti": 0.06087906852852259,
+          "coverage": 0.08877476195177403,
+          "tp": 275.2017620504995,
+          "fp": 9927.12845555756,
+          "n_truth": 3100,
+          "emitted": 10252
+        }
+      },
+      "catalogue_hidden_folds_positive_vs_zero": 1.0,
+      "sgmc_off_catalogue": {
+        "dti": 0.5615349882569801,
+        "coverage": 0.5623088831299062,
+        "tp": 35258.45389889451,
+        "fp": 27876.62541206312,
+        "n_truth": 62703
+      },
+      "emitted_pixels": 44090,
+      "hug_share": 0.10326604672261283,
+      "on_catalogue_pixels": 647,
+      "format_check": {
+        "file": "gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif",
+        "bytes": 1602242,
+        "sha256": "9b83158bde01cd5d42e38229d70d01e67cecd2514eeb5fa8d1f3ab6851469dad",
+        "ok_to_upload": true,
+        "hard_failures": [],
+        "official_nan_outside": true,
+        "positive_pixels": 44090,
+        "footprint_pixels": 5167373,
+        "checks": {
+          "template_matches_expected_grid_and_footprint": {
+            "pass_": true,
+            "detail": "(3730, 3292), footprint 5,167,373 px",
+            "hard": true
+          },
+          "single_band": {
+            "pass_": true,
+            "detail": "count=1",
+            "hard": true
+          },
+          "dtype_float32": {
+            "pass_": true,
+            "detail": "dtypes=('float32',)",
+            "hard": true
+          },
+          "crs_epsg_32611": {
+            "pass_": true,
+            "detail": "32611",
+            "hard": true
+          },
+          "shape_matches_template": {
+            "pass_": true,
+            "detail": "(3730, 3292) vs (3730, 3292)",
+            "hard": true
+          },
+          "geotransform_matches_template": {
+            "pass_": true,
+            "detail": "(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)",
+            "hard": true
+          },
+          "footprint_all_finite": {
+            "pass_": true,
+            "detail": "0 NaN/Inf inside the 5,167,373-px footprint",
+            "hard": true
+          },
+          "footprint_values_in_0_1": {
+            "pass_": true,
+            "detail": "min=0.0 max=1.0",
+            "hard": true
+          },
+          "outside_footprint_is_nan_official": {
+            "pass_": true,
+            "detail": "7,111,787/7,111,787 NaN",
+            "hard": false
+          },
+          "outside_footprint_is_nan_or_zero": {
+            "pass_": true,
+            "detail": "NaN (official) or 0 (fallback) outside",
+            "hard": true
+          },
+          "nan_mask_identical_to_template": {
+            "pass_": true,
+            "detail": "NaN pixels exactly equal the template's NaN pixels (or none at all)",
+            "hard": true
+          },
+          "nodata_tag": {
+            "pass_": true,
+            "detail": "nodata=nan",
+            "hard": false
+          },
+          "variant_nan_aware_whole_array": {
+            "pass_": true,
+            "detail": "np.nanmin/np.nanmax over the whole array",
+            "hard": true
+          },
+          "variant_masked_read": {
+            "pass_": true,
+            "detail": "rasterio masked read",
+            "hard": true
+          },
+          "variant_strict_whole_array_no_nan": {
+            "pass_": false,
+            "detail": "((a>=0)&(a<=1)).all(): False for ANY NaN, including outside the owner-mirror template footprint",
+            "hard": false
+          },
+          "profile_matches_template": {
+            "pass_": true,
+            "detail": "compress=lzw (template lzw)",
+            "hard": false
+          }
+        }
+      }
+    },
+    "docs/downloads/gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif": {
+      "name": "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif",
+      "catalogue_hidden_mean": 0.09832378835029429,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.1056920987446421,
+        "draw21": 0.09095547795594647
+      },
+      "catalogue_hidden_folds": {
+        "draw20_fold0": {
+          "dti": 0.09569325322575749,
+          "coverage": 0.17507170656925544,
+          "tp": 334.5620312538471,
+          "fp": 9502.400312819991,
+          "n_truth": 1911,
+          "emitted": 9655
+        },
+        "draw20_fold1": {
+          "dti": 0.1095693423654994,
+          "coverage": 0.19497933510737883,
+          "tp": 458.39641683744765,
+          "fp": 11055.700147864947,
+          "n_truth": 2351,
+          "emitted": 11261
+        },
+        "draw20_fold2": {
+          "dti": 0.06986244455249088,
+          "coverage": 0.10031624292045675,
+          "tp": 369.66535516188316,
+          "fp": 11346.992261302588,
+          "n_truth": 3685,
+          "emitted": 11507
+        },
+        "draw20_fold3": {
+          "dti": 0.14764335483482066,
+          "coverage": 0.20197556232371905,
+          "tp": 651.3711884939939,
+          "fp": 8507.56906005176,
+          "n_truth": 3225,
+          "emitted": 8771
+        },
+        "draw21_fold0": {
+          "dti": 0.10087117112078586,
+          "coverage": 0.17493044721480533,
+          "tp": 369.27817407045404,
+          "fp": 9491.167484550046,
+          "n_truth": 2111,
+          "emitted": 9655
+        },
+        "draw21_fold1": {
+          "dti": 0.10442317143126101,
+          "coverage": 0.18956388102175772,
+          "tp": 429.3621905142812,
+          "fp": 11069.398121916787,
+          "n_truth": 2265,
+          "emitted": 11261
+        },
+        "draw21_fold2": {
+          "dti": 0.0650373547266706,
+          "coverage": 0.09447894698936335,
+          "tp": 338.61254600987826,
+          "fp": 11357.546005521417,
+          "n_truth": 3584,
+          "emitted": 11507
+        },
+        "draw21_fold3": {
+          "dti": 0.09349021454506837,
+          "coverage": 0.12911455140059816,
+          "tp": 400.2551093418543,
+          "fp": 8606.001752950204,
+          "n_truth": 3100,
+          "emitted": 8771
+        }
+      },
+      "catalogue_hidden_folds_positive_vs_zero": 1.0,
+      "sgmc_off_catalogue": {
+        "dti": 0.09528236525789707,
+        "coverage": 0.09057505387996088,
+        "tp": 5679.3276034351875,
+        "fp": 41534.83852151584,
+        "n_truth": 62703
+      },
+      "emitted_pixels": 44090,
+      "hug_share": 0.18748015422998413,
+      "on_catalogue_pixels": 0,
+      "format_check": {
+        "file": "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif",
+        "bytes": 1573188,
+        "sha256": "5f963b8bca5ec226ddc7caaadec239c6be6d28aa567f890033be04d04bfd5e32",
+        "ok_to_upload": true,
+        "hard_failures": [],
+        "official_nan_outside": true,
+        "positive_pixels": 44090,
+        "footprint_pixels": 5167373,
+        "checks": {
+          "template_matches_expected_grid_and_footprint": {
+            "pass_": true,
+            "detail": "(3730, 3292), footprint 5,167,373 px",
+            "hard": true
+          },
+          "single_band": {
+            "pass_": true,
+            "detail": "count=1",
+            "hard": true
+          },
+          "dtype_float32": {
+            "pass_": true,
+            "detail": "dtypes=('float32',)",
+            "hard": true
+          },
+          "crs_epsg_32611": {
+            "pass_": true,
+            "detail": "32611",
+            "hard": true
+          },
+          "shape_matches_template": {
+            "pass_": true,
+            "detail": "(3730, 3292) vs (3730, 3292)",
+            "hard": true
+          },
+          "geotransform_matches_template": {
+            "pass_": true,
+            "detail": "(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)",
+            "hard": true
+          },
+          "footprint_all_finite": {
+            "pass_": true,
+            "detail": "0 NaN/Inf inside the 5,167,373-px footprint",
+            "hard": true
+          },
+          "footprint_values_in_0_1": {
+            "pass_": true,
+            "detail": "min=0.0 max=1.0",
+            "hard": true
+          },
+          "outside_footprint_is_nan_official": {
+            "pass_": true,
+            "detail": "7,111,787/7,111,787 NaN",
+            "hard": false
+          },
+          "outside_footprint_is_nan_or_zero": {
+            "pass_": true,
+            "detail": "NaN (official) or 0 (fallback) outside",
+            "hard": true
+          },
+          "nan_mask_identical_to_template": {
+            "pass_": true,
+            "detail": "NaN pixels exactly equal the template's NaN pixels (or none at all)",
+            "hard": true
+          },
+          "nodata_tag": {
+            "pass_": true,
+            "detail": "nodata=nan",
+            "hard": false
+          },
+          "variant_nan_aware_whole_array": {
+            "pass_": true,
+            "detail": "np.nanmin/np.nanmax over the whole array",
+            "hard": true
+          },
+          "variant_masked_read": {
+            "pass_": true,
+            "detail": "rasterio masked read",
+            "hard": true
+          },
+          "variant_strict_whole_array_no_nan": {
+            "pass_": false,
+            "detail": "((a>=0)&(a<=1)).all(): False for ANY NaN, including outside the owner-mirror template footprint",
+            "hard": false
+          },
+          "profile_matches_template": {
+            "pass_": true,
+            "detail": "compress=lzw (template lzw)",
+            "hard": false
+          }
+        }
+      }
+    },
+    "docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif": {
+      "name": "gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif",
+      "catalogue_hidden_mean": 0.09832378835029429,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.1056920987446421,
+        "draw21": 0.09095547795594647
+      },
+      "catalogue_hidden_folds": {
+        "draw20_fold0": {
+          "dti": 0.09569325322575749,
+          "coverage": 0.17507170656925544,
+          "tp": 334.5620312538471,
+          "fp": 9502.400312819991,
+          "n_truth": 1911,
+          "emitted": 9655
+        },
+        "draw20_fold1": {
+          "dti": 0.1095693423654994,
+          "coverage": 0.19497933510737883,
+          "tp": 458.39641683744765,
+          "fp": 11055.700147864947,
+          "n_truth": 2351,
+          "emitted": 11261
+        },
+        "draw20_fold2": {
+          "dti": 0.06986244455249088,
+          "coverage": 0.10031624292045675,
+          "tp": 369.66535516188316,
+          "fp": 11346.992261302588,
+          "n_truth": 3685,
+          "emitted": 11507
+        },
+        "draw20_fold3": {
+          "dti": 0.14764335483482066,
+          "coverage": 0.20197556232371905,
+          "tp": 651.3711884939939,
+          "fp": 8507.56906005176,
+          "n_truth": 3225,
+          "emitted": 8771
+        },
+        "draw21_fold0": {
+          "dti": 0.10087117112078586,
+          "coverage": 0.17493044721480533,
+          "tp": 369.27817407045404,
+          "fp": 9491.167484550046,
+          "n_truth": 2111,
+          "emitted": 9655
+        },
+        "draw21_fold1": {
+          "dti": 0.10442317143126101,
+          "coverage": 0.18956388102175772,
+          "tp": 429.3621905142812,
+          "fp": 11069.398121916787,
+          "n_truth": 2265,
+          "emitted": 11261
+        },
+        "draw21_fold2": {
+          "dti": 0.0650373547266706,
+          "coverage": 0.09447894698936335,
+          "tp": 338.61254600987826,
+          "fp": 11357.546005521417,
+          "n_truth": 3584,
+          "emitted": 11507
+        },
+        "draw21_fold3": {
+          "dti": 0.09349021454506837,
+          "coverage": 0.12911455140059816,
+          "tp": 400.2551093418543,
+          "fp": 8606.001752950204,
+          "n_truth": 3100,
+          "emitted": 8771
+        }
+      },
+      "catalogue_hidden_folds_positive_vs_zero": 1.0,
+      "sgmc_off_catalogue": {
+        "dti": 0.09528236525789707,
+        "coverage": 0.09057505387996088,
+        "tp": 5679.3276034351875,
+        "fp": 41534.83852151584,
+        "n_truth": 62703
+      },
+      "emitted_pixels": 44090,
+      "hug_share": 0.18748015422998413,
+      "on_catalogue_pixels": 0,
+      "format_check": {
+        "file": "gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif",
+        "bytes": 1603424,
+        "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+        "ok_to_upload": true,
+        "hard_failures": [],
+        "official_nan_outside": true,
+        "positive_pixels": 44090,
+        "footprint_pixels": 5167373,
+        "checks": {
+          "template_matches_expected_grid_and_footprint": {
+            "pass_": true,
+            "detail": "(3730, 3292), footprint 5,167,373 px",
+            "hard": true
+          },
+          "single_band": {
+            "pass_": true,
+            "detail": "count=1",
+            "hard": true
+          },
+          "dtype_float32": {
+            "pass_": true,
+            "detail": "dtypes=('float32',)",
+            "hard": true
+          },
+          "crs_epsg_32611": {
+            "pass_": true,
+            "detail": "32611",
+            "hard": true
+          },
+          "shape_matches_template": {
+            "pass_": true,
+            "detail": "(3730, 3292) vs (3730, 3292)",
+            "hard": true
+          },
+          "geotransform_matches_template": {
+            "pass_": true,
+            "detail": "(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)",
+            "hard": true
+          },
+          "footprint_all_finite": {
+            "pass_": true,
+            "detail": "0 NaN/Inf inside the 5,167,373-px footprint",
+            "hard": true
+          },
+          "footprint_values_in_0_1": {
+            "pass_": true,
+            "detail": "min=0.0 max=1.0",
+            "hard": true
+          },
+          "outside_footprint_is_nan_official": {
+            "pass_": true,
+            "detail": "7,111,787/7,111,787 NaN",
+            "hard": false
+          },
+          "outside_footprint_is_nan_or_zero": {
+            "pass_": true,
+            "detail": "NaN (official) or 0 (fallback) outside",
+            "hard": true
+          },
+          "nan_mask_identical_to_template": {
+            "pass_": true,
+            "detail": "NaN pixels exactly equal the template's NaN pixels (or none at all)",
+            "hard": true
+          },
+          "nodata_tag": {
+            "pass_": true,
+            "detail": "nodata=nan",
+            "hard": false
+          },
+          "variant_nan_aware_whole_array": {
+            "pass_": true,
+            "detail": "np.nanmin/np.nanmax over the whole array",
+            "hard": true
+          },
+          "variant_masked_read": {
+            "pass_": true,
+            "detail": "rasterio masked read",
+            "hard": true
+          },
+          "variant_strict_whole_array_no_nan": {
+            "pass_": false,
+            "detail": "((a>=0)&(a<=1)).all(): False for ANY NaN, including outside the owner-mirror template footprint",
+            "hard": false
+          },
+          "profile_matches_template": {
+            "pass_": true,
+            "detail": "compress=lzw (template lzw)",
+            "hard": false
+          }
+        }
+      }
+    }
+  },
+  "reference": "docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif",
+  "deltas": {
+    "docs/downloads/gemsdoe29-sgmc-off-catalogue-44k-20261003-c8dcd780e3fd-nan.tif": {
+      "vs": "docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif",
+      "catalogue_hidden": {
+        "draw20_fold0": -0.06307482023267631,
+        "draw20_fold1": -0.05873562064874755,
+        "draw20_fold2": -0.028432019995178803,
+        "draw20_fold3": -0.0831806242126301,
+        "draw21_fold0": -0.07526267393964078,
+        "draw21_fold1": -0.05881380674895754,
+        "draw21_fold2": -0.0295652019335189,
+        "draw21_fold3": -0.03261114601654578
+      },
+      "catalogue_hidden_mean": -0.05370948921598697
+    },
+    "docs/downloads/gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif": {
+      "vs": "docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif",
+      "catalogue_hidden": {
+        "draw20_fold0": 0.0,
+        "draw20_fold1": 0.0,
+        "draw20_fold2": 0.0,
+        "draw20_fold3": 0.0,
+        "draw21_fold0": 0.0,
+        "draw21_fold1": 0.0,
+        "draw21_fold2": 0.0,
+        "draw21_fold3": 0.0
+      },
+      "catalogue_hidden_mean": 0.0
+    }
+  },
+  "note": "Proxy screens only. Neither target is the organizer's hidden expert label set and neither score is a competition score. Format checks are local."
+}

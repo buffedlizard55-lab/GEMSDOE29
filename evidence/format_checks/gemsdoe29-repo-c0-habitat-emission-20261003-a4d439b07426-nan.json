@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "checked_utc": "2026-10-03T15:52:27.621286+00:00",
+  "checker": "gemsdoe.submission.check_file",
+  "input": "docs/downloads/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif",
+  "input_sha256": "3537e9fc47a465036a8c1462b99a29b7f3449ee2e7bb94fd0a12d438a85b375d",
+  "template": "/tmp/gemsdoe29-data/sample_submission.tif",
+  "template_sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+  "provenance_note": "Local check against the restored owner-mirror template; neither template nor result is organizer-authenticated.",
+  "result": {
+    "file": "gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif",
+    "bytes": 1591482,
+    "sha256": "3537e9fc47a465036a8c1462b99a29b7f3449ee2e7bb94fd0a12d438a85b375d",
+    "ok_to_upload": true,
+    "hard_failures": [],
+    "official_nan_outside": true,
+    "positive_pixels": 37913,
+    "footprint_pixels": 5167373,
+    "checks": {
+      "template_matches_expected_grid_and_footprint": {
+        "pass_": true,
+        "detail": "(3730, 3292), footprint 5,167,373 px",
+        "hard": true
+      },
+      "single_band": {
+        "pass_": true,
+        "detail": "count=1",
+        "hard": true
+      },
+      "dtype_float32": {
+        "pass_": true,
+        "detail": "dtypes=('float32',)",
+        "hard": true
+      },
+      "crs_epsg_32611": {
+        "pass_": true,
+        "detail": "32611",
+        "hard": true
+      },
+      "shape_matches_template": {
+        "pass_": true,
+        "detail": "(3730, 3292) vs (3730, 3292)",
+        "hard": true
+      },
+      "geotransform_matches_template": {
+        "pass_": true,
+        "detail": "(100.0, 0.0, 243350.0, 0.0, -100.0, 4508550.0)",
+        "hard": true
+      },
+      "footprint_all_finite": {
+        "pass_": true,
+        "detail": "0 NaN/Inf inside the 5,167,373-px footprint",
+        "hard": true
+      },
+      "footprint_values_in_0_1": {
+        "pass_": true,
+        "detail": "min=0.0 max=1.0",
+        "hard": true
+      },
+      "outside_footprint_is_nan_official": {
+        "pass_": true,
+        "detail": "7,111,787/7,111,787 NaN",
+        "hard": false
+      },
+      "outside_footprint_is_nan_or_zero": {
+        "pass_": true,
+        "detail": "NaN (official) or 0 (fallback) outside",
+        "hard": true
+      },
+      "nan_mask_identical_to_template": {
+        "pass_": true,
+        "detail": "NaN pixels exactly equal the template's NaN pixels (or none at all)",
+        "hard": true
+      },
+      "nodata_tag": {
+        "pass_": true,
+        "detail": "nodata=nan",
+        "hard": false
+      },
+      "variant_nan_aware_whole_array": {
+        "pass_": true,
+        "detail": "np.nanmin/np.nanmax over the whole array",
+        "hard": true
+      },
+      "variant_masked_read": {
+        "pass_": true,
+        "detail": "rasterio masked read",
+        "hard": true
+      },
+      "variant_strict_whole_array_no_nan": {
+        "pass_": false,
+        "detail": "((a>=0)&(a<=1)).all(): False for ANY NaN, including outside the owner-mirror template footprint",
+        "hard": false
+      },
+      "profile_matches_template": {
+        "pass_": true,
+        "detail": "compress=lzw (template lzw)",
+        "hard": false
+      }
+    }
+  }
+}

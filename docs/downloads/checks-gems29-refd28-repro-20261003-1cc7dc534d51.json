@@ -1,6 +1,6 @@
 {
   "stem": "gems29-refd28-repro-20261003-1cc7dc534d51",
-  "note_to_paste": "GEMSDOE29 REF-D2.8 | owner-reported 0.2600 mask reproduction | DO NOT RESUBMIT; duplicate | 1cc7dc534d51",
+  "note_to_paste": "GEMSDOE29 REFD28 | owner-mirror geometry reproduction | DO NOT RESUBMIT; reference only | 1cc7dc534d51",
   "grid": {
     "crs": "EPSG:32611",
     "width": 3292,
@@ -135,7 +135,7 @@
     },
     "sha256_receipt:gems29-refd28-repro-20261003-1cc7dc534d51-nan.zip": {
       "pass": true,
-      "detail": "actual=1ab45e393e60adf9c2581f77666f43015640ec8a7a132888a86e886297504af9, build_receipt=1ab45e393e60adf9c2581f77666f43015640ec8a7a132888a86e886297504af9"
+      "detail": "actual=a93d817153dea02b4b7cfb13e4c6565a2fbf1c237baf4477aeedb810b7d5fd63, build_receipt=a93d817153dea02b4b7cfb13e4c6565a2fbf1c237baf4477aeedb810b7d5fd63"
     }
   },
   "files": {
@@ -149,11 +149,11 @@
     },
     "gems29-refd28-repro-20261003-1cc7dc534d51-nan.zip": {
       "bytes": 322486,
-      "sha256": "1ab45e393e60adf9c2581f77666f43015640ec8a7a132888a86e886297504af9"
+      "sha256": "a93d817153dea02b4b7cfb13e4c6565a2fbf1c237baf4477aeedb810b7d5fd63"
     }
   },
   "independent_verification": "scripts/verify_downloads.py",
-  "independent_verification_utc": "2026-10-03T16:08:38Z",
+  "independent_verification_utc": "2026-10-03T16:33:03Z",
   "independent_verification_files": {
     "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif": {
       "bytes": 1573188,
@@ -165,7 +165,7 @@
     },
     "gems29-refd28-repro-20261003-1cc7dc534d51-nan.zip": {
       "bytes": 322486,
-      "sha256": "1ab45e393e60adf9c2581f77666f43015640ec8a7a132888a86e886297504af9"
+      "sha256": "a93d817153dea02b4b7cfb13e4c6565a2fbf1c237baf4477aeedb810b7d5fd63"
     }
   }
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independently verify published downloads against template, build receipt and artifact ledger."""
+"""Independently verify the H29 WORMRANK and REFD28 TIFF/ZIP downloads."""
 from __future__ import annotations
 
 import json
@@ -67,9 +67,14 @@ def main() -> int:
     failures = 0
     verified_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
-    for key, art in ledger["artifacts"].items():
+    # The repository ledger also records H31/H34/factorial reports and C0 candidates that use
+    # separate receipt tooling; this verifier is scoped to the two H29 builds it creates.
+    for key in ("WORMRANK", "REFD28"):
+        art = ledger.get("artifacts", {}).get(key, {})
         stem = art.get("stem")
         if not stem:
+            print(f"{key}: missing artifact stem in artifact ledger")
+            failures += 1
             continue
         checks = verify_files(dl, stem, foot_mask=foot, expected_px=art.get("px"))
         receipt_path = dl / f"checks-{stem}.json"

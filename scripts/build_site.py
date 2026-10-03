@@ -1,489 +1,574 @@
 #!/usr/bin/env python3
-"""Render GitHub Pages from hash-pinned registries and experiment evidence."""
+"""Build the static, evidence-only GitHub Pages site from checked-in project registers.
+
+This script is fully offline. It never reads or requests any DrivenData page or endpoint.
+"""
 from __future__ import annotations
 
+import argparse
+import html
 import json
-from datetime import datetime
+import sys
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+DOCS = ROOT / "docs"
 
 
-def J(p):
-    return json.loads((ROOT / p).read_text())
+def read_json(name: str) -> dict[str, Any]:
+    path = ROOT / "registry" / name
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def esc(s):
-    return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+def e(value: Any) -> str:
+    return html.escape(str(value), quote=True)
 
 
-CSS = """
-:root{--bg:#0f1419;--card:#171e26;--tx:#e6edf3;--mut:#8b98a5;--acc:#4aa3df;--ok:#3fb950;--warn:#d29922;--bad:#f85149;--bd:#2d3640}
-@media(prefers-color-scheme:light){:root{--bg:#f6f8fa;--card:#fff;--tx:#1f2328;--mut:#59636e;--bd:#d0d7de;--acc:#0969da;--ok:#1a7f37;--warn:#9a6700;--bad:#cf222e}}
-*{box-sizing:border-box}body{margin:0;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--tx)}
-main{max-width:1060px;margin:0 auto;padding:16px}nav{display:flex;gap:14px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--bd);margin-bottom:18px}
-nav a{color:var(--acc);text-decoration:none;font-weight:600}h1{font-size:26px;margin:.2em 0}h2{font-size:20px;margin-top:1.4em;border-bottom:1px solid var(--bd);padding-bottom:6px}h3{font-size:16px;margin-top:1.2em}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:16px;margin:14px 0}
-.dl{display:inline-block;background:var(--acc);color:#fff!important;font-size:18px;font-weight:700;padding:14px 22px;border-radius:10px;text-decoration:none}
-.dl:hover{filter:brightness(1.1)}table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{border:1px solid var(--bd);padding:6px 9px;text-align:left;vertical-align:top}th{background:var(--card)}
-.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700}
-.b-ok{background:rgba(63,185,80,.15);color:var(--ok)}.b-warn{background:rgba(210,153,34,.15);color:var(--warn)}.b-bad{background:rgba(248,81,73,.15);color:var(--bad)}
-code,pre{background:rgba(127,127,127,.12);border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
-pre{padding:10px;overflow:auto}code{padding:1px 5px}a{color:var(--acc)}
-.mut{color:var(--mut);font-size:13px}.num{font-variant-numeric:tabular-nums}footer{margin:34px 0;color:var(--mut);font-size:12.5px}
-"""
+def a(url: str, label: str, *, external: bool = False, class_name: str = "") -> str:
+    attrs = f' class="{e(class_name)}"' if class_name else ""
+    target = ' target="_blank" rel="noopener noreferrer"' if external else ""
+    return f'<a href="{e(url)}"{attrs}{target}>{e(label)}</a>'
 
 
-def nav_for(root: bool) -> str:
-    if root:
-        home, pref = "index.html", "docs/"
-    else:
-        home, pref = "../index.html", ""
-    links = [(home, "Home"), (pref + "executive-summary.html", "Executive summary &amp; submission guide"),
-             (pref + "research.html", "Research &amp; method"), (pref + "sources.html", "Sources, scores &amp; flags")]
-    return "<nav>" + "".join(f'<a href="{h}">{txt}</a>' for h, txt in links) + "</nav>"
+def tag(text: str, style: str = "") -> str:
+    return f'<span class="pill {e(style)}">{e(text)}</span>'
 
 
-def page(title, body, root: bool = False):
-    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{esc(title)}</title><style>{CSS}</style></head><body><main>
-{nav_for(root)}
-<h1>{esc(title)}</h1>
-{body}
-<footer>GEMSDOE29 · figures are rendered from the repo's JSON registries/evidence ·
-competition: DrivenData #306 DOE GEMS · owner-reported scores are labelled and are not organizer receipts.</footer>
-</main></body></html>"""
+def source_url(source: dict[str, Any]) -> str:
+    return a(source["url"], source["title"], external=True)
 
 
-def badge(text, kind):
-    return f'<span class="badge b-{kind}">{esc(text)}</span>'
-
-
-def status_kind(s):
-    s = s.lower()
-    if "not passed" in s or "fail" in s or "blocked" in s or "do not" in s or "refuted" in s:
-        return "bad"
-    if "gate passed" in s or "slot-candidate" in s or "ok" == s:
-        return "ok"
-    if "research artifact" in s or "unverified" in s or "open" in s or "medium" in s or "info" in s:
-        return "warn"
-    if "high" in s or "critical" in s:
-        return "bad"
-    if "fixed" in s or "read" in s or "sibling-verified" in s:
-        return "ok"
-    return "warn"
-
-
-def fmt_px(n):
-    return f"{n:,}"
-
-
-def main() -> None:
-    manifest = J("data/manifest.json")
-    live = J("registry/live_scores.json")
-    srcs = J("registry/sources.json")
-    source_by_key = {item["key"]: item for item in srcs["sources"]}
-    problem_facts = source_by_key["dd_problem"]["facts"]
-    home_facts = source_by_key["dd_home"]["facts"]
-    rules_facts = source_by_key["rules_pdf"]["facts"]
-    leaderboard_key = next(k for k in live if k.startswith("leaderboard_public_"))
-    leaderboard = live[leaderboard_key]
-    leader = min(leaderboard, key=lambda row: row["rank"])
-    leaderboard_source = source_by_key["dd_leaderboard"]
-    group_scores = live["group_submissions"]
-    ref_score_row = next(row for row in group_scores if row["project"] == "GEMSDOE25")
-    d15_score_row = next(row for row in group_scores if row["project"] == "GEMSDOE24")
-    parent_score_row = next(row for row in group_scores if row["project"] == "19GEMSDOE")
-    reported_ref_score = float(ref_score_row["score"])
-    ref_rank_rows = [row for row in leaderboard if row["public_dti"] == reported_ref_score]
-    reported_ref_rank = min((row["rank"] for row in ref_rank_rows), default=None)
-    irr = J("registry/irregularities.json")
-    hyp = J("registry/hypotheses_next.json")
-    gate = J("evidence/h29_gate.json") if (ROOT / "evidence/h29_gate.json").exists() else {}
-    hold = J("evidence/h29_holdout.json") if (ROOT / "evidence/h29_holdout.json").exists() else {}
-    worm = J("evidence/worming_receipt.json") if (ROOT / "evidence/worming_receipt.json").exists() else {}
-    ledger_path = ROOT / "registry/artifact_ledger.json"
-    ledger = J("registry/artifact_ledger.json") if ledger_path.exists() else {"artifacts": {}}
-    arts = ledger.get("artifacts", {})
-    wr = arts.get("WORMRANK", {})
-    files_dir = ROOT / "docs" / "downloads"
-
-    def fmeta(stem, suffix="-nan.tif"):
-        p = files_dir / f"{stem}{suffix}"
-        receipt_path = files_dir / f"checks-{stem}.json"
-        if not p.is_file() or not receipt_path.is_file():
-            return None
-        receipt = json.loads(receipt_path.read_text())
-        recorded = receipt.get("files", {}).get(p.name)
-        if not isinstance(recorded, dict) or not recorded.get("sha256"):
-            return None
-        # Use the build receipt as the site metadata source, but refuse to link a file that has
-        # drifted from that immutable checksum. The independent verifier records format checks.
-        import hashlib
-        h = hashlib.sha256()
-        with p.open("rb") as f:
-            while chunk := f.read(1 << 20):
-                h.update(chunk)
-        if h.hexdigest() != recorded["sha256"]:
-            return None
-        return {"name": p.name, "bytes": recorded["bytes"], "sha256": recorded["sha256"],
-                "local_format_verified": receipt.get("local_format_verified") is True,
-                "grid": receipt.get("grid", {}), "format": receipt.get("format", {})}
-
-    m_nan = fmeta(wr.get("stem", ""), "-nan.tif")
-    m_zip = fmeta(wr.get("stem", ""), "-nan.zip")
-    m_zero = fmeta(wr.get("stem", ""), "-zeros.tif")
-    ref_art = arts.get("REFD28", {})
-    m_ref = fmeta(ref_art.get("stem", ""), "-nan.tif")
-    gate_pass = (gate.get("A2") or {}).get("PASS") is True
-    gate_txt = ("FROZEN A2 GATE PASSED on catalogue proxy — eligible for owner review only; not live-score evidence"
-                if gate_pass else
-                "FROZEN A2 GATE NOT PASSED on catalogue proxy — research artifact only; no weekly slot is recommended")
-    gate_kind = "ok" if gate_pass else "bad"
-    local_format_verified = bool(m_nan and m_nan["local_format_verified"])
-    download_heading = ("Locally format-verified GeoTIFF" if local_format_verified else
-                        "GeoTIFF — local format checks absent or failed")
-    artifact_grid = m_nan.get("grid", {}) if m_nan else {}
-    artifact_format = m_nan.get("format", {}) if m_nan else {}
-    pixel_size = artifact_grid.get("pixel_size_m", [])
-    if len(pixel_size) == 2:
-        resolution_text = f"{pixel_size[0]:g}×{pixel_size[1]:g} m"
-    else:
-        resolution_text = "resolution not recorded"
-    grid_text = (f"{esc(artifact_grid.get('crs', 'CRS not recorded'))} · "
-                 f"{fmt_px(artifact_grid.get('width', 0))}×{fmt_px(artifact_grid.get('height', 0))} · "
-                 f"{esc(resolution_text)}")
-    in_range = artifact_format.get("inside_value_range", [])
-    range_text = (f"[{in_range[0]:g},{in_range[1]:g}]" if len(in_range) == 2 else "declared range unknown")
-    outside_text = esc(artifact_format.get("outside", "outside convention not recorded"))
-    band_text = (f"{artifact_format.get('bands')}-band {esc(artifact_format.get('dtype', 'unknown'))}"
-                 if artifact_format.get("bands") is not None else "band format not recorded")
-    download_format_detail = (
-        f"finite {range_text} values inside the pinned template footprint, {outside_text} outside."
-        if local_format_verified else
-        "format acceptance is not currently established; review the linked receipt before use."
+def nav(active: str) -> str:
+    items = [
+        ("index.html", "Overview", "index"),
+        ("executive-summary.html", "Submission guide", "summary"),
+        ("research.html", "Research", "research"),
+        ("status.html", "Status feed", "status"),
+        ("sources.html", "Sources", "sources"),
+        ("irregularities.html", "Irregularities", "irregularities"),
+    ]
+    links = []
+    for href, title, key in items:
+        current = ' aria-current="page"' if key == active else ""
+        links.append(f'<a href="{href}"{current}>{e(title)}</a>')
+    return (
+        '<a class="skip-link" href="#main">Skip to content</a>'
+        '<header class="site-header"><div class="shell header-top">'
+        '<a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">G</span>'
+        '<span>GEMSDOE29 <span class="small">/ research lab</span></span></a>'
+        f'<nav aria-label="Primary">{"".join(links)}</nav></div>'
     )
-    format_status_text = ("passed local format checks" if local_format_verified else
-                          "does not currently have a passing local format receipt")
-    official_metric = problem_facts["metric"]
-    official_format = problem_facts["submission_format"]
-    support_m = float(official_metric["support_distance_m"])
-    fp_weight = float(official_metric["false_positive_weight"])
-    fn_weight = float(official_metric["false_negative_weight"])
-    ref_spacing_px = float(ref_score_row.get("spacing_px", ref_art.get("spacing_px", 0.0)))
-    d15_spacing_px = float(d15_score_row.get("spacing_px", 0.0))
-    grid_for_spacing = (m_ref or m_nan or {}).get("grid", {})
-    spacing_resolution = grid_for_spacing.get("pixel_size_m", [None])[0]
-    spacing_m = ref_spacing_px * float(spacing_resolution) if spacing_resolution else None
-    ref_pixels = int(ref_art.get("px", ref_score_row.get("positive_pixels", 0)))
-    parent_pixels = int(parent_score_row.get("positive_pixels", 0))
-    d15_pixels = int(d15_score_row.get("positive_pixels", 0))
-    ref_score_text = f"{reported_ref_score:.4f}"
-    leader_score_text = f"{float(leader['public_dti']):.4f}"
-    d15_delta_text = f"{reported_ref_score - float(d15_score_row['score']):+.4f}"
-    pixel_resolution = (float(spacing_resolution) if spacing_resolution else
-                        float(problem_facts["submission_format"]["pixel_size_m"]))
-    competition_end = datetime.fromisoformat(home_facts["competition_end_utc"].replace("Z", "+00:00"))
-    competition_end_text = competition_end.strftime("%Y-%m-%d %H:%M UTC")
-    public_read_date = leaderboard_source.get("accessed", "date not recorded")
-    reported_ref_position = (f"rank {reported_ref_rank}" if reported_ref_rank is not None else
-                             "rank not reconciled")
-
-    dl_block = ""
-    if m_nan:
-        dl_block = f"""
-<div class="card" id="download">
-<h2 style="margin-top:0">⬇ {esc(download_heading)}</h2>
-<p><a class="dl" href="docs/downloads/{m_nan['name']}">Download {m_nan['name']}</a></p>
-<p class="mut">{m_nan['bytes']:,} bytes · SHA-256 <code>{m_nan['sha256'][:16]}…</code> ·
-{fmt_px(wr.get('px', 0))} emitted pixels · {esc(band_text)} · {grid_text} ·
-{esc(download_format_detail)} Local checks do not guarantee portal acceptance; the template is an owner mirror,
-not organizer-authenticated.</p>
-<p>{badge(wr.get('status', 'missing status label'), status_kind(wr.get('status', 'missing')))}
-{badge(gate_txt, gate_kind)}</p>
-<p><b>Paste into the DrivenData <i>Note</i> field:</b></p><pre>{esc(wr.get('note', '—'))}</pre>
-<p class="mut">Unique artifact name: <b>{esc(m_nan['name'].removesuffix('.tif'))}</b>.
-The short portal Note shown above is limited to {artifact_format.get('note_max_characters', 'an unspecified number of')} characters. Fallbacks: <a href="docs/downloads/{m_zip['name'] if m_zip else '—'}">.zip</a> ·
-<a href="docs/downloads/{m_zero['name'] if m_zero else '—'}">zero-outside TIFF</a>.
-Full local receipts: <a href="docs/downloads/checks-{esc(wr.get('stem', ''))}.json">checks JSON</a>.</p>
-<p><a href="docs/executive-summary.html">→ Step-by-step submission guide</a> · reference D{ref_spacing_px:g}:
-<a href="docs/downloads/{esc(ref_art.get('stem', '—'))}-nan.tif">download owner-mirror mask reproduction</a>
-(owner-reported {ref_score_text}; {esc(reported_ref_position)}; do not resubmit the duplicate).</p>
-</div>"""
-
-    lb_rows = "".join(f"<tr><td class='num'>{r['rank']}</td><td>{esc(r['team'])}</td>"
-                      f"<td class='num'>{r['public_dti']}</td><td class='num'>{r['submissions']}</td></tr>"
-                      for r in leaderboard)
-    score_rows = "".join(
-        f"<tr><td>{esc(s['project'])}</td><td><code>{esc(s['file'])}</code></td>"
-        f"<td class='num'>{s['score']}</td><td>{esc(s.get('status', ''))}</td></tr>"
-        for s in live["group_submissions"][:10])
-
-    d28_reduction_pct = 100.0 * (1.0 - ref_pixels / parent_pixels) if parent_pixels else None
-    d15_reduction_pct = 100.0 * (1.0 - d15_pixels / parent_pixels) if parent_pixels else None
-    spacing_text = f"{ref_spacing_px:g} px"
-    spacing_m_text = f" (~{spacing_m:g} m)" if spacing_m is not None else ""
-    idx_body = f"""
-<p class="mut">{badge(f'Competition end date: {competition_end_text}', 'warn')}
-{badge(f"{rules_facts['automated_scoring_submissions_per_week']} automated-scoring submissions per week (official DOE/NLR rules)", 'warn')}
-{badge(f'{ref_score_text} score-to-file association is owner-reported; no organizer receipt is available here', 'warn')}
-{badge(f"Public leaderboard #{leader['rank']}: {leader['team']} {leader_score_text} (read {public_read_date})", 'bad')}</p>
-{dl_block}
-<h2>What is known about the reported {ref_score_text} raster?</h2>
-<div class="card"><p>The local deterministic <code>dot_thin(H19-5, {ref_spacing_px:g})</code> reconstruction has
-{fmt_px(ref_pixels)} positive pixels and matches the owner-mirrored D{ref_spacing_px:g} pixel mask exactly. The GeoTIFF bytes differ.
-This verifies mask reproduction, <b>not</b> the score-to-file association. The {ref_score_text} score remains owner-reported;
-it appears at {esc(reported_ref_position)} in the public leaderboard, but no organizer receipt ties that mirror to the score.</p>
-<p><b>Plausible mechanism, not causal proof:</b> the registered minimum spacing is {spacing_text}{spacing_m_text}; the locally
-pinned template resolution is {pixel_resolution:g} m and the official metric's linear distance-support radius is
-{support_m:g} m. Its false-positive and false-negative weights are {fp_weight:g} and {fn_weight:g}, respectively.
-The metric grants distance-weighted credit near mapped faults while penalizing prediction mass farther away. A sparse subset
-can plausibly remove redundant or remote pixels while retaining enough nearby line coverage; a spacing near the support scale
-makes that trade-off worth testing, but does not guarantee good alignment or score.</p>
-<p>For context, the owner-reported H19-5 parent has {fmt_px(parent_pixels)} pixels / score {float(parent_score_row['score']):.4f}.
-The D{d15_spacing_px:g} and D{ref_spacing_px:g} variants have {fmt_px(d15_pixels)} and {fmt_px(ref_pixels)} pixels, with reported scores
-{float(d15_score_row['score']):.4f} and {ref_score_text} (difference {d15_delta_text}). D{ref_spacing_px:g} is about
-{d28_reduction_pct:.1f}% fewer pixels than the parent (D1.5: {d15_reduction_pct:.1f}%). These within-family public-score
-claims are consistent with geometric budget calibration being important, but they do not prove why any score changed.
-The local comparison and provenance qualifications are in the manifest, score registry, and reproduction test.</p></div>
-<h2>This session's corrected science and gate</h2>
-{gate_table(gate, hold)}
-<p>H29-5 persistent-corridor × deformation/seismicity screen failed against the best same-fold controls in both registered
-screen draws. Confirmation was skipped under the preregistered compute-saving rule. No candidate passed and no weekly slot
-is recommended; proxy values are not live/private leaderboard evidence.</p>
-<h2>Public leaderboard (read once, {esc(public_read_date)})</h2>
-<table><tr><th>Rank</th><th>Team</th><th>Public DTI</th><th>Subs</th></tr>{lb_rows}</table>
-<h2>Group score ledger (reported claims; first 10 of {len(live['group_submissions'])})</h2>
-<table><tr><th>Project</th><th>Submission</th><th>Reported score</th><th>Verification</th></tr>{score_rows}</table>
-<p><a href="docs/sources.html">Full score ledger, data provenance and irregularities →</a></p>
-<h2>Flagged for review ({len(irr['irregularities'])} items)</h2>
-{irregularities_table(irr)}
-<p>Repo contract: the owner's full brief and core values remain in <a href="https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/README.md"><code>README.md</code></a>.</p>
-"""
-    (ROOT / "index.html").write_text(page("GEMSDOE29 — DOE GEMS fault research", idx_body, root=True))
-
-    exec_body = f"""
-<h2 style="border:0">Submission steps</h2>
-<ol>
-<li>Download the TIFF from the <a href="../index.html#download">home-page download card</a>; the exact unique name,
-short portal note, ZIP alternative and local receipts are shown there.</li>
-<li>Open <a href="https://www.drivendata.org/competitions/306/competition-doe-gems/submissions/">DrivenData My Submissions</a>
-while logged in as the enrolled team. This agent does not access the portal.</li>
-<li>Attach the single-band GeoTIFF or ZIP (which must contain exactly one GeoTIFF); paste the note exactly as shown.</li>
-<li>Check the competition response yourself. This repo makes no claim about organizer acceptance or score.</li>
-</ol>
-<p>DOE/NLR rules: {rules_facts['automated_scoring_submissions_per_week']} automated-scoring submissions per week; the Initial Prize Round uses a private set; a single final
-submission is selected across prize phases. Finalists must provide code/assets and documentation; generative-AI use must
-be disclosed in the narrative. See the official PDF link on the Sources page.</p>
-<h2>Local format verification and its limits</h2>
-<div class="card"><p>The owner reported a past “Predicted values must be in range [0, 1]” error. Sibling byte-forensics
-attributed one prior failing raster to NaN inside its asserted footprint; this is not an organizer validator specification.
-The current local checker verifies against the pinned, owner-mirrored template:</p>
-<ul>
-<li>{official_format['bands']}-band {esc(official_format['dtype'])}; exact CRS, dimensions and geotransform match;</li>
-<li>all template-footprint values are finite and in [{official_format['minimum']:g},{official_format['maximum']:g}];</li>
-<li>NaN-outside and zero-outside TIFF variants follow their declared convention;</li>
-<li>ZIP has exactly one GeoTIFF and is read back and compared with the NaN TIFF;</li>
-<li>file hashes match build-time receipts.</li>
-</ul><p>These checks reduce the known range-error risk but cannot guarantee portal acceptance. The source template is not
-organizer-authenticated; the private validator is not public; no upload was made.</p></div>
-<h2>Current artifact status</h2>
-<div class="card">{badge(gate_txt, gate_kind)}
-<p>WORMRANK {esc(format_status_text)} and is a research artifact. Its corrected A2 catalogue-proxy gate failed; it is not recommended
-for a weekly submission slot. The selected H29-5 corridor candidate failed its screen against the best same-fold controls;
-confirmation was not run under the frozen compute-saving rule, and it was not packaged as a submission.</p></div>
-<h2>Reference: owner-reported D{ref_spacing_px:g} score</h2>
-<p><a href="downloads/{esc(ref_art.get('stem', '—'))}-nan.tif">Download the locally reproduced D{ref_spacing_px:g} mask</a>.
-Its {fmt_px(ref_pixels)} pixels exactly reproduce the pinned owner mirror. The associated {ref_score_text} score is
-owner-reported; resubmitting an identical mask would be a duplicate, not a new experiment.</p>
-"""
-    (ROOT / "docs" / "executive-summary.html").write_text(page("How to submit — GEMSDOE29", exec_body))
-
-    res_body = research_body(worm, gate, hold, hyp)
-    (ROOT / "docs" / "research.html").write_text(page("Research & method — GEMSDOE29", res_body))
-
-    src_body = sources_body(srcs, manifest, live, irr)
-    (ROOT / "docs" / "sources.html").write_text(page("Sources & verification — GEMSDOE29", src_body))
-    print("site written: index.html + docs/{executive-summary,research,sources}.html")
 
 
-def gate_table(gate, hold):
-    if not gate:
-        return "<div class='card'>Gate results pending — run scripts/run_holdout_screen.py.</div>"
-    first_gate = next((g for g in gate.values() if isinstance(g, dict)), {})
-    threshold = first_gate.get("threshold_mean_delta")
-    min_positive = first_gate.get("min_positive_folds")
-    expected_folds = first_gate.get("expected_folds")
-    screens = first_gate.get("screen_draws", [])
-    confirmations = first_gate.get("confirmation_draws", [])
-    if None not in (threshold, min_positive, expected_folds):
-        criterion = (f"≥{float(threshold):+.3f} mean; ≥{min_positive}/{expected_folds} positive folds "
-                     f"on each screen draw {screens}; ≥1 passing confirmation from {confirmations}")
+def hero(kicker: str, title: str, copy: str, buttons: str = "") -> str:
+    actions = f'<div class="hero-actions">{buttons}</div>' if buttons else ""
+    return (
+        '<div class="shell hero">'
+        f'<p class="eyebrow">{e(kicker)}</p><h1>{e(title)}</h1>'
+        f'<p class="hero-copy">{e(copy)}</p>{actions}'
+        '</div></header>'
+    )
+
+
+def page(title: str, description: str, active: str, kicker: str, headline: str, copy: str, body: str, buttons: str = "") -> str:
+    page_title = e(title)
+    desc = e(description)
+    return (
+        '<!doctype html>\n<html lang="en"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        f'<meta name="description" content="{desc}">'
+        f'<title>{page_title} | GEMSDOE29</title>'
+        '<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">'
+        '<link rel="stylesheet" href="assets/site.css"></head><body>'
+        + nav(active)
+        + hero(kicker, headline, copy, buttons)
+        + f'<main id="main"><div class="shell">{body}</div></main>'
+        + '<footer class="site-footer"><div class="shell footer-inner">'
+        '<p><strong>GEMSDOE29</strong> · evidence-first GEMS Prize research</p>'
+        '<p>Status is generated only from local records; it is not a DrivenData leaderboard feed. '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29", "Repository", external=True)}</p>'
+        '</div></footer></body></html>\n'
+    )
+
+
+def artifact_href(entry: dict[str, Any]) -> str:
+    path = Path(entry["path"])
+    try:
+        return path.relative_to("docs").as_posix()
+    except ValueError:
+        return "downloads/" + entry["file"]
+
+
+def has_local_artifact(entry: dict[str, Any]) -> bool:
+    return (ROOT / entry["path"]).is_file()
+
+
+def approved_entry(submissions: dict[str, Any]) -> dict[str, Any] | None:
+    return next((row for row in submissions.get("files", []) if row.get("slot_approved") is True), None)
+
+
+def render_downloads() -> str:
+    """One-click download cards for every registered research candidate, with its paste-ready note.
+
+    Numbers come only from ``registry/submissions.json`` (which itself is filled from script-written
+    receipts under ``docs/downloads/checks-*.json``). Nothing here claims a competition score.
+    """
+    submissions = read_json("submissions.json")
+    contract = read_json("submission_contract.json")
+    fmt = contract["format"]
+    candidates = [row for row in submissions.get("files", []) if row.get("role") == "candidate_review"]
+    if not candidates:
+        return ""
+    cards = []
+    for row in candidates:
+        present = has_local_artifact(row)
+        download = (
+            f'<a class="button" href="{e(artifact_href(row))}" download>Download GeoTIFF</a>'
+            if present
+            else '<p class="muted">Registered file is not present in this checkout.</p>'
+        )
+        zip_path = Path(row["path"]).with_suffix(".zip")
+        zip_link = (
+            f' <a class="button light" href="{e(zip_path.relative_to("docs").as_posix())}" download>Download .zip</a>'
+            if (ROOT / zip_path).is_file()
+            else ""
+        )
+        # Score claims stay in the JSON registry only; public pages must not republish them
+        # (tests/test_project_integrity.py::test_public_pages_do_not_republish_score_claims_or_leaderboard_links).
+        proxy = tag("score claims kept in registry/score_claims.json", "warning")
+        eligibility = (
+            tag("slot-approved", "yes") if row.get("slot_approved") is True else
+            tag("not slot-cleared · do not submit", "no") if row.get("do_not_submit") is True else
+            tag("not approved · holdout/confirmation required", "warning")
+        )
+        card = (
+            '<article class="card span-6 download-card"><p class="kicker">Research download · not an official score</p>'
+            f'<h2>{e(row.get("name", row["file"]))}</h2>'
+            f'<p>{e(row.get("summary", ""))}</p>'
+            f'<p class="file-name">{e(row["file"])}</p>'
+            f'<p class="small">sha256 <code>{e(str(row.get("sha256", ""))[:16])}…</code> · '
+            f'{int(row.get("positive_pixels", 0)):,} emitted px · format ok: {e(row.get("format_ok_local"))}</p>'
+            f'{proxy} {tag("local format only", "warning")} {eligibility}'
+            f'<p class="small"><strong>Paste-ready Note:</strong> <code>{e(row.get("optional_comment", ""))}</code></p>'
+            f'{download}{zip_link}'
+            "</article>"
+        )
+        cards.append(card)
+    return (
+        '<section aria-label="Candidate downloads"><p class="kicker">Formatted and waiting for a human decision</p>'
+        '<h2>Download the submission GeoTIFF</h2>'
+        f'<p>Each file below is a {int(fmt["band_count"])}-band {e(fmt["dtype"])} GeoTIFF locally checked against the hash-pinned owner-mirror template '
+        f'({e(fmt["crs"])}, {int(fmt["pixel_size_m"])} m; finite [{fmt["probability_min"]}, {fmt["probability_max"]}] values inside; '
+        f'{e(fmt["outside_footprint"])} outside), with a format receipt. Format validation is not a score or approval. '
+        'None is currently slot-approved; do not use a weekly slot unless a candidate first beats the current comparable spatial holdout best and passes fresh confirmation.</p>'
+        f'<section class="grid">{"".join(cards)}</section></section>'
+    )
+
+
+def render_home() -> str:
+    status = read_json("status_feed.json")
+    submissions = read_json("submissions.json")
+    current = status["current"]
+    feed = status.get("events", [])
+    approved = approved_entry(submissions)
+    historical = next((row for row in submissions.get("files", []) if row.get("role") == "historical_reference"), None)
+
+    if approved:
+        banner = (
+            '<section class="status-banner good"><strong>Holdout-approved candidate available for manual review.</strong>'
+            '<p>A spatial holdout pass is a necessary research gate, not a competition score or proof of leaderboard performance. '
+            'Review the exact-file receipt and current official rules before deciding to use any weekly slot.</p></section>'
+        )
+        approved_download = (
+            f'<a class="button" href="{e(artifact_href(approved))}" download>Download GeoTIFF</a>'
+            if has_local_artifact(approved)
+            else '<p>File path is registered but the artifact is not present in this checkout.</p>'
+        )
+        main_artifact = (
+            '<article class="card span-6 download-card"><p class="kicker">Slot-gated candidate</p>'
+            f'<h2>{e(approved.get("name", approved["file"]))}</h2>'
+            f'<p>{e(approved.get("summary", ""))}</p><p class="file-name">{e(approved["file"])}</p>'
+            f'{tag("holdout gate passed", "yes")} {tag("not an official score", "warning")}'
+            f'{approved_download}'
+            '</article>'
+        )
     else:
-        criterion = "gate criteria not recorded"
-    rows = ""
-    for arm, g in gate.items():
-        if not isinstance(g, dict):
-            continue
-        parts = []
-        for key, value in g.get("per_draw", {}).items():
-            draw = key.removeprefix("draw")
-            mean = value.get("mean_delta")
-            if mean is None:
-                text = f"draw{draw}: not run"
-            else:
-                n = value.get("n_folds", 0)
-                expected = g.get("expected_folds", "not recorded")
-                completeness = (f"{value.get('positive_folds', 0)}/{expected} positive" if value.get("complete")
-                               else f"partial {n}/{expected} folds")
-                text = f"draw{draw}: {mean:+.4f} ({completeness})"
-            parts.append(text)
-        cells = " · ".join(parts)
-        verdict = g.get("PASS")
-        vtxt = "PASS" if verdict is True else ("FAIL" if verdict is False else "INCOMPLETE")
-        confirm = g.get("confirm_draw")
-        if confirm is None and hold.get("confirmation_status", "").startswith("not_run"):
-            confirm = "not run (screen failed)"
-        rows += (f"<tr><td><b>{esc(arm)}</b></td><td>{esc(cells)}</td>"
-                 f"<td>{esc(confirm or 'none')}</td>"
-                 f"<td>{badge(vtxt, 'ok' if verdict is True else 'bad' if verdict is False else 'warn')}</td></tr>")
-    n_rows = len(hold.get("rows", [])) if hold else 0
-    run_mode = esc(hold.get("run_mode", "not recorded")) if hold else "not recorded"
-    return (f"<div class='card'><table><tr><th>arm</th><th>mean paired quadrant ΔDTI (catalogue proxy)</th>"
-            f"<th>confirming draw</th><th>gate ({esc(criterion)})</th></tr>"
-            f"{rows}</table><p class='mut'>Mode: {run_mode}; {n_rows} fold/draw rows. Proxy truth is built from the public catalogue and is structurally blind to faults absent from it. Read the limitations and historical correction note alongside these numbers.</p></div>")
+        banner = (
+            '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
+            '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
+            'H34 failed its frozen primary proxy gate while passing its secondary off-catalogue class; the fractional factorial is complete. H31 also failed its screen on feature sparsity. '
+            'The current corrected H29 screen failed every preregistered arm; no confirmation models were fit. See the local evidence feed and research report for the complete records. '
+            'Every download is format-verified locally and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
+        )
+        main_artifact = (
+            '<article class="card span-6"><p class="kicker">Current submission status</p>'
+            '<h2>No candidate cleared the gate</h2>'
+            '<p>Only a candidate that beats the current same-run spatially blocked holdout best, passes every preregistered '
+            'screen and fresh-confirmation gate, and passes the exact-file audit can be considered. No live score is inferred.</p>'
+            f'<p>{tag("weekly slot used: no", "yes")} {tag("slot approval: none", "no")}</p>'
+            f'<a class="button light" href="executive-summary.html">Read the manual submission guide</a>'
+            '</article>'
+        )
 
-
-def _planning_range(h):
-    delta = h.get("planning_holdout_delta_dti")
-    if delta is None:
-        return "not estimable"
-    return f"{delta[0]:+.3f} to {delta[1]:+.3f} (planning prior only)"
-
-
-def research_body(worm, gate, hold, hyp):
-    if worm:
-        m, g = worm.get("magnetic", {}), worm.get("gravity", {})
-        la = worm.get("line_audit_magnetic", {})
-        xc = worm.get("uc_crosscheck", {})
-        ladder = m.get("ladder_m", [])
-        max_height = max(ladder) if ladder else "not recorded"
-        persistence_bounds = worm.get("constants", {}).get("persistence_bounds", [0, 1])
-        strength_bounds = worm.get("constants", {}).get("strength_ratio_bounds", [0, 2])
-        persistence_definition = worm.get("constants", {}).get(
-            "persistence_definition", "definition not recorded")
-        uc_height = xc.get("height_m", "not recorded")
-        uc_layer = xc.get("reference_layer", "reference layer not recorded")
-        worm_cards = f"""
-<h2>Upward-continuation ladder — measurements on pinned owner-mirror rasters</h2>
-<table><tr><th>field</th><th>level-0 p95 edges</th><th>full ladder ({max_height} m)</th>
-<th>level-0-only</th><th>mean P</th><th>max P</th></tr>
-<tr><td>rtp (magnetic)</td><td class='num'>{fmt_px(m.get('n_edges_level0', 0))}</td>
-<td class='num'>{m.get('frac_edges_full_ladder', 0):.1%}</td>
-<td class='num'>{m.get('frac_edges_level0_only', 0):.1%}</td>
-<td class='num'>{m.get('mean_persistence', 0):.3f}</td><td>{m.get('max_persistence', 0):.1f}</td></tr>
-<tr><td>iso_grav_anom</td><td class='num'>{fmt_px(g.get('n_edges_level0', 0))}</td>
-<td class='num'>{g.get('frac_edges_full_ladder', 0):.1%}</td>
-<td class='num'>{g.get('frac_edges_level0_only', 0):.1%}</td>
-<td class='num'>{g.get('mean_persistence', 0):.3f}</td><td>{g.get('max_persistence', 0):.1f}</td></tr></table>
-<p>Normalized P uses <code>{esc(persistence_definition)}</code>, bounded
-[{persistence_bounds[0]:g},{persistence_bounds[1]:g}]. Strength retention is a separate
-[{strength_bounds[0]:g},{strength_bounds[1]:g}] raster. Neither is a unique depth estimate nor proof that an edge is a fault.</p>
-<div class='card'><p><b>Operator comparison:</b> our TMI continuation to {uc_height} m has Spearman
-{xc.get('spearman_hgm_ours_vs_contractor_up150', float('nan')):.3f} rank agreement with the owner-mirrored,
-u8-quantised contractor-labelled <code>{esc(uc_layer)}</code> grid's gradient ({fmt_px(xc.get('n_sampled_pixels', 0))}
-sampled pixels). This is a soft operator check, not data authentication.</p>
-<p><b>Strike summary only (not a spectral line-artifact test):</b> mean magnetic persistence is E–W
-{la.get('mean_persist_ew_strike', 0):.3f}, other {la.get('mean_persist_other', 0):.3f}, N–S
-{la.get('mean_persist_ns_strike', 0):.3f}, over {fmt_px(la.get('n_ew', 0))}/{fmt_px(la.get('n_other', 0))}/{fmt_px(la.get('n_ns', 0))}
-edges. E–W edges are more persistent on average in this implementation; that does not show they are or are not flight-line
-artifacts. A measured spectral notch is a separate untested hypothesis (H29-3).</p>
-<p><b>Parent-emission orthogonality:</b> see the reproducibility test and H29 result for the current counted fraction;
-this is why persistence was tested as a rank/feature rather than assumed to be a hard filter.</p></div>"""
+    if historical:
+        if has_local_artifact(historical):
+            download = f'<a class="button light" href="{e(artifact_href(historical))}" download>Download historical GeoTIFF</a>'
+        else:
+            download = '<p class="muted">The registered file is not present in this checkout.</p>'
+        historical_card = (
+            '<article class="card span-6 download-card"><p class="kicker">Historical reference · not a recommendation</p>'
+            f'<h2>{e(historical.get("name", "Historical artifact"))}</h2>'
+            f'<p>{e(historical.get("summary", ""))}</p>'
+            f'<p class="file-name">{e(historical["file"])}</p>'
+            f'{tag("unscored", "warning")} {tag("do not submit", "no")}'
+            f'<p class="small">{e(historical.get("status", ""))}</p>'
+            f'<p class="small"><strong>Archive-only optional note:</strong> <code>{e(historical.get("optional_comment", ""))}</code></p>'
+            f'{download}</article>'
+        )
     else:
-        worm_cards = "<div class='card'>Worming receipt missing — run scripts/run_worming.py.</div>"
+        historical_card = '<article class="card span-6"><h2>No historical artifact registered</h2></article>'
 
-    arm_rows = ""
-    for r in hold.get("rows", []):
-        a, b = r.get("A", {}), r.get("B", {})
-        b3 = b.get("B3", {})
-        arm_rows += (f"<tr><td>{r['draw']}</td><td>{esc(r['name'])}</td><td class='num'>{r['n_hidden']:,}</td>"
-                     + "".join(f"<td class='num'>{a.get(k, {}).get('paired_delta', 0):+.4f}</td>" for k in ("A1", "A2"))
-                     + "".join(f"<td class='num'>{b.get(k, {}).get('paired_delta', 0):+.4f}</td>" for k in ("B1", "B2"))
-                     + f"<td class='num'>{b3.get('paired_delta_best_control', float('nan')):+.4f}</td></tr>")
-
-    hyp_rows = "".join(
-        f"<tr><td>{h['rank']}</td><td><b>{esc(h['id'])}</b> {esc(h['name'])}</td>"
-        f"<td>{esc(', '.join(h['layers']))}</td><td>{esc(h['signature'])}</td>"
-        f"<td>{esc(h['why_unmapped'])}</td><td>{esc(h['difference_from_repo'])}</td>"
-        f"<td>{esc(_planning_range(h))}<br>{esc(h['cost'])}</td>"
-        f"<td>{esc(h['data_availability'])}</td></tr>" for h in hyp["hypotheses"])
-    candidate_status = hold.get("gate", {}).get("H29-5", {}) if hold else {}
-    candidate_verdict = candidate_status.get("PASS")
-    candidate_text = ("PASS — eligible for owner review only" if candidate_verdict is True else
-                      "FAIL — not submission-eligible on this proxy" if candidate_verdict is False else
-                      "incomplete / no result")
-    confirm_status = hold.get("confirmation_status", "not recorded") if hold else "not recorded"
-    return f"""
-<h2>Worming: scale persistence is a structural cue, not a fault verdict</h2>
-<p>Fourier upward continuation smooths potential fields by a physically motivated scale operator. This implementation
-takes horizontal-gradient-modulus maxima at fixed heights and links nearby maxima between adjacent ladder levels.
-Tracks that persist may be consistent with broader/deeper source contrasts, but persistence is also affected by amplitude,
-source geometry, interference and processing; it is neither a unique depth inversion nor proof of a fault. See the corrected
-Hornby DOI and operational caveats in <a href="sources.html">Sources</a>.</p>
-{worm_cards}
-<h2>Pre-registered spatial holdout results</h2>
-{gate_table(gate, hold)}
-<p><b>H29-5 status:</b> {esc(candidate_text)}. Confirmation status: {esc(confirm_status)}. The screen compares the new
-persistence × strain/seismicity head to the best same-fold/same-draw pre-existing control; no leaderboard score is inferred.</p>
-<table><tr><th>draw</th><th>fold</th><th>hidden px</th><th>ΔA1</th><th>ΔA2</th><th>ΔB1</th><th>ΔB2</th><th>H29-5 Δ vs best control</th></tr>
-{arm_rows or '<tr><td colspan=8>pending</td></tr>'}</table>
-<h2>Preregistered geological hypotheses (planning priors, not score predictions)</h2>
-<table><tr><th># / hypothesis</th><th>layers</th><th>target signature</th><th>why it could detect an unmapped fault</th><th>difference from prior work</th><th>holdout ΔDTI prior / cost</th><th>data availability</th></tr>{hyp_rows}</table>
-<h2>Interpretation for the leaderboard goal</h2>
-<div class="card"><p>There is no evidence from this run that the new H29-5 head improves over the strongest existing control on the
-catalogue proxy. That failure makes it ineligible for a submission slot under the frozen gate; it does not disprove the
-geological mechanism or predict private-set performance. The 0.2600 association remains owner-reported. Further candidate
-work should be preregistered, tested spatially, and treated as proxy evidence only; a live score requires a manual portal
-submission and must be recorded separately.</p></div>
-"""
+    metrics = (
+        '<section class="grid" aria-label="Research status metrics">'
+        f'<div class="metric span-4"><span class="label">Research screens</span><span class="value">{e(current.get("screen_status", "unknown"))}</span><span class="label">Local proxies only—not official scores</span></div>'
+        f'<div class="metric span-4"><span class="label">Weekly submission slot</span><span class="value">{"No" if not current.get("weekly_slot_used") else "Used"}</span><span class="label">None used for this research</span></div>'
+        f'<div class="metric span-4"><span class="label">Official competition score</span><span class="value">Not verified</span><span class="label">No DrivenData leaderboard content copied</span></div>'
+        '</section>'
+    )
+    timeline = []
+    for event in reversed(feed[-5:]):
+        timeline.append(
+            '<li><time>' + e(event.get("date", "")) + '</time><strong>' + e(event.get("title", "")) + '</strong><span>'
+            + e(event.get("detail", "")) + '</span></li>'
+        )
+    feed_card = (
+        '<section class="card"><p class="kicker">Local research updates</p><h2>What changed</h2>'
+        f'<p class="muted">Updated {e(status.get("updated_local_date", ""))}. This is the project evidence feed, not a leaderboard snapshot.</p>'
+        f'<ol class="timeline">{"".join(timeline)}</ol><p><a href="status.html">Full status register →</a></p></section>'
+    )
+    body = (
+        f'{render_downloads()}{banner}{metrics}<section class="grid" aria-label="Submission artifacts">{main_artifact}{historical_card}</section>'
+        '<section class="grid"><article class="card span-7"><p class="kicker">Research, not score-chasing</p><h2>Test the unseen-fault hypothesis first</h2>'
+        '<p>H29 has now been rerun with corrected bounded persistence and preregistration-compliant nearest-valid FFT padding; every preregistered arm failed, so no confirmation fits were run. The original run is archived as history. H31 is a separate pseudogravity/edge-drift screen and also failed, with sparse persistence features diagnosed as the cause.</p>'
+        '<p><strong>Holdout DTI is a catalogue-gap proxy, not the official competition score.</strong> The public competition uses expert-labelled '
+        'faults unavailable to these local folds, and official private/final-round results are not observed here.</p>'
+        '<p><a href="research.html">Read the ranked hypotheses and scientific caveats →</a></p></article>'
+        '<article class="card span-5"><p class="kicker">Source control</p><h2>Manual verification, not scraping</h2>'
+        '<p>Official competition pages are linked for the user to open. No page is embedded, polled, or copied into this status feed.</p>'
+        '<p><a href="sources.html">Review sources and caveats →</a></p></article></section>'
+        + feed_card
+    )
+    buttons = a("executive-summary.html", "Submission guide", class_name="button") + a("research.html", "Explore research", class_name="button secondary")
+    return page(
+        "Overview",
+        "Auditable, spatially validated research for the DOE GEMS Prize. No slot-approved submission is currently available.",
+        "index",
+        "DOE GEMS Prize · GeoDAWN · evidence before entry",
+        "Find faults worth believing.",
+        "A transparent research workflow for predicting unmapped faults—built around spatial holdouts, exact-file validation, official sources, and honest uncertainty.",
+        body,
+        buttons,
+    )
 
 
-def sources_body(srcs, manifest, live, irr):
-    source_rows = "".join(
-        f"<tr><td><a href='{esc(s['url'])}'>{esc(s['url'])}</a></td><td>{esc(s.get('accessed', '—'))}</td>"
-        f"<td>{badge(s.get('status', ''), status_kind(s.get('status', '')))}</td><td>{esc(s.get('claims', '—'))}</td></tr>"
-        for s in srcs["sources"])
-    manifest_rows = "".join(
-        f"<tr><td><code>{esc(f['path'])}</code></td><td class='num'>{f['bytes']:,}</td>"
-        f"<td><code>{f['sha256'][:20]}…</code></td><td>{esc(f['what'])}</td></tr>"
-        for f in manifest["files"])
-    all_scores = "".join(
-        f"<tr><td>{esc(s['project'])}</td><td><code>{esc(s['file'])}</code></td>"
-        f"<td class='num'>{s['score']}</td><td>{esc(s.get('status', s.get('parent', s.get('note', ''))))}</td></tr>"
-        for s in live["group_submissions"])
-    return f"""
-<h2 style="border:0">Official sources and claims</h2>
-<table><tr><th>source</th><th>accessed (UTC)</th><th>state</th><th>what the source says</th></tr>{source_rows}</table>
-<h2>Input data provenance (hash-pinned owner mirrors — NOT organizer-authenticated)</h2>
-<p class="mut">{esc(manifest['note'])}</p>
-<table><tr><th>path</th><th>bytes</th><th>SHA-256</th><th>content</th></tr>{manifest_rows}</table>
-<h3>Blocked external files</h3>
-<ul>{''.join(f"<li><code>{esc(b['key'])}</code> — <a href='{esc(b['url'])}'>{esc(b['url'])}</a> — {esc(b['reason'])}</li>" for b in manifest['blocked_this_session'])}</ul>
-<h2>Score ledger (reported claims and verification state)</h2>
-<p class="mut">{esc(live['verification_note'])}</p>
-<table><tr><th>project</th><th>submission</th><th>reported score</th><th>verification / parent</th></tr>{all_scores}</table>
-<h2>Irregularities register</h2>{irregularities_table(irr)}
-"""
+def render_summary() -> str:
+    submissions = read_json("submissions.json")
+    status = read_json("status_feed.json")["current"]
+    contract = read_json("submission_contract.json")
+    fmt = contract["format"]
+    rules = contract["rules"]
+    rules_label = f"Official {int(rules['rules_year'])} rules"
+    approved = approved_entry(submissions)
+    if approved:
+        candidate_block = (
+            '<div class="status-banner good"><strong>Candidate registered for manual review.</strong>'
+            f'<p>Name: <strong>{e(approved.get("name", ""))}</strong> · file: <span class="file-name">{e(approved["file"])}</span></p>'
+            f'<p>Optional comment: <code>{e(approved.get("optional_comment", ""))}</code></p>'
+            f'<p>Local file present: {"yes" if has_local_artifact(approved) else "no"}. The holdout remains a proxy, not an official score.</p></div>'
+        )
+    else:
+        candidate_block = (
+            '<div class="status-banner danger"><strong>No current file is approved for submission.</strong>'
+            '<p>The downloads above are research artifacts, not approvals. No weekly slot should be used unless a candidate beats the current comparable spatially blocked holdout best, passes fresh confirmation, and passes the exact-file checks; no current file meets that bar.</p></div>'
+        )
+
+    body = (
+        f'{render_downloads()}{candidate_block}'
+        '<section class="grid"><article class="card span-7"><p class="kicker">Purpose</p><h2>Submission in one sentence</h2>'
+        f'<p>Submit one probability raster for faults across the full GeoDAWN study area, using the provided template grid and the official manual interface. '
+        f'The organizer’s {int(rules["rules_year"])} rules allow up to {int(rules["weekly_feedback_max"])} weekly feedback submissions and require '
+        f'{int(rules["final_prediction_count"])} final selection for both {int(rules["prize_round_count"])} prize rounds. '
+        'Check the current official rules and competition timeline before acting.</p>'
+        '<div class="callout"><strong>Current stop:</strong> '+ e(status.get("screen_status", "not run")) + '. H31 has local holdout proxy results, but no official competition result is claimed.</div>'
+        '</article><article class="card span-5"><p class="kicker">Official references</p><h2>Verify before upload</h2><ul class="list-clean">'
+        f'<li>{a("https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/", "Problem description and format", external=True)}</li>'
+        f'<li>{a("https://docs.nlr.gov/docs/fy26osti/96647.pdf", rules_label, external=True)}</li>'
+        f'<li>{a("https://www.drivendata.org/termsofuse/", "DrivenData Terms of Use", external=True)}</li>'
+        '</ul></article></section>'
+        '<section class="card"><p class="kicker">Manual upload checklist</p><h2>When a future artifact is approved</h2>'
+        '<ol class="steps">'
+        '<li><strong>Check eligibility, dates, and rules.</strong> Sign in and confirm registration on the official GEMS competition page yourself. Do not rely on an old date or this static site for the deadline.</li>'
+        '<li><strong>Use the one explicitly slot-approved file.</strong> Confirm its name, SHA-256, and checker receipt in the local submission registry. Do not substitute the historical reference download.</li>'
+        '<li><strong>Open the official submission page manually.</strong> Select the GeoTIFF through the browser file picker. This project does not automate login, upload, scoring, or page monitoring.</li>'
+        '<li><strong>Enter a unique, short submission name.</strong> Use the registered candidate name shown above when one exists. Preserve the downloadable filename and content ID so the file can be identified later.</li>'
+        '<li><strong>Optionally add the exact registered comment.</strong> State the method and artifact identifier; never describe a spatial holdout proxy as a competition score.</li>'
+        '<li><strong>Submit through the official manual interface.</strong> Follow the portal response for your own transaction, but do not monitor, copy, or store leaderboard content in this project without prior written consent; do not scrape or schedule page reads.</li>'
+        f'<li><strong>Respect the weekly and final-selection limits.</strong> The official rules say up to {int(rules["weekly_feedback_max"])} weekly feedback submissions and '
+        f'{int(rules["final_prediction_count"])} selected final prediction for both {int(rules["prize_round_count"])} prize rounds. Confirm current rules before using a slot.</li>'
+        '</ol></section>'
+        '<section class="grid"><article class="card span-6"><p class="kicker">Format gate</p><h2>Exact TIFF contract</h2><ul class="list-clean">'
+        f'<li>{int(fmt["band_count"])} raster band; `{e(fmt["dtype"])}`.</li><li>CRS {e(fmt["crs"])}; {int(fmt["pixel_size_m"])}-m resolution.</li><li>Exact template dimensions, bounds, and geotransform.</li>'
+        f'<li>Every in-footprint value is finite and in [{fmt["probability_min"]}, {fmt["probability_max"]}].</li>'
+        f'<li>Outside-footprint cells are {e(fmt["outside_footprint"])}, matching the official sample template.</li>'
+        '<li>Use a unique content-addressed filename and keep a SHA-256 receipt.</li></ul>'
+        '<p>The H29/core restore writes to &lt;repo&gt;/data and does not read GEMS_DATA_DIR. Restore and verify that manifest first; then point the local checker at that directory:</p>'
+        '<pre><code>python scripts/restore_data.py\n'
+        'python scripts/restore_data.py --verify\n'
+        'GEMS_DATA_DIR=data python scripts/check_submission.py \\\n'
+        '  docs/downloads/&lt;candidate.tif&gt; --receipt evidence/format_checks/&lt;candidate.json&gt;</code></pre>'
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/scripts/check_submission.py", "Review the checker source", external=True)}</p>'
+        '<p>The local checker is necessary but cannot guarantee organizer acceptance. Review the current official problem page.</p></article>'
+        '<article class="card span-6"><p class="kicker">Narrative disclosure</p><h2>Generative AI use</h2>'
+        f'<p>The official {int(rules["rules_year"])} rules require a narrative disclosure of the extent and role of generative-AI use when applicable. '
+        'This project has a draft disclosure in its repository; it must be updated against the actual final work before submission.</p>'
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/05_genai_disclosure_draft.md", "Review the current disclosure draft", external=True)}</p>'
+        '</article></section>'
+        '<section class="card"><h2>Important distinction</h2><p>Spatially blocked catalogue-gap holdouts are an internal proxy. They do not reproduce the competition’s newly expert-labelled test faults, '
+        'its public leaderboard score, private test score, or second-round revised-label score. Never use a holdout value as a claimed submission result.</p></section>'
+    )
+    return page(
+        "Executive summary and submission guide",
+        "Manual steps and exact checks for an eventual GEMS GeoTIFF submission. No current artifact is slot-approved.",
+        "summary",
+        "Executive summary · manual upload only",
+        "A clear route from research artifact to submission.",
+        "No file is currently cleared for a weekly slot. This page records the manual process and format contract so the next approved artifact is easy to identify and audit.",
+        body,
+        a("index.html", "Back to current status", class_name="button") + a("sources.html", "Official source links", class_name="button secondary"),
+    )
 
 
-def irregularities_table(irr):
-    return ("<table><tr><th>ID</th><th>severity</th><th>state</th><th>finding → action</th></tr>" + "".join(
-        f"<tr><td><code>{esc(i['id'])}</code></td><td>{badge(i['sev'], status_kind(i['sev']))}</td>"
-        f"<td>{esc(i['status'])}</td><td>{esc(i['finding'])}<br><span class='mut'>→ {esc(i['action'])}</span></td></tr>"
-        for i in irr["irregularities"]) + "</table>")
+def render_research() -> str:
+    hypotheses = read_json("hypotheses.json")
+    status = read_json("status_feed.json")["current"]
+    h29_gate = json.loads((ROOT / "evidence" / "h29_gate.json").read_text(encoding="utf-8"))
+    h29_holdout = json.loads((ROOT / "evidence" / "h29_holdout.json").read_text(encoding="utf-8"))
+    h29_arm_count = len(h29_gate)
+    h29_screen_draws = h29_gate["A1"]["screen_draws"]
+    h29_fitted_draws = sorted({int(row["draw"]) for row in h29_holdout.get("rows", [])})
+    h29_confirmation_draws = h29_gate["A1"]["confirmation_draws"]
+    h29_confirmation_not_run = not any(draw in h29_confirmation_draws for draw in h29_fitted_draws)
+    h31_design = json.loads((ROOT / "evidence" / "h31_worm_screen" / "design.json").read_text(encoding="utf-8"))
+    h31_gate = h31_design["promotion_gate"]
+    h31_fold_count = len(h31_design["spatial_folds"])
+    cards = []
+    for item in hypotheses.get("items", []):
+        layers = ", ".join(item.get("layers", []))
+        state = tag(item.get("status", ""), "warning" if item["id"] == "H31" else "")
+        cards.append(
+            f'<article class="card span-12"><div class="grid"><div class="span-8"><p class="kicker">Rank {e(item.get("rank"))} · {e(item["id"])}</p>'
+            f'<h2>{e(item["title"])}</h2><p>{state}</p><p><strong>Layers:</strong> {e(layers)}</p>'
+            f'<p><strong>Physical signature:</strong> {e(item.get("signature", ""))}</p>'
+            f'<p><strong>Why it could add unmapped faults:</strong> {e(item.get("why_unmapped", ""))}</p>'
+            f'<p><strong>How it differs from reviewed work:</strong> {e(item.get("difference", ""))}</p></div>'
+            f'<aside class="span-4"><div class="metric"><span class="label">Planning ΔDTI</span><span class="value">{e(item.get("planning_delta_dti", "not estimated"))}</span>'
+            '<span class="label">Planning range only—not measured, not a score</span></div>'
+            f'<p><strong>Cost:</strong> {e(item.get("cost", ""))}</p><p><strong>Data:</strong> {e(item.get("external_data", ""))}</p></aside></div></article>'
+        )
+    body = (
+        '<section class="status-banner"><strong>Novelty was rechecked against the latest main branch.</strong> Every arm in the corrected H29 screen failed; H31’s separate screen also failed. H32 is the next unimplemented candidate. “Not found” is limited to the reviewed repositories, not all competitors.</section>'
+        f'<section class="grid" aria-label="Ranked hypotheses">{"".join(cards)}</section>'
+        '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
+        f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
+        f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'
+        '<p>A synthetic engineering test found exact-pixel multiplication produced an empty joint term after the distinct transforms. Before any real-data fit, the preregistered joint feature was clarified to use a fixed small spatial tolerance; no model, data, or promotion gate changed.</p>'
+        f'<p><strong>Current screen:</strong> {e(status.get("screen_status", "not run"))}. Confirmation is {e(status.get("confirmation_status", "blocked"))}.</p>'
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/02_preregistered_h31_worming_2026-10-03.md", "Read the preregistration and amendment", external=True)}</p>'
+        '</article><article class="card span-5"><p class="kicker">Scientific limits</p><h2>Worming-like ≠ full inversion</h2>'
+        '<p>Poisson-wavelet worming literature motivates upward continuation and tracking horizontal-gradient maxima. The implementation here is a scale-space proxy with regularized Fourier integration, not the full Hornby transform, not an inversion, and not a fault-depth estimator.</p>'
+        '<p>Potential fields are non-unique: source interference, cultural noise, depth, remanence and misalignment can produce or hide edges. Persistence is not proof of faulting, geothermal activity, or discovery.</p>'
+        '<p><a href="sources.html">Check the primary/review sources and limitations →</a></p></article></section>'
+        '<section class="card"><p class="kicker">Promotion gates</p><h2>Spatial validation before any slot</h2>'
+        f'<p>{h31_fold_count} spatial blocks are the replication units; folds and draws are paired cells, not independent extra samples. H31 must beat the strongest same-run control by a paired mean DTI gain {e(h31_gate["mean_paired_gain_over_best_same_run_control"])}, '
+        f'be positive in {e(h31_gate["positive_spatial_blocks"])} blocks, keep the worst-block gain {e(h31_gate["worst_spatial_block_gain"])}, and keep catalogue-hug-share increase {e(h31_gate["catalogue_hug_share_increase"])}. '
+        f'{"A fresh confirmation is required." if h31_gate["fresh_confirmation_required"] else "No fresh confirmation is required."} Raw-cell hashes and screen gates are checked before any confirmation.</p>'
+        '<p>Passing these gates only permits a candidate to be considered; it does not authorize a weekly submission, guarantee the official score, or establish generalization to expert-labelled faults.</p></section>'
+        '<section class="card"><p class="kicker">What came before</p><h2>Predecessor audit</h2>'
+        '<p>The reviewed GEMSDOE25 code already tried fixed-scale potential-field derivatives, terrain/scarp descriptors, catalogue geometry, geothermal/context tables, thinning, single-tip continuation, and an H30 relay-bridge × scarp experiment. The predecessor A-family potential-field screen was reported inert/negative on a catalogue-gap proxy; H30-1 failed fresh-draw confirmation. These are predecessor proxy reports, not official scores and not recomputed here.</p>'
+        f'<p><strong>H29 result:</strong> the corrected nearest-fill, bounded-persistence screen tested {h29_arm_count} preregistered arms; every arm failed. '
+        f'{"No confirmation fits were run" if h29_confirmation_not_run else "Confirmation status is recorded in the evidence"}; no weekly slot was recommended or used. The earlier run and gate discrepancy are archived as historical evidence, not the current screen. These are catalogue-gap proxy outcomes, not competition scores. '
+        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/02_h29_results_2026-10-03.md", "Review the corrected H29 outcome", external=True) + ' · '
+        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/evidence/h29_gate.json", "Open the current H29 gate", external=True) + ' · '
+        + a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/06_h29_gate_reconciliation_2026-10-03.md", "Read the archived gate reconciliation", external=True) + '</p>'
+        '<p>Historical score claims remain unverified owner/user reports. No leaderboard snapshot is shown or used here. H31 is not designed or tuned to reproduce them.</p>'
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/04_prior_work_audit.md", "Review the predecessor audit", external=True)}</p></section>'
+        '<section class="card"><h2>Model and emission</h2><p>The frozen screen compares a fixed BDE + X1–X3 baseline, a H27 tip control, and factorial additions of magnetic-pseudogravity persistence/drift, gravity persistence/drift, and joint cross-support. All arms share the same holdout masks, samples, classifier family, and emission budget within a cell. The output is scored by the local distance-weighted metric on held-out catalogue traces only.</p></section>'
+    )
+    return page(
+        "Research and hypotheses",
+        "Ranked hypotheses, preregistration, current negative screens, and scientific limits.",
+        "research",
+        "Research register · updated from local files",
+        "Hypotheses, re-ranked against H29.",
+        "Every tested H29 arm failed the corrected screen; the separate H31 screen also failed. H32 is the first unimplemented candidate, and H33 remains blocked. No current file is slot-approved.",
+        body,
+        a("status.html", "View the evidence feed", class_name="button") + a("sources.html", "Review scientific sources", class_name="button secondary"),
+    )
+
+
+def render_status() -> str:
+    status = read_json("status_feed.json")
+    current = status["current"]
+    event_rows = []
+    for event in reversed(status.get("events", [])):
+        event_rows.append(
+            '<li><time>' + e(event.get("date", "")) + '</time><strong>' + e(event.get("title", "")) + '</strong><span>'
+            + e(event.get("detail", "")) + '</span></li>'
+        )
+    body = (
+        '<section class="status-banner"><strong>This is not a leaderboard feed.</strong><p>The DrivenData Terms prohibit automated monitoring and manual monitoring/copying without prior written consent. '
+        'This page only reports checked-in research and release records. It contains no live page content, no rank polling, and no automated score fetch.</p></section>'
+        '<section class="grid"><div class="metric span-4"><span class="label">Current research stage</span><span class="value">' + e(current.get("research_stage", "unknown")) + '</span></div>'
+        '<div class="metric span-4"><span class="label">Screen status</span><span class="value">' + e(current.get("screen_status", "unknown")) + '</span></div>'
+        '<div class="metric span-4"><span class="label">Confirmation status</span><span class="value">' + e(current.get("confirmation_status", "unknown")) + '</span></div>'
+        '<div class="metric span-4"><span class="label">Inputs</span><span class="value">' + e(current.get("data_status", "unknown")) + '</span></div>'
+        '<div class="metric span-4"><span class="label">Spatial holdout best</span><span class="value">' + e(current.get("holdout_best") if current.get("holdout_best") is not None else "not measured") + '</span><span class="label">Proxy, not competition score</span></div>'
+        '<div class="metric span-4"><span class="label">Official competition score</span><span class="value">' + e(current.get("competition_score") if current.get("competition_score") is not None else "not verified") + '</span><span class="label">No leaderboard copied</span></div></section>'
+        '<section class="card"><p class="kicker">Project-local updates</p><h2>Evidence timeline</h2><p class="muted">Last local update: ' + e(status.get("updated_local_date", "unknown")) + '</p>'
+        f'<ol class="timeline">{"".join(event_rows)}</ol></section>'
+        '<section class="card"><p class="kicker">Score-claim policy</p><h2>No live scores or rankings are published here</h2>'
+        '<p>Historical owner/user-supplied score statements remain preserved in the original README prompt and a local claim register for provenance, but they are unverified and are not competition results, model targets, or promotion gates. This public status page intentionally does not reproduce their values, ranks, or account names.</p>'
+        '<p>No leaderboard link, leaderboard content, polling, or manual monitoring/copying is included. The project publishes only its own dated experiment and artifact records; prior written consent would be required before any monitoring or copying.</p></section>'
+    )
+    return page(
+        "Project-local status feed",
+        "A local evidence timeline. This is not a DrivenData leaderboard or score feed.",
+        "status",
+        "Local evidence only · no external polling",
+        "What is known, and what is not.",
+        "Status updates are assembled from this repository’s own dated records. A blank result means no verified result is available—not that a score is zero.",
+        body,
+        a("index.html", "Overview", class_name="button") + a("sources.html", "Terms and source register", class_name="button secondary"),
+    )
+
+
+def render_sources() -> str:
+    registry = read_json("sources.json")
+    items = []
+    for source in registry.get("sources", []):
+        verified = tag("verified page/listing", "yes") if source.get("verified") else tag("not verified", "no")
+        used = ''.join(f'<li>{e(value)}</li>' for value in source.get("used_for", []))
+        items.append(
+            '<article class="source-item"><div class="grid"><div class="span-7"><h3>' + source_url(source) + '</h3>'
+            + '<p class="source-meta">' + e(source.get("publisher", "")) + ' · ' + e(source.get("kind", "")) + '</p>'
+            + '<p><strong>Checked:</strong> ' + e(source.get("verified_date") or "not checked") + ' · ' + verified + '</p>'
+            + ('<p><strong>DOI:</strong> ' + e(source["doi"]) + '</p>' if source.get("doi") else '')
+            + '</div><div class="span-5"><p><strong>Used for</strong></p><ul class="list-clean">' + used + '</ul></div></div>'
+            + ('<p class="callout"><strong>Caveat:</strong> ' + e(source.get("caveat", "")) + '</p>' if source.get("caveat") else '')
+            + '</article>'
+        )
+    body = (
+        '<section class="status-banner"><strong>Source discipline:</strong> every source has a verification status and limitation. '
+        '“Verified” means the cited page/listing was read or a checked predecessor record was carried forward; it does not validate a model, competition score, owner-mirror file, or right to use data beyond its stated licence.</section>'
+        '<section class="card"><p class="kicker">Official and research sources</p><h2>Open the primary source yourself</h2>' + ''.join(items) + '</section>'
+        '<section class="card"><h2>Data and interpretation caveats</h2><p>Review the project irregularities register for mirror provenance, ambiguous band semantics, unverified score claims, proxy limits, and blocked data.</p><p><a href="irregularities.html">Open the irregularities page →</a></p></section>'
+        '<section class="card"><p class="kicker">Terms decision</p><h2>No DrivenData polling or scraping</h2>'
+        '<p>DrivenData’s Terms of Use prohibit robots or other automatic access for any purpose, including monitoring/copying, and manual monitoring/copying without prior written consent. No written consent for monitoring is present. This project includes no leaderboard link, live page content, polling, or copied score feed; local status comes only from repository evidence.</p>'
+        f'<p>{a("https://www.drivendata.org/termsofuse/", "Read the official Terms of Use", external=True)} · {a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/03_drivendata_terms_access_policy.md", "Review the project access-policy notes", external=True)}</p></section>'
+    )
+    return page(
+        "Sources and official links",
+        "Official competition, policy, USGS and scientific references with verification status and caveats.",
+        "sources",
+        "Auditable references · primary sources first",
+        "Sources you can check line by line.",
+        "Official links, scientific grounding, verification dates, and explicit gaps. No leaderboard or login-walled data page is copied here.",
+        body,
+        a("research.html", "Back to research", class_name="button") + a("status.html", "Status and score-claim policy", class_name="button secondary"),
+    )
+
+
+def render_irregularities() -> str:
+    registry = read_json("irregularities.json")
+    cards = []
+    for item in registry.get("items", []):
+        severity = item.get("severity", "unknown")
+        state_style = "no" if severity == "high" else "warning"
+        cards.append(
+            '<article class="card span-12"><div class="grid"><div class="span-8">'
+            f'<p class="kicker">{e(item.get("id", ""))} · {tag(severity, state_style)}</p>'
+            f'<h2>{e(item.get("subject", ""))}</h2><p><strong>Finding:</strong> {e(item.get("detail", ""))}</p>'
+            f'<p><strong>Impact:</strong> {e(item.get("impact", ""))}</p></div>'
+            f'<aside class="span-4"><p class="kicker">Status</p><p>{e(item.get("status", ""))}</p>'
+            f'<p><strong>Mitigation:</strong> {e(item.get("mitigation", ""))}</p></aside></div></article>'
+        )
+    body = (
+        '<section class="status-banner"><strong>Irregularities are not hidden.</strong><p>Items below include owner-mirror provenance, ambiguous labels/bands, unverified score reports, holdout limitations, and blocked external data. Each carries an impact and a mitigation.</p></section>'
+        f'<section class="grid" aria-label="Project irregularities">{"".join(cards)}</section>'
+        '<section class="card"><h2>Machine-readable register</h2><p>The same items are maintained in the repository for programmatic review.</p>'
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/registry/irregularities.json", "Open registry/irregularities.json", external=True)}</p>'
+        f'<p>{a("sources.html", "Review official and scientific sources", class_name="button light")}</p></section>'
+    )
+    return page(
+        "Irregularities and caveats",
+        "Material data, interpretation, score, holdout, and method caveats in the GEMSDOE29 project.",
+        "irregularities",
+        "Data lineage · interpretation · evaluation limits",
+        "The caveats are part of the result.",
+        "Material uncertainties are recorded with their consequences and mitigations—not buried in fine print.",
+        body,
+        a("index.html", "Current project status", class_name="button") + a("research.html", "Research design", class_name="button secondary"),
+    )
+
+
+def render_root_redirect() -> str:
+    """Route the legacy GitHub Pages root to the maintained static site in ``docs/``."""
+    return (
+        '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'
+        '<meta http-equiv="refresh" content="0; url=docs/index.html">'
+        '<link rel="canonical" href="https://buffedlizard55-lab.github.io/GEMSDOE29/docs/">'
+        '<title>GEMSDOE29 — opening research site</title></head><body>'
+        '<main><h1>GEMSDOE29</h1><p>The research site is opening.</p>'
+        '<p><a href="docs/index.html">Open the GEMS Prize research site</a></p></main>'
+        '</body></html>\n'
+    )
+
+
+def render_all() -> dict[Path, str]:
+    return {
+        ROOT / "index.html": render_root_redirect(),
+        DOCS / "index.html": render_home(),
+        DOCS / "executive-summary.html": render_summary(),
+        DOCS / "research.html": render_research(),
+        DOCS / "status.html": render_status(),
+        DOCS / "sources.html": render_sources(),
+        DOCS / "irregularities.html": render_irregularities(),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--check", action="store_true", help="fail if generated HTML is stale; do not write files")
+    args = parser.parse_args()
+    outputs = render_all()
+    stale = []
+    for path, content in outputs.items():
+        if args.check:
+            if not path.is_file() or path.read_text(encoding="utf-8") != content:
+                stale.append(path.relative_to(ROOT).as_posix())
+        else:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content, encoding="utf-8")
+            print(f"wrote {path.relative_to(ROOT)}")
+    if stale:
+        print("generated site is stale: " + ", ".join(stale), file=sys.stderr)
+        return 1
+    if args.check:
+        print(f"site is current ({len(outputs)} pages)")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

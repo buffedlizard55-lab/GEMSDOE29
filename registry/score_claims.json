@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "policy": "No live leaderboard page or content has been fetched/copied. These values are owner/user-reported historical claims only; do not treat them as verified scores or use them as training targets or promotion gates.",
+  "claims": [
+    {
+      "id": "reported-leader-2026-10-02",
+      "value": 0.3195,
+      "description": "Reported as the then-current highest GEMS leaderboard score in the preserved original project brief.",
+      "source": "knowledge/owner_brief_verbatim.txt and predecessor repository README",
+      "verification": "unverified; no organizer receipt, screenshot, public-page contents, account identity, or score-to-file mapping retained",
+      "used_for_modeling": false
+    },
+    {
+      "id": "reported-rank5-2026-10-02",
+      "value": 0.2941,
+      "description": "Reported as a rank-five score in the predecessor repository's historical README.",
+      "source": "buffedlizard55-lab/GEMSDOE25 at efc4be7bb3cfdf2def12a7fb83284d3311ac9220",
+      "verification": "unverified; predecessor analysis labels this a user/owner-provided claim",
+      "used_for_modeling": false
+    },
+    {
+      "id": "reported-group-score-2026-10-02",
+      "value": 0.2477,
+      "description": "Reported score associated with an earlier owner-mirrored raster; the local raster's deterministic pixel transformation was reproducible, but the score itself was not independently verified.",
+      "source": "predecessor repository and owner-mirrored D2.8 artifact; see knowledge/04_prior_work_audit.md",
+      "verification": "unverified; raster reproducibility is not a competition-score receipt",
+      "used_for_modeling": false
+    }
+  ]
+}
