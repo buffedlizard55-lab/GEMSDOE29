@@ -79,7 +79,17 @@
 
 ## Start here
 
-- **[H41 results (read first)](knowledge/26_h41_results_2026-10-03.md)** — the screen table, why the two passing
+- **[H43 results (read first)](knowledge/30_h43_drainage_results_2026-10-03.md)** — the drainage-network screen on
+  draws 32/33 (40 cells): `A3_knick` **+0.01419** and `A4_union` **+0.01287** pass the frozen G1 gate with the
+  emission budget in band and the worst fold ≈ −0.001, while `A1_off` (+0.00401) and `A2_network` (−0.00136) fail —
+  so the signal is the **knickpoint residual**, not drainage density. The SGMC second proxy is negative on both
+  passing arms, the staged execution and the design-file rewrite are disclosed in §1, and the preregistered
+  confirmation on draws 34/35 is in flight (its verdict belongs in §5). Its frozen protocol is
+  **[knowledge/29](knowledge/29_preregistered_h43_screen_2026-10-03.md)**.
+- **[Session-5 note](knowledge/31_session5_data_and_emission_2026-10-03.md)** — the data-placement receipt (the
+  standing blocker, closed), the emission-density sweep (negative: keep the pinned artifact) and the H43 execution
+  record, with every re-check command.
+- **[H41 results](knowledge/26_h41_results_2026-10-03.md)** — the screen table, why the two passing
   arms are a ranking gain rather than an emission fluke, the SGMC conflict, and every disclosed process defect.
   Its frozen protocol is **[knowledge/24](knowledge/24_preregistered_h41_screen_2026-10-03.md)**.
 - **[Session-4 brief, frozen screen and slate](knowledge/25_candidates_v4_2026-10-03.md)** — the
@@ -115,8 +125,38 @@
 
 ## Evidence boundary and current status
 
-- **Next free draw is 32** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27 plus 2/3 count as spent because they were authorized under a recorded receipt and never fitted.
+- **Next free draw is 36** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). Draws 32/33 were fitted by the H43 screen and 34/35 are reserved by its in-flight confirmation (recorded with an `IN FLIGHT` note whose row count is a lower bound by design); the next free pair after the confirmation is 36. The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27 plus 2/3 count as spent because they were authorized under a recorded receipt and never fitted.
 - **One download by hand** — the *leaderboard score itself*. The manual link is on the site's leaderboard card and in `knowledge/03`; `scripts/check_site.py` deliberately fails if anything on the site links the score page, and `registry/score_claims.json` keeps every score as a claim until the owner confirms it.
+- **H43 (session 5):** drainage-network organization on the cached detrended surface — priority-flood fill → D8
+  accumulation → binned-median log-log stream-power fit → knickpoint residual, plus off-catalogue and
+  channel/scarp columns (`src/gemsdoe/h43.py`). Frozen at `knowledge/29` (sha256 `919210d9…`), screened on
+  draws 32/33 across the four blocked folds and five arms: **`A3_knick` PASS +0.01419** (fold gains
+  −0.0010/+0.0195/+0.0153/+0.0229, 3/4 positive folds in both draws, worst fold −0.00095) and
+  **`A4_union` PASS +0.01287**; `A1_off` (+0.00401) and `A2_network` (−0.00136) FAIL. Control mean 0.14317,
+  passing-arm means 0.15735/0.15603, emissions 7.3–7.5 k dots per cell (budget in band), viability guard passed,
+  and `scripts/analyze_h43_screen.py` recomputed every gate from the raw rows with **integrity_problems: 0**.
+  The **SGMC second proxy is negative on both passing arms** (A3 −0.00012 on 2/4 folds, A4 −0.00190 on 1/4) — the
+  same proxy conflict that vetoed H41 — so this is a screen pass, not a promotion. The first launch was OOM-killed
+  at 23/40 rows and its partial stage is quarantined under `evidence/history/h43_screen_oom_partial_2026-10-03/`;
+  the completed stage ran as four verified process episodes, and the design-file rewrite that happened before the
+  keep-design guard existed is disclosed with the exact evidence in `knowledge/30` §1
+  (`IR-29-H43-DESIGN-REWRITE`, `IR-29-H43-STAGED-EXECUTION`). Raw cells: [`evidence/h43_screen/`](evidence/h43_screen/).
+  The preregistered confirmation on draws 34/35 was launched from a clean tree at `bd6811e` and is in flight at this
+  commit; **no H43 candidate exists, no file is slot-approved, and no weekly slot has been used.**
+- **Data placement (session 5):** the original brief's blocker — "run the data download script and prepare the
+  data" — is closed locally with a re-checkable receipt. `bash scripts/download_competition_data.sh` restored the
+  hash-pinned owner mirrors, `python scripts/prepare_data.py` rebuilt the footprint/label/band caches (5,167,373
+  footprint pixels, 60,988 catalogue pixels, 19 bands), and `python scripts/record_data_placement.py` wrote
+  `evidence/data_placement_receipt.json`: 22/22 pinned manifest entries byte-correct (11/11 H31 group, 11/11 core),
+  `problems: []`, **`organizer_authenticated: false`** (owner mirrors, not organizer bytes — `IR-DATA-01`).
+  `--check` re-verifies without rewriting. See `knowledge/31` §2.
+- **Emission density (session 5):** the frozen sweep (`knowledge/27`) returned a **negative**: on a proxy that
+  reproduces the reported ladder order (solid 0.06970 < d1.5 0.09449 < d2.8 0.09832), the pinned 2.8-px artifact is
+  the **maximum** of its family — every denser row loses 0.0038–0.0286 and every sparser row 0.0028–0.0267, the
+  score-aware placement variant loses 0.0043, and the rule returns `admissible: []` with "keep the pinned artifact"
+  (`knowledge/28`, `evidence/emission_sweep/`). Two side findings are registered: the spacing parameter is
+  quantised by an integer disc (`IR-29-SPACING-QUANTISATION`) and the repository-candidate file scores 0.327 on the
+  file-level proxy purely from training leakage, which is why the sweep never ranks model-derived artifacts.
 - **H41 (session 4):** slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only — the first G1 pass in
   this family (`A1` +0.0066173, `A4` +0.0073436 on 40 cells; `A2`/`A3` fail; AUC 0.8037 → 0.8159; SGMC second proxy
   negative on every arm, and again on the confirmation). **Confirmation verdict (draws 30/31, 40 cells): `A4_h41_union` reproduces at +0.0077283 and passes G1+G2, `A1_h41_off` fails G2 at +0.0044157, and G3 — the inherited secondary-proxy requirement — withholds promotion for every arm (SGMC 1/4 folds in both stages), so nothing was built or submitted.** `knowledge/26` additionally discloses seven process defects, including five wrong sentences in the frozen preregistration (left byte-identical on purpose) and a fabricated citation. No leaderboard was fetched: that check stays manual by policy. Raw cells: [`evidence/h41_screen/`](evidence/h41_screen/) (including the preserved
@@ -172,7 +212,8 @@ python -m pip install -e '.[dev]'
 python -m pytest -q
 ruff check src scripts tests
 python scripts/build_submission_contract.py
-python scripts/build_draw_ledger.py --check   # which holdout draws are already spent (next free: 32)
+python scripts/record_data_placement.py --check   # re-verify the session-5 data placement receipt (no rewrite)
+python scripts/build_draw_ledger.py --check   # which holdout draws are already spent (next free: 36)
 python scripts/build_site.py
 python scripts/check_site.py
 python scripts/verify_downloads.py            # re-verify every registered download (never its build hashes)

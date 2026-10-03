@@ -398,10 +398,14 @@ def h43_screen_card() -> str:
         gains = entry["fold_gains"]
         gain_list = list(gains.values()) if isinstance(gains, dict) else list(gains)
         n_pos = sum(1 for g in gain_list if g > 0)
+        # The gate counts positive folds *within each draw*; show both that statistic and the fold-mean count so a
+        # reader cannot mistake the looser fold-mean count for the gate (A2_network: fold-mean 1/4 but draw counts 0/4, 3/4).
+        pos_draws = list(entry.get("positive_folds_per_draw") or [])
+        per_draw = ", ".join(f"{p}/4" for p in pos_draws) if pos_draws else "n/a"
         verdict = "G1 PASS" if entry["G1_SCREEN_PASS"] else "G1 FAIL"
         items.append(
-            f"<li><code>{e(arm)}</code>: mean paired gain {entry['mean_gain']:+.5f}, folds positive {n_pos}/4, "
-            f"worst {entry['worst_fold_gain']:+.5f}, budget ok: {entry['budget_ok']}, "
+            f"<li><code>{e(arm)}</code>: mean paired gain {entry['mean_gain']:+.5f}, per-draw positive folds {per_draw} (gate), "
+            f"fold-mean positives {n_pos}/4, worst {entry['worst_fold_gain']:+.5f}, budget ok: {entry['budget_ok']}, "
             f"SGMC {entry['sgmc_mean_gain']:+.5f} ({entry['sgmc_positive_folds']}/4 folds) &#8594; <strong>{verdict}</strong></li>"
         )
     passed = sorted(arm for arm, entry in arms.items() if arm != "C0_base" and entry.get("G1_SCREEN_PASS"))

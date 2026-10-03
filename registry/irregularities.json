@@ -576,10 +576,10 @@
       "status": "open; disclosed",
       "date": "2026-10-03",
       "summary": "The re-run H43 screen is executed as several two-cell processes instead of one, to stay under the container memory limit.",
-      "detail": "After the OOM kill the screen was re-run with the same frozen preregistration (knowledge/29, unchanged sha256), the same draws (32/33), folds, arms, seeds and gates, but split into processes of at most two cells via --max-cells; each continuation runs --resume, which re-verifies the preregistration, module and input hashes recorded in design_screen.json before appending a row, and the summary is written only when all 40 (fold, draw, arm) rows exist. The process count is recorded in the summary's execution block.",
+      "detail": "The re-run H43 screen is executed as several two-cell processes instead of one, to stay under the container memory limit. Verified process accounting from the raw-cell file's git history (empty after the quarantine reset 87ecc24 -> 10 rows ca271ba -> 20 rows 910dffd -> 40 rows bd6811e): the launch plus three --resume continuations, i.e. four process episodes. The summary's execution block reports processes=2 because the runner computes 1 + (1 if any rows pre-existed); that counter under-counts staged runs and must be read as a lower bound, not a census. Every continuation re-verified the frozen prereg, module and input hashes before appending, so the rows share one feature definition and one input set.",
       "subject": "Staged multi-process execution of one frozen screen",
       "impact": "A reader could mistake the staged run for two experiments; the split is an environment workaround and changes no fit, gate or draw.",
-      "mitigation": "Disclosed in knowledge/30 and in this register entry; the summary carries execution.resumed and rows_this_process.",
+      "mitigation": "Disclosed in knowledge/30 section 1 with the per-run row arithmetic; the summary counter is documented as an under-count in the runner knob (processes) rather than silently trusted. A machine with more memory removes the staging, not the protocol.",
       "affected_artifacts": [
         "scripts/run_h43_screen.py",
         "evidence/h43_screen/summary_screen.json",
@@ -615,6 +615,15 @@
         "knowledge/07_metric_emission_analysis_2026-10-03.md",
         "docs/irregularities.html"
       ]
+    },
+    {
+      "id": "IR-29-H43-DESIGN-REWRITE",
+      "severity": "medium",
+      "status": "disclosed, not repairable",
+      "subject": "The first H43 resume continuation rewrote evidence/h43_screen/design_screen.json before the keep-design guard existed.",
+      "detail": "scripts/run_h43_screen.py originally wrote the design file on every launch. The first continuation therefore re-labelled the stage with the merge revision ca271bae48... and build_seconds 32.04, replacing the launch-time c89e0e27.../35.12 recorded after the first ten rows. The rewrite is visible in commit 910dffd's diff. Per-row git revisions are not recorded anywhere, so which revision fitted rows 11-20 cannot be proven from the evidence.",
+      "impact": "Affects provenance labelling only: the module hashes pinned in the design are byte-identical across the two revisions (the merge did not touch src/gemsdoe), every continuation re-verified them, and the analyzer re-checks the preregistration hash, so no gate or cell value is affected. It does mean the design file's revision field describes the stage's close, not its launch.",
+      "mitigation": "The runner now keeps an existing design on --resume (910dffd) so future staged stages cannot re-label themselves; the defect and its exact evidence are recorded in knowledge/30 section 1."
     }
   ],
   "updated": "2026-10-03"
