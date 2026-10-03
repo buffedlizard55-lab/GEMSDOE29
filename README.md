@@ -46,9 +46,14 @@ against the original request). Create a pull request and merge it.*
   (`tests/test_sibling_reproduction.py`). The geometry lever is exhausted at ≈0.255–0.260 (GEMSDOE27 live
   inversion); beating public-#1 0.3195 (DARD, 12 subs; read from the leaderboard 2026-10-03, public column)
   requires detector concentration > 5.7× blind. See `registry/live_scores.json`.
-* **Gate outcomes + candidate:** see `evidence/h29_gate.json`, the site's research page, and
-  `docs/downloads/checks-*.json`. A gate FAIL is recorded honestly and the file is labelled research-only;
-  no file in this repo claims a live score.
+* **Frozen gate verdict (2026-10-03):** all four arms FAIL the pre-registered +0.005 sparse-proxy bar —
+  A1 gate −0.0001/−0.0001, A2 rank −0.0010/+0.0002, B1 worm-features +0.0004/+0.0004, B2 thermal-features
+  +0.0005/+0.0012 (4/4 folds one draw; still 1/4 of margin). No slot recommended, none spent; the two
+  shipped TIFs carry their status on the download card. Full write-up: `knowledge/02_h29_results_2026-10-03.md`.
+* **Answer to "can we beat 0.26 / 0.3195?":** not by re-arranging this surface (exhausted ≈0.255–0.260,
+  independently re-verified here); beating 0.3195 requires detector concentration > 5.7× blind. This session
+  proved worming-persistence and probe-residuals in their SIMPLE forms are not that jump — and registered the
+  sharper versions (notch, corridors, soft prior, GPU U-Net) for the next sessions.
 
 ## How to use the site / submit (also at `docs/executive-summary.html`)
 

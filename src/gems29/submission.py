@@ -56,7 +56,8 @@ def write_submission(mask: np.ndarray, out_dir: Path, stem: str, *, note: str) -
     zero_arr = np.where(foot, vals, np.float32(0.0))
     p_nan = out_dir / f"{stem}-nan.tif"
     p_zero = out_dir / f"{stem}-zeros.tif"
-    with rasterio.open(p_nan, "w", **prof, nodata=np.nan) as ds:
+    prof["nodata"] = float(np.nan)
+    with rasterio.open(p_nan, "w", **prof) as ds:
         ds.write(nan_arr, 1)
     p2 = dict(prof)
     p2["nodata"] = None
@@ -114,6 +115,10 @@ def verify_files(out_dir: Path, stem: str, foot_mask: np.ndarray | None = None,
         rec("zip:content_identical", np.array_equal(np.nan_to_num(a), np.nan_to_num(b))
             and np.array_equal(np.isnan(a), np.isnan(b)))
         probe.unlink()
+        try:
+            (out_dir / "_zip_probe").rmdir()
+        except OSError:
+            pass
     else:
         rec("zip:content_identical", False, "probe missing")
     n_fails = sum(1 for c in checks.values() if not c["pass"])

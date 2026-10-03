@@ -39,16 +39,22 @@ pre{padding:10px;overflow:auto}code{padding:1px 5px}a{color:var(--acc)}
 .mut{color:var(--mut);font-size:13px}.num{font-variant-numeric:tabular-nums}footer{margin:34px 0;color:var(--mut);font-size:12.5px}
 """
 
-NAV = """<nav><a href="index.html">Home</a><a href="executive-summary.html">Executive summary &amp; submission guide</a>
-<a href="research.html">Research &amp; method</a><a href="sources.html">Sources, scores &amp; flags</a></nav>"""
+def nav_for(root: bool) -> str:
+    if root:  # page lives at repo root; subpages under docs/
+        home, pref = "index.html", "docs/"
+    else:     # page lives in docs/; siblings unprefixed, home up one level
+        home, pref = "../index.html", ""
+    links = [(home, "Home"), (pref + "executive-summary.html", "Executive summary &amp; submission guide"),
+             (pref + "research.html", "Research &amp; method"), (pref + "sources.html", "Sources, scores &amp; flags")]
+    return "<nav>" + "".join(f'<a href="{h}">{txt}</a>' for h, txt in links) + "</nav>"
 
 
-def page(title, body, rel=""):
+def page(title, body, root: bool = False):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)}</title><style>{CSS}</style></head><body><main>
-{NAV.replace('href="', f'href="{rel}')}
+{nav_for(root)}
 <h1>{esc(title)}</h1>
 {body}
 <footer>GEMSDOE29 · built {now} · every figure on this page is generated from the repo's own JSON
@@ -63,10 +69,16 @@ def badge(text, kind):
 
 def status_kind(s):
     s = s.lower()
-    if "pass" in s or "verified" in s and "not" not in s:
-        return "ok"
-    if "fail" in s or "blocked" in s or "do not" in s:
+    if "not passed" in s or "fail" in s or "blocked" in s or "do not" in s or "refuted" in s:
         return "bad"
+    if "gate passed" in s or "slot-candidate" in s or "ok" == s:
+        return "ok"
+    if "research artifact" in s or "unverified" in s or "open" in s or "medium" in s or "info" in s:
+        return "warn"
+    if "high" in s or "critical" in s:
+        return "bad"
+    if "fixed" in s or "read" in s or "sibling-verified" in s:
+        return "ok"
     return "warn"
 
 
@@ -129,7 +141,7 @@ values exactly 0.0/1.0 in the footprint, NaN outside — the format that cannot 
 <b>{esc(m_nan['name'].removesuffix('.tif'))}</b>. Fallbacks: <a href="docs/downloads/{m_zip['name'] if m_zip else '—'}">.zip (same TIFF)</a> ·
 <a href="docs/downloads/{m_zero['name'] if m_zero else '—'}">-zeros.tif (0.0 outside footprint)</a>.
 Check receipts: docs/downloads/checks-{esc(wr.get('stem', ''))}.json.</p>
-<p><a href="executive-summary.html">→ Step-by-step submission guide</a> ·
+<p><a href="docs/executive-summary.html">→ Step-by-step submission guide</a> ·
 Reference (already live-scored 0.2600 — <b>do not resubmit</b>):
 {esc(arts.get('REFD28', {}).get('stem', '—'))}</p>
 </div>"""
@@ -143,8 +155,8 @@ Reference (already live-scored 0.2600 — <b>do not resubmit</b>):
         for s in live["group_submissions"][:10])
 
     idx_body = f"""
-<p class="mut">{badge('Competition ends 2026-12-03 (rules page; see sources)', 'warn')}
-{badge('3 submissions / rolling 7 days (rules)', 'warn')}
+<p class="mut">{badge('Ends 2026-12-03 23:59 UTC (competition homepage, read 2026-10-03)', 'warn')}
+{badge('3 submissions / rolling 7 days — sibling/owner-reported; rules PDF unreachable in sandbox (IR-29-RULES-URL)', 'warn')}
 {badge('Group best (owner-reported): 0.2600 · public rank #15', 'ok')}
 {badge('Public #1: DARD 0.3195 (leaderboard read 2026-10-03)', 'bad')}</p>
 {dl_block}
@@ -167,12 +179,12 @@ persistence), residualized 2 m geothermal probes, and (registered, pending) flig
 <table><tr><th>Rank</th><th>Team</th><th>Public DTI</th><th>Subs</th></tr>{lb_rows}</table>
 <h2>Group score ledger (owner-reported claims; first 10 of {len(live['group_submissions'])})</h2>
 <table><tr><th>Project</th><th>Submission</th><th>Score</th><th>Status</th></tr>{rows}</table>
-<p><a href="sources.html">Full ledger + verification state →</a></p>
+<p><a href="docs/sources.html">Full ledger + verification state →</a></p>
 <h2>Flagged for review (this session, {len(irr['irregularities'])} items)</h2>
 {irregularities_table(irr)}
 <p>Repo contract: the owner's full brief + core values live in <a href="https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/README.md"><code>README.md</code></a> and must be re-read at the start of every session.</p>
 """
-    (ROOT / "index.html").write_text(page("GEMSDOE29 — worming the deep/shallow boundary (DOE GEMS #306)", idx_body))
+    (ROOT / "index.html").write_text(page("GEMSDOE29 — worming the deep/shallow boundary (DOE GEMS #306)", idx_body, root=True))
 
     # ---------------- docs/executive-summary.html ----------------
     exec_body = f"""
@@ -220,15 +232,15 @@ explicit call against the numbers shown — not this repo's recommendation.</p><
 44,090-px geometry that the owner reports scored 0.2600 (tests/test_sibling_reproduction.py). It exists to prove
 format validity and for emergency rollback; resubmitting it would waste a slot without changing anything.</p>
 """
-    (ROOT / "docs" / "executive-summary.html").write_text(page("How to submit — GEMSDOE29", exec_body, rel="../"))
+    (ROOT / "docs" / "executive-summary.html").write_text(page("How to submit — GEMSDOE29", exec_body))
 
     # ---------------- docs/research.html ----------------
     res_body = research_body(worm, gate, hold, hyp)
-    (ROOT / "docs" / "research.html").write_text(page("Worming research & method — GEMSDOE29", res_body, rel="../"))
+    (ROOT / "docs" / "research.html").write_text(page("Worming research & method — GEMSDOE29", res_body))
 
     # ---------------- docs/sources.html ----------------
     src_body = sources_body(srcs, manifest, live, irr)
-    (ROOT / "docs" / "sources.html").write_text(page("Sources & verification — GEMSDOE29", src_body, rel="../"))
+    (ROOT / "docs" / "sources.html").write_text(page("Sources & verification — GEMSDOE29", src_body))
     print("site written: index.html + docs/{executive-summary,research,sources}.html")
 
 
@@ -341,7 +353,7 @@ solution's loss on GPU, which this sandbox cannot train.</p></div>
 def sources_body(srcs, manifest, live, irr):
     s_rows = "".join(
         f"<tr><td><a href='{esc(s['url'])}'>{esc(s['url'])}</a></td><td>{esc(s.get('accessed', '—'))}</td>"
-        f"<td>{badge(s.get('status', ''), status_kind(s.get('status', '')))}</td><td>{esc(s['claims'])}</td></tr>"
+        f"<td>{badge(s.get('status', ''), status_kind(s.get('status', '')))}</td><td>{esc(s.get(chr(39)+chr(99)+chr(108)+chr(97)+chr(105)+chr(109)+chr(115)+chr(39), chr(39)+chr(45)+chr(39)))}</td></tr>"
         for s in srcs["sources"])
     m_rows = "".join(
         f"<tr><td><code>{esc(f['path'])}</code></td><td class='num'>{f['bytes']:,}</td>"

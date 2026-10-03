@@ -1,0 +1,65 @@
+{
+  "stem": "gems29-wormrank-d28-20261003-73a8c4d12139",
+  "checks": {
+    "gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s) float32"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif:grid": {
+      "pass": true,
+      "detail": "(3730, 3292) EPSG:32611"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif:values_in_01": {
+      "pass": true,
+      "detail": "min=0.0, max=1.0"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif:no_nan_inside_template_footprint": {
+      "pass": true,
+      "detail": ""
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif:pixel_count": {
+      "pass": true,
+      "detail": "41349 vs 41349"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif:binary": {
+      "pass": true,
+      "detail": "n_positive=41349"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-zeros.tif:single_float32_band": {
+      "pass": true,
+      "detail": "1 band(s) float32"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-zeros.tif:grid": {
+      "pass": true,
+      "detail": "(3730, 3292) EPSG:32611"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-zeros.tif:values_in_01": {
+      "pass": true,
+      "detail": "min=0.0, max=1.0"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-zeros.tif:no_nan_inside_template_footprint": {
+      "pass": true,
+      "detail": ""
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-zeros.tif:pixel_count": {
+      "pass": true,
+      "detail": "41349 vs 41349"
+    },
+    "gems29-wormrank-d28-20261003-73a8c4d12139-zeros.tif:binary": {
+      "pass": true,
+      "detail": "n_positive=41349"
+    },
+    "zip:exactly_one_geotiff": {
+      "pass": true,
+      "detail": "['gems29-wormrank-d28-20261003-73a8c4d12139-nan.tif']"
+    },
+    "zip:content_identical": {
+      "pass": true,
+      "detail": ""
+    },
+    "__summary__": {
+      "pass": true,
+      "detail": "14 checks, 0 failures"
+    }
+  }
+}
