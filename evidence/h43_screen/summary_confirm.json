@@ -1,0 +1,123 @@
+{
+  "stage": "confirm",
+  "draws": [
+    34,
+    35
+  ],
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "arms": {
+    "A1_off": {
+      "mean_gain": -0.0006014361952171796,
+      "fold_gains": [
+        0.0,
+        -0.001048615760093935,
+        -0.0021182054634360237,
+        0.0007610764426612404
+      ],
+      "positive_folds_per_draw": [
+        1,
+        1
+      ],
+      "worst_fold_gain": -0.0021182054634360237,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": 0.0011275023821333344,
+      "sgmc_positive_folds": 2,
+      "mean_dti": 0.13695897727092654,
+      "mean_auc": 0.7857436296021446,
+      "G1_SCREEN_PASS": false
+    },
+    "A2_network": {
+      "mean_gain": 0.004079503903982665,
+      "fold_gains": [
+        0.0074475801478387504,
+        0.0030651657568439017,
+        0.0025363696067308705,
+        0.003268900104517136
+      ],
+      "positive_folds_per_draw": [
+        3,
+        4
+      ],
+      "worst_fold_gain": 0.0025363696067308705,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": 0.0006449907627411426,
+      "sgmc_positive_folds": 3,
+      "mean_dti": 0.14163991737012638,
+      "mean_auc": 0.7891132680955011,
+      "G1_SCREEN_PASS": false
+    },
+    "A3_knick": {
+      "mean_gain": 0.016740718064659543,
+      "fold_gains": [
+        0.0,
+        0.02213377237373787,
+        0.01964270669751428,
+        0.025186393187386025
+      ],
+      "positive_folds_per_draw": [
+        3,
+        3
+      ],
+      "worst_fold_gain": 0.0,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": -0.0021449519410035207,
+      "sgmc_positive_folds": 0,
+      "mean_dti": 0.15430113153080327,
+      "mean_auc": 0.7936994616109225,
+      "G1_SCREEN_PASS": true
+    },
+    "A4_union": {
+      "mean_gain": 0.01567803150122358,
+      "fold_gains": [
+        -0.0005326507580935003,
+        0.016903050233918193,
+        0.02488730249383958,
+        0.02145442403523004
+      ],
+      "positive_folds_per_draw": [
+        3,
+        4
+      ],
+      "worst_fold_gain": -0.0005326507580935003,
+      "cells_present": 8,
+      "budget_ok": true,
+      "sgmc_mean_gain": -2.3865684555385985e-05,
+      "sgmc_positive_folds": 2,
+      "mean_dti": 0.1532384449673673,
+      "mean_auc": 0.7916355413063633,
+      "G1_SCREEN_PASS": true
+    },
+    "C0_base": {
+      "mean_dti": 0.13756041346614373,
+      "mean_auc": 0.7848084162140689
+    }
+  },
+  "n_cells": 40,
+  "execution": {
+    "processes": 2,
+    "resumed": true,
+    "rows_this_process": 10,
+    "note": "the 2026-10-03 OOM kill split this stage across processes; every row was appended by a process that re-verified the frozen prereg, module and input hashes"
+  },
+  "viability_guard": {
+    "min_nonzero_fraction": 0.002,
+    "static_columns": {
+      "H43_LNACC": 0.40152665580750607,
+      "H43_OMEGA": 0.701252841627651,
+      "H43_KNICK": 0.04053878053703497,
+      "H43_OFF_FRONT": 0.0,
+      "H43_CHANNEL_SCARP": 0.5239795927253558
+    },
+    "problems": [],
+    "passed": true
+  },
+  "note": "DTI proxies on blocked holdout folds; gates frozen in knowledge/29 \u00a75. The drainage surface is detrended, so a pass is corridor-ranking evidence about drainage organization, never a claim about real discharge or about 30 m-scale scarps."
+}

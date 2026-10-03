@@ -42,7 +42,7 @@ STAGE_SOURCES = {
     "h43_screen": dict(files=["evidence/h43_screen/design_screen.json"], fitted_key="draws",
                        status_note="COMPLETE: 40 cells on draws 32/33 (staged into two-cell processes after the OOM kill). A3_knick +0.01419 and A4_union +0.01287 passed G1, A1_off +0.00401 and A2_network -0.00136 failed, SGMC second proxy negative on both passing arms (proxy conflict). See knowledge/30; no candidate, no slot."),
     "h43_confirmation": dict(files=["evidence/h43_screen/design_confirm.json"], fitted_key="draws",
-                             status_note="IN FLIGHT at this record: the frozen 40-cell confirmation on draws 34/35 was launched from a clean tree at bd6811e; summary_confirm.json is written only at 40/40 rows and the live row count is evidence/h43_screen/cells_confirm.jsonl. No promotion or slot may be claimed until knowledge/30 section 5 records the confirmation verdict."),
+                             status_note="COMPLETE: 40 cells on draws 34/35. A3_knick +0.01674 and A4_union +0.01568 replicated the primary proxy result (3/4 positive folds per draw, worst folds 0.0/-0.000533) but the SGMC second proxy is negative in both stages, so the inherited G3 requirement withheld promotion for every arm: no candidate, no slot. See knowledge/30 section 5 and evidence/h43_screen/analyzer_report.json (integrity_problems 0)."),
 
 }
 # Ranges documented in prose that predate the per-stage evidence files kept here (or whose only record is an

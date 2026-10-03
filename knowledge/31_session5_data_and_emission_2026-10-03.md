@@ -105,7 +105,9 @@ non-reproducible one. Mixing the two arrays inside one frozen design would be si
 The staged execution is a compute-environment workaround, not a protocol change: draws (32/33), folds,
 arms, seeds, gates and the preregistration hash are unchanged. It is disclosed as
 `IR-29-H43-STAGED-EXECUTION`. Results — including the gate arithmetic recomputed from the raw rows by
-`scripts/analyze_h43_screen.py` — are in [`knowledge/30`](30_h43_drainage_results_2026-10-03.md).
+`scripts/analyze_h43_screen.py` — are in [`knowledge/30`](30_h43_drainage_results_2026-10-03.md), together with
+the confirmation verdict on draws 34/35: both knickpoint arms replicated the primary-proxy gain more strongly and
+the inherited G3 secondary-proxy rule then withheld promotion (same structure as H41).
 
 ## 4. Verification performed in this session (so the next session need not redo it)
 
