@@ -2,17 +2,22 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
-> **Current decision (2026-10-03, session 2): no slot-approved submission.** H34 (metric-native
-> coverage emission) is implemented, preregistered, run and reported: it **failed its frozen primary
-> gate** on the catalogue-hidden proxy (mean paired gain −0.0212, 0/4 folds) while passing its secondary
-> off-catalogue class (+0.0535, 4/4 folds) — see
-> [`knowledge/09_h34_results_2026-10-03.md`](knowledge/09_h34_results_2026-10-03.md). The 2^(5−1)
-> fractional factorial over the five feature families is running; the H35–H39 candidate slate is
-> registered; H29 failed all four arms and H31 remains unfitted. Two format-verified downloads are
-> offered for the owner's own decision: the REFD28 rebuild (the group's best-reported geometry) and the
-> SGMC off-catalogue inventory alternative (which **fails** the registered gate and is published only
-> because the two proxies rank it oppositely). No weekly slot has been used. All scores quoted anywhere
-> in this repository are unverified owner-reported claims.
+> **Current decision (2026-10-03, session 2 close-out): no slot-approved submission, but the site now
+> leads with the repository's own best-evidenced candidate.** The 2^(5−1) fractional factorial over the
+> five feature families is complete: supported inclusion effects are **B** (DEM curvature/scarp,
+> +0.0241, 8/8 cells positive) and **E** (visible-catalogue geometry, +0.0596, 8/8), with interactions
+> AC/AD/CD positive and AB/BD negative — see
+> [`knowledge/14_factorial_results_2026-10-03.md`](knowledge/14_factorial_results_2026-10-03.md).
+> The **H31 worming-persistence screen failed** (mean paired gain +0.000000, 0/4 blocks); the cause is
+> diagnosed, not hand-waved: the five persistence features are nonzero on only 0.001–0.084 % of the
+> 5.17 M-pixel footprint, so the four `T_*` arms emitted identical dot sets in 8/8 cells — see
+> [`knowledge/16_h31_screen_results_2026-10-03.md`](knowledge/16_h31_screen_results_2026-10-03.md).
+> A new candidate (`content id a4d439b07426`, 37,913 dots, zero catalogue pixels, format receipt
+> `ok_to_upload=True`) now leads the download block. Its method scores `0.1409` on the
+> catalogue-hidden proxy versus `0.09832`/`0.09449`/`0.06970` for the historical D2.8/d1.5/H19-5 files
+> on identical draws (the proxy reproduces the known real ranking of all three; the SGMC proxy inverts
+> it — both are proxies and the conflict is registered). It has never been live-scored and no weekly
+> slot is approved. All scores quoted anywhere in this repository are unverified owner-reported claims.
 
 ## Start here
 
@@ -22,6 +27,7 @@
 - **[Project-local status feed](docs/status.html)** — timestamps only from this repository's checked-in research, experiment, review, and deploy evidence.
 - **[Source register](docs/sources.html)** — official competition/rules links and scientific sources, with verification dates and caveats.
 - **[Irregularities and caveats](docs/irregularities.html)** — owner-mirror limitations, ambiguous data labels, unverified historical scores, and holdout/method risks.
+- [Repository candidate GeoTIFF](docs/downloads/gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif) — one-click float32 TIFF (37,913 dots, NaN outside the footprint, format receipt `ok_to_upload=True`); proxy-screened on the blocked holdout, never live-scored, owner decides the slot.
 - [Historical D2.8 GeoTIFF](docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif) — one-click owner-mirrored float32 TIFF, locally format-checked against the hash-pinned owner-mirror template; unscored, not slot-approved, and **do not submit**. See [`evidence/format_checks/`](evidence/format_checks/) for the receipt.
 - [Full original project prompt](knowledge/owner_brief_verbatim.txt) — preserved verbatim below as well as in the linked text file.
 
@@ -36,13 +42,12 @@
 ## Evidence boundary and current status
 
 - **H34 (session 2):** the metric-native coverage emission was preregistered, implemented and screened on 32 paired cells (4 folds x 2 draws x 4 arms, 306.6 s). It **failed** its frozen primary gate on the catalogue-hidden proxy (mean paired gain −0.0212 vs the best control, 0/4 folds positive) and passed its secondary SGMC off-catalogue class (+0.0535, 4/4 folds). Raw cells and summary: [`evidence/h34_coverage_screen/`](evidence/h34_coverage_screen/); write-up: [`knowledge/09_h34_results_2026-10-03.md`](knowledge/09_h34_results_2026-10-03.md). Nothing was re-tuned after the run.
-- **Candidate downloads (session 2):** a model-free scoreboard ([`evidence/candidate_scoreboard.json`](evidence/candidate_scoreboard.json)) compares fixed files on both proxies. The REFD28 rebuild is prediction-identical to the historical file (0.09832 catalogue-hidden, 0.09528 SGMC); the SGMC off-catalogue inventory alternative scores 0.04461 / 0.56153 — i.e. the two proxies rank these files oppositely (flagged as IR-29-PROXY-CONFLICT). Both are linked at the top of the site with a paste-ready Note; neither is slot-approved.
-- **Fractional factorial (session 2):** a frozen 2^(5−1) resolution V design over the five feature families (A potential-field gradients, B DEM/scarp, C strain/seismicity, D thermal/geochemical, E catalogue geometry) runs on draws 14–15 across four folds; preregistration in [`knowledge/12_preregistered_factorial_families_2026-10-03.md`](knowledge/12_preregistered_factorial_families_2026-10-03.md).
-- **New hypothesis slate (session 2):** H35 interaction zones, H36 MT conductance edges, H37 geothermometry residuals, H38 worm convergence/azimuth, H39 Euler depth selection — ranked in [`knowledge/10_candidates_v2_2026-10-03.md`](knowledge/10_candidates_v2_2026-10-03.md) and registered in `registry/hypotheses.json`. The strategy document for the >0.3195 attempt is [`knowledge/13_strategy_system_2026-10-03.md`](knowledge/13_strategy_system_2026-10-03.md).
+- **Candidates (session 2):** the site's first download is now the repository's own candidate (`gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif`: HGB habitat trained on every catalogue pixel, 3-seed average, frozen standard emission; 37,913 dots; format `ok_to_upload=True`; never live-scored). Its method beat the historical family on the catalogue-hidden proxy (0.1409 vs 0.0983/0.0945/0.0697) but loses on the SGMC proxy (0.0847 vs 0.0953); see [`knowledge/17_repo_candidate_2026-10-03.md`](knowledge/17_repo_candidate_2026-10-03.md) and the model-free scoreboard [`evidence/candidate_scoreboard.json`](evidence/candidate_scoreboard.json). The REFD28 rebuild and the SGMC off-catalogue inventory remain linked as controls/alternatives. Nothing is slot-approved.
+- **H31 screen (session 2):** 40 validated cells (draws 10–11 x four spatial blocks x five arms, 921 s) under the frozen protocol; gate **FAIL**, mean paired gain +0.000000, 0/4 blocks. The registered contrasts are identically zero because the persistence columns are sparse binary peak sets. The only worming-adjacent signal remains the H27 tip control (+0.0083). Raw: [`evidence/h31_worm_screen/`](evidence/h31_worm_screen/).
 - **Environment limit (session 2):** the sandbox can reach only api.github.com, codeload.github.com and PyPI from the shell; sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov and drivendata.org are blocked. All 11 hash-pinned inputs were re-verified present in `/tmp/gemsdoe29-data`. External layers must be fetched on an unrestricted machine (flagged as IR-29-SANDBOX-NET).
 - **Competition data:** none are included in Git. The earlier H31 implementation run restored and hash-verified all 11 manifest entries under temporary `/tmp` paths; those inputs and caches do not persist and must be restored again. Pins identify owner mirrors, not organizer downloads. The earlier main-branch H29 run also recorded a restored feature stack; no scratch input is assumed reusable here.
 - **H29 prior experiment:** the pre-existing main history contains a frozen screen of worm gating, worm-ranked emission, persistence-as-head-features, and thermal-probe features. No arm passed the registered `+0.005` screen. Although draws 2–3 were computed for every arm, the screen failures made them ineligible as confirmations; they are treated as exploratory extra proxy draws. A gate-serialization bug in the original runner also left those draws out of `h29_gate.json`; the raw cells were reconciled without editing. No weekly slot was recommended or used. See [`knowledge/02_h29_results_2026-10-03.md`](knowledge/02_h29_results_2026-10-03.md), [`knowledge/06_h29_gate_reconciliation_2026-10-03.md`](knowledge/06_h29_gate_reconciliation_2026-10-03.md), and the raw [`evidence/h29_holdout.json`](evidence/h29_holdout.json). These are spatial proxy results, not competition scores.
-- **H31:** the existing preregistration and pre-fit synthetic amendment are in [`knowledge/02_preregistered_h31_worming_2026-10-03.md`](knowledge/02_preregistered_h31_worming_2026-10-03.md). The prototype tests the narrower regularized vertical-integration transform of RTP plus explicit lateral drift beyond H29's raw-RTP/gravity persistence work. A non-frozen feature-only smoke test has no model fit, DTI, or holdout result; the final cache must be rebuilt from a clean committed source revision.
+- **H31:** the existing preregistration and pre-fit synthetic amendment are in [`knowledge/02_preregistered_h31_worming_2026-10-03.md`](knowledge/02_preregistered_h31_worming_2026-10-03.md). The prototype tests the narrower regularized vertical-integration transform of RTP plus explicit lateral drift beyond H29's raw-RTP/gravity persistence work. The screen has now been run (see the H31 bullet above): the features were rebuilt from a clean committed revision and the gate failed on feature sparsity.
 - **Holdouts:** four spatial quadrants, hidden-catalogue gaps, and collars are a spatial proxy, not the private expert-labelled test set. Only raw-cell verified, paired gains across spatial blocks may permit fresh confirmation.
 - **Score claims:** 0.3195, 0.2941 and 0.2477 are retained as historical user/owner-reported claims only. No DrivenData leaderboard content, account identity, screenshot, receipt, rank, or score-to-file mapping has been independently verified here. They are not fit targets or promotion gates.
 - **Submission budget:** no weekly slot has been used for this work. The live competition rules say a competitor may submit up to three per week for feedback and must choose one final submission for both prize rounds. Recheck the official timeline/rules before any entry.

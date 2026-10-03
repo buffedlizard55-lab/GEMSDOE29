@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-03T15:52:18.829924+00:00",
+  "method": {
+    "model": "HistGradientBoostingClassifier",
+    "parameters": {
+      "max_iter": 100,
+      "learning_rate": 0.12,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 50,
+      "l2_regularization": 1.0,
+      "class_weight": {
+        "0": 1,
+        "1": 5
+      },
+      "early_stopping": false
+    },
+    "model_seeds": [
+      0,
+      1,
+      2
+    ],
+    "fit_seconds": [
+      7.068790435791016,
+      7.719413995742798,
+      8.03690218925476
+    ],
+    "training_rows": 360988,
+    "training_positives": 60988,
+    "negative_sampling": "<= 300,000 non-catalogue footprint pixels > 1.5 px from any catalogue pixel",
+    "feature_layout": "static A-D + catalogue family E + add-on extras + H27 tip/scarp/interaction (as H34 controls)",
+    "emission": {
+      "ridge_nms_sigma_px": 1.0,
+      "k_fraction_of_footprint": 0.0245,
+      "k_candidates": 126601,
+      "min_distance_px": 2.4,
+      "policy": "score-ordered Poisson disk (H34 C0 / H31 frozen standard emission)"
+    }
+  },
+  "evidence_for_method": {
+    "screen": "evidence/h34_coverage_screen/",
+    "protocol": "4 quadrants x draws 20/21, models trained with hidden components removed",
+    "c0_ordered_dots_mean_dti": 0.14086084085915884,
+    "c1_geodesic_dots_mean_dti": 0.14479018210246675,
+    "historical_d28_same_protocol": 0.09832,
+    "note": "proxy only; the artifact itself trains on the full catalogue so its own proxy score would be contaminated and is not computed"
+  },
+  "artifact": {
+    "file": "gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif",
+    "bytes": 1591482,
+    "sha256": "3537e9fc47a465036a8c1462b99a29b7f3449ee2e7bb94fd0a12d438a85b375d",
+    "content_id": "a4d439b07426",
+    "positive_pixels": 37913,
+    "note": "GEMSDOE29 repo candidate | HGB habitat + frozen standard emission; proxy-validat | id a4d439b07426 | not yet live-scored",
+    "zip": "gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.zip",
+    "on_catalogue_pixels": 0,
+    "hug_share_within_300m_of_catalogue": 0.6595099306306544
+  },
+  "inputs": {
+    "labels.tif": {
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "bytes": 425830
+    },
+    "sample_submission.tif": {
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "bytes": 1599597
+    }
+  },
+  "git": {
+    "revision": "5f03c6663d961b77c618234f35762b95ea2ce312",
+    "branch": "arena/01a10240-gemsdoe29",
+    "dirty_worktree": true
+  },
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6"
+  },
+  "provenance_warning": "Owner-mirror inputs are byte-verified but not organizer-authenticated; this is a research candidate, not an official score, and no weekly slot is approved by this repository."
+}

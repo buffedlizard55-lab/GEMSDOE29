@@ -3,11 +3,11 @@
  "updated_local_date": "2026-10-03",
  "feed_type": "project-local research and release status; not a DrivenData leaderboard feed",
  "current": {
-  "research_stage": "H34 metric-native coverage emission screen is reported (FAIL on the catalogue-hidden primary proxy; PASS on the SGMC off-catalogue secondary); the 2^(5-1) fractional factorial over the five feature families has completed (128 fits) and is reported in knowledge/14; H31 remains unfitted and unconfirmed; no artifact is slot-approved",
-  "screen_status": "H34: FAIL on the catalogue-hidden proxy (mean paired gain -0.0212 vs best control, 0/4 folds positive), PASS on the SGMC off-catalogue proxy (+0.0535, 4/4 folds); factorial: supported family-inclusion effects B (+0.0241), E (+0.0596) and interactions AC, AD, CD (+), AB, BD (-); H29: no arm passed; H31: screen not run",
+  "research_stage": "Session 2 close-out: the 2^(5-1) fractional factorial over feature families is reported (B and E are the supported families), the H31 worming-persistence screen failed with its cause diagnosed (features nonzero on under 0.09% of the footprint), and this repository's own habitat+emission candidate has been built, format-verified and added to the download block as the best-evidenced file. No artifact is slot-approved.",
+  "screen_status": "H34: FAIL on the catalogue-hidden primary proxy, PASS on the SGMC secondary; factorial: supported B (+0.0241) and E (+0.0596) with interactions AC/AD/CD positive, AB/BD negative; H31: FAIL (mean paired gain +0.000000, 0/4 blocks), H29: no arm passed; repo candidate: method scores 0.1409 on the catalogue-hidden proxy vs 0.0983 for the historical D2.8 file on identical draws",
   "confirmation_status": "H34 is negative on its primary proxy and therefore not eligible for confirmation; H31 confirmation remains blocked until a screen passes",
-  "data_status": "All 11 hash-pinned owner-mirror inputs were re-verified present this session in the temporary data directory; owner mirrors are not organizer-authenticated",
-  "holdout_best": null,
+  "data_status": "All 11 hash-pinned owner-mirror inputs re-verified this session in the temporary data directory; the historical H19-5 and dotted d1.5 mirrors were fetched from the owner's GEMSDOE24 repository for this analysis; owner mirrors are not organizer-authenticated",
+  "holdout_best": "repo-c0-habitat method (H34 C0 control protocol): 0.14086 mean proxy DTI on 8 cells",
   "competition_score": null,
   "weekly_slot_used": false,
   "slot_approved_artifact": null
@@ -93,6 +93,18 @@
    "type": "experiment",
    "title": "Fractional factorial completed and reported",
    "detail": "128 fits (16 runs x draws 14-15 x 4 folds, 1276.5 s). Supported inclusion effects under the frozen rule: B (DEM curvature/scarp, +0.0241, 8/8 cells positive) and E (visible-catalogue geometry, +0.0596, 8/8); supported interactions AC, AD, CD positive and AB, BD negative. C (strain/seismicity) is negative but its worst cells breach the -0.010 stability floor, so the frozen rule refuses to certify it. Report: knowledge/14_factorial_results_2026-10-03.md; raw: evidence/factorial_families/."
+  },
+  {
+   "date": "2026-10-03",
+   "type": "negative result",
+   "title": "H31 worming-persistence screen failed; cause diagnosed",
+   "detail": "40 validated cells, drawings 10/11, 921 s. The four T_* arms produced identical emitted sets in 8/8 cells because the five persistence features are nonzero on 0.001%-0.084% of the footprint (max 4,350 px of 5,167,373). Only the H27 tip control moved (+0.0083). Report: knowledge/16_h31_screen_results_2026-10-03.md."
+  },
+  {
+   "date": "2026-10-03",
+   "type": "candidate",
+   "title": "Repository candidate built and added as the best-evidenced file",
+   "detail": "HGB habitat trained on every catalogue pixel (3-seed average), frozen standard emission (ridge NMS -> drop known -> top 2.45% -> score-ordered Poisson dots at 2.4 px): 37,913 dots, zero catalogue pixels, float32 single band, NaN outside the footprint, format receipt ok_to_upload=True, content id a4d439b07426. Its method scores 0.1409 on the catalogue-hidden proxy versus 0.0983 for the historical D2.8 on identical draws, while the SGMC proxy prefers the historical file (0.0953 vs 0.0847); the conflict is registered and the file is not slot-approved. Documentation: knowledge/17."
   }
  ]
 }
