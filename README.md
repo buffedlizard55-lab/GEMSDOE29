@@ -139,7 +139,10 @@
 
 ## Start here
 
-- **[H43 results (read first)](knowledge/30_h43_drainage_results_2026-10-03.md)** — the drainage-network screen on
+- **[Why D2.8 leads and what beating 0.3195 takes (read first)](knowledge/34_d28_why_it_won_and_path_past_03195_2026-10-03.md)** — the owner-reported D2.8 lead is emission-redundancy removal (73 % of the parent's kernel credit at 36 % of its pixels; the H28-conditional optimum of its own family), the brief's worming paragraph is already implemented in four failed formulations (H29/H31/H31b/H40 — closed, not retried), and the ~+0.06 gap to the reported #1 needs new habitat mass no validated estimate yet provides. Strategy: calibrate proxies on the owner's own files, screen v5 habitat on fresh draws, build at most one cross-fitted artifact.
+- **[Candidate slate v5](knowledge/35_candidates_v5_2026-10-03.md)** — four grep-verified-new hypotheses (H50 range-front segmentation ranked first, H49 alteration corridors, H51 cross-family agreement, H48 vent/paleo alignments) with layers / signature / why-off-catalogue / difference-from-repo / obtainability each, plus the frozen H50 validation plan on draws 36/37 — queued, not run, no slot until it beats 0.14479.
+- **[Session-6 audit record](knowledge/36_session6_review_intake_2026-10-03.md)** — one-click TIF + `[0,1]` fix re-verified in this checkout (7/7 downloads pass), prompt disposition table, the H43 register defect (`IR-29-H43-REGISTRY-STALE`, fixed), remaining work, three-pass log.
+- **[H43 results](knowledge/30_h43_drainage_results_2026-10-03.md)** — the drainage-network screen on
   draws 32/33 (40 cells): `A3_knick` **+0.01419** and `A4_union` **+0.01287** pass the frozen G1 gate with the
   emission budget in band and the worst fold ≈ −0.001, while `A1_off` (+0.00401) and `A2_network` (−0.00136) fail —
   so the signal is the **knickpoint residual**, not drainage density. The SGMC second proxy is negative on both
@@ -375,6 +378,23 @@ Do not attempt to access the DrivenData website programmatically beyond fetching
 
 When done: do three passes (implement, review for bugs/edge cases, recheck), then create a pull request and merge it to main. List any remaining work and limitations. Put this prompt into the repo README and read it every time you work on the project as a starting point.
 ```
+
+## Session 6 intake — preserved working note (2026-10-03)
+
+The session-6 brief restates the standing brief (worming-as-filter, one-click TIF + note, executive
+summary, `[0, 1]` fix, why-D2.8/beat-0.3195 analysis, 3–5 new ranked hypotheses with obtainability,
+holdout validation before any slot, prompt-in-README, three passes, PR + merge). It is not pasted in
+full a third time; the standing transcription and the session-3 verbatim brief below remain the
+authoritative texts (both preserved byte-identically — the owner-brief block is pinned by
+`tests/test_project_integrity.py::test_full_owner_brief_is_preserved_in_readme`). Session 6's new
+deliverables: **[knowledge/34](knowledge/34_d28_why_it_won_and_path_past_03195_2026-10-03.md)**
+(why the owner-reported D2.8 leads, the 4×-negative worming disposition, the path past 0.3195),
+**[knowledge/35](knowledge/35_candidates_v5_2026-10-03.md)** (v5 slate: H50/H49/H51/H48 ranked, with
+the frozen H50 validation plan on draws 36/37), and
+**[knowledge/36](knowledge/36_session6_review_intake_2026-10-03.md)** (audit record, three-pass log,
+remaining work). Register changes: H43 status corrected (`IR-29-H43-REGISTRY-STALE`), v5 slate filed
+(`registry/hypotheses_v5_2026-10-03.json`), status-feed event appended. No experiment ran, no slot
+was used, nothing is slot-approved.
 
 ## Session 3 brief — preserved verbatim (2026-10-03)
 
