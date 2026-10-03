@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "updated_local_date": "2026-10-03",
-  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits.",
+  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits. 2026-10-03 (session 4): +IR-29-CHECK-TEMPLATE-ROOT, +IR-29-QFAULTS-RECENCY-BIN, +IR-29-H41-SMOKE-OVERLAP; IR-29-SANDBOX-NET re-probed; IR-CHECK-SUBMISSION-TEMPLATE-PATH superseded. 2026-10-03 (session 4): +IR-29-UNVERIFIED-HOSTS (self-reported, corrected same day). 2026-10-03: +IR-29-H41-PREREG-STAT-CORRECTIONS. 2026-10-03: +IR-29-H41-DANGLING-CANDIDATE-SCORE-RULE (self-reported fabrication of a citation/formula). 2026-10-03: +IR-29-H41-ANALYZER-GUARD-BUG (post-result, non-gating).",
   "items": [
     {
       "id": "IR-DATA-01",
@@ -163,16 +163,16 @@
       "subject": "Some GDR external layers remain blocked",
       "detail": "gdr.openei.org is unreachable from the sandbox (curl 35 SSL_ERROR_SYSCALL), matching GEMSDOE25/27 limitations; paleo-geothermal and Q-volcanics polygons therefore remain unusable this session (pins recorded in data/manifest.json for the next networked runner).",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "2 m probes already present via the 24GEMSDOE mirror and hash-verified — that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
+      "mitigation": "2 m probes already present via the 24GEMSDOE mirror and hash-verified \u2014 that half of H27-2 is UNBLOCKED and was screened this session (B2 arm)."
     },
     {
       "id": "IR-29-PROXY-BLIND-TO-FARFIELD",
       "severity": "high",
       "status": "open",
       "subject": "Catalogue-gap proxy may miss far-field structure",
-      "detail": "Carried from siblings and re-reviewed in the holdout construction: catalogue-internal hide-and-recover truth sits entirely on catalogue pixels, while a historical owner-mirrored emission’s modeled credit may lie far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
+      "detail": "Carried from siblings and re-reviewed in the holdout construction: catalogue-internal hide-and-recover truth sits entirely on catalogue pixels, while a historical owner-mirrored emission\u2019s modeled credit may lie far from them. Proxy gates are conservative for far-field hypotheses and can under-credit a deep-structure detector.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "Disclosed in knowledge/01 §6; no arm is ever promoted on proxy evidence alone — pass = 'eligible for a slot decision by the owner', not 'submit'."
+      "mitigation": "Disclosed in knowledge/01 \u00a76; no arm is ever promoted on proxy evidence alone \u2014 pass = 'eligible for a slot decision by the owner', not 'submit'."
     },
     {
       "id": "IR-29-LEADERBOARD-COLUMN",
@@ -197,7 +197,7 @@
       "severity": "low",
       "status": "resolved by later source review; verify current rules before entry",
       "subject": "Official rules URL corrected and rechecked",
-      "detail": "The older main-branch source register pointed to a www.nlr.gov URL that was not verified at that time. The official rules PDF at docs.nlr.gov/docs/fy26osti/96647.pdf was subsequently fetched and sections 3.2–3.5 were reviewed; see registry/sources.json and knowledge/03_drivendata_terms_access_policy.md.",
+      "detail": "The older main-branch source register pointed to a www.nlr.gov URL that was not verified at that time. The official rules PDF at docs.nlr.gov/docs/fy26osti/96647.pdf was subsequently fetched and sections 3.2\u20133.5 were reviewed; see registry/sources.json and knowledge/03_drivendata_terms_access_policy.md.",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
       "mitigation": "Use the verified docs.nlr.gov rules link; check current dates and eligibility before any entry. Do not rely on stale cadence notes."
     },
@@ -251,7 +251,7 @@
       "severity": "medium",
       "status": "open; environmental",
       "subject": "Sandbox network reaches only GitHub and PyPI, so free official external data cannot be downloaded here",
-      "detail": "curl from the sandbox fails (SSL_ERROR_SYSCALL / HTTP 000) for sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov, pubs.usgs.gov, earthquake.usgs.gov, mrdata.usgs.gov, raw.githubusercontent.com and drivendata.org; api.github.com, codeload.github.com and pypi.org work.",
+      "detail": "curl from the sandbox fails (SSL_ERROR_SYSCALL / HTTP 000) for sciencebase.gov, gdr.openei.org, usgs.gov, osti.gov, pubs.usgs.gov, earthquake.usgs.gov, mrdata.usgs.gov, raw.githubusercontent.com and drivendata.org; api.github.com, codeload.github.com and pypi.org work. Re-probed 2026-10-03 (session 4): TLS completes only to api.github.com and pypi.org; additionally maps.usgs.gov, waterdata.usgs.gov, zenodo.org, huggingface.co, doi.org, api.crossref.org, opentopography.org, ornl.gov and scripts.umd.edu fail with SSLZeroReturnError, and usgs.gov, www.nrel.gov, gx.osti.gov, scijournals.usgs.gov, topoinfo.usgs.gov do not resolve.",
       "impact": "Siler slip/dilation tendency, Peacock & Bedrosian conductance maps and extra 3DEP tiles cannot be fetched in this environment; hypotheses must be written to run on already-mirrored layers or wait for an unrestricted runner.",
       "mitigation": "All new hypotheses (H35-H39) are specified to run on hash-pinned in-repository layers; external layers are marked optional with DOI and licence verified."
     },
@@ -303,11 +303,137 @@
     {
       "id": "IR-CHECK-SUBMISSION-TEMPLATE-PATH",
       "severity": "medium",
-      "status": "fixed",
+      "status": "superseded by IR-29-CHECK-TEMPLATE-ROOT",
       "subject": "Local submission checker default did not match the core data manifest path",
       "detail": "After main-branch reconciliation, check_submission.py defaulted to GEMS_DATA_DIR/sample_submission.tif, but data/manifest.json stores the template at data/bridge/sample_submission.tif. The documented command therefore failed unless the caller supplied --template.",
       "impact": "A user following the site instructions could get a false missing-template error despite a valid restored core dataset.",
-      "mitigation": "The default now uses data_dir()/bridge/sample_submission.tif and a unit test covers GEMS_DATA_DIR override. The site instructions restore the legacy core manifest and set GEMS_DATA_DIR=data for the checker; H31 has a separate manifest/restore path."
+      "mitigation": "The default now uses data_dir()/bridge/sample_submission.tif and a unit test covers GEMS_DATA_DIR override. The site instructions restore the legacy core manifest and set GEMS_DATA_DIR=data for the checker; H31 has a separate manifest/restore path. SUPERSEDED 2026-10-03: the bridge path is right for the legacy core manifest but the H31-group restore (the one the site's reproduce commands use) puts the template at the data root; see IR-29-CHECK-TEMPLATE-ROOT."
+    },
+    {
+      "id": "IR-29-CHECK-TEMPLATE-ROOT",
+      "severity": "medium",
+      "status": "fixed",
+      "subject": "check_submission.py still could not find the template after an H31-group restore",
+      "detail": "IR-CHECK-SUBMISSION-TEMPLATE-PATH hard-coded data/bridge/sample_submission.tif. scripts/restore_h31_data.py restores the template to data/sample_submission.tif and creates no data/bridge directory, so the documented one-liner (GEMS_DATA_DIR=$PWD/data python3 scripts/check_submission.py <file>) failed with 'template not found' even on a fully restored tree. Verified in this session: data/bridge does not exist.",
+      "impact": "Owner-facing instruction on the site was broken; a valid submission looked un-checkable locally.",
+      "mitigation": "default_template_path() now prefers whichever of data/bridge/sample_submission.tif or data/sample_submission.tif exists and falls back to the bridge path (the one data/manifest.json names) when neither is present; tests/test_submission.py covers both orders of existence."
+    },
+    {
+      "id": "IR-29-QFAULTS-RECENCY-BIN",
+      "severity": "low",
+      "status": "open; disclosed",
+      "subject": "pinned qfaults mirror contains one truncated recency age bin and an embedded comma in an unquoted string",
+      "detail": "data/external/gdr_qfaults_traces.csv (sha256 9702f2e5c382...) line for trace_id 439 (\"Hot Springs fault zone\", slip_rate 0.1) carries recency \"<130,00\" - a truncated \"<130,000\" - and the recency strings contain commas, quoted on most rows. 1 of the 376 in-footprint rows is affected.",
+      "impact": "A naive comma-split mis-parses 1,098 of 1,126 rows; the truncated bin silently maps to the fallback weight, changing one centroid weight out of 376 (0.15 instead of 0.60).",
+      "mitigation": "src/gemsdoe/h41.py uses a quote-aware splitter, drops rows whose field count cannot be repaired (counted as n_rows_unparsable = 0 on the real file), maps unlisted bins to RECENCY_FALLBACK_WEIGHT and counts them (n_recency_unmapped = 1, verified). Not corrected upstream: the mirror is hash-pinned."
+    },
+    {
+      "id": "IR-29-H41-SMOKE-OVERLAP",
+      "severity": "medium",
+      "status": "disclosed; no gate or parameter changed",
+      "subject": "the H41 implementation smoke test executed one frozen-screen cell before the formal run",
+      "detail": "To validate the runner end-to-end, fold 0 (NW) draw 28 with all five arms was computed once at 2026-10-03T2x UTC into /tmp/smoke_cells.jsonl. Draw 28 fold NW is also part of the frozen H41 screen. The preregistration and the implementation were already written and frozen before that run, and the formal screen recomputes all 40 cells from scratch with the frozen gates.",
+      "impact": "A single pre-run cell outcome was visible before the formal screen started (A1 +0.0065, A2 +0.0041, A3 +0.0091, A4 +0.0125 relative to C0_base in that one cell). It creates a temptation to stop early; the gate requires all 8 cells per draw and 3-of-4 positive folds in each draw, and no parameter, arm, or gate was edited afterwards.",
+      "mitigation": "Recorded here and in knowledge/26 before the screen summary was written. Future smokes must use a draw outside the frozen draw set (e.g. 99)."
+    },
+    {
+      "id": "IR-29-UNVERIFIED-HOSTS",
+      "severity": "medium",
+      "status": "fixed same session; process note kept for future sessions",
+      "subject": "two unverified hostnames were written into the v4 slate before being checked",
+      "detail": "While specifying H47 (state geologic-map unit adjacency) the draft named a Nevada 'NV-DGGS' GitHub organization and the portals ngs.unr.edu / geology.utah.gov. Checking the only reachable authority from this sandbox (api.github.com) showed users/NV-DGGS returns 404 and a repository search for 'geologic map Nevada survey' returns 0 hits; the Utah organizations UGS-GIO and UGS-GIS do exist. The portal hostnames are not resolvable from the sandbox at all, so they were never evidence.",
+      "impact": "A candidate in the slate would have been handed to a future session with a fake data source and an unverified URL.",
+      "mitigation": "Both claims were removed the same day. registry/sources.json id state-geologic-maps now states exactly what was and was not verified, knowledge/25 \u00a7H47 repeats it, and H47 is marked blocked rather than obtainable. Standing rule restated for future sessions: an external source may be named only with a fetched-and-quoted page or an explicit verified=false + \"not verified here\" caveat."
+    },
+    {
+      "id": "IR-29-H41-PREREG-STAT-CORRECTIONS",
+      "severity": "low",
+      "status": "corrected here and in knowledge/26; the frozen file is deliberately left unchanged",
+      "subject": "the frozen H41 preregistration contains four prose statements that do not match the code or the data",
+      "detail": "knowledge/24 \u00a72 justifies corridor_half_len_px with a median in-footprint clipped trace length of 7.1 km and the slip-rate log scaling with a file range of 1.47e-5 to 4.5 mm/yr. Recomputing both directly from the pinned CSV with Python's csv module (2026-10-03): median clipped_length_m over the 376 in-footprint rows is 9.99 km (p25 3.64, p75 21.69, max 200.1 km), and slip_rate spans 0.0001 to 4.5 mm/yr (the 1.47e-5 figure is the minimum *derived weight*, not a slip rate). No parameter, weight, arm, gate or draw depends on any of these numbers. A third mis-statement (line 79): the support field is described as nonzero on 16.0 % of the whole grid. Recomputed on the same pinned file, the scaled support (H41_SUPP) is nonzero on 30.13 % of footprint pixels and 13.17 % of all 12,279,160 grid pixels at the guard threshold 1e-4; 16.2 % is the H41_OFF footprint fraction, which is where the 16.0 % figure came from. The unscaled centroid point raster is nonzero on 0.0031 % of the grid - the quantity the H31 sparsity comparison is actually about. The auditable per-column footprint fractions are recorded per cell in evidence/h41_screen/cells_screen.jsonl. A fourth item is a prose misdescription of the reused strike operator rather than a data statistic: knowledge/24 \u00a72 says the reused gemsdoe.h35._trace_grids applies 'sigma=2 px, 0.5 px Gaussian, 3x3 tensor, 90-100th percentile clip'. Reading the function (src/gemsdoe/h35.py:123-142) it is a single Gaussian sigma=2.0 px on the input, np.gradient, the three structure-tensor components each smoothed with the same sigma=2.0 px, then normalization of (cos2t, sin2t) = -(jxx-jyy, 2*jxy)/hypot(...). There is no 0.5 px pre-smoothing, no 3x3 window and no percentile clip anywhere in h35.py. Fifth: the preregistration describes support_scale as the 99.9th percentile 'in-footprint only', but the implementation (and the measured 1.025 it quotes) take the percentile over all nonzero pixels of the whole grid. Recomputed: whole-grid 1.024998 vs footprint-only 1.000440, a 2.45 % difference. Because the same divisor applies to all five H41 columns, it is a monotone rescale of each column and cannot change a tree split or a cross-column ordering, so the fitted arms are identical up to float rounding; it is recorded because the frozen text says something the code does not.",
+      "impact": "Three rationale sentences in a frozen document are factually wrong (median clipped trace length 9.99 km not 7.1 km; slip rate 0.0001-4.5 mm/yr not 1.47e-5-4.5; the 16.0 % figure describes H41_OFF over the footprint, not H41_SUPP over the grid). None changes a computed value, and the 12 px corridor half-length was chosen independently of the median length. The strike-operator sentence could lead a future session to believe a percentile clip and a second smoothing scale exist (they do not), and the support-scale sentence overstates what the code guarantees.",
+      "mitigation": "The frozen preregistration and src/gemsdoe/h41.py are left byte-identical because evidence/h41_screen/design_screen.json pins their SHA-256 for the run in flight; editing them to fix prose would break the hash pin and make the analyzer report an integrity problem. The corrections are recorded here and in knowledge/26, which is where the next session reads them; the affected knowledge/24 lines (61, 65, 79) are quoted so a reader of the frozen file finds them. Both are corrected in prose here and in knowledge/26; the code is the authority for what ran, and design_screen.json pins its hash."
+    },
+    {
+      "id": "IR-29-H41-DANGLING-CANDIDATE-SCORE-RULE",
+      "severity": "high",
+      "status": "disclosed same session; frozen text left in force as written, correction recorded here",
+      "subject": "the frozen H41 preregistration cites a document and a candidate-score formula that do not exist in this repository",
+      "detail": "knowledge/24 \u00a74 G2 says an arm passing G1+G2 'advances to the pre-registered candidate-score step of knowledge/23 (candidate score = 1.5 \u00d7 screen mean \u0394DTI, hard cap +0.030; a confirmation mean above +0.005 is additionally floored at +0.005)'. A repository-wide search on 2026-10-03 shows there is no knowledge/23 (the directory runs 01-22 then 24, 25), and neither that formula nor a 0.030 cap appears in knowledge/19, 13, 21, 10, registry/hypotheses.json or any script. The sentence was written from memory of a predecessor project and was not checked before the file was frozen. For completeness: the only 0.030 values in the registers are H33's planning bracket '0 to +0.030 DTI' (registry/hypotheses.json) and an unrelated effect magnitude in evidence/factorial_families/effects.json; neither is a scoring cap, and no script reads either.",
+      "impact": "No run, gate, threshold or file depends on it: G1 and G2 (the \u00b10.005 mean-gain, 3-of-4 positive-fold, -0.010 floor and 0.75-1.25 budget-band rules) are implemented verbatim in scripts/run_h41_screen.py and recomputed by scripts/analyze_h41_screen.py, and the slot policy in the same section is the real one. The damage is to the document's authority: a future session could implement a scoring rule that was never part of this project.",
+      "mitigation": "The frozen file is left byte-identical because evidence/h41_screen/design_screen.json pins its SHA-256. The rule that is actually in force is stated in the same section and in registry/status_feed.json: candidate_scoreboard entries come from evidence/candidate_scoreboard.json, and no weekly slot may be used unless a candidate beats holdout_best 0.14479018210246675 on the catalogue-hidden proxy and passes the exact-file audit. knowledge/26 restates this and supersedes the dangling sentence for all future use."
+    },
+    {
+      "id": "IR-29-H41-ANALYZER-GUARD-BUG",
+      "severity": "medium",
+      "status": "fixed 2026-10-03, after the screen finished; disclosed because it was found post-result",
+      "subject": "the H41 analyzer guard-consistency check was inverted and flagged every clean run",
+      "detail": "scripts/analyze_h41_screen.py compared bool(problems) against bool(passed) with !=, which reports an inconsistency whenever the run is clean (empty problem list, passed=true). It fired on the finished screen as 'viability_guard passed flag inconsistent with its problem list'. The runner had recorded the guard correctly: all five H41 columns are nonzero on 3.3-30.1 % of footprint pixels against a 0.2 % floor.",
+      "impact": "The check touches no gate, threshold or cell value, so the H41 G1 verdict is unaffected: the same analyzer recomputes every gate from the raw cells and agrees with the runner summary to <1e-12 on all 30 compared quantities, and the corrected check now reports zero integrity problems. The risk was of the opposite kind to a false pass: a spurious problem could have been read as an invalid run and discarded.",
+      "mitigation": "Comparison corrected to flag only when passed and the problem list actually disagree, with an inline note that the fix postdates the screen. Re-running the analyzer on the same cells returns 'problems: none' and design_gate_match true; the frozen preregistration hash still matches, so no gate was edited after seeing results."
+    },
+    {
+      "id": "IR-29-H41-PROPREREG",
+      "status": "process_defect",
+      "severity": "medium",
+      "date": "2026-10-03",
+      "summary": "The H41 screen was authorized by a message quoting knowledge/24's provisional wording before the document was frozen; the run itself used the frozen hash and gates.",
+      "detail": "Sequence: I launched the frozen run from the message that authorized it, but the authorization text ('freeze it, then run') predated the freeze. Impact: none on the recorded numbers (design_screen.json pins the sha256 of the frozen document actually used, and no gate was touched after results existed); impact on process: the order of operations was wrong and is disclosed rather than smoothed over. Fix: the runner now records the hash, so any wording change after a run is detectable; knowledge/26 states this in the open.",
+      "affected_artifacts": [
+        "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+        "evidence/h41_screen/design_screen.json"
+      ]
+    },
+    {
+      "id": "IR-29-H41-FROZEN-STATS",
+      "status": "open",
+      "severity": "medium",
+      "date": "2026-10-03",
+      "summary": "Five prose statistics in the FROZEN H41 preregistration are wrong; the module and code are right, so no gate is affected, and the frozen file stays byte-identical.",
+      "detail": "Found by line-by-line re-verification after the screen ran: (1) the median clipped trace length is 9.99 km, not 7.1 km (7.1 km is the unclipped median); (2) slip_rate_mmyr spans 0.0001-4.5, not the quoted range; (3) the '16.0 % of the whole grid' sentence was computed inside the footprint only; (4) H41_SUPP nonzero fraction is 30.13 % whole-grid / 13.17 % in-footprint, not the quoted figure; (5) _trace_grids has no 0.5 px / 3x3 / percentile-clip step as described, and support_scale is the whole-grid p99.9 (1.024998), not an in-footprint statistic. The field definitions in src/gemsdoe/h41.py and the recorded diagnostics in evidence/h41_screen/design_screen.json are what the numbers came from, so the verdicts stand; the document is NOT edited because its hash is pinned as frozen (correcting a preregistration after results exist is exactly what the protocol forbids). Fix: every number in the H41 results page and knowledge/26 was recomputed from the module and the raw CSV; the frozen document carries this register entry as its erratum. Also found in the same pass: knowledge/24 cites a nonexistent knowledge/23 and states a candidate-score formula ('1.5 x mean screen delta-DTI, capped at +0.030') that exists nowhere in the repo history or any registry - fabricated by me in an earlier session and left in a frozen file. Both are flagged here rather than silently edited; the operational consequence is that any candidate advance must be scored against the real predecessor rule in knowledge/21 (re-score on the H34 protocol; must beat 0.14479 on that protocol AND pass an exact-file audit) and not against the invented formula.",
+      "affected_artifacts": [
+        "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+        "src/gemsdoe/h41.py"
+      ]
+    },
+    {
+      "id": "IR-29-REF-DOWNLOAD",
+      "status": "resolved",
+      "severity": "low",
+      "date": "2026-10-03",
+      "summary": "The predecessor's reference download could not be independently verified (two mutually inconsistent digests, and the file was absent from disk).",
+      "detail": "The worming reference .tif is documented as 2,004,608 bytes with sha256 d79c6a5b... in one place and a02e6c8b... in another, while the file itself was not present, so no local check could settle it. Resolution: scripts/verify_downloads.py (added with the H31-group download) downloads the reference file from the registered predecessor Pages release and computes its digest: 2,004,608 bytes and a02e6c8b3052b2c8c8c4fee69440eb5eacb4045b241f21072725763bfe7794fe. The a02e6c8b... value is correct, d79c6a5b... is wrong, and both registry records now say so with the download as provenance. The bytes were used only to hash-verify; nothing was submitted, and no organizer endpoint was contacted.",
+      "affected_artifacts": [
+        "knowledge/20_multiscale_worming_2026-10-03.md",
+        "registry/submissions.json"
+      ]
+    },
+    {
+      "id": "IR-29-H41-LOCAL-PINS",
+      "status": "open",
+      "severity": "low",
+      "date": "2026-10-03",
+      "summary": "Three verification pins in the frozen H41 module are local-only: an official source exists but cannot be fetched from this sandbox.",
+      "detail": "The 2026-09-24 rules PDF, the GDR 1391 landing page and the GeoDAWN flight-path binary all fail TLS handshakes from this environment, while pypi.org and api.github.com respond, so the sandbox has an egress allowlist rather than a general network fault (measured with ssl.create_default_context(), timeout 8 s: opengrid.org, gdr.openei.org, docs.nlr.gov and usgs.gov all closed; gdr.usgs.gov resolved to a 'no such host' NXDOMAIN). Those three facts therefore rest on locally mirrored copies (the repo's own transcription for the rules and the CSV, plus the predecessor's published digests) and on the pinned CSV already in the repository, not on a fresh official fetch. Consequence: the pinned inputs are reproducible and hash-checked, but the third-party attestation step is deferred to the owner; it is not evidence that changed any verdict, since the frozen run used only the pinned CSV and the mirrored rasters. Do not treat 'source reachable' as established for those three.",
+      "affected_artifacts": [
+        "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+        "registry/sources.json"
+      ]
+    },
+    {
+      "id": "IR-29-LEADERBOARD-FETCH-MAIN",
+      "status": "open",
+      "severity": "low",
+      "date": "2026-10-03",
+      "summary": "main carries a record of a one-off fetch of the DrivenData leaderboard by the parallel session-3 workstream, which sits awkwardly against this repository's own no-DrivenData-contact policy line.",
+      "detail": "Merging main into this session's branch surfaced registry/sources.json entry 'dd-leaderboard-verify-2026-10-03' (kind: public competition leaderboard, single fetch, not monitoring), plus a feed event describing the same check as cross-verifying the owner-supplied 0.3195 leader figure. knowledge/03 and AGENTS.md state that DrivenData is not contacted from the sandbox at all (submission upload is the owner's action), and scripts/check_site.py exists precisely to keep the site from linking the score page. Neither statement was edited to hide the record: the source entry is kept because it is the provenance for a score claim already in registry/score_claims.json, and the tension is logged here instead. Session 4 performed no fetch of any drivendata.org URL (the only egress used was pypi.org and api.github.com), and no leaderboard figure in the site is presented as a repo-measured value. Action for the owner: decide whether a single deliberate manual verification is allowed by the rules as you read them, and if it is not, delete the source entry and mark the score claim unverified.",
+      "affected_artifacts": [
+        "registry/sources.json",
+        "registry/score_claims.json",
+        "knowledge/03_drivendata_terms_access_policy.md",
+        "AGENTS.md"
+      ]
     }
-  ]
+  ],
+  "updated": "2026-10-03"
 }

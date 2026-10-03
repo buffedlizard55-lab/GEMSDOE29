@@ -1,0 +1,40 @@
+design recorded: /home/user/GEMSDOE29/evidence/h41_screen/design_screen.json (git a9d880e7, 2 draws x 4 folds x 5 arms)
+fold=NW draw=28 C0=0.1723 A1=0.1788 A2=0.1764 A3=0.1814 A4=0.1848  (159s)
+fold=NW draw=29 C0=0.1749 A1=0.1883 A2=0.1826 A3=0.1768 A4=0.1777  (159s)
+fold=NE draw=28 C0=0.1541 A1=0.1476 A2=0.1603 A3=0.1534 A4=0.1578  (177s)
+fold=NE draw=29 C0=0.1262 A1=0.1145 A2=0.1233 A3=0.1247 A4=0.1192  (175s)
+fold=SW draw=28 C0=0.0970 A1=0.1100 A2=0.1126 A3=0.1071 A4=0.1158  (179s)
+fold=SW draw=29 C0=0.1389 A1=0.1523 A2=0.1434 A3=0.1325 A4=0.1446  (178s)
+fold=SE draw=28 C0=0.1254 A1=0.1309 A2=0.1316 A3=0.1336 A4=0.1392  (157s)
+fold=SE draw=29 C0=0.1819 A1=0.2013 A2=0.1787 A3=0.1919 A4=0.1904  (159s)
+{
+  "A1_h41_off": {
+    "mean_gain": 0.006617295866467202,
+    "worst_fold_gain": -0.009107821219790285,
+    "mean_dti": 0.15297066435466056,
+    "G1_SCREEN_PASS": true
+  },
+  "A2_h41_support": {
+    "mean_gain": 0.0047673494426785055,
+    "worst_fold_gain": 0.0014924525125251664,
+    "mean_dti": 0.15112071793087187,
+    "G1_SCREEN_PASS": false
+  },
+  "A3_h41_corridor": {
+    "mean_gain": 0.0038132544268094405,
+    "worst_fold_gain": -0.0011314750870251022,
+    "mean_dti": 0.15016662291500282,
+    "G1_SCREEN_PASS": false
+  },
+  "A4_h41_union": {
+    "mean_gain": 0.0073435756263382675,
+    "worst_fold_gain": -0.0016553600174617489,
+    "mean_dti": 0.15369694411453164,
+    "G1_SCREEN_PASS": true
+  },
+  "C0_base": {
+    "mean_dti": 0.14635336848819336
+  }
+}
+wrote /home/user/GEMSDOE29/evidence/h41_screen/summary_screen.json
+EXIT=0

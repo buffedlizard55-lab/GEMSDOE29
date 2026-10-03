@@ -10,7 +10,7 @@
   "sources": [
     {
       "id": "dd-problem",
-      "title": "GEMS Prize problem description — metric, data and submission format",
+      "title": "GEMS Prize problem description \u2014 metric, data and submission format",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
       "publisher": "DrivenData / U.S. DOE GEMS Prize",
       "kind": "official competition documentation",
@@ -46,7 +46,7 @@
       "publisher": "National Laboratory of the Rockies for U.S. DOE",
       "kind": "official competition rules PDF",
       "verified": true,
-      "verified_date": "2026-10-03 (official PDF fetched through sections 3.2–3.5)",
+      "verified_date": "2026-10-03 (official PDF fetched through sections 3.2\u20133.5)",
       "used_for": [
         "up to three submissions per week",
         "single GeoTIFF requirement",
@@ -54,7 +54,7 @@
         "only one submission selected for both prize rounds",
         "required generative-AI narrative disclosure when applicable"
       ],
-      "caveat": "Sections 3.2–3.5 were fetched and read in this continuation; consult the linked full PDF for all eligibility, deadline, award, and compliance details before entry."
+      "caveat": "Sections 3.2\u20133.5 were fetched and read in this continuation; consult the linked full PDF for all eligibility, deadline, award, and compliance details before entry."
     },
     {
       "id": "hornby1999",
@@ -153,7 +153,7 @@
     },
     {
       "id": "gdr1391",
-      "title": "GDR 1391 — INGENIOUS supporting datasets",
+      "title": "GDR 1391 \u2014 INGENIOUS supporting datasets",
       "url": "https://gdr.openei.org/submissions/1391",
       "publisher": "Geothermal Data Repository / NLR",
       "kind": "official research-data catalog",
@@ -163,7 +163,7 @@
       "used_for": [
         "source context for owner-mirrored well/spring, fault-trace and volcanic-vent tables"
       ],
-      "caveat": "The local input bytes are owner-derived mirrors, not organizer-authenticated competition files; do not use label-derived distance columns."
+      "caveat": "The local input bytes are owner-derived mirrors, not organizer-authenticated competition files; do not use label-derived distance columns. 2026-10-03 (session 4): gdr.openei.org is not fetchable from this sandbox (TLS closed by the egress proxy), so the submission page itself was not re-read; the local qfaults/well-spring mirrors were instead re-verified byte-for-byte against their SHA-256 pins (11/11 present)."
     },
     {
       "id": "prior-repository",
@@ -330,6 +330,45 @@
         "depth-estimation caveats carried into the H39 design"
       ],
       "caveat": "Library access not available from the sandbox; the structural-index table was read from the authors' public summary documents."
+    },
+    {
+      "id": "usgs-comcat",
+      "title": "USGS Earthquake Catalog (ComCat) web services API",
+      "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
+      "publisher": "U.S. Geological Survey",
+      "kind": "official public data API",
+      "verified": false,
+      "verified_date": "2026-10-03 (not fetchable from this sandbox; TLS closed by the egress proxy)",
+      "used_for": [
+        "intended external source for hypothesis H45 (seismicity strand fitting)"
+      ],
+      "caveat": "Free, public, no-registration API in the provider\u2019s own documentation, but obtainability was NOT verified from this environment; a manual fetch is required before H45 can be screened. Do not state that coverage or completeness inside the footprint has been checked."
+    },
+    {
+      "id": "usgs-nwis",
+      "title": "USGS Water Data / NWIS daily-discharge services",
+      "url": "https://waterdata.usgs.gov/nwis/dv",
+      "publisher": "U.S. Geological Survey",
+      "kind": "official public data service",
+      "verified": false,
+      "verified_date": "2026-10-03 (not fetchable from this sandbox; TLS closed by the egress proxy)",
+      "used_for": [
+        "intended external source for hypothesis H44 (spring-to-gauge discharge chain)"
+      ],
+      "caveat": "Free and public in the provider\u2019s documentation; obtainability NOT verified from this environment. Site metadata for the specific gauging stations inside the GEMS footprint has not been checked."
+    },
+    {
+      "id": "state-geologic-maps",
+      "title": "State geological-survey map GIS for the GEMS footprint (Nevada / Utah)",
+      "url": "https://github.com/UGS-GIO/ugs-map-viewer",
+      "publisher": "Utah Geological Survey (public GIS organization); Nevada equivalent not found",
+      "kind": "official open-GIS distribution, partially verified",
+      "verified": false,
+      "verified_date": "2026-10-03 (GitHub API checks from the sandbox only)",
+      "used_for": [
+        "intended external source for hypothesis H47 (map-unit boundary adjacency)"
+      ],
+      "caveat": "Obtainability is NOT established. What was verified from the sandbox, which can reach only api.github.com: the UGS-GIO/ugs-map-viewer and UGS-GIS organizations exist (real U.S. Utah Geological Survey GIS repositories), while a GitHub user/org lookup for the Nevada Division of Geological Survey returns 404 and a repository search for 'geologic map Nevada survey' returns 0 hits. An earlier draft of this entry named a Nevada 'NV-DGGS' organization; that organization does not exist and the claim was removed the same day it was written. Neither the 1:250k unit polygons themselves nor any download endpoint was fetched or verified; H47 must be treated as blocked until the owner checks the state surveys' own portals."
     },
     {
       "id": "dd-leaderboard-verify-2026-10-03",

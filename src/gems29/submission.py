@@ -30,7 +30,7 @@ def sha256_file(p: Path | str) -> str:
 
 
 def _template() -> tuple[dict, np.ndarray]:
-    template = paths.DATA / "bridge" / "sample_submission.tif"
+    template = paths.template_path()
     with rasterio.open(template) as ds:
         return ds.profile.copy(), np.isfinite(ds.read(1))
 

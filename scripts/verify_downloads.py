@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Independently verify the H29 WORMRANK and REFD28 TIFF/ZIP downloads."""
+"""Independently verify the registered candidate TIFF/ZIP downloads against the local template.
+
+Reads the build-time receipt in ``docs/downloads/checks-<stem>.json``, re-checks the published files against the
+hashes recorded there (never refreshing the baseline), and rewrites only the verification fields.
+"""
 from __future__ import annotations
 
 import json
@@ -13,6 +17,7 @@ import numpy as np  # noqa: E402
 import rasterio  # noqa: E402
 
 from gems29.submission import sha256_file, verify_files  # noqa: E402
+from gemsdoe.paths import template_path  # noqa: E402
 
 
 FILE_SUFFIXES = ("-nan.tif", "-zeros.tif", "-nan.zip")
@@ -62,7 +67,14 @@ def receipt_after_verification(old: dict, stem: str, checks: dict,
 def main() -> int:
     dl = ROOT / "docs" / "downloads"
     ledger = json.loads((ROOT / "registry" / "artifact_ledger.json").read_text())
-    with rasterio.open(ROOT / "data" / "bridge" / "sample_submission.tif") as ds:
+    # One shared resolver for both restore layouts (IR-29-CHECK-TEMPLATE-ROOT): this script used to
+    # hard-code data/bridge/, which an H31-group restore does not create.
+    template = template_path()
+    if not template.is_file():
+        print(f"verify_downloads: template not found ({template}); restore the hash-pinned inputs first")
+        return 1
+    print(f"verify_downloads: using template {template.relative_to(ROOT)}")
+    with rasterio.open(template) as ds:
         foot = np.isfinite(ds.read(1))
     failures = 0
     verified_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")

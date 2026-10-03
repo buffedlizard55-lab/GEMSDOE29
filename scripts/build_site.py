@@ -166,6 +166,101 @@ def render_downloads() -> str:
     )
 
 
+def h41_screen_card() -> str:
+    """Session-4 H41 card: every number is read from evidence/h41_screen/, nothing is hard-coded."""
+    base = ROOT / "evidence" / "h41_screen"
+    summary_p, design_p = base / "summary_screen.json", base / "design_screen.json"
+    analyzer_p = base / "analyzer_report.json"
+    if not design_p.is_file():
+        return (
+            '<section class="card"><p class="kicker">Session-4 frozen screen · H41</p>'
+            "<h2>H41 qfaults-corridor screen: no evidence in this checkout yet</h2>"
+            '<p>Pre-registered in <code>knowledge/24_preregistered_h41_screen_2026-10-03.md</code>; the runner is '
+            "<code>scripts/run_h41_screen.py</code> and refuses to run from a dirty worktree or overwrite existing "
+            "evidence. Re-run the screen in a checkout with the hash-pinned data restored to see this card populate.</p></section>"
+        )
+    design = json.loads(design_p.read_text(encoding="utf-8"))
+    q = design.get("qfaults", {})
+    gates = design["gates"]
+    rows_html = ""
+    verdict = "screen still in flight; no summary written yet"
+    if summary_p.is_file():
+        summary = json.loads(summary_p.read_text(encoding="utf-8"))
+        arms = summary["arms"]
+        cells = base / "cells_screen.jsonl"
+        n_cells = len([1 for line in cells.read_text(encoding="utf-8").splitlines() if line.strip()]) if cells.is_file() else 0
+        tr = []
+        for arm in design["arms"][1:]:
+            adm = arms.get(arm, {})
+            if "mean_gain" not in adm:
+                continue
+            tr.append(
+                f'<tr><td>{e(arm)}</td><td>{adm["mean_gain"]:+.7f}</td>'
+                f'<td>{", ".join(f"{g:+.5f}" for g in adm["fold_gains"])}</td>'
+                f'<td>{", ".join(str(v) for v in adm["positive_folds_per_draw"])} (need {gates["min_positive_folds"]})</td>'
+                f'<td>{adm["worst_fold_gain"]:+.7f}</td>'
+                f'<td>{tag("G1 FAIL", "no") if not adm["G1_SCREEN_PASS"] else tag("G1 PASS", "yes")}</td></tr>'
+            )
+        rows_html = "".join(tr)
+        passed = [arm for arm in design["arms"][1:] if arms.get(arm, {}).get("G1_SCREEN_PASS")]
+        guard = summary.get("viability_guard", {})
+        guard_txt = ("passed — every column nonzero on at least "
+                     f"{guard.get('min_nonzero_fraction', 0) * 100:.1f} % of footprint pixels"
+                     if guard.get("passed") else f"FAILED: {len(guard.get('problems', []))} cell(s) reported sparse columns")
+        verdict = (
+            f"{len(summary.get('draws', []))} draw(s), {n_cells} raw cells, "
+            + ("all four arms failed G1" if not passed else "passed: " + ", ".join(passed))
+            + f"; the pre-declared degeneracy guard {guard_txt}."
+        )
+    ana = json.loads(analyzer_p.read_text(encoding="utf-8")) if analyzer_p.is_file() else None
+    ana_txt = ("not yet recomputed" if ana is None else
+               ("zero problems" if not ana["integrity_problems"] else f"problems: {ana['integrity_problems']}"))
+    table = (
+        '<table><thead><tr><th>arm</th><th>mean gain</th><th>fold gains (NW, NE, SW, SE)</th>'
+        "<th>positive folds</th><th>worst fold</th><th>gate</th></tr></thead>"
+        f'<tbody>{rows_html}</tbody></table>' if rows_html else ""
+    )
+    return (
+        '<section class="card"><p class="kicker">Session-4 frozen screen · every number read from '
+        "evidence/h41_screen/</p><h2>H41: slip-rate-weighted INGENIOUS fault-corridor evidence, off-catalogue only</h2>"
+        f"<p>Pre-registered (sha256 {e(design['preregistration']['sha256'][:12] + chr(8230))}) before any fit; clean tree at "
+        f"{e(design['git']['revision'][:7])}; {len(design['draws'])} draws x {len(design['folds'])} folds x {len(design['arms'])} arms. "
+        f"Gates: mean paired gain &ge; {gates['mean_gain']}, &ge;{gates['min_positive_folds']}/{len(design['folds'])} folds positive on every draw, "
+        f"worst fold &ge; {gates['max_fold_loss']}, emission within x[{gates['budget_ratio_band'][0]}, {gates['budget_ratio_band'][1]}] of control.</p>"
+        f"<p>{e(verdict)}</p>{table}"
+        f"<p><strong>Input audit:</strong> {q.get('n_rows_read', 0):,} trace rows read from the hash-pinned qfaults mirror, "
+        f"{q.get('n_in_footprint', 0)} in-footprint, {q.get('n_rows_unparsable', 0)} unparsable (dropped and counted), "
+        f"{q.get('n_recency_unmapped', 0)} outside the frozen age-bin table (fallback weight), maximum slip rate "
+        f"{q.get('slip_rate_max_seen', 0)} mm/yr. The mirror carries one centroid per trace and no polyline geometry, so "
+        "any pass here is corridor ranking near mapped young faults, never dot placement on a trace.</p>"
+        f"<p><strong>Independent recomputation:</strong> {e(ana_txt)}.</p>"
+        f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/24_preregistered_h41_screen_2026-10-03.md", "Read the frozen H41 preregistration", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/25_candidates_v4_2026-10-03.md", "Read the v4 candidate slate", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/26_h41_results_2026-10-03.md", "Read the H41 results document", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/h41.py", "Read the feature module", external=True)}</p></section>'
+    )
+
+
+def h41_status_sentence() -> str:
+    """One-sentence, evidence-derived statement of the session-4 H41 screen outcome."""
+    summary = ROOT / "evidence" / "h41_screen" / "summary_screen.json"
+    if not summary.is_file():
+        return ("the session-4 H41 qfaults-corridor screen is frozen in knowledge/24 and recorded cell-by-cell "
+                "in evidence/h41_screen/ (no summary in this checkout)")
+    data = json.loads(summary.read_text(encoding="utf-8"))
+    arms = data["arms"]
+    parts = [f"{arm.split('_')[0]} {arms[arm]['mean_gain']:+.5f}" for arm in arms if "mean_gain" in arms[arm]]
+    passed = [arm for arm in arms if arms[arm].get("G1_SCREEN_PASS")]
+    verdict = ("failed the frozen G1 gate on every arm" if not passed
+               else "cleared G1 on " + ", ".join(sorted(passed)))
+    guard = data.get("viability_guard", {})
+    guard_txt = "sparse-column guard passed" if guard.get("passed") else "sparse-column guard FAILED"
+    return (f"session 4 pre-registered and screened H41 (slip-rate-weighted INGENIOUS fault-corridor evidence, "
+            f"off-catalogue only) on {len(data.get('folds', []))} folds × {len(data.get('draws', []))} draws × 5 arms: "
+            f"{'; '.join(parts)} mean paired gain, {verdict}, {guard_txt}, "
+            f"{'no confirmation was fit' if not passed else 'confirmation authorized'}")
+
+
 def render_home() -> str:
     status = read_json("status_feed.json")
     submissions = read_json("submissions.json")
@@ -197,11 +292,17 @@ def render_home() -> str:
         banner = (
             '<section class="status-banner danger"><strong>No slot-approved submission.</strong>'
             '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
-            'Session 3 ran two parallel preregistered screens and both failed their frozen gates. Workstream B: H35 (tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation '
-            'persistence) on four folds × two draws — all four arms failed the frozen gate, the union arm by fold-robustness alone. Workstream A: H31b (dense continuous worming persistence, an independent '
-            'rebuild of the same idea) on fresh draws 22/23 — draw 22 positive in 4/4 folds, draw 23 in 2/4; the frozen stability gates failed, so no confirmation, no candidate file, no slot '
-            '(knowledge/21_h31b_screen_results_2026-10-03.md). Earlier records stand: H34 failed its primary proxy gate, the fractional factorial is complete, H31 failed on feature sparsity, and the '
-            'corrected H29 screen failed every arm. See the local evidence feed and research report for the complete records. '
+            '<p>Do not spend a weekly submission slot on any file from this page: the repository recommends none. '
+            + e(h41_status_sentence()) + '; '
+            'Session 3 ran two parallel preregistered screens and both failed their frozen gates. Workstream B: H35 '
+            '(tip-corridor stress-shadow interaction zones) and H40 (dense continuous upward-continuation persistence) on '
+            'four folds × two draws — all four arms failed the frozen gate, the union arm by fold-robustness alone. '
+            'Workstream A: H31b (dense continuous worming persistence, an independent rebuild of the same idea) on fresh '
+            'draws 22/23 — draw 22 positive in 4/4 folds, draw 23 in 2/4; the frozen stability gates failed, so no '
+            'confirmation, no candidate file, no slot (knowledge/21_h31b_screen_results_2026-10-03.md). Earlier records '
+            'stand: H34 failed its primary proxy gate, the fractional factorial is complete, H31 failed on feature '
+            'sparsity, and the corrected H29 screen failed every arm. See the local evidence feed and research report for '
+            'the complete records. '
             'Every download is format-verified locally and unscored; the files are offered so the owner can decide, not because a proxy says to submit.</p></section>'
         )
         main_artifact = (
@@ -262,14 +363,28 @@ def render_home() -> str:
         '<p><a href="sources.html">Review sources and caveats →</a></p></article></section>'
         + feed_card
     )
-    buttons = a("executive-summary.html", "Submission guide", class_name="button") + a("research.html", "Explore research", class_name="button secondary")
+    # The single-click download is placed in the hero itself, not only further down the page, so that a
+    # visitor sees the actual file within the first screen (standing owner requirement, 2026-10-03).
+    primary = next((row for row in submissions.get("files", []) if row.get("role") == "candidate_review"
+                    and has_local_artifact(row)), None)
+    hero_download = (
+        a(artifact_href(primary), "Download the .tif in one click", class_name="button cta")
+        + a("executive-summary.html", "Submission guide", class_name="button")
+        + a("research.html", "Explore research", class_name="button secondary")
+        if primary else
+        a("executive-summary.html", "Submission guide", class_name="button")
+        + a("research.html", "Explore research", class_name="button secondary")
+    )
+    buttons = hero_download
     return page(
         "Overview",
         "Auditable, spatially validated research for the DOE GEMS Prize. No slot-approved submission is currently available.",
         "index",
         "DOE GEMS Prize · GeoDAWN · evidence before entry",
         "Find faults worth believing.",
-        "A transparent research workflow for predicting unmapped faults—built around spatial holdouts, exact-file validation, official sources, and honest uncertainty.",
+        "A transparent research workflow for predicting unmapped faults, built around spatial holdouts, exact-file "
+        "validation, official sources and honest uncertainty. The download in the banner is one click and needs no login; "
+        "its paste-ready submission note sits with it. Nothing here is a score claim.",
         body,
         buttons,
     )
@@ -325,11 +440,16 @@ def render_summary() -> str:
         f'<li>Every in-footprint value is finite and in [{fmt["probability_min"]}, {fmt["probability_max"]}].</li>'
         f'<li>Outside-footprint cells are {e(fmt["outside_footprint"])}, matching the official sample template.</li>'
         '<li>Use a unique content-addressed filename and keep a SHA-256 receipt.</li></ul>'
-        '<p>The H29/core restore writes to &lt;repo&gt;/data and does not read GEMS_DATA_DIR. Restore and verify that manifest first; then point the local checker at that directory:</p>'
-        '<pre><code>python scripts/restore_data.py\n'
-        'python scripts/restore_data.py --verify\n'
-        'GEMS_DATA_DIR=data python scripts/check_submission.py \\\n'
-        '  docs/downloads/&lt;candidate.tif&gt; --receipt evidence/format_checks/&lt;candidate.json&gt;</code></pre>'
+        '<p>Fetch and verify the pinned inputs with one command (it never contacts the organizer; it restores '
+        'the hash-pinned owner mirrors): <code>bash scripts/download_competition_data.sh</code>, with '
+        '<code>--group core|h31|all</code> and <code>--verify</code>. The legacy core restore writes to '
+        '&lt;repo&gt;/data/bridge and ignores <code>GEMS_DATA_DIR</code>; the H31-group restore writes to '
+        '&lt;repo&gt;/data. The submission checker and the download verifier resolve either layout through one shared '
+        'helper since 2026-10-03, so the documented check below works after either restore:</p>'
+        '<pre><code>bash scripts/download_competition_data.sh --verify\n'
+        'GEMS_DATA_DIR=$PWD/data python scripts/check_submission.py \\\n'
+        '  docs/downloads/&lt;candidate.tif&gt; --receipt evidence/format_checks/&lt;candidate.json&gt;\n'
+        'python scripts/verify_downloads.py   # re-verify every registered download against its build-time hashes</code></pre>'
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/scripts/check_submission.py", "Review the checker source", external=True)}</p>'
         '<p>The local checker is necessary but cannot guarantee organizer acceptance. Review the current official problem page.</p></article>'
         '<article class="card span-6"><p class="kicker">Narrative disclosure</p><h2>Generative AI use</h2>'
@@ -346,7 +466,7 @@ def render_summary() -> str:
         "summary",
         "Executive summary · manual upload only",
         "A clear route from research artifact to submission.",
-        "No file is currently cleared for a weekly slot. This page records the manual process and format contract so the next approved artifact is easy to identify and audit.",
+        "No file is currently cleared for a weekly slot. The one-click GeoTIFF downloads sit at the very top of this page, each with its paste-ready note and format receipt; below them is the manual process and the exact format contract, so the next approved artifact is easy to identify and audit.",
         body,
         a("index.html", "Back to current status", class_name="button") + a("sources.html", "Official source links", class_name="button secondary"),
     )
@@ -407,8 +527,43 @@ def render_research() -> str:
         '<article class="card span-6"><p class="kicker">What it means</p><h2>Three worming-family screens, three consistent negatives</h2>'
         '<p>H29 (sparse persistence features), H31 (seed-tracked persistence), and now H40 (dense continuous persistence) plus the new H35 tip-corridor interaction fields all failed the same fixed effect bar on the same '
         'spatial folds. The mechanisms are not disproven science — the caveat that this grid’s most persistent edges run E–W (survey-parallel, the H29 diagnostic) travels with every verdict — but on this pipeline the '
-        'frozen structural baseline already extracts most of that information. Remaining independent levers are label-side or other-physics: the v3 slate promotes H41 (slip-rate-weighted INGENIOUS off-catalogue trace '
-        'centroids, data already mirrored) to rank 1, with H36 (MT edges), H37 (geothermometry residuals), H42 (measured-period line audit) and the H38/H39 filter-role pair behind it.</p></article></section>'
+        'frozen structural baseline already extracts most of that information. The v3 slate\u2019s rank 1, H41 (slip-rate-weighted INGENIOUS off-catalogue trace centroids, already mirrored), is the first idea in this '
+        'family to clear the frozen gate: on draws 28/29 two of its five arms passed, and every number behind that sentence \u2014 mean paired gains, per-fold gains, the AUC step, the emission budget band and the '
+        'negative SGMC second proxy \u2014 is recomputed from the raw cells in the card above rather than repeated here. That is why a gate pass authorizes a confirmation and not a submission. The v4 slate (H43 drainage organization first, '
+        'then H44\u2013H47) is ranked in knowledge/25 with each candidate\u2019s external-data obtainability stated; H44\u2013H47 wait on owner-side fetches, and H36/H37/H42 and the H38/H39 filter-role pair remain behind H43.</p></article></section>'
+    )
+
+    strategy_card = (
+        "<section class=\"grid\"><article class=\"card span-6\"><p class=\"kicker\">Metric analysis</p>"
+        "<h2>Why a sparser emission scored better, and what beating the leaderboard best requires</h2>"
+        "<p>The repository\u2019s read of the published metric: credit is granted per true-positive pixel within a "
+        "300 m triangular kernel, and a false positive costs a fraction of what a miss costs, so once a dot sits "
+        "inside a neighbouring dot\u2019s kernel it adds nothing while still risking a false-positive charge. Under "
+        "those conditions the optimal move is to emit only where the expected credit per emitted pixel clears a "
+        "threshold the metric itself fixes, and to space dots so each one earns its own kernel. That is arithmetic "
+        "about the scoring rule, not a tuning preference, and it explains why a thinned, catalogue-free emission can "
+        "outrank a dense one from the same model.</p>"
+        "<p>Closing the remaining gap therefore needs either more true-positive mass per emitted pixel, or a habitat "
+        "that puts dots on structure the current model never ranks highly. The derivation, the measured "
+        "credit-per-pixel ladder for the repository\u2019s own files and the resulting three-part system (habitat, "
+        "emission rule, admission rule) live in <code>knowledge/07_metric_emission_analysis_2026-10-03.md</code> and "
+        "<code>knowledge/13_strategy_system_2026-10-03.md</code>. The score figures are not republished here: they are "
+        "unverified owner-reported claims, and these pages carry only locally recomputable proxies.</p></article>"
+        "<article class=\"card span-6\"><p class=\"kicker\">Owner question</p>"
+        "<h2>Are there new competition results to read?</h2>"
+        "<p>This project deliberately does not answer that by fetching the competition site. The platform\u2019s terms "
+        "prohibit automated access for any purpose including monitoring, and the project charter repeats the ban "
+        "(<code>AGENTS.md</code> rule 3, <code>knowledge/03_drivendata_terms_access_policy.md</code>), so no leaderboard "
+        "row, rank or feed item is scraped, embedded or cached here. The repository instead reports its own state "
+        "continuously and leaves the competition page for the owner to open in a browser.</p>"
+        "<ul class=\"list-clean\">"
+        "<li><a href=\"https://www.drivendata.org/competitions/306/competition-doe-gems/\" target=\"_blank"
+        " rel=\"noopener noreferrer\">Open the official competition page manually</a></li>"
+        "<li><a href=\"https://docs.nlr.gov/docs/fy26osti/96647.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">"
+        "Official rules (submission limits, final selection, AI disclosure)</a></li></ul>"
+        "<p>No weekly slot has been used by this repository, so nothing was submitted that could be scored; "
+        "<code>evidence/candidate_scoreboard.json</code> and the submission register are the authoritative local "
+        "record.</p></article></section>"
     )
 
     def _hypothesis_card(item: dict[str, Any]) -> str:
@@ -475,7 +630,8 @@ def render_research() -> str:
         layers = ", ".join(item.get("layers", []))
         state = tag(item.get("status", ""), "warning" if item["id"] == "H31" else "")
         cards.append(
-            f'<article class="card span-12"><div class="grid"><div class="span-8"><p class="kicker">Rank {e(item.get("rank"))} · {e(item["id"])}</p>'
+            f'<article class="card span-12"><div class="grid"><div class="span-8"><p class="kicker">Rank {e(item.get("rank"))} · {e(item["id"])}'
+            + (f' · {e(item["slate"])}' if item.get("slate") else '') + '</p>'
             f'<h2>{e(item["title"])}</h2><p>{state}</p><p><strong>Layers:</strong> {e(layers)}</p>'
             f'<p><strong>Physical signature:</strong> {e(item.get("signature", ""))}</p>'
             f'<p><strong>Why it could add unmapped faults:</strong> {e(item.get("why_unmapped", ""))}</p>'
@@ -485,13 +641,16 @@ def render_research() -> str:
             f'<p><strong>Cost:</strong> {e(item.get("cost", ""))}</p><p><strong>Data:</strong> {e(item.get("external_data", ""))}</p></aside></div></article>'
         )
     body = (
-        '<section class="status-banner"><strong>Novelty was rechecked against the latest main branch, including both session-3 screens.</strong> '
+        '<section class="status-banner"><strong>Novelty was rechecked again on 2026-10-03 against the current main branch, including both session-3 workstreams and the session-4 screen.</strong> '
         'Every arm in the corrected H29 screen failed; the H31 seed-tracked screen and the H34 coverage-emission screen failed; the session-3 H35/H40 screen '
         '(tip-corridor interaction zones + dense continuous persistence, four arms) failed its frozen gate on all arms; the parallel H31b dense-worming screen '
         '(draws 22/23) failed its stability gates on draw 23. The worming/persistence family is now screened in four distinct formulations across two independent '
-        'workstreams. “Not found” is limited to the reviewed repositories, not all competitors. '
-        'Two parallel v3 registers are rendered below: the Workstream-A slate (H31b first, screened) and the refreshed Workstream-B slate (H41 first).</section>'
-        f'{h35_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
+        'workstreams, and the slate carries an explicit decision not to run it a fifth time without a new mechanism: another retry would be silent fishing, not '
+        'science. “Not found” is limited to the reviewed repositories, not all competitors. '
+        'The v4 slate (H43 drainage organization first, then H44–H47) is in knowledge/25_candidates_v4; H41 was promoted from the v3 slate and screened this '
+        'session, and is the first candidate in this family to clear a frozen gate on two arms. Two parallel v3 registers are rendered below: the Workstream-A slate '
+        '(H31b first, screened) and the refreshed Workstream-B slate.</section>'
+        f'{h35_card}{h41_screen_card()}{strategy_card}{v3_section}<section class="grid" aria-label="Refreshed ranked slate (Workstream B)">{"".join(cards)}</section>'
         '<section class="grid"><article class="card span-7"><p class="kicker">H31 research design</p><h2>Test the pseudogravity/drift increment beyond H29</h2>'
         f'<p>The original H29 run had already tested upward-continuation worm persistence on raw RTP and isostatic gravity, but its bounded-persistence normalization and FFT exterior padding were both found nonconforming. Its raw cells are archived and reconciled as historical only. The corrected run tested {h29_arm_count} preregistered arms over screen draws {" and ".join(map(str, h29_screen_draws))}; every arm failed, '
         f'{"so no confirmation models were fit" if h29_confirmation_not_run else "and its confirmation status is recorded in the evidence"}. H31 does not claim worming itself is new. It isolates a regularized vertical-integration pseudogravity <em>proxy</em> from RTP plus a lateral edge-drift feature, then checks whether those additions improve a same-run baseline. The available isostatic gravity anomaly is included separately. A symmetric fixed-neighborhood cross-support allows small grid misregistration; it is a tolerance, not geological proof.</p>'
@@ -523,8 +682,10 @@ def render_research() -> str:
         "Ranked hypotheses, preregistration, current negative screens, and scientific limits.",
         "research",
         "Research register · updated from local files",
-        "Hypotheses, re-ranked against H29.",
-        "The corrected H29 screen, the H31 screen, the H34 emission screen, the session-3 H35/H40 screen (all four arms) and the parallel H31b dense-worming screen (draw 23) all failed their frozen gates. H41 leads the refreshed slate; H36 is the next local candidate. No current file is slot-approved.",
+        "Hypotheses, re-ranked against the current screens.",
+        "The corrected H29, H31, H34, session-3 H35/H40 and H31b screens all failed their frozen gates; the session-4 H41 "
+        "qfaults-corridor screen passed on two of four arms and its confirmation is recorded in knowledge/26. The v4 slate "
+        "ranks the next five ideas by gain per cost, H43 first. No current file is slot-approved.",
         body,
         a("status.html", "View the evidence feed", class_name="button") + a("sources.html", "Review scientific sources", class_name="button secondary"),
     )

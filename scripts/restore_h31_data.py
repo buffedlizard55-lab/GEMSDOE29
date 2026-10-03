@@ -86,13 +86,33 @@ def restore(entry: dict, root: Path) -> dict:
     return dict(id=entry["id"], status="restored", sha256=entry["sha256"])
 
 
-def main() -> None:
+def inspect(entry: dict, root: Path) -> dict:
+    """Hash-check a pinned file without fetching anything; never creates or modifies data."""
+    dest = root / entry["dest"]
+    if not dest.exists():
+        return dict(id=entry["id"], status="missing", dest=entry["dest"])
+    got = sha256_file(dest)
+    return dict(id=entry["id"], status="present" if got == entry["sha256"] else "mismatch",
+                dest=entry["dest"], sha256=got, expected=entry["sha256"])
+
+
+def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--group", default="core", choices=["core", "external", "all"])
     ap.add_argument("--manifest", default=str(ROOT / "registry" / "data_manifest.json"))
+    ap.add_argument("--verify", action="store_true",
+                    help="hash-check the pinned files already on disk; never download, never write a receipt")
     args = ap.parse_args()
     man = json.loads(Path(args.manifest).read_text())
     root = data_dir()
+    if args.verify:
+        results = [inspect(e, root) for e in man["files"] if args.group in ("all", e["group"])]
+        bad = [r for r in results if r["status"] != "present"]
+        for r in results:
+            extra = "" if r["status"] == "present" else f"  (expected {r.get('expected', '')[:12]}…)"
+            print(f"{r['status']:>8}  {r['dest']}{extra}")
+        print(f"verify: {len(results) - len(bad)}/{len(results)} pinned files present and hash-correct in {root}")
+        return 1 if bad else 0
     root.mkdir(parents=True, exist_ok=True)
     results = []
     for e in man["files"]:
@@ -102,7 +122,8 @@ def main() -> None:
             print(f"{r['status']:>8}  {e['dest']}  sha256={r['sha256'][:12]}…")
     (root / "restore_receipt.json").write_text(json.dumps(results, indent=1))
     print(f"{len(results)} files verified in {root}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

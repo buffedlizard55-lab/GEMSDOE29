@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "review_date": "2026-10-03",
-  "novelty_boundary": "The initial candidate slate was drafted before the H31 feature prototype was implemented on arena/01a10075-gemsdoe29, based at ad130c8. After rebasing onto current main, the review includes the in-repository H29 raw-RTP/gravity worming screen. H31 is not a novel worming category: its regularized RTP vertical-integration transform and explicit drift increment remain unfit and untested on spatial holdouts. After the H34 screen (2026-10-03), H34 is reported as a negative method result, and H35-H39 are registered as the next candidate slate (H35 interaction zones, H36 MT conductance edges, H37 geothermometry, H38 worm convergence/azimuth, H39 Euler depths). Novelty claims apply only to the reviewed repositories, not all competitors. Session 3 (2026-10-03): H35 (tip-corridor stress-shadow interaction) and H40 (dense continuous persistence) were pre-registered (knowledge/19), implemented, and screened on draws 24/25; all four arms failed G1 (knowledge/21, evidence/h35_h40_screen/). The untried slate re-ranked in knowledge/20 (H41, H36, H37, H42, H38/H39 merged). Novelty claims apply only to the reviewed repositories, not all competitors.",
+  "novelty_boundary": "The initial candidate slate was drafted before the H31 feature prototype was implemented on arena/01a10075-gemsdoe29, based at ad130c8. After rebasing onto current main, the review includes the in-repository H29 raw-RTP/gravity worming screen. H31 is not a novel worming category: its regularized RTP vertical-integration transform and explicit drift increment remain unfit and untested on spatial holdouts. After the H34 screen (2026-10-03), H34 is reported as a negative method result, and H35-H39 are registered as the next candidate slate (H35 interaction zones, H36 MT conductance edges, H37 geothermometry, H38 worm convergence/azimuth, H39 Euler depths). Novelty claims apply only to the reviewed repositories, not all competitors. Session 3 (2026-10-03): H35 (tip-corridor stress-shadow interaction) and H40 (dense continuous persistence) were pre-registered (knowledge/19), implemented, and screened on draws 24/25; all four arms failed G1 (knowledge/21, evidence/h35_h40_screen/). The untried slate re-ranked in knowledge/20 (H41, H36, H37, H42, H38/H39 merged). Novelty claims apply only to the reviewed repositories, not all competitors. 2026-10-03 (session 4): the v4 slate (knowledge/25) adds H43-H47; novelty of H41 (qfaults attribute table for prediction) and H43 (flow routing) was re-verified by a repository-wide grep over src/, scripts/ and tests/ in this session, and H45 was checked against the frozen family-C seismicity density bands.",
   "items": [
     {
       "id": "H32",
@@ -197,7 +197,7 @@
       "id": "H41",
       "rank": 1,
       "title": "Slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only",
-      "status": "proposed in the v3 slate (knowledge/20); not implemented; requires its own preregistration before any fit",
+      "status": "screened 2026-10-03 under knowledge/24 (draws 28/29, 4 folds, 40 cells): G1 PASS on A1_h41_off (+0.0066173) and A4_h41_union (+0.0073436); A2/A3 failed. First arms in this family to clear the frozen gate. Confirmation on draws 30/31 is authorized and recorded in knowledge/26_h41_results_2026-10-03.md; the SGMC second proxy moved negative for every arm, so no slot is implied by the screen alone.",
       "layers": [
         "gdr_qfaults_traces.csv (1,126 trace centroids with slip_rate; attributes-only, hash-pinned)",
         "family A/B ridges",
@@ -209,7 +209,9 @@
       "planning_delta_dti": "0 to +0.02 (low confidence; judgement range, never a gate)",
       "cost": "about half a day; all inputs local and hash-pinned",
       "external_data": "none required; upgrade path via full GDR 1391 trace geometry (public, CC BY 4.0) pending owner-side fetch + mirroring",
-      "validation": "four spatial folds; two screen draws (proposed 28/29) + fresh confirmation (30/31) under a new preregistration with the same G1/G2/G3 structure"
+      "validation": "four spatial folds; two screen draws (proposed 28/29) + fresh confirmation (30/31) under a new preregistration with the same G1/G2/G3 structure",
+      "screened": "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+      "evidence": "evidence/h41_screen/"
     },
     {
       "id": "H42",
@@ -228,6 +230,101 @@
       "cost": "about one day after a spectrum module is written; inputs local",
       "external_data": "none for the measured audit; GeoDAWN flight-path binary only for the blocked assumed-spacing variant",
       "validation": "screen as a frozen column swap on the A-family ridge set; same gate structure"
+    },
+    {
+      "id": "H43",
+      "rank": 1,
+      "title": "Drainage-network organization: stream-power residual and knickpoint excess",
+      "status": "proposed in the v4 slate (knowledge/25); not implemented; top candidate to build after the H41 verdict",
+      "layers": [
+        "det_elev (cached 100 m grid)",
+        "det_elev_slope",
+        "D8 contributing area (new)",
+        "supplied-catalogue off-mask"
+      ],
+      "signature": "Ridge of stream power A^m*S along range-front trends plus excess steepness above a per-basin log-log S-A envelope (knickpoint density).",
+      "why_unmapped": "Drainage integration is a catchment-scale network property; the supplied 100 m bands are all local-window filters, and the catalogue carries no hydrologic routing at all.",
+      "difference": "Verified by grep: no flow_accum/d8/knickpoint/stream_power implementation exists in src/, scripts/ or tests/. H27/H30 filter scarp geometry, H31/H40 filter potential-field ridges, H35 builds catalogue interaction zones; none uses the topographic boundary condition.",
+      "planning_delta_dti": "0 to +0.012 (low confidence; judgement bracket, never a gate)",
+      "cost": "about half a day; zero downloads, D8 + envelope fit on the cached DEM band",
+      "external_data": "none required; optional refinement from USGS 3DEP 1/3-arc-second DEM (free, public, official) which is owner-side fetch only (IR-29-SANDBOX-NET)",
+      "validation": "frozen four-fold blocked screen, fresh draw pair, same G1/G2 gates as knowledge/19 and knowledge/24; must beat holdout_best 0.14479018210246675 before any slot",
+      "slate": "v4 (knowledge/25_candidates_v4_2026-10-03.md)"
+    },
+    {
+      "id": "H44",
+      "rank": 2,
+      "title": "Spring-to-gauge discharge chain (hydrologic pathway continuity)",
+      "status": "proposed in the v4 slate (knowledge/25); blocked on an owner-side NWIS fetch",
+      "layers": [
+        "gdr_wellspring_in_footprint.csv (mirrored)",
+        "USGS NWIS daily discharge (not mirrored)",
+        "H43 basin outlets"
+      ],
+      "signature": "Distance to spring-to-gauge chains, weighted by dry-season base flow, on segments crossing range fronts.",
+      "why_unmapped": "D_gdr_* features encode where heat is and how many holes are nearby; nothing encodes directed fluvial connectivity between thermal points.",
+      "difference": "H37 tested young-fault density around springs (co-location); this tests the ordering of points along a routed drainage path.",
+      "planning_delta_dti": "0 to +0.006 (very low confidence)",
+      "cost": "1-2 days incl. owner-side download and gauge attribution",
+      "external_data": "USGS NWIS (waterdata.usgs.gov), free and official; unreachable from the sandbox (SSLZeroReturnError, verified 2026-10-03)",
+      "validation": "same frozen gate structure; downstream of H43 and should not be screened before H43 has a verdict",
+      "slate": "v4 (knowledge/25_candidates_v4_2026-10-03.md)"
+    },
+    {
+      "id": "H45",
+      "rank": 3,
+      "title": "Seismicity strand fitting instead of seismicity density",
+      "status": "proposed in the v4 slate (knowledge/25); blocked on an owner-side ComCat fetch",
+      "layers": [
+        "USGS ComCat hypocentres (not mirrored)",
+        "structure-tensor/DBSCAN strand fitting",
+        "off-catalogue mask"
+      ],
+      "signature": "Distance to a fitted hypocentre strand, oriented, versus the coarse unstructured deq_n100a15/ieq_n100a15 counts.",
+      "why_unmapped": "The catalogue seismicity bands are 100 km-bin counts without orientation; a strand is a line and the label class is lines.",
+      "difference": "Family C seismicity use in this repository is density only, frozen inside static_ABCD; strand geometry has never been derived from hypocentres here. Not a new data channel in the labels (earthquakes are independent of the organizers mapping).",
+      "planning_delta_dti": "0 to +0.008 (low confidence; depth errors of several km smear a 500 m corridor)",
+      "cost": "1 day after the fetch; owner-side download required",
+      "external_data": "USGS ComCat API (earthquake.usgs.gov/fdsnws/event/1/query), free and public; unreachable from the sandbox (SSLZeroReturnError, verified 2026-10-03)",
+      "validation": "same frozen gate structure; screened only if H43 passes, to keep the negative-streak arithmetic honest",
+      "slate": "v4 (knowledge/25_candidates_v4_2026-10-03.md)"
+    },
+    {
+      "id": "H46",
+      "rank": 4,
+      "title": "1-m LiDAR scarp template along GeoDAWN flight lines",
+      "status": "proposed in the v4 slate (knowledge/25) as the costed re-registration of an item deferred by the predecessor session; still deferred and not implemented",
+      "layers": [
+        "GeoDAWN 1-m LiDAR (doi:10.5066/P93LGLVQ)",
+        "crest-trough template matched at 1-3 m throw, 10-40 m width"
+      ],
+      "signature": "Sub-grid scarp amplitude where the 100 m derived bands are structurally blind; a detected uncatalogued scarp is a direct geometric prediction.",
+      "why_unmapped": "The supplied raster family is 100 m and every derived band inherits that resolution.",
+      "difference": "H27/H30 and the static B_*/L_* blocks are 100 m ridge/trough products; knowledge/22 records the raw point-cloud route as deferred for cost, not falsified. Distinct from H42 (spectral notch of acquisition imprint).",
+      "planning_delta_dti": "0 to +0.010 in covered corridors, unmeasurable per-cell at the frozen gate because coverage is flight-line limited",
+      "cost": "multi-day: multi-GB owner-side download, mosaic, registration checks, false-alarm study",
+      "external_data": "GeoDAWN 1-m LiDAR via USGS GDR, free and public under CC BY 4.0; gdr.openei.org is unreachable in-sandbox (IR-29-GDR-BLOCKED), so the multi-GB download is owner-side fetch only",
+      "validation": "would need its own coverage-restricted gate; explicitly out of scope this session",
+      "slate": "v4 (knowledge/25_candidates_v4_2026-10-03.md)"
+    },
+    {
+      "id": "H47",
+      "rank": 5,
+      "title": "SGMC map-unit boundary adjacency (contacts, not the fault raster)",
+      "status": "proposed in the v4 slate (knowledge/25); blocked on an owner-side state-map polygon fetch",
+      "layers": [
+        "Nevada/Utah 1:250k geologic map unit polygons (not mirrored)",
+        "unit-contact geometry",
+        "off-catalogue mask"
+      ],
+      "signature": "Permeable-vs-seal juxtaposition across a mapped contact that is not a catalogue fault; km-scale corridor.",
+      "why_unmapped": "derived_sgmc_faults_100m_u8.tif carries only the SGMC fault subset (198 KB) and is used as a truth-like second proxy; the unit geometry has never been read as a predictor.",
+      "difference": "Every SGMC use in this repository is fault-raster based; this is the lithologic-adjacency channel, a fluid-pathway argument rather than a strain argument.",
+      "planning_delta_dti": "0 to +0.004 (mapping-scale floor: a 1:250k contact is too coarse for 100 m dot placement)",
+      "cost": "1-2 days plus a large owner-side download",
+      "external_data": "NDGSG/UGS open GIS, free and official; not mirrored, owner-side fetch only",
+      "validation": "same frozen gate structure; lowest priority because of the scale floor",
+      "slate": "v4 (knowledge/25_candidates_v4_2026-10-03.md)"
     }
   ]
 }
