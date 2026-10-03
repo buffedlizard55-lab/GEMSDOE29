@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_utc": "2026-10-03T20:28:39.437590+00:00",
+  "generated_utc": "2026-10-03T20:52:22.415662+00:00",
   "generated_by": "scripts/verify_pipeline.py",
   "environment": {
     "python": "3.11.2",
@@ -185,8 +185,8 @@
   },
   "reproduction": {
     "ok": true,
-    "seconds": 103.0,
-    "command": "/usr/bin/python3 /home/user/GEMSDOE29/scripts/build_repo_candidate.py --out-dir /tmp/gemsdoe29-verify-o49ib0pc --record /tmp/gemsdoe29-verify-o49ib0pc/record.json --slug verify-repro",
+    "seconds": 95.0,
+    "command": "/usr/bin/python3 /home/user/GEMSDOE29/scripts/build_repo_candidate.py --out-dir /tmp/gemsdoe29-verify-vbp04yya --record /tmp/gemsdoe29-verify-vbp04yya/record.json --slug verify-repro",
     "rebuilt_sha256": "3537e9fc47a465036a8c1462b99a29b7f3449ee2e7bb94fd0a12d438a85b375d",
     "registered_sha256": "3537e9fc47a465036a8c1462b99a29b7f3449ee2e7bb94fd0a12d438a85b375d",
     "rebuilt_bytes": 1591482,
