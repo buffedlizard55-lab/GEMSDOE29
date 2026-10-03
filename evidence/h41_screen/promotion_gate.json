@@ -1,0 +1,68 @@
+{
+  "generated_by": "scripts/analyze_h41_screen.py",
+  "date": "2026-10-03",
+  "rule": "knowledge/19 \u00a74 G3 (inherited verbatim by knowledge/24 \u00a74) plus its \u00a75 pre-declared fork: an arm that beats C0 on the catalogue-hidden proxy while the SGMC secondary gain is negative on >=3/4 folds is reported as a proxy conflict with NO promotion. The summary and report fields G1_PASS / G1_SCREEN_PASS / above_holdout_best cover the primary-proxy gates only.",
+  "holdout_best": 0.14479018210246675,
+  "arms": {
+    "A1_h41_off": {
+      "G1_screen_pass": true,
+      "G2_confirmation_pass": false,
+      "screen_mean_above_holdout_best": true,
+      "confirm_mean_above_holdout_best": true,
+      "sgmc_positive_folds_screen_at_least_3": false,
+      "sgmc_positive_folds_confirm_at_least_3": false,
+      "G3_ELIGIBLE": false,
+      "sgmc": {
+        "screen": 2,
+        "confirm": 1,
+        "mean_gain_screen": -0.001062916,
+        "mean_gain_confirm": -0.002051842
+      }
+    },
+    "A2_h41_support": {
+      "G1_screen_pass": false,
+      "G2_confirmation_pass": false,
+      "screen_mean_above_holdout_best": true,
+      "confirm_mean_above_holdout_best": true,
+      "sgmc_positive_folds_screen_at_least_3": false,
+      "sgmc_positive_folds_confirm_at_least_3": false,
+      "G3_ELIGIBLE": false,
+      "sgmc": {
+        "screen": 1,
+        "confirm": 1,
+        "mean_gain_screen": -0.000886537,
+        "mean_gain_confirm": -0.00399056
+      }
+    },
+    "A3_h41_corridor": {
+      "G1_screen_pass": false,
+      "G2_confirmation_pass": false,
+      "screen_mean_above_holdout_best": true,
+      "confirm_mean_above_holdout_best": true,
+      "sgmc_positive_folds_screen_at_least_3": false,
+      "sgmc_positive_folds_confirm_at_least_3": false,
+      "G3_ELIGIBLE": false,
+      "sgmc": {
+        "screen": 1,
+        "confirm": 1,
+        "mean_gain_screen": -0.00167195,
+        "mean_gain_confirm": -0.00361099
+      }
+    },
+    "A4_h41_union": {
+      "G1_screen_pass": true,
+      "G2_confirmation_pass": true,
+      "screen_mean_above_holdout_best": true,
+      "confirm_mean_above_holdout_best": true,
+      "sgmc_positive_folds_screen_at_least_3": false,
+      "sgmc_positive_folds_confirm_at_least_3": false,
+      "G3_ELIGIBLE": false,
+      "sgmc": {
+        "screen": 1,
+        "confirm": 1,
+        "mean_gain_screen": -0.002260493,
+        "mean_gain_confirm": -0.002106949
+      }
+    }
+  }
+}

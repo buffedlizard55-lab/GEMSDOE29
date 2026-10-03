@@ -433,6 +433,21 @@
         "knowledge/03_drivendata_terms_access_policy.md",
         "AGENTS.md"
       ]
+    },
+    {
+      "id": "IR-29-H41-G3-OMISSION",
+      "status": "open",
+      "severity": "high",
+      "date": "2026-10-03",
+      "summary": "The frozen H41 preregistration enumerates only the primary-proxy half of the inherited G3 gate, so its machine-readable pass fields understate what promotion requires; the stricter inherited reading was applied and it removed a promotion.",
+      "detail": "knowledge/24 \u00a74 declares its gates 'frozen (identical to knowledge/19 so that the negative-streak arithmetic stays comparable)' and then lists G1, G2 and a slot policy restating only the 0.14479 holdout half of G3. knowledge/19 \u00a74's G3 additionally requires the SGMC secondary gain vs C0 to be positive on >=3/4 folds on both screens, and knowledge/19 \u00a75 pre-declares 'any arm beating C0 on catalogue-hidden DTI while SGMC gain is negative on >=3/4 folds -> reported as a proxy conflict; no promotion'. scripts/run_h41_screen.py carries sgmc_min_positive_folds=3 in its frozen gates dict and records sgmc_mean_gain/sgmc_positive_folds per arm, but neither the runner nor scripts/analyze_h41_screen.py uses them in any pass/fail term, so G1_SCREEN_PASS / G1_PASS / above_holdout_best in summary_*.json and analyzer_report.json mean 'primary-proxy gates only'. Consequence for the record: A4_h41_union passes G1+G2 (+0.0073436 then +0.0077283, all four cells of both stages positive on the mean criterion) yet fails G3 at 1/4 SGMC folds in both stages, so no candidate is built and no weekly slot is claimed. The choice of reading is disclosed rather than assumed, and it is the reading that forfeits this session's best result. Action: any future preregistration must copy the inherited gate set verbatim, including secondary-proxy clauses, and the analyzer should print an explicit eligibility field instead of leaving the inference to the reader.",
+      "affected_artifacts": [
+        "knowledge/24_preregistered_h41_screen_2026-10-03.md",
+        "knowledge/19_preregistered_h35_h40_screen_2026-10-03.md",
+        "scripts/run_h41_screen.py",
+        "scripts/analyze_h41_screen.py",
+        "evidence/h41_screen/summary_confirm.json"
+      ]
     }
   ],
   "updated": "2026-10-03"

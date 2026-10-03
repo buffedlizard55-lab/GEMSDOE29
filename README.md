@@ -16,9 +16,17 @@
 > sparse-column guard (the H31 killer) passes by 17–150×, and `H41_OFF` correlates at |ρ| ≤ 0.27 with every existing
 > catalogue channel — so this is new ranking information, not the catalogue re-expressed. **Counter-evidence carried in
 > the same sentence: the SGMC second proxy moves negative for all four arms (−0.0009 to −0.0023, 1–2/4 folds).**
-> That is the registered proxy conflict, and it is why the weekly slot stays unused: the confirmation on draws 30/31
-> is authorized and recorded in [`knowledge/26_h41_results_2026-10-03.md`](knowledge/26_h41_results_2026-10-03.md),
-> and a candidate would additionally have to beat `holdout_best` 0.14479018210246675 *on the protocol that produced it*.
+> **The preregistered confirmation on fresh draws 30/31 then decided it, and the answer is neither a clean pass nor
+> a clean fail.** `A4_h41_union` reproduced (+0.0077283, all four fold means positive, worst fold +0.0043033, budgets
+> 0.974–0.997×) and passes G1+G2; `A1_h41_off` did not (+0.0044157, below the frozen +0.005 mean bar), so the cheap
+> two-column arm fails while the five-column union replicates. Promotion was then **withheld by G3 as inherited from
+> `knowledge/19` §4**: the SGMC off-catalogue class gained on only 1 of 4 folds in *both* stages, and `knowledge/19` §5
+> pre-declares exactly that pattern as "proxy conflict, no promotion". H41 is therefore recorded as a **replicated
+> primary-proxy gain vetoed by the secondary proxy** — no candidate file, no weekly slot, and the eligibility arithmetic
+> is now a machine-readable artifact (`evidence/h41_screen/promotion_gate.json`, `G3_ELIGIBLE=false` for all four arms).
+> The clause the frozen `knowledge/24` §4 omitted while claiming identity with `knowledge/19` is disclosed as
+> `IR-29-H41-G3-OMISSION`; the stricter reading was applied, which is the reading that cost this session its own best
+> result. Full write-up: [`knowledge/26_h41_results_2026-10-03.md`](knowledge/26_h41_results_2026-10-03.md) §5.
 > Session 4 also closed standing loose ends: `bash scripts/download_competition_data.sh` now exists as the prompt's
 > one-command data entry point (it never contacts the organizer), `check_submission.py`/`verify_downloads.py`/
 > `gems29.submission` share one template resolver so the documented checks run after either restore (28+28 download
@@ -111,7 +119,7 @@
 - **One download by hand** — the *leaderboard score itself*. The manual link is on the site's leaderboard card and in `knowledge/03`; `scripts/check_site.py` deliberately fails if anything on the site links the score page, and `registry/score_claims.json` keeps every score as a claim until the owner confirms it.
 - **H41 (session 4):** slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only — the first G1 pass in
   this family (`A1` +0.0066173, `A4` +0.0073436 on 40 cells; `A2`/`A3` fail; AUC 0.8037 → 0.8159; SGMC second proxy
-  negative on every arm, which is why the screen is not a slot decision). `knowledge/26` additionally discloses six process defects, including five wrong sentences in the frozen preregistration (left byte-identical on purpose) and a fabricated citation. No leaderboard was fetched: that check stays manual by policy. Raw cells: [`evidence/h41_screen/`](evidence/h41_screen/) (including the preserved
+  negative on every arm, and again on the confirmation). **Confirmation verdict (draws 30/31, 40 cells): `A4_h41_union` reproduces at +0.0077283 and passes G1+G2, `A1_h41_off` fails G2 at +0.0044157, and G3 — the inherited secondary-proxy requirement — withholds promotion for every arm (SGMC 1/4 folds in both stages), so nothing was built or submitted.** `knowledge/26` additionally discloses seven process defects, including five wrong sentences in the frozen preregistration (left byte-identical on purpose) and a fabricated citation. No leaderboard was fetched: that check stays manual by policy. Raw cells: [`evidence/h41_screen/`](evidence/h41_screen/) (including the preserved
   `aborted_attempt_1/` of the first confirmation launch, which was killed before fitting any cell). Write-up:
   [`knowledge/26_h41_results_2026-10-03.md`](knowledge/26_h41_results_2026-10-03.md). No slot used, nothing submitted.
 - **Multiscale "worming" (the owner's original idea) is closed, not shelved.** It has now been screened

@@ -144,6 +144,44 @@ def test_h41_screen_evidence_is_internally_consistent() -> None:
     assert design["git"]["dirty_worktree"] is False and design["git"]["revision"].startswith("a9d880e")
 
 
+def test_h41_promotion_gate_veto_is_pinned_by_the_evidence() -> None:
+    """The G3 veto must be recomputable, so the pass fields can never be re-read as eligibility later."""
+    base = ROOT / "evidence" / "h41_screen"
+    gate = base / "promotion_gate.json"
+    if not gate.is_file():
+        pytest.skip("H41 confirmation evidence not present in this checkout")
+    g = json.loads(gate.read_text())
+    screen = json.loads((base / "summary_screen.json").read_text())
+    confirm = json.loads((base / "summary_confirm.json").read_text())
+    assert g["holdout_best"] == 0.14479018210246675
+    for arm, entry in g["arms"].items():
+        sc, cf = screen["arms"][arm], confirm["arms"][arm]
+        assert entry["G1_screen_pass"] == sc["G1_SCREEN_PASS"], arm
+        assert entry["G2_confirmation_pass"] == cf["G1_SCREEN_PASS"], arm
+        # the SGMC fold counts the gate used are the ones the runner recorded
+        assert entry["sgmc"]["screen"] == sc["sgmc_positive_folds"], arm
+        assert entry["sgmc"]["confirm"] == cf["sgmc_positive_folds"], arm
+        assert abs(entry["sgmc"]["mean_gain_screen"] - sc["sgmc_mean_gain"]) < 1e-9, arm
+        assert abs(entry["sgmc"]["mean_gain_confirm"] - cf["sgmc_mean_gain"]) < 1e-9, arm
+        # eligibility needs all six terms; every arm must fail on the SGMC halves alone
+        assert entry["G3_ELIGIBLE"] is False, arm
+        assert entry["sgmc"]["screen"] < 3 and entry["sgmc"]["confirm"] < 3, arm
+    # the specific shapes of this session's verdict
+    a4, a1 = g["arms"]["A4_h41_union"], g["arms"]["A1_h41_off"]
+    assert a4["G1_screen_pass"] and a4["G2_confirmation_pass"] and a4["screen_mean_above_holdout_best"]
+    assert a4["confirm_mean_above_holdout_best"]
+    assert a1["G1_screen_pass"] and a1["G2_confirmation_pass"] is False
+    assert screen["arms"]["A1_h41_off"]["mean_gain"] >= 0.005 > confirm["arms"]["A1_h41_off"]["mean_gain"]
+    assert confirm["arms"]["A4_h41_union"]["mean_gain"] >= 0.005
+    assert confirm["arms"]["A4_h41_union"]["worst_fold_gain"] > 0
+    # and no H41 candidate or slot receipt may exist while the veto stands
+    subs = json.loads((ROOT / "registry" / "submissions.json").read_text())
+    assert not [x for x in subs["files"] if "h41" in json.dumps(x).lower()], \
+        "no H41 submission file may exist while the G3 veto stands"
+    assert not [x for x in subs["files"] if x.get("role") == "candidate_review" and "slot-approved" in str(x.get("status", ""))]
+    assert "no file is slot-approved" in json.loads((ROOT / "registry" / "status_feed.json").read_text())["current"]["confirmation_status"]
+
+
 def test_h35_h40_screen_evidence_is_internally_consistent() -> None:
     base = ROOT / "evidence" / "h35_h40_screen"
     summary = json.loads((base / "summary_screen.json").read_text())

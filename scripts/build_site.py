@@ -212,6 +212,27 @@ def h41_screen_card() -> str:
             + ("all four arms failed G1" if not passed else "passed: " + ", ".join(passed))
             + f"; the pre-declared degeneracy guard {guard_txt}."
         )
+    confirm_txt = ""
+    confirm_p, gate_p = base / "summary_confirm.json", base / "promotion_gate.json"
+    if confirm_p.is_file():
+        cs = json.loads(confirm_p.read_text(encoding="utf-8"))
+        cp = cs["arms"]
+        names = [x for x in cs["arms"] if x != "C0_base"]
+        g2 = [x for x in names if cp[x].get("G1_SCREEN_PASS")]
+        line = (f"<p><strong>Confirmation (draws {'/'.join(map(str, cs.get('draws', [])))}, {cs.get('n_cells', 0)} cells, "
+                f"same frozen gates):</strong> "
+                + ", ".join(f"{x} {cp[x]['mean_gain']:+.7f}" for x in names)
+                + f"; G2 passed by {', '.join(g2) if g2 else 'no arm'}")
+        if gate_p.is_file():
+            gt = json.loads(gate_p.read_text(encoding="utf-8"))
+            elig = [x for x, v in gt["arms"].items() if v["G3_ELIGIBLE"]]
+            if elig:
+                line += f"; G3 eligibility: {', '.join(elig)}."
+            else:
+                line += ("; G3 withholds promotion from every arm — the SGMC off-catalogue class gained on fewer than "
+                         "3 of 4 folds in both stages, the pattern knowledge/19 §5 pre-declares as a proxy conflict "
+                         "with no promotion")
+        confirm_txt = line + ". See <code>knowledge/26</code> §5 for the reading and "                              "<code>evidence/h41_screen/promotion_gate.json</code> for the arithmetic.</p>"
     ana = json.loads(analyzer_p.read_text(encoding="utf-8")) if analyzer_p.is_file() else None
     ana_txt = ("not yet recomputed" if ana is None else
                ("zero problems" if not ana["integrity_problems"] else f"problems: {ana['integrity_problems']}"))
@@ -227,7 +248,7 @@ def h41_screen_card() -> str:
         f"{e(design['git']['revision'][:7])}; {len(design['draws'])} draws x {len(design['folds'])} folds x {len(design['arms'])} arms. "
         f"Gates: mean paired gain &ge; {gates['mean_gain']}, &ge;{gates['min_positive_folds']}/{len(design['folds'])} folds positive on every draw, "
         f"worst fold &ge; {gates['max_fold_loss']}, emission within x[{gates['budget_ratio_band'][0]}, {gates['budget_ratio_band'][1]}] of control.</p>"
-        f"<p>{e(verdict)}</p>{table}"
+        f"<p>{e(verdict)}</p>{table}{confirm_txt}"
         f"<p><strong>Input audit:</strong> {q.get('n_rows_read', 0):,} trace rows read from the hash-pinned qfaults mirror, "
         f"{q.get('n_in_footprint', 0)} in-footprint, {q.get('n_rows_unparsable', 0)} unparsable (dropped and counted), "
         f"{q.get('n_recency_unmapped', 0)} outside the frozen age-bin table (fallback weight), maximum slip rate "
@@ -524,12 +545,13 @@ def render_research() -> str:
         f'{d28["files"]["d2_8"]["credit_per_emitted_px"]:.4f} credit per emitted pixel — every pixel isolated ({d28["files"]["d2_8"]["isolated_share"] * 100:.1f} %), none on the catalogue '
         f'({d28["files"]["d2_8"]["catalogue_overlap_px"]} overlap pixels). The kernel credit per emitted pixel rises monotonically as the emission thins toward the trace: this is why a 36 % emission can beat a 100 % emission '
         'under the published metric, and it is a property of the metric, not of any model. Owner-reported competition scores for these files are unverified claims and are deliberately absent here.</p></article>'
-        '<article class="card span-6"><p class="kicker">What it means</p><h2>Three worming-family screens, three consistent negatives</h2>'
-        '<p>H29 (sparse persistence features), H31 (seed-tracked persistence), and now H40 (dense continuous persistence) plus the new H35 tip-corridor interaction fields all failed the same fixed effect bar on the same '
+        '<article class="card span-6"><p class="kicker">What it means</p><h2>Four worming-family screens, four consistent negatives</h2>'
+        '<p>H29 (sparse persistence features), H31 (seed-tracked persistence), H40 (dense continuous persistence) with the new H35 tip-corridor interaction fields, and the parallel H31b dense-worming rebuild all failed the same fixed effect bar on the same '
         'spatial folds. The mechanisms are not disproven science — the caveat that this grid’s most persistent edges run E–W (survey-parallel, the H29 diagnostic) travels with every verdict — but on this pipeline the '
         'frozen structural baseline already extracts most of that information. The v3 slate\u2019s rank 1, H41 (slip-rate-weighted INGENIOUS off-catalogue trace centroids, already mirrored), is the first idea in this '
-        'family to clear the frozen gate: on draws 28/29 two of its five arms passed, and every number behind that sentence \u2014 mean paired gains, per-fold gains, the AUC step, the emission budget band and the '
-        'negative SGMC second proxy \u2014 is recomputed from the raw cells in the card above rather than repeated here. That is why a gate pass authorizes a confirmation and not a submission. The v4 slate (H43 drainage organization first, '
+        'family to clear the frozen gate: on draws 28/29 two of its five arms passed G1, the union arm then reproduced on fresh draws 30/31 (+0.0077283, worst fold still positive), and the inherited G3 secondary-proxy gate '
+        'withheld promotion anyway because the SGMC off-catalogue class lost ground in both stages. Every number behind that sentence \u2014 mean paired gains, per-fold gains, the AUC step, the emission budget band and the '
+        'negative SGMC second proxy \u2014 is recomputed from the raw cells in the card above rather than repeated here. That is the gate stack working as designed: a replicated primary-proxy gain is still not a submission. The v4 slate (H43 drainage organization first, '
         'then H44\u2013H47) is ranked in knowledge/25 with each candidate\u2019s external-data obtainability stated; H44\u2013H47 wait on owner-side fetches, and H36/H37/H42 and the H38/H39 filter-role pair remain behind H43.</p></article></section>'
     )
 

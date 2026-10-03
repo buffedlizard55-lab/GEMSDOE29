@@ -197,7 +197,7 @@
       "id": "H41",
       "rank": 1,
       "title": "Slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only",
-      "status": "screened 2026-10-03 under knowledge/24 (draws 28/29, 4 folds, 40 cells): G1 PASS on A1_h41_off (+0.0066173) and A4_h41_union (+0.0073436); A2/A3 failed. First arms in this family to clear the frozen gate. Confirmation on draws 30/31 is authorized and recorded in knowledge/26_h41_results_2026-10-03.md; the SGMC second proxy moved negative for every arm, so no slot is implied by the screen alone.",
+      "status": "confirmed-and-vetoed 2026-10-03. Screen (draws 28/29, 40 cells): G1 PASS on A1_h41_off (+0.0066173) and A4_h41_union (+0.0073436) \u2014 the first arms in this family to clear a frozen gate; A2/A3 failed. Confirmation (draws 30/31, 40 cells): A4 reproduces and passes G2 (+0.0077283, positive folds 4/3, worst fold +0.0043033, budget 0.974-0.997x, all four fold means positive), A1 fails G2 (+0.0044157, below the +0.005 mean bar). Promotion is then withheld by G3 as inherited from knowledge/19 \u00a74: the SGMC off-catalogue secondary class gained on only 1/4 folds in BOTH stages (A4 -0.002260493 screen / -0.002106949 confirm), and knowledge/19 \u00a75 pre-declares that pattern as a proxy conflict with no promotion. No candidate file was built, no weekly slot was used, and the gate-text omission that made this ambiguous is registered as IR-29-H41-G3-OMISSION.",
       "layers": [
         "gdr_qfaults_traces.csv (1,126 trace centroids with slip_rate; attributes-only, hash-pinned)",
         "family A/B ridges",
@@ -209,9 +209,11 @@
       "planning_delta_dti": "0 to +0.02 (low confidence; judgement range, never a gate)",
       "cost": "about half a day; all inputs local and hash-pinned",
       "external_data": "none required; upgrade path via full GDR 1391 trace geometry (public, CC BY 4.0) pending owner-side fetch + mirroring",
-      "validation": "four spatial folds; two screen draws (proposed 28/29) + fresh confirmation (30/31) under a new preregistration with the same G1/G2/G3 structure",
+      "validation": "frozen blocked-fold screen + fresh-draw confirmation, both re-derived from raw cells by scripts/analyze_h41_screen.py, and the G3 secondary-proxy eligibility computed separately; the leaderboard was never contacted",
       "screened": "knowledge/24_preregistered_h41_screen_2026-10-03.md",
-      "evidence": "evidence/h41_screen/"
+      "evidence": "evidence/h41_screen/",
+      "confirmation": "evidence/h41_screen/summary_confirm.json (40 cells, draws 30/31, analyzer problems: none)",
+      "promotion_gate": "evidence/h41_screen/promotion_gate.json \u2014 all four arms G3_ELIGIBLE=false; knowledge/26_h41_results_2026-10-03.md \u00a75 carries the verdict and the reasoning"
     },
     {
       "id": "H42",

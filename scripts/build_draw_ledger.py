@@ -38,10 +38,8 @@ STAGE_SOURCES = {
                                           "never authorized."),
     "h41_screen": dict(files=["evidence/h41_screen/design_screen.json"], fitted_key="draws"),
     "h41_confirmation": dict(files=["evidence/h41_screen/design_confirm.json"], fitted_key="draws",
-                             status_note="IN FLIGHT: the confirmation process was still appending rows to "
-                                          "cells_confirm.jsonl when this ledger was generated, so raw_cells is a "
-                                          "lower bound and no verdict is implied. Regenerate after the run writes "
-                                          "summary_confirm.json."),
+                             status_note="COMPLETE: 40 cells on draws 30/31. A4_h41_union passed G2 and was refused promotion at G3 (SGMC 1/4 folds in both stages); no candidate, no slot. See knowledge/26 section 5 and evidence/h41_screen/promotion_gate.json."),
+
 }
 # Ranges documented in prose that predate the per-stage evidence files kept here (or whose only record is an
 # archived pre-correction run). They are claimed so the "next free draw" arithmetic stays conservative.
