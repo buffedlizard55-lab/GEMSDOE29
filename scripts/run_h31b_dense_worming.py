@@ -109,7 +109,8 @@ def verify_restored_inputs(data: Path) -> dict:
     receipt_path = data / "restore_receipt.json"
     if receipt_path.is_file():
         receipt = json.loads(receipt_path.read_text())
-        bad = [r["id"] for r in receipt.get("files", receipt if isinstance(receipt, list) else [])
+        entries = receipt if isinstance(receipt, list) else receipt.get("files", [])
+        bad = [r.get("id", "?") for r in entries
                if isinstance(r, dict) and r.get("status") not in ("present", "restored")]
         if bad:
             raise SystemExit(f"restore receipt reports problems: {bad}")
@@ -168,10 +169,13 @@ def main() -> int:
     if not (cache.is_file() and meta_path.is_file()):
         raise SystemExit("H31b feature cache missing; run scripts/build_h31b_features.py first")
     w_meta = json.loads(meta_path.read_text())
-    if w_meta.get("code_revision") not in (revision, None) and w_meta.get("code_revision") != "unknown":
-        # a cache built from different frozen code must be rebuilt so the screen sees exactly the
-        # committed feature builder; accept only same-revision or unknown (pre-revision) caches
-        raise SystemExit(f"H31b cache built at revision {w_meta.get('code_revision')}, not {revision}; rebuild it")
+    want_builder = sha256_file(ROOT / "src" / "gemsdoe" / "wormdense.py")
+    if w_meta.get("builder_sha256") != want_builder:
+        raise SystemExit(
+            "H31b feature builder changed since the cache was built "
+            f"(cache {str(w_meta.get('builder_sha256'))[:12]} != source {want_builder[:12]}); "
+            "rebuild with scripts/build_h31b_features.py"
+        )
     features = np.load(cache)
     if list(w_meta.get("names", [])) != W_NAMES:
         raise SystemExit("H31b cache name manifest does not match the frozen W_NAMES")

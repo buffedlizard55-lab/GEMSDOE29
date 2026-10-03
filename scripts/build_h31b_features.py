@@ -2,8 +2,9 @@
 """Build the H31b dense worming feature cache (family W, 12 columns).
 
 Frozen design: knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md. Regenerable; the
-cache and metadata live in the ignored work directory. Refuses to overwrite an existing cache
-without --force (evidence-style protection for a frozen protocol).
+cache and metadata live in the ignored work directory. Re-running rebuilds in place; the screen
+runner refuses to use a cache whose builder source hash does not match the committed module, so
+stale caches cannot silently enter a screen.
 
     python scripts/build_h31b_features.py
 """
@@ -73,7 +74,8 @@ def main() -> int:
         "bands/iso_grav_anom": _sha256(grav_path),
         "bands/_footprint": _sha256(bands / "_footprint.npy"),
     }
-    meta = write_cache(w / CACHE, w / META, features, metadata, input_hashes, rev)
+    builder_sha = _sha256(ROOT / "src" / "gemsdoe" / "wormdense.py")
+    meta = write_cache(w / CACHE, w / META, features, metadata, input_hashes, rev, builder_sha)
 
     print(f"H31b dense worming cache: {features.shape[0]} columns x {features.shape[1]} px "
           f"in {time.time() - t0:.0f}s; code revision {rev[:12]}", flush=True)

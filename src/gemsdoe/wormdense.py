@@ -207,6 +207,7 @@ def write_cache(
     metadata: dict[str, Any],
     input_hashes: dict[str, str],
     code_revision: str,
+    builder_sha256: str,
 ) -> dict[str, Any]:
     """Write the float32 cache and a deterministic metadata receipt; record the output hash."""
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -215,6 +216,7 @@ def write_cache(
         schema_version=1,
         input_hashes=input_hashes,
         code_revision=code_revision,
+        builder_sha256=builder_sha256,
         **metadata,
     )
     meta["output_sha256"] = _sha256_file(out_path)
