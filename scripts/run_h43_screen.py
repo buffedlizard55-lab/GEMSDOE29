@@ -11,6 +11,12 @@ DrivenData; all inputs are hash-pinned owner mirrors restored under ``GEMS_DATA_
     GEMS_DATA_DIR=$PWD/data python3 scripts/run_h43_screen.py --confirm  # confirmation (34/35)
 
 The confirmation stage exits BEFORE any fit unless at least one arm passed G1 in the screen summary.
+The screen was OOM-killed after 23 of 40 cells by a 3.9 GB container limit (2026-10-03); ``--resume`` appends to an
+existing ``cells_<stage>.jsonl``, re-verifies every frozen hash from ``design_<stage>.json`` first, skips
+``(fold, draw, arm)`` triples already present, and only writes the summary once all cells are complete. Data already
+recorded is never rewritten.
+
+    GEMS_DATA_DIR=$PWD/data python3 scripts/run_h43_screen.py --resume --cell SW:32 --max-cells 1
 """
 
 from __future__ import annotations
@@ -106,11 +112,30 @@ def off_catalogue_mask(visible: np.ndarray, shape: tuple[int, int]) -> np.ndarra
     return dist >= OFF_CATALOGUE_MIN_PX
 
 
-def run_cells(ctx, static_cols, knick_grid, off_masks, folds, draws, sink, sgmc_truth: np.ndarray):
+def run_cells(ctx, static_cols, knick_grid, off_masks, folds, draws, sink, sgmc_truth: np.ndarray,
+              *, skip_arms=None, cell_filter=None, done_values=None, max_cells=None):
+    """Fit every requested cell/arm, appending rows to ``sink``.
+
+    ``skip_arms`` holds ``(fold, seed, arm)`` triples already recorded in the evidence file (resume path); a cell
+    whose five arms are all recorded is skipped entirely. ``cell_filter`` restricts to ``(fold, seed)`` pairs.
+    """
+    import gc
+
+    skip_arms = set(skip_arms or ())
     rows: list[dict] = []
     guard_problems: list[str] = []
+    seen: dict[tuple[int, int, str], float] = dict(done_values or {})
+    done_cells = 0
     for fold in folds:
         for seed in draws:
+            if cell_filter is not None and (fold, seed) not in cell_filter:
+                continue
+            if all((fold, seed, arm) in skip_arms for arm in ARMS):
+                continue
+            if max_cells is not None and done_cells >= max_cells:
+                print(f"stopping after {done_cells} cell(s); re-run --resume to continue", flush=True)
+                return rows, guard_problems
+            done_cells += 1
             t0 = time.time()
             cell = Cell(ctx, fold, seed, extras=True, h27=True)
             off = off_masks[seed]
@@ -136,6 +161,8 @@ def run_cells(ctx, static_cols, knick_grid, off_masks, folds, draws, sink, sgmc_
             del cell.Xtr, cell.Xq
             k = int(round(KFRAC * cell.dom_c.sum()))
             for arm in ARMS:
+                if (fold, seed, arm) in skip_arms:
+                    continue
                 t_fit = time.time()
                 from sklearn.ensemble import HistGradientBoostingClassifier
 
@@ -160,9 +187,12 @@ def run_cells(ctx, static_cols, knick_grid, off_masks, folds, draws, sink, sgmc_
                 rows.append(row)
                 sink.write(json.dumps(row) + "\n")
                 sink.flush()
-            brief = " ".join(
-                f"{a.split('_')[0]}={next(r for r in rows if r['fold'] == fold and r['draw'] == seed and r['arm'] == a)['dti']:.4f}"
-                for a in ARMS)
+                seen[(fold, seed, arm)] = float(row["dti"])
+                del model, p, score_crop, candidates, emitted, result, sg
+            del Xtr, Xq, columns, cell
+            gc.collect()
+            brief = " ".join(f"{a.split('_')[0]}={seen[(fold, seed, a)]:.4f}" for a in ARMS
+                             if (fold, seed, a) in seen)
             print(f"fold={FOLDS[fold]} draw={seed} {brief}  ({time.time() - t0:.0f}s)", flush=True)
     return rows, guard_problems
 
@@ -215,10 +245,42 @@ def gate_summary(rows: list[dict], folds, draws) -> dict:
     return per
 
 
+def load_recorded_rows(path: Path) -> list[dict]:
+    """Every cell row already appended to the stage's raw-cell file (resume path reads, never rewrites)."""
+    if not path.is_file():
+        return []
+    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+
+
+def verify_design(design_path: Path) -> dict:
+    """Re-verify every frozen hash recorded in an existing design file before appending cells to it."""
+    if not design_path.is_file():
+        raise SystemExit(f"resume refused: missing {design_path}")
+    design = json.loads(design_path.read_text())
+    if design["preregistration"]["sha256"] != sha256_file(PREREG):
+        raise SystemExit("resume refused: the frozen preregistration changed since the screen started")
+    for key, recorded in design.get("modules", {}).items():
+        current = sha256_file(ROOT / "src" / key)
+        if recorded != current:
+            raise SystemExit(f"resume refused: {key} changed since the screen started")
+    for key, entry in design.get("inputs", {}).items():
+        path = ROOT / key
+        if not path.is_file() or path.stat().st_size != entry["bytes"] or sha256_file(path) != entry["sha256"]:
+            raise SystemExit(f"resume refused: input {key} changed since the screen started")
+    return design
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--confirm", action="store_true", help="run confirmation draws (requires a G1 pass in the screen summary)")
+    ap.add_argument("--resume", action="store_true",
+                    help="append missing cells to an existing (hash-verified) cells_<stage>.jsonl instead of refusing")
+    ap.add_argument("--cell", action="append", default=None, metavar="FOLD:DRAW",
+                    help="restrict to one cell (fold name/index : draw); repeatable; requires --resume")
+    ap.add_argument("--max-cells", type=int, default=None, help="stop after N cells in this process (use with --resume)")
     args = ap.parse_args()
+    if (args.cell or args.max_cells) and not args.resume:
+        raise SystemExit("--cell/--max-cells only make sense with --resume")
     if not PREREG.is_file():
         raise SystemExit(f"missing frozen preregistration: {PREREG}")
     EVIDENCE.mkdir(parents=True, exist_ok=True)
@@ -226,9 +288,17 @@ def main() -> int:
     cells_path = EVIDENCE / f"cells_{stage}.jsonl"
     design_path = EVIDENCE / f"design_{stage}.json"
     summary_path = EVIDENCE / f"summary_{stage}.json"
-    for p in (cells_path, design_path, summary_path):
-        if p.exists():
-            raise SystemExit(f"refusing to overwrite existing {stage} evidence: {p}")
+    existing_rows: list[dict] = []
+    if args.resume:
+        verify_design(design_path)
+        existing_rows = load_recorded_rows(cells_path)
+        if summary_path.exists():
+            raise SystemExit(f"{summary_path} already exists; the {stage} stage is closed")
+        print(f"resume: {len(existing_rows)} recorded rows in {cells_path.name}", flush=True)
+    else:
+        for p in (cells_path, design_path, summary_path):
+            if p.exists():
+                raise SystemExit(f"refusing to overwrite existing {stage} evidence: {p}")
     state = git_state()
     if state["dirty_worktree"]:
         raise SystemExit("refusing to run from a dirty worktree; commit the implementation first")
@@ -309,15 +379,44 @@ def main() -> int:
     design_path.write_text(json.dumps(design, indent=2, default=float) + "\n")
     print(f"design recorded: {design_path} (git {state['revision'][:8]}, {len(draws)} draws x {len(folds)} folds x {len(ARMS)} arms)", flush=True)
 
-    sink = cells_path.open("w")
+    cell_filter = None
+    if args.cell:
+        cell_filter = set()
+        for spec in args.cell:
+            fold_txt, _, draw_txt = spec.partition(":")
+            try:
+                fold = FOLDS.index(fold_txt) if fold_txt in FOLDS else int(fold_txt)
+                cell_filter.add((fold, int(draw_txt)))
+            except ValueError as exc:
+                raise SystemExit(f"--cell expects FOLD:DRAW (e.g. SW:32), got {spec!r}") from exc
+        unknown = sorted(c for c in cell_filter if c[0] not in folds or c[1] not in draws)
+        if unknown:
+            raise SystemExit(f"--cell outside the frozen {stage} design: {unknown}")
+    skip_arms = {(r["fold"], r["draw"], r["arm"]) for r in existing_rows}
+    done_values = {(r["fold"], r["draw"], r["arm"]): float(r["dti"]) for r in existing_rows}
+    sink = cells_path.open("a" if args.resume else "w")
     try:
-        rows, guard_problems = run_cells(ctx, static_cols, knick_grid, off_masks, folds, draws, sink, sgmc_truth)
+        new_rows, guard_problems = run_cells(ctx, static_cols, knick_grid, off_masks, folds, draws, sink, sgmc_truth,
+                                             skip_arms=skip_arms, cell_filter=cell_filter, done_values=done_values,
+                                             max_cells=args.max_cells)
     finally:
         sink.close()
-    per = gate_summary(rows, folds, draws)
+    all_rows = existing_rows + new_rows
+    recorded = {(r["fold"], r["draw"], r["arm"]) for r in all_rows}
+    expected = len(folds) * len(draws) * len(ARMS)
+    if len(recorded) != expected:
+        print(f"{stage} incomplete: {len(recorded)}/{expected} (fold, draw, arm) rows recorded; summary NOT written. "
+              f"Re-run with --resume to continue.", flush=True)
+        return 0
+    per = gate_summary(all_rows, folds, draws)
+    guard_problems = [msg for r in all_rows for msg in r.get("viability_guard", [])]
     summary = dict(
         stage=stage, draws=draws, folds=[FOLDS[f] for f in folds], arms=per,
-        n_cells=len(rows),
+        n_cells=len(all_rows),
+        execution=dict(processes=(1 + (1 if existing_rows else 0)) if args.resume else 1,
+                       resumed=bool(args.resume), rows_this_process=len(new_rows),
+                       note=("the 2026-10-03 OOM kill split this stage across processes; every row was appended by a "
+                             "process that re-verified the frozen prereg, module and input hashes") if args.resume else None),
         viability_guard=dict(min_nonzero_fraction=GATES["min_nonzero_fraction"],
                              static_columns=nonzero, problems=guard_problems, passed=not guard_problems),
         note=("DTI proxies on blocked holdout folds; gates frozen in knowledge/29 §5. The drainage surface is "

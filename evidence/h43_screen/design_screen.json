@@ -1,0 +1,218 @@
+{
+  "stage": "screen",
+  "experiment": "H43 drainage-network screen (stream power + knickpoint excess)",
+  "preregistration": {
+    "path": "knowledge/29_preregistered_h43_screen_2026-10-03.md",
+    "sha256": "919210d9dad7ccd068af411b30114606dbe0e0c9997de0ac423c41c1f65d9393"
+  },
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "draws": [
+    32,
+    33
+  ],
+  "arms": [
+    "C0_base",
+    "A1_off",
+    "A2_network",
+    "A3_knick",
+    "A4_union"
+  ],
+  "gates": {
+    "mean_gain": 0.005,
+    "min_positive_folds": 3,
+    "max_fold_loss": -0.01,
+    "budget_ratio_band": [
+      0.75,
+      1.25
+    ],
+    "sgmc_min_positive_folds": 3,
+    "holdout_best": 0.14479018210246675,
+    "min_nonzero_fraction": 0.002
+  },
+  "arm_columns": {
+    "C0_base": [],
+    "A1_off": [
+      "H43_OFF_FRONT"
+    ],
+    "A2_network": [
+      "H43_LNACC",
+      "H43_OMEGA"
+    ],
+    "A3_knick": [
+      "H43_KNICK",
+      "H43_OFF_FRONT"
+    ],
+    "A4_union": [
+      "H43_LNACC",
+      "H43_OMEGA",
+      "H43_KNICK",
+      "H43_OFF_FRONT",
+      "H43_CHANNEL_SCARP"
+    ]
+  },
+  "h43_names": [
+    "H43_LNACC",
+    "H43_OMEGA",
+    "H43_KNICK",
+    "H43_OFF_FRONT",
+    "H43_CHANNEL_SCARP"
+  ],
+  "constants": {
+    "k_frac": 0.0245,
+    "min_dist_px": 2.4,
+    "off_catalogue_min_px": 5.0,
+    "emit": "frozen C0 emission (ridge NMS -> drop visible -> topK -> score-ordered Poisson 2.4)"
+  },
+  "draw_seed_inventory": {
+    "rule": "registry/draw_ledger.json",
+    "used_before": "0-31 across H29/H31/factorial/H34/H35/H40/H31b/H41",
+    "this_stage": [
+      32,
+      33
+    ]
+  },
+  "h43_diagnostics": {
+    "pits": 21164,
+    "fill_changed": true,
+    "max_uphill_step": 0.0,
+    "slope_px_median": 3.7437350377085803,
+    "acc_p99_9": 1387.0,
+    "acc_max": 12641.0,
+    "lnacc_ref": 3.1420764610732848,
+    "omega_ref": 677.2677810303599,
+    "knick": {
+      "fit": {
+        "intercept": 1.0959014506674947,
+        "slope": -0.18402060531102074,
+        "theta": 0.18402060531102074,
+        "bin_centres": [
+          1.3979400086720377,
+          1.4313637641589874,
+          1.4771212547196624,
+          1.5185139398778875,
+          1.5563025007672873,
+          1.6020599913279623,
+          1.6532125137753437,
+          1.6989700043360187,
+          1.7558748556724915,
+          1.806179973983887,
+          1.863322860120456,
+          1.9294189257142926,
+          1.99563519459755,
+          2.0718820073061255,
+          2.1522883443830563,
+          2.2430380486862944,
+          2.3483048630481607,
+          2.4785664955938436,
+          2.656098202012832,
+          2.967547976218862
+        ],
+        "bin_medians": [
+          0.805087147334436,
+          0.8007898464170632,
+          0.7959419037216027,
+          0.7973456605143833,
+          0.7945893337079476,
+          0.788258657384716,
+          0.78263306731935,
+          0.7805946983130063,
+          0.7808860695200139,
+          0.7780612987082607,
+          0.7736478863383417,
+          0.7671791539531778,
+          0.766551592141644,
+          0.7547685253907094,
+          0.7323902069033872,
+          0.7249522241667308,
+          0.6911253517104252,
+          0.6585836385762238,
+          0.5824665665420373,
+          0.4583106672471243
+        ],
+        "n_channel_pixels": 416542
+      },
+      "q95": 0.6515972762534264,
+      "channel_pixels": 416542,
+      "channel_fraction_of_footprint": 0.08065779139602719,
+      "positive_residual_pixels": 209479,
+      "positive_residual_fraction_of_channels": 0.502900067700256,
+      "median_pos_residual": 0.002919282761384978
+    },
+    "nonzero_fraction": {
+      "H43_LNACC": 0.40176464938601697,
+      "H43_OMEGA": 0.7016684894328615,
+      "H43_KNICK": 0.0405628087536152,
+      "H43_OFF_FRONT": 0.0,
+      "H43_CHANNEL_SCARP": 0.5242901668218342
+    }
+  },
+  "h43_columns_nonzero_fraction": {
+    "H43_LNACC": 0.40152665580750607,
+    "H43_OMEGA": 0.701252841627651,
+    "H43_KNICK": 0.04053878053703497,
+    "H43_OFF_FRONT": 0.0,
+    "H43_CHANNEL_SCARP": 0.5239795927253558
+  },
+  "build_seconds": 34.56241416931152,
+  "git": {
+    "revision": "a244032ae8b1d5c051787bdcc070f903b66c1c1a",
+    "branch": "arena/01a10342-gemsdoe29",
+    "dirty_worktree": false
+  },
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6",
+    "packages": {
+      "scipy": "1.17.1",
+      "scikit-learn": "1.9.1",
+      "rasterio": "1.4.4"
+    }
+  },
+  "inputs": {
+    "data/sample_submission.tif": {
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "bytes": 1599597
+    },
+    "data/labels.tif": {
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "bytes": 425830
+    },
+    "data/external/derived_sgmc_faults_100m_u8.tif": {
+      "sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+      "bytes": 198602
+    },
+    "work/bands/_footprint.npy": {
+      "sha256": "c446094771775c00802862e9ec58846fd1b278b4e608303e68811a2404dfd246",
+      "bytes": 12279288
+    },
+    "work/bands/_labels.npy": {
+      "sha256": "d77fa88ad58d0a268b736b3c1d6a8939fd237d5955369944bd2b299194b2555d",
+      "bytes": 12279288
+    },
+    "work/bands/12_det_elev.npy": {
+      "sha256": "caa50bf75e99d58a4587463dcabfd501488df4def0ab79c09768cda3e9b01423",
+      "bytes": 49116768
+    },
+    "work/static_ABCD.npy": {
+      "sha256": "fe584a12ed3e1ed7d26b272c49f6da0bbe16e072d98f6b1694938d858305b084",
+      "bytes": 1322847616
+    },
+    "work/addons.npy": {
+      "sha256": "ad31ff14a804b6956efa13b8c3caf6b322d6942b0f57911050ba243ac92e57bc",
+      "bytes": 103347588
+    }
+  },
+  "modules": {
+    "gemsdoe/h43.py": "f75e75a79f0d59b469c7247f60f4bcf4fb73d8d01fdef4c906ba060b6a143aeb",
+    "gemsdoe/experiment.py": "1a1fcd306bc5014491fa6b6ef1c0ae0b48fb2a1b122e75da73d0381a0d331622",
+    "gemsdoe/thinning.py": "63bdfd1c11455e18446f0e1be0fbf7c93ae94c49f98624d3f4ef4ef76f79c55e",
+    "gemsdoe/metric.py": "c0be2a023b413309561138c9eee64a81e07bb0df6ab4841c9f0c55d37ea2afd3",
+    "gemsdoe/features.py": "3bb3079a4b15c5a1c77bfe9e46a0af5129907bbd69818b9ab9c81e00ecc86910"
+  },
+  "note": "H43 is built from the cached det_elev band plus the *visible* catalogue only; the off-catalogue mask removes information rather than adding it. det_elev is a detrended surface of unknown absolute datum, so no absolute gradient or discharge is claimed (knowledge/29 \u00a72, \u00a76)."
+}
