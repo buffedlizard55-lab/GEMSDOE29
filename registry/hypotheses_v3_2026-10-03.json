@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-10-03",
+  "novelty_boundary": "Slate v3, drafted 2026-10-03 on arena/01a102cf-gemsdoe29 from the owner's standing brief (README 'Standing brief - current session'). New relative to the v2 registered slate (registry/hypotheses.json: H31-H39) and all executed screens (H27-H34, H29 corrected). H31b is the dense-continuous correction of the failed H31 binarised worming (knowledge/16); it is not a re-run of H31. Planning delta-DTI values are low-confidence brackets, not predictions or scores. Novelty claims apply to the reviewed repositories, not to all competitors.",
+  "rank_rationale": "Ranked by expected DTI improvement per implementation cost: H31b (executed this session, no new data) > H36 (cheap, local, third potential field) > H35 (highest ceiling, data-dependent) > H37 (local process signal, medium confidence) > H38 (conditional on H31b/H36 outcomes).",
+  "items": [
+    {
+      "id": "H31b",
+      "rank": 1,
+      "title": "Dense continuous worming persistence fields (magnetic + gravity)",
+      "status": "preregistered (knowledge/19_preregistered_h31b_dense_worming_2026-10-03.md); screen stage running on draws 22/23, folds NW/NE/SW/SE",
+      "layers": ["rtp", "iso_grav_anom", "pseudogravity proxy of rtp via FFT vertical integration"],
+      "signature": "Per-pixel, at continuation heights 0/100/200/400/800/1200 m: fraction of the five upward heights at which the pixel clears the per-height p90 horizontal-gradient-modulus scale threshold; deepest surviving height; 0-m and 1200-m edge amplitudes, percentile-scaled (12 dense columns, family W; margin-zero band 68 px inside the footprint).",
+      "why_unmapped": "Unmapped faults are often deeper or buried; their edges persist through upward continuation while shallow noise dies within a couple of hundred metres. Persistence plus deep amplitude characterises each pixel as deep structural signal versus shallow texture without any mapped surface trace.",
+      "difference": "H29 raw worming (four arms, all failed); H31 binarised tracking (0.001-0.084% nonzero; arms pixel-identical to control in 8/8 cells, knowledge/16). H31b is the first dense-continuous persistence representation in this family and the first test of the TMI-to-pseudogravity integration route as a feature family.",
+      "planning_delta_dti": "0 to +0.010 (low-confidence planning bracket; not an observed result)",
+      "cost": "one session (executed 2026-10-03)",
+      "external_data": "none required",
+      "validation": "screen draws 22/23 x 4 folds vs the 81-column H34 control layout; frozen gates G1-G5 (per-draw mean paired gain >= +0.005, >=3/4 folds positive per draw, no fold < -0.010, 8-cell mean > 0.14479 holdout best, 40/40 finite cells); fresh confirmation draws 24/25 only if the screen passes; owner decides any slot"
+    },
+    {
+      "id": "H36",
+      "rank": 2,
+      "title": "MT conductance structural edges and step asymmetry",
+      "status": "registered; not implemented",
+      "layers": ["cond_surf", "depth_to_base_surf"],
+      "signature": "Conductance edge magnitude (gradient + Hessian-ridge strength on the MT fields) and opposing-face step asymmetry of the conductance/depth step, percentile-scaled; MT is a third potential field independent of magnetics and gravity.",
+      "why_unmapped": "MT conductance tracks deep, fluid-filled, fractured structural volume where geothermal systems live; fault-related conductivity structures extend below mapped surface traces and often persist where the USGS/INGENIOUS surface catalog is silent.",
+      "difference": "cond_surf/depth_to_base_surf exist only as raw base-band inputs (factorial family A, inert/negative). No conductance-derived edge family or opposing-face step-asymmetry ratio has been built in any reviewed repository. The negative C family is the gravity x magnetic conjunction - a different physical route.",
+      "planning_delta_dti": "0 to +0.010 (low-confidence planning bracket; not an observed result)",
+      "cost": "about 0.5-1 day",
+      "external_data": "none (bands 15/17 are in the hash-pinned stack)",
+      "validation": "same paired design as H31b (fresh draws), 8-12 columns, preregistered frozen gates before any fit"
+    },
+    {
+      "id": "H35",
+      "rank": 3,
+      "title": "Structural interaction zones with a stress/dilation filter",
+      "status": "registered (also v2 slate rank 1); not implemented; external shapefile pending owner-side fetch",
+      "layers": ["catalogue vector geometry (tips, junctions, relay pairs, strike coherence)", "regional stress orientation + Siler 2022 fault-slip/dilation data (DOI 10.5066/P9YL58W6)", "tmi_hg", "tmi_vg", "iso_grav_anom_hg", "geod_dilaterate"],
+      "signature": "Density-weighted interaction fields: tip-junction density, relay-geometry score, strike coherence with the regional sigma-1 direction, dilation-tendency proxy from the strain-rate tensor, rasterised at 100 m.",
+      "why_unmapped": "Newly expert-labelled faults are disproportionately found inside fault systems (relay ramps, tips, junctions) where interaction geometry predicts locations even where the trace was never mapped; a stress/dilation filter says which system members should be active. Highest-ceiling candidate: it targets the discovery mechanism itself.",
+      "difference": "H27 (tip-continuation bridge to LiDAR scarps) and H30 (relay factorial) were single-feature bridges and both failed fresh confirmation; H35 is a multi-geometry interaction field with an explicit mechanical filter and the first hypothesis in this family to use external fault-slip data.",
+      "planning_delta_dti": "0 to +0.030 (highest ceiling, broadest uncertainty; low-confidence planning bracket)",
+      "cost": "1-2 days plus one data fetch",
+      "external_data": "Siler (2022), USGS ScienceBase item 6296974dd34ec53d276bb33d, DOI 10.5066/P9YL58W6 - free official USGS, no registration; DOI resolves (checked 2026-10-03) but sciencebase.gov is unreachable from this sandbox (SSL_ERROR_SYSCALL), so the shapefile must be fetched on an unrestricted machine and mirrored per the registered data-flow rule. A first test is implementable without it by approximating the regional stress direction from the published NNW-E stress field.",
+      "validation": "preregister before fitting; two-proxy admission per knowledge/15 (off-catalogue >=3/4 folds positive; catalogue-hidden loss <=0.005); fresh confirmation; no slot without beating the then-current holdout best"
+    },
+    {
+      "id": "H37",
+      "rank": 4,
+      "title": "Geothermometry residual + spring/vent cluster geometry",
+      "status": "registered; not implemented",
+      "layers": ["GDR 1391 well & spring temperature/chemistry (local mirror data/external/gdr_wellspring_in_footprint.csv, CC BY 4.0, DOI 10.15121/1881483)", "quaternary volcanic vents CSV", "tc"],
+      "signature": "Published geothermometer temperatures per site; residual heat after removing the regional trend; 500 m spatial kernel of chemistry-weighted residual hot sites plus vent-cluster coherence.",
+      "why_unmapped": "Thermal water follows faults; a chemically-hot spring or vent sitting away from every mapped trace is direct evidence of a hidden structure feeding it. Only candidate using an independent process signal (fluid geochemistry) rather than structure shape.",
+      "difference": "The GDR mirrors exist in the data manifest but are unused by any implemented experiment; H29-6 (radiometric/magnetic thermal persistence, failed) is scale-space geophysics, not fluid chemistry. The label-derived distance column in the CSV is excluded from features.",
+      "planning_delta_dti": "0 to +0.015 (low-confidence planning bracket; not an observed result)",
+      "cost": "about 1 day",
+      "external_data": "none new for the first test (local hash-pinned mirror; geothermometer equations are published literature)",
+      "validation": "same paired design; because springs are partly off-catalogue, the off-catalogue proxy is the primary admission measure with the catalogue-hidden proxy as a loss bound"
+    },
+    {
+      "id": "H38",
+      "rank": 5,
+      "title": "Worm convergence - cross-field azimuth coherence",
+      "status": "registered; not implemented; conditional on H31b/H36 outcomes",
+      "layers": ["family W (H31b, if built)", "L_strikes", "tmi_hg", "iso_grav_anom_hg", "DEM lineament orientation"],
+      "signature": "Local strike-histogram coherence: within each 500 m window, the degree to which independent fields (magnetic HGM orientation, gravity HGM orientation, LiDAR scarp strike, DEM lineament) agree on a common strike (15-degree bin), weighted by per-field edge strength from the family W amplitudes.",
+      "why_unmapped": "Agreement of independent physical fields on orientation at the same location is strong structural evidence even with no mapped trace; convergence of worm-like edge populations with matching strike is how structural mappers argue for unmapped lineaments.",
+      "difference": "H31 JOINT_PERSIST tested only 2-px co-location between two fields (51 nonzero pixels; null). No azimuth-agreement pipeline exists; the LiDAR strike band is currently used only inside the B family.",
+      "planning_delta_dti": "0 to +0.008 (low-confidence planning bracket; not an observed result)",
+      "cost": "about 1 day (azimuth pipeline on existing bands)",
+      "external_data": "none",
+      "validation": "preregister; build only after H31b/H36 outcomes so it can condition on which edge families actually paid"
+    }
+  ]
+}
