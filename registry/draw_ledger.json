@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/build_draw_ledger.py",
+  "stages": {
+    "h29_corrected_screen": {
+      "draws_fitted": [],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": null,
+      "evidence": {
+        "evidence/h29_gate.json": {
+          "present": true,
+          "sha256": null
+        }
+      }
+    },
+    "h31_worm_screen": {
+      "draws_fitted": [
+        10,
+        11
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 40,
+      "evidence": {
+        "evidence/h31_worm_screen/design.json": {
+          "present": true,
+          "sha256": null
+        }
+      }
+    },
+    "factorial_families": {
+      "draws_fitted": [
+        14,
+        15
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 128,
+      "evidence": {
+        "evidence/factorial_families/design.json": {
+          "present": true,
+          "sha256": null
+        }
+      }
+    },
+    "h34_coverage_screen": {
+      "draws_fitted": [
+        20,
+        21
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 32,
+      "evidence": {
+        "evidence/h34_coverage_screen/design.json": {
+          "present": true,
+          "sha256": null,
+          "git_revision": "b098c3b1852c9164ba61439b98a36f20d4a013f3"
+        }
+      }
+    },
+    "h35_h40_screen": {
+      "draws_fitted": [
+        24,
+        25
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 40,
+      "evidence": {
+        "evidence/h35_h40_screen/design_screen.json": {
+          "present": true,
+          "sha256": null,
+          "prereg_sha256": "5432b42ae044d44aedd4cd6663a18a96a0f91ded6aa34ea8a164f8ce6080fa62",
+          "git_revision": "1442d1bf27956aaf88adb00f9a9ae940e103ebc3"
+        }
+      }
+    },
+    "h41_screen": {
+      "draws_fitted": [
+        28,
+        29
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 40,
+      "evidence": {
+        "evidence/h41_screen/design_screen.json": {
+          "present": true,
+          "sha256": null,
+          "prereg_sha256": "2f25c06fe67f05b720bae5aab0378de71f96e871a9fbff4910af71176abb499d",
+          "git_revision": "a9d880e7ac1cdd1c2bd527b7d7374036a8709b2e"
+        }
+      }
+    },
+    "h41_confirmation": {
+      "draws_fitted": [
+        30,
+        31
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 4,
+      "evidence": {
+        "evidence/h41_screen/design_confirm.json": {
+          "present": true,
+          "sha256": null,
+          "prereg_sha256": "2f25c06fe67f05b720bae5aab0378de71f96e871a9fbff4910af71176abb499d",
+          "git_revision": "2568dc0d1287d8218ceed732161da8192070cd52"
+        }
+      }
+    }
+  },
+  "prose_claimed": {
+    "main_and_early_screens_0_to_13": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "h29_pre_correction_archived_run": [
+      2,
+      3
+    ]
+  },
+  "authorized_then_released": {
+    "h29_confirmation_draws_never_fit": [
+      2,
+      3
+    ],
+    "h35_h40_confirmation_draws_never_fit": [
+      26,
+      27
+    ]
+  },
+  "claimed_by_any_fit": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    20,
+    21,
+    24,
+    25,
+    28,
+    29,
+    30,
+    31
+  ],
+  "released_unused": [
+    26,
+    27
+  ],
+  "next_free_draw": 32,
+  "rule": "A frozen screen must use draws >= next_free_draw, or a documented released-unused pair that was never fitted. Reusing a draw that any fit has touched silently un-blinds a stage.",
+  "note": "Derived from committed evidence only; draw provenance for stages whose raw cells were never archived is inherited from knowledge/18 and knowledge/22 and is recorded under prose_claimed."
+}

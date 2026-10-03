@@ -64,6 +64,7 @@ json_paths = [
     ROOT / "registry" / "score_claims.json",
     ROOT / "registry" / "submission_contract.json",
     ROOT / "registry" / "data_manifest.json",
+    ROOT / "registry" / "draw_ledger.json",
 ]
 for path in json_paths:
     try:

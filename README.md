@@ -2,7 +2,33 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
-> **Current decision (2026-10-03, session 3 close-out): no slot-approved submission.** Session 3 took the two
+> **Current decision (2026-10-03, session 4): H41 became the first candidate in this family to clear a frozen
+> gate — on two arms — and the preregistered confirmation, not the screen, decides what happens next.** Session 4
+> implemented `src/gemsdoe/h41.py`, the first use anywhere in this project of the hash-pinned INGENIOUS Quaternary
+> fault attribute table for prediction (slip-rate × recency weighted trace-centroid support, restricted to centroids
+> ≥500 m from the visible catalogue, plus an anisotropic scarp-strike corridor, a scarp product and an off-support
+> purity ratio), frozen the protocol in [`knowledge/24_preregistered_h41_screen_2026-10-03.md`](knowledge/24_preregistered_h41_screen_2026-10-03.md)
+> (sha256 `2f25c06f…`) before any fit, and ran 4 blocked folds × draws 28/29 × 5 arms = 40 cells (1,470 s, clean tree,
+> `scripts/analyze_h41_screen.py` recomputing every gate from raw cells with zero integrity problems).
+> **`A1_h41_off` +0.0066173 and `A4_h41_union` +0.0073436 mean paired DTI gain pass** the frozen ±0.005 / ≥3-of-4-positive-folds /
+> −0.010-worst-fold / 0.75–1.25×-budget gates; `A2_h41_support` (+0.0047673) and `A3_h41_corridor` (+0.0038133) fail.
+> Footprint holdout AUC rises 0.8037 → 0.8159 at emission held inside 0.977–1.013× control, the pre-declared
+> sparse-column guard (the H31 killer) passes by 17–150×, and `H41_OFF` correlates at |ρ| ≤ 0.27 with every existing
+> catalogue channel — so this is new ranking information, not the catalogue re-expressed. **Counter-evidence carried in
+> the same sentence: the SGMC second proxy moves negative for all four arms (−0.0009 to −0.0023, 1–2/4 folds).**
+> That is the registered proxy conflict, and it is why the weekly slot stays unused: the confirmation on draws 30/31
+> is authorized and recorded in [`knowledge/26_h41_results_2026-10-03.md`](knowledge/26_h41_results_2026-10-03.md),
+> and a candidate would additionally have to beat `holdout_best` 0.14479018210246675 *on the protocol that produced it*.
+> Session 4 also closed standing loose ends: `bash scripts/download_competition_data.sh` now exists as the prompt's
+> one-command data entry point (it never contacts the organizer), `check_submission.py`/`verify_downloads.py`/
+> `gems29.submission` share one template resolver so the documented checks run after either restore (28+28 download
+> checks, 0 failures), the v4 slate with per-candidate data-obtainability is in
+> [`knowledge/25_candidates_v4_2026-10-03.md`](knowledge/25_candidates_v4_2026-10-03.md), and six process defects
+> (including five mis-stated sentences in the frozen preregistration and one fabricated Nevada data source that was
+> caught and removed the same day) are disclosed in `registry/irregularities.json`. No leaderboard or competition page
+> was fetched, so "any new results?" stays a manual check by the owner; nothing in this repository has been submitted.
+>
+> **Session 3 close-out.** Session 3 took the two
 > strongest remaining physics bets — **H35** (tip-corridor stress-shadow interaction zones under the frozen
 > Bellier–Zoback σ₃ = 105° regional field) and **H40** (multiscale upward-continuation persistence rebuilt as
 > *dense continuous surfaces*, the fix for H31's sparsity failure) — pre-registered them as a five-arm
@@ -34,7 +60,10 @@
 
 ## Start here
 
-- **[Session-4 brief, frozen screen and slate (read first)](knowledge/25_candidates_v4_2026-10-03.md)** — the
+- **[H41 results (read first)](knowledge/26_h41_results_2026-10-03.md)** — the screen table, why the two passing
+  arms are a ranking gain rather than an emission fluke, the SGMC conflict, and every disclosed process defect.
+  Its frozen protocol is **[knowledge/24](knowledge/24_preregistered_h41_screen_2026-10-03.md)**.
+- **[Session-4 brief, frozen screen and slate](knowledge/25_candidates_v4_2026-10-03.md)** — the
   v4 candidate slate (H43 drainage organization, H44 discharge chain, H45 seismicity strands, H46 1-m LiDAR
   scarp template, H47 map-unit adjacency), each with layers / expected signature / why off-catalogue /
   difference from repo work / ranked cost, and the external-data obtainability statement per candidate.
@@ -64,6 +93,11 @@
 
 ## Evidence boundary and current status
 
+- **H41 (session 4):** slip-rate-weighted INGENIOUS centroid corridors, off-catalogue only — the first G1 pass in
+  this family (`A1` +0.0066173, `A4` +0.0073436 on 40 cells; `A2`/`A3` fail; AUC 0.8037 → 0.8159; SGMC second proxy
+  negative on every arm). Raw cells: [`evidence/h41_screen/`](evidence/h41_screen/) (including the preserved
+  `aborted_attempt_1/` of the first confirmation launch, which was killed before fitting any cell). Write-up:
+  [`knowledge/26_h41_results_2026-10-03.md`](knowledge/26_h41_results_2026-10-03.md). No slot used, nothing submitted.
 - **H35/H40 (session 3):** the interaction-zone + dense-persistence four-arm screen failed its frozen G1 gate on all arms (means +0.0018/+0.0046/+0.0005/+0.0056; the union missed only the ≥3/4-positive-folds rule on draw 24). Pre-registered before fitting (`knowledge/19`), independently audited from raw cells (`evidence/h35_h40_screen/analyzer_report.json`: no problems), no confirmation, no slot. See [`knowledge/21_h35_h40_results_2026-10-03.md`](knowledge/21_h35_h40_results_2026-10-03.md). The D2.8 emission geometry behind the why-0.2600 analysis was re-derived byte-exactly from the mirrored rasters ([`evidence/d28_geometry.json`](evidence/d28_geometry.json)).
 - **H34 (session 2):** the metric-native coverage emission was preregistered, implemented and screened on 32 paired cells (4 folds x 2 draws x 4 arms, 306.6 s). It **failed** its frozen primary gate on the catalogue-hidden proxy (mean paired gain −0.0212 vs the best control, 0/4 folds positive) and passed its secondary SGMC off-catalogue class (+0.0535, 4/4 folds). Raw cells and summary: [`evidence/h34_coverage_screen/`](evidence/h34_coverage_screen/); write-up: [`knowledge/09_h34_results_2026-10-03.md`](knowledge/09_h34_results_2026-10-03.md). Nothing was re-tuned after the run.
 - **Candidates (session 2):** the site's first download is the repository's own HGB candidate (`gemsdoe29-repo-c0-habitat-emission-20261003-a4d439b07426-nan.tif`: trained on every catalogue pixel, 3-seed average, frozen standard emission; 37,913 dots; format `ok_to_upload=True`; never live-scored). Its method scores 0.1409 on the catalogue-hidden proxy vs 0.0983/0.0945/0.0697 for the historical family, but loses on the SGMC proxy (0.0847 vs 0.0953). Crucially, it does not beat the current H34 C1 control best (0.14479 vs 0.14086 on the same 8-cell report) and is not slot-cleared. See [`knowledge/17_repo_candidate_2026-10-03.md`](knowledge/17_repo_candidate_2026-10-03.md) and [`evidence/candidate_scoreboard.json`](evidence/candidate_scoreboard.json). Nothing is slot-approved.
@@ -88,7 +122,9 @@ The [official problem page](https://www.drivendata.org/competitions/306/competit
 - `scripts/` — the legacy `scripts/restore_data.py` for `data/manifest.json`, the separate `scripts/restore_h31_data.py` for `registry/data_manifest.json`, local submission-contract/site builders, preparation/cache tools, and frozen-run analyzers.
 - `tests/` — synthetic tests for the reused core pipeline, submission writer/checker, and H31 proxy.
 - `knowledge/` — original user brief, H29 corrected results and post-screen audit, ranked hypotheses, H31 preregistration, verified sources, access policy, predecessor audit, and draft AI disclosure.
-- `registry/` — machine-readable data/source/hypothesis/submission/score-claim/status and irregularity registers.
+- `registry/` — machine-readable data/source/hypothesis/submission/score-claim/status and irregularity registers,
+  plus `draw_ledger.json` (generated by `scripts/build_draw_ledger.py` from the committed evidence: which holdout
+  draws are spent, which pairs were authorized then released unused, and the next free draw).
 - `evidence/` — small, hash-stamped local format receipts and (after validation) H31 raw-cell evidence; no large caches.
 - `docs/` — GitHub Pages site and registered GeoTIFF downloads; no competition data cache.
 - `NOTICE.md` — provenance of code adapted from the same-owner predecessor. The predecessor had no root license file at the reviewed commit; this notice is not a license grant.
@@ -104,8 +140,10 @@ python -m pip install -e '.[dev]'
 python -m pytest -q
 ruff check src scripts tests
 python scripts/build_submission_contract.py
+python scripts/build_draw_ledger.py --check   # which holdout draws are already spent (next free: 32)
 python scripts/build_site.py
 python scripts/check_site.py
+python scripts/verify_downloads.py            # re-verify every registered download (never its build hashes)
 ```
 
 **One command, both layouts:** `bash scripts/download_competition_data.sh` added on 2026-10-03 as the

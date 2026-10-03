@@ -59,3 +59,48 @@
   `knowledge/21` §3.
 * The site feed's `draw_inventory` is prose, not a database; a future session that adds draws should add a
   structured registry file and a test rather than more strings.
+
+---
+
+## Session-4 disposition of this list (appended 2026-10-03, the text above is left as written)
+
+*Standing limitations, as they now read.*
+
+1. **The negative streak is broken, once, narrowly.** Six screens have now been run against the frozen ±0.005
+   gate; H41 is the first with arms that pass (`A1_h41_off` +0.0066173, `A4_h41_union` +0.0073436 on 40 cells,
+   `knowledge/26`). The other four screens still failed, and H41's gain is +0.0066 against a bar of +0.005 — it
+   clears, it does not dominate. Nothing about the streak's cause changed: the win came from a *label-side*
+   channel (an independent young-fault inventory), not from a better filter on the same fields.
+2. **Proxy ≠ score is now load-bearing, not rhetorical.** H41 is the first feature whose two proxies disagree in
+   *direction*: +0.0066 on the catalogue-hidden target, −0.0009 to −0.0023 on the SGMC off-catalogue class. The
+   registered conflict (`IR-29-PROXY-CONFLICT`) can no longer be treated as a tie-break detail; a submission
+   decision that reads only the primary proxy would be reading one of two disagreeing measurements.
+3. **Owner-mirror status:** unchanged, and now more consequential — `data/external/gdr_qfaults_traces.csv`
+   (sha256 `9702f2e5…`) is a hash-pinned owner transcription, not an organizer file, and it is the input the
+   first passing feature depends on. If the mirror's slip-rate or age-bin values differ from the real release,
+   H41's gain is unreproducible in exactly the way that cannot be detected from inside this repository.
+
+*The next-step list.*
+
+1. **H41 screen — done** (this session, frozen protocol, evidence in `evidence/h41_screen/`, analyzer zero
+   problems). The follow-on that *this* list asked for also happened: `H36/H37/H42` were not silently retried,
+   and the worming family was explicitly closed with a written reason instead of a fourth attempt.
+2. **Weekly-slot rule — still armed, still unmet.** H41's pass does not clear it. The rule requires beating
+   `holdout_best = 0.14479018210246675` *on the protocol that produced that number* (the H34 cells, draws 20/21),
+   so a candidate built from the H41 habitat must be re-scored there; the `above_holdout_best: true` field the
+   H41 analyzer prints is an artifact of comparing across protocols and must be read as meaningless
+   (`knowledge/26` §3). No file in `registry/submissions.json` is slot-approved and no slot has been used.
+3. **H36/H37/H42 — superseded in ranking, not deleted.** The v4 slate (`knowledge/25`) puts H43 (DEM drainage
+   organization) first because it needs no download in an environment where only `api.github.com` and `pypi.org`
+   complete TLS; H44–H47 are recorded with their blocked external sources. H36/H37/H42 keep their v3 specs and
+   stay behind H43.
+4. **The robustness upgrade listed here is now the critical path.** This list asked for A4 (union) to be
+   re-estimated on *different* folds/draws before trusting a near-miss or a near-pass. The preregistered
+   confirmation on draws 30/31 is that test for H41's two passing arms; if it reproduces, the remaining robustness
+   question is fold geometry (the 30 % quadrant folds are shared by every screen in this family, so all six
+   verdicts are correlated through it) — worth one frozen geometry-swap before any candidate is called stable.
+5. **Housekeeping — partly done.** `scripts/download_competition_data.sh` exists and both template layouts
+   resolve through one helper; the draw ledger is no longer pure prose for this family: `design_screen.json` and
+   `design_confirm.json` each record a machine-readable `draw_seed_inventory`. A single structured draws
+   registry with a test (this list's actual ask) is still open, as is the suggestion to archive nothing
+   regenerable.

@@ -236,6 +236,7 @@ def h41_screen_card() -> str:
         f"<p><strong>Independent recomputation:</strong> {e(ana_txt)}.</p>"
         f'<p>{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/24_preregistered_h41_screen_2026-10-03.md", "Read the frozen H41 preregistration", external=True)} · '
         f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/25_candidates_v4_2026-10-03.md", "Read the v4 candidate slate", external=True)} · '
+        f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/knowledge/26_h41_results_2026-10-03.md", "Read the H41 results document", external=True)} · '
         f'{a("https://github.com/buffedlizard55-lab/GEMSDOE29/blob/main/src/gemsdoe/h41.py", "Read the feature module", external=True)}</p></section>'
     )
 
@@ -518,8 +519,10 @@ def render_research() -> str:
         '<article class="card span-6"><p class="kicker">What it means</p><h2>Three worming-family screens, three consistent negatives</h2>'
         '<p>H29 (sparse persistence features), H31 (seed-tracked persistence), and now H40 (dense continuous persistence) plus the new H35 tip-corridor interaction fields all failed the same fixed effect bar on the same '
         'spatial folds. The mechanisms are not disproven science — the caveat that this grid’s most persistent edges run E–W (survey-parallel, the H29 diagnostic) travels with every verdict — but on this pipeline the '
-        'frozen structural baseline already extracts most of that information. Remaining independent levers are label-side or other-physics: the v3 slate promotes H41 (slip-rate-weighted INGENIOUS off-catalogue trace '
-        'centroids, data already mirrored) to rank 1, with H36 (MT edges), H37 (geothermometry residuals), H42 (measured-period line audit) and the H38/H39 filter-role pair behind it.</p></article></section>'
+        'frozen structural baseline already extracts most of that information. The v3 slate\u2019s rank 1, H41 (slip-rate-weighted INGENIOUS off-catalogue trace centroids, already mirrored), is the first idea in this '
+        'family to clear the frozen gate: on draws 28/29 two of its five arms passed, and every number behind that sentence \u2014 mean paired gains, per-fold gains, the AUC step, the emission budget band and the '
+        'negative SGMC second proxy \u2014 is recomputed from the raw cells in the card above rather than repeated here. That is why a gate pass authorizes a confirmation and not a submission. The v4 slate (H43 drainage organization first, '
+        'then H44\u2013H47) is ranked in knowledge/25 with each candidate\u2019s external-data obtainability stated; H44\u2013H47 wait on owner-side fetches, and H36/H37/H42 and the H38/H39 filter-role pair remain behind H43.</p></article></section>'
     )
 
     strategy_card = (
