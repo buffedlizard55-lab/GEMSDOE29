@@ -1,0 +1,72 @@
+{
+  "generated_by": "scripts/analyze_h43_screen.py",
+  "date": "2026-10-03",
+  "rule": "knowledge/27 \u00a74 G1+G2+G3: an arm is G3_ELIGIBLE only if it passes G1 on draws 32/33, passes G2 on draws 34/35, exceeds holdout_best (0.14479018210246675) in both stages, and gains on the SGMC off-catalogue secondary proxy in >= 3 of 4 folds in both stages.",
+  "holdout_best": 0.14479018210246675,
+  "arms": {
+    "A1_h43_off_front": {
+      "G1_screen_pass": false,
+      "G2_confirmation_pass": false,
+      "screen_mean_above_holdout_best": false,
+      "confirm_mean_above_holdout_best": false,
+      "sgmc_positive_folds_screen_at_least_3": false,
+      "sgmc_positive_folds_confirm_at_least_3": false,
+      "confirmation_ran": false,
+      "G3_ELIGIBLE": false,
+      "sgmc": {
+        "screen": 2,
+        "confirm": null,
+        "mean_gain_screen": -0.000367106,
+        "mean_gain_confirm": null
+      }
+    },
+    "A2_h43_omega_area": {
+      "G1_screen_pass": false,
+      "G2_confirmation_pass": false,
+      "screen_mean_above_holdout_best": true,
+      "confirm_mean_above_holdout_best": false,
+      "sgmc_positive_folds_screen_at_least_3": false,
+      "sgmc_positive_folds_confirm_at_least_3": false,
+      "confirmation_ran": false,
+      "G3_ELIGIBLE": false,
+      "sgmc": {
+        "screen": 2,
+        "confirm": null,
+        "mean_gain_screen": 0.00019907,
+        "mean_gain_confirm": null
+      }
+    },
+    "A3_h43_scarp_free": {
+      "G1_screen_pass": false,
+      "G2_confirmation_pass": false,
+      "screen_mean_above_holdout_best": true,
+      "confirm_mean_above_holdout_best": false,
+      "sgmc_positive_folds_screen_at_least_3": true,
+      "sgmc_positive_folds_confirm_at_least_3": false,
+      "confirmation_ran": false,
+      "G3_ELIGIBLE": false,
+      "sgmc": {
+        "screen": 3,
+        "confirm": null,
+        "mean_gain_screen": 0.001356049,
+        "mean_gain_confirm": null
+      }
+    },
+    "A4_h43_union": {
+      "G1_screen_pass": false,
+      "G2_confirmation_pass": false,
+      "screen_mean_above_holdout_best": true,
+      "confirm_mean_above_holdout_best": false,
+      "sgmc_positive_folds_screen_at_least_3": false,
+      "sgmc_positive_folds_confirm_at_least_3": false,
+      "confirmation_ran": false,
+      "G3_ELIGIBLE": false,
+      "sgmc": {
+        "screen": 2,
+        "confirm": null,
+        "mean_gain_screen": -0.001125236,
+        "mean_gain_confirm": null
+      }
+    }
+  }
+}

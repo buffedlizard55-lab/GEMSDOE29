@@ -161,6 +161,18 @@
   on the same three unverified owner-reported points). Registered as `IR-29-PROXY-VETO-PATTERN` with three
   options for the owner; **no label or gate was changed**. Evidence:
   [`evidence/proxy_agreement_review.json`](evidence/proxy_agreement_review.json).
+- **[H43b results — Workstream B & head-to-head comparison](knowledge/37_h43b_mass_conserving_drainage_results_2026-10-03.md)** —
+  parallel Session-5 implementation (`src/gemsdoe/h43b.py`, frozen in
+  **[knowledge/27b](knowledge/27b_preregistered_h43b_screen_2026-10-03.md)**, `evidence/h43b_screen/`) that seeds
+  Barnes–Lehman–Mulla priority-flood at the true footprint boundary (`17,865` outlets, `876,389` raised cells,
+  `0` trapped interior cells, `100 %` mass conservation across `5,167,373` pixels, `max_acc_px = 824,820` vs `109`
+  in Workstream A), fits `108` per-basin repeated-median log–log $S\text{–}A$ envelopes, and separates
+  `A3_h43_scarp_free` (without `H43_CHANNEL_SCARP`) from `A4_h43_union`. On the same draws `32/33` (`40` cells in a
+  single uninterrupted process, `analyzer_report.json` `integrity_problems: []`), `A4_h43_union` gained **`+0.0039976`**
+  and was positive in **all 4 quadrant fold means** (`NW +0.00387, NE +0.00350, SW +0.00642, SE +0.00220`, worst
+  fold `+0.0021960`, `0.00100` short of G1's `+0.005` bar), while `A3_h43_scarp_free` (`+0.0019365` primary)
+  **passed the SGMC $\ge 3/4$ positive-folds gate (`+0.0013560`, 3/4 folds)**, isolating `H43_CHANNEL_SCARP` as the
+  column that trades SGMC score for primary range-front score.
 - **[Artifact leakage and the cross-fitted fix (session 5, parallel workstream)](knowledge/33_artifact_leakage_and_crossfit_2026-10-03.md)** —
   the measured defect in the single-fit artifact path (`E_dist` separates the training labels perfectly, 2 distinct
   columns used out of 81), why the screens are unaffected, the cross-fitted protocol, the `-nan` vs `-zeros`
