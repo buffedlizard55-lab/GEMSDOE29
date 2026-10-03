@@ -344,7 +344,9 @@
         "confirms the 0.2600 and 0.2449 values that are already recorded as owner-reported historical claims also appear on the page; account identities and score-to-file mappings are NOT verified",
         "context: a multi-team plateau near 0.26 and a frontier cluster near 0.29-0.32 exist at fetch time (no table stored in the repository)"
       ],
-      "caveat": "One-off human-equivalent fetch at the owner's explicit request (the standing brief supplies the 0.3195 figure and asks for line-by-line verification with links for manual review). Per the Terms-of-Use policy (knowledge/03) there is no polling, no scheduled reads, and no leaderboard table content stored in this repository; the single confirmed value is kept in registry/score_claims.json as an audit record. Open the linked page yourself for the current board."
+      "caveat": "One-off human-equivalent fetch at the owner's explicit request (the standing brief supplies the 0.3195 figure and asks for line-by-line verification with links for manual review). Per the Terms-of-Use policy (knowledge/03) there is no polling, no scheduled reads, and no leaderboard table content stored in this repository; the single confirmed value is kept in registry/score_claims.json as an audit record. Open the linked page yourself for the current board.",
+      "site_hidden": true,
+      "note_for_site": "Audit-only: full entry in registry/sources.json; not rendered on the Pages site (no-claim/no-leaderboard-link rule)."
     },
     {
       "id": "gemsdoe25-site-2026-10-03",
