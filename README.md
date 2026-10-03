@@ -114,7 +114,10 @@
   emission budget in band and the worst fold ≈ −0.001, while `A1_off` (+0.00401) and `A2_network` (−0.00136) fail —
   so the signal is the **knickpoint residual**, not drainage density. The SGMC second proxy is negative on both
   passing arms, the staged execution and the design-file rewrite are disclosed in §1, and the preregistered
-  confirmation on draws 34/35 is in flight (its verdict belongs in §5). Its frozen protocol is
+  confirmation on draws 34/35 **replicated both arms more strongly** (+0.01674 / +0.01568, 3/4 positive folds per
+  draw, worst folds 0.0 / −0.00053) — then the inherited G3 secondary-proxy rule vetoed promotion, exactly as for
+  H41, because the SGMC class is negative in both stages (2/4 → 0/4 and 1/4 → 2/4 folds). H43 closes with no
+  candidate and no slot; its frozen protocol is
   **[knowledge/29](knowledge/29_preregistered_h43_screen_2026-10-03.md)**.
 - **[Session-5 note](knowledge/31_session5_data_and_emission_2026-10-03.md)** — the data-placement receipt (the
   standing blocker, closed), the emission-density sweep (negative: keep the pinned artifact) and the H43 execution
@@ -177,7 +180,7 @@
   the frozen controls reproduced the stored H34 cells **exactly** (max |Δ| = 0.0). Verdict: **no promotion, no
   candidate built, no slot** — [`knowledge/28`](knowledge/28_h41a4_results_2026-10-03.md),
   [`evidence/h41a4_h34protocol/`](evidence/h41a4_h34protocol/).
-- **Next free draw is 36** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). Draws 32/33 were fitted by the H43 screen and 34/35 are reserved by its in-flight confirmation (recorded with an `IN FLIGHT` note whose row count is a lower bound by design); the next free pair after the confirmation is 36. The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27 plus 2/3 count as spent because they were authorized under a recorded receipt and never fitted.
+- **Next free draw is 36** — `registry/draw_ledger.json` is now the only draw ledger, generated from the committed evidence (`scripts/build_draw_ledger.py`, `--check` fails on drift, `tests/test_draw_ledger.py` pins it). Draws 32/33 were fitted by the H43 screen and 34/35 by its completed confirmation (both recorded in the ledger, which now also marks `h43_confirmation` COMPLETE); the next free pair is 36. The older prose lists in `knowledge/08` and this README are history, not authority: they are the records that drifted in session 3 (draws 24/25 double-claimed), and 26/27 plus 2/3 count as spent because they were authorized under a recorded receipt and never fitted.
 - **One download by hand** — the *leaderboard score itself*. The manual link is on the site's leaderboard card and in `knowledge/03`; `scripts/check_site.py` deliberately fails if anything on the site links the score page, and `registry/score_claims.json` keeps every score as a claim until the owner confirms it.
 - **H43 (session 5):** drainage-network organization on the cached detrended surface — priority-flood fill → D8
   accumulation → binned-median log-log stream-power fit → knickpoint residual, plus off-catalogue and
@@ -193,8 +196,12 @@
   the completed stage ran as four verified process episodes, and the design-file rewrite that happened before the
   keep-design guard existed is disclosed with the exact evidence in `knowledge/30` §1
   (`IR-29-H43-DESIGN-REWRITE`, `IR-29-H43-STAGED-EXECUTION`). Raw cells: [`evidence/h43_screen/`](evidence/h43_screen/).
-  The preregistered confirmation on draws 34/35 was launched from a clean tree at `bd6811e` and is in flight at this
-  commit; **no H43 candidate exists, no file is slot-approved, and no weekly slot has been used.**
+  The preregistered confirmation on draws 34/35 was launched from a clean tree at `bd6811e` and completed 40/40 cells:
+  both arms replicated more strongly (A3 +0.01674, A4 +0.01568; 3/4 positive folds per draw; worst folds 0.0 and
+  −0.000533; budgets in band; analyzer `integrity_problems: 0`, screen section bit-identical to the pre-confirmation
+  report), and the inherited G3 rule then withheld promotion because the SGMC second proxy is negative in both stages
+  — the second independent family (after H41) with the replicated-primary/secondary-proxy-loss signature.
+  **No H43 candidate exists, no file is slot-approved, and no weekly slot has been used.**
 - **Data placement (session 5):** the original brief's blocker — "run the data download script and prepare the
   data" — is closed locally with a re-checkable receipt. `bash scripts/download_competition_data.sh` restored the
   hash-pinned owner mirrors, `python scripts/prepare_data.py` rebuilt the footprint/label/band caches (5,167,373

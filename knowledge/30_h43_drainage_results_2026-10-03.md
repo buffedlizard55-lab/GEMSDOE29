@@ -95,13 +95,61 @@ The runner prints `confirmation authorised for: ['A3_knick', 'A4_union']` as an 
 it then runs the **full 5-arm × 4-fold × 2-draw matrix (40 cells) on the fresh draws**, so draws 34/35
 replicate the whole screen, including the arms that failed G1. Those two arms are replication controls here,
 not promotion candidates; promotion still requires G1 on both draw pairs plus the inherited G3
-secondary-proxy requirement. Nothing in the confirmation has been inspected for gates yet; the verdict is
-written by `scripts/analyze_h43_screen.py` into `analyzer_confirm.json` and recorded in §5 below.
+secondary-proxy requirement. The stage is complete; `scripts/analyze_h43_screen.py` re-derives every gate
+from the raw rows into `evidence/h43_screen/analyzer_report.json` (both stages, `integrity_problems: 0`) and
+the verdict is recorded in §5 below.
 
-## 5. Confirmation verdict
+## 5. Confirmation verdict (draws 34/35, 40/40 cells)
 
-_(pending — filled from `evidence/h43_screen/summary_confirm.json` and
-`evidence/h43_screen/analyzer_confirm.json` when the stage completes)_
+Status: **complete**. Raw rows `evidence/h43_screen/cells_confirm.jsonl` (40), runner summary
+`evidence/h43_screen/summary_confirm.json`, design `evidence/h43_screen/design_confirm.json` (git
+`bd6811e4`, sha256 `54651fe6…`, draw-independent module/input hashes identical to the screen). The
+independent checker re-derived every gate from the raw rows and cross-checked the summary:
+`evidence/h43_screen/analyzer_report.json` now carries both stages — its `screen` section is
+**bit-identical** to the pre-confirmation report (verified by JSON equality) and `integrity_problems: 0`.
+
+| arm | screen mean (d32/33) | **confirm mean (d34/35)** | confirm fold gains (NW, NE, SW, SE) | positive folds per draw | worst fold | mean DTI | mean AUC | SGMC confirm | primary gates (G1+G2) | G3 secondary |
+|---|---:|---:|---|---|---:|---:|---:|---|---|---|
+| `A1_off` | +0.00401 | −0.00060 | 0.0, −0.00105, −0.00212, +0.00076 | 1, 1 | −0.00212 | 0.13696 | 0.78574 | +0.00113 (2/4) | FAIL | — |
+| `A2_network` | −0.00136 | +0.00408 | +0.00745, +0.00307, +0.00254, +0.00327 | 3, 4 | +0.00254 | 0.14164 | 0.78911 | +0.00064 (3/4) | FAIL (mean < +0.005) | — |
+| **`A3_knick`** | +0.01419 | **+0.01674** | 0.0, +0.02213, +0.01964, +0.02519 | 3, 3 | 0.0 | 0.15430 | 0.79370 | **−0.00214 (0/4)** | **PASS** | **FAIL** |
+| **`A4_union`** | +0.01287 | **+0.01568** | −0.00053, +0.01690, +0.02489, +0.02145 | 3, 4 | −0.00053 | 0.15324 | 0.79164 | −0.00002 (2/4) | **PASS** | **FAIL** |
+| `C0_base` | 0.14317 | 0.13756 | — | — | — | 0.13756 | 0.78481 | — | — | — |
+
+Emission budget inside band in every cell (confirm emissions 7,148–9,586 dots), viability guard passed
+(`problems: []`), and the NW fold is structurally identical between `A3_knick` and the control on both
+confirmation draws (fold gain exactly 0.0) — the replication again lives in NE/SW/SE.
+
+**Verdict: the primary-proxy result replicated on both fresh draws, and the inherited G3 requirement
+withholds promotion for every arm — identical in structure to H41.**
+
+1. **Both knickpoint-bearing arms replicated, slightly larger than the screen** (+0.01674 vs +0.01419 for
+   `A3_knick`; +0.01568 vs +0.01287 for `A4_union`), each positive in 3/4 folds on both fresh draws, worst
+   folds 0.0 and −0.00053 against the −0.010 floor, budgets inside 0.75–1.25×. On the catalogue-hidden
+   proxy this is now the strongest and best-replicated result in the repository.
+2. **The SGMC second proxy vetoes promotion.** It is negative in *both* stages for both arms
+   (`A3_knick` −0.00012 on 2/4 folds → −0.00214 on 0/4; `A4_union` −0.00190 on 1/4 → −0.00002 on 2/4),
+   and the inherited G3 rule requires ≥3/4 positive folds in both stages. `A2_network`'s drainage-density
+   columns did *not* reach the +0.005 bar even though they were positive in 3/4 and 4/4 folds, so the
+   interpretation is unchanged: the signal is the **knickpoint residual**, not drainage density.
+3. **The "replicated primary gain, secondary-proxy loss" pattern is now the second independent family to
+   show it** (H41 was the first, `knowledge/26` §5). Two unrelated feature families both ranking
+   catalogue-hidden faults better while losing the independent state-map class is evidence *about the
+   proxies*: for off-catalogue structural evidence the two local proxies disagree systematically
+   (`IR-29-PROXY-CONFLICT`). A weekly slot decision must not be made on either proxy alone.
+4. **Consequences.** No H43 candidate is built, nothing is downloaded from this stage, and no weekly slot
+   is claimed. H43 closes as *screened and confirmed on the primary proxy, vetoed at the secondary proxy*.
+   The runner's `G1_SCREEN_PASS` field in a *confirmation* summary means "primary-proxy gates on the
+   confirmation draws" and never eligibility (the `IR-29-H41-G3-OMISSION` naming class).
+5. **What would change the conclusion:** a mechanism that improves the SGMC class rather than trading it
+   away, or a benign explanation of the trade (e.g. an SGMC truth-geometry artefact) established with new
+   evidence. A bar-protocol re-score à la H41-A4 (`knowledge/28_h41a4_results_2026-10-03.md`) could
+   measure H43 against the 0.14479 anchor as *research*, but G3 already blocks promotion, and draws 20/21
+   are the bar protocol's own cells (`IR-29-BAR-PROTOCOL-DRAW-REUSE`).
+6. **Disclosed execution detail:** the confirmation's `execution` block again reads
+   `processes: 2, resumed: true` because the runner's counter is a formula (see §1); the stage actually
+   ran as several two-cell `--resume` episodes under the same frozen design, each re-verifying the
+   prereg, module and input hashes before appending rows.
 
 ## 6. Artifacts
 
