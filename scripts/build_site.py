@@ -371,7 +371,8 @@ def h43_screen_card() -> str:
         )
     design = json.loads(design_p.read_text(encoding="utf-8"))
     diag = design.get("h43_diagnostics", {})
-    knick = diag.get("knick", {}).get("fit", {})
+    knick_block = diag.get("knick", {})
+    knick = knick_block.get("fit", {})
     rev = str(design.get("git", {}).get("revision", ""))[:8]
     parts = [
         '<section class="card"><p class="kicker">Session-5 frozen screen · H43 drainage organization</p>',
@@ -380,7 +381,7 @@ def h43_screen_card() -> str:
         "concavity fit, off-catalogue knickpoint excess, and channel&#215;scarp — built from the cached detrended "
         "surface plus the visible catalogue only (the off-catalogue mask removes information). Diagnostics measured "
         "on the real band: ",
-        f"{int(diag.get('pits', 0)):,} strict pits filled, {int(knick.get('n_channel_pixels', 0)):,} channel pixels, ",
+        f"{int(diag.get('pits', 0)):,} strict pits filled, {int(knick_block.get('channel_pixels', 0)):,} channel pixels, ",
         f"knickpoint coverage {100 * design.get('h43_columns_nonzero_fraction', {}).get('H43_KNICK', 0):.2f}%, ",
         f"fitted concavity theta = {float(knick.get('theta', 0.0)):.3f}.</p>",
     ]
@@ -394,7 +395,9 @@ def h43_screen_card() -> str:
     for arm, entry in arms.items():
         if arm == "C0_base":
             continue
-        n_pos = sum(1 for g in entry["fold_gains"].values() if g > 0)
+        gains = entry["fold_gains"]
+        gain_list = list(gains.values()) if isinstance(gains, dict) else list(gains)
+        n_pos = sum(1 for g in gain_list if g > 0)
         verdict = "G1 PASS" if entry["G1_SCREEN_PASS"] else "G1 FAIL"
         items.append(
             f"<li><code>{e(arm)}</code>: mean paired gain {entry['mean_gain']:+.5f}, folds positive {n_pos}/4, "
