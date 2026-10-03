@@ -65,7 +65,9 @@
       "verified": true,
       "verified_date": "2026-10-02 (article page fetched in research session)",
       "used_for": [
-        "primary basis for Poisson-wavelet multiscale edge analysis"
+        "primary basis for Poisson-wavelet multiscale edge analysis",
+        "multiscale upward-continuation edge detection ('worming')",
+        "H52 survival-with-height emission filter (knowledge/37, src/gemsdoe/wormfilter.py)"
       ],
       "caveat": "The H31 feature is not a replication of the full method."
     },
@@ -401,6 +403,36 @@
         "paste-ready Note convention for DrivenData's optional comment field"
       ],
       "caveat": "All scores there are owner-reported and unverified; the site itself states the file is not slot-approved. Local bit-for-bit reproduction of dot_thin(H19-5, 1.5) -> d1.5 and dot_thin(H19-5, 2.8) -> D2.8 (44,090 px) is verified by tests/test_sibling_reproduction.py."
+    },
+    {
+      "id": "silva2003-smf",
+      "title": "Fault-generated mountain fronts in southeast Spain: geomorphologic assessment of tectonic and seismic activity (Silva, Goy, Zazo & Bardaji 2003, Geomorphology)",
+      "url": "https://www.sciencedirect.com/science/article/abs/pii/S0169555X02002155",
+      "publisher": "Elsevier / Geomorphology",
+      "kind": "peer-reviewed literature (abstract page)",
+      "verified": true,
+      "verified_date": "2026-10-03 (search-result abstract text; full text not fetched)",
+      "used_for": [
+        "mountain-front sinuosity definition Smf = Lmf/Ls (Bull and McFadden 1977)",
+        "Smf/Vf activity classes; Smf <= ~1.4-1.6 = tectonically active front",
+        "H50 range-front segmentation candidate (knowledge/38)"
+      ],
+      "caveat": "Abstract-level verification only. The index is attributed there to Bull and McFadden (1977); the 1977 original was not fetched."
+    },
+    {
+      "id": "bull-mcfadden-1977",
+      "title": "Mountain-front sinuosity index (Smf) as introduced by Bull and McFadden (1977), as quoted in secondary sources",
+      "url": "https://www.researchgate.net/publication/285368808_Mountain_Fronts",
+      "publisher": "secondary quotation (Bull & McFadden 1977; Bull 2007; Keller 1986)",
+      "kind": "secondary citation of a grey-literature original",
+      "verified": true,
+      "verified_date": "2026-10-03 (search-result text only; the 1977 original was not fetched)",
+      "used_for": [
+        "Smf < 1.4 indicates tectonically active fronts (Keller 1986, as quoted)",
+        "Smf > 3 typical of inactive fronts (Bull and McFadden 1977, as quoted)",
+        "H50 frozen threshold selection (knowledge/38)"
+      ],
+      "caveat": "The 1977 chapter itself was not retrieved; treat the numeric classes as quoted, not primary-verified."
     }
   ]
 }

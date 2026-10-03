@@ -186,16 +186,21 @@ def run_cells(ctx, vectors: np.ndarray, grids: dict[str, np.ndarray], surv_grid:
             azdef_crop = grids["WF_AZ_DEFINED"][sl]
 
             # --- fit 1: the frozen control matrix (six of the seven arms share this score field) ---
+            # Memory discipline on the 3 GB sandbox: fit and predict the base model BEFORE the extended
+            # matrices exist, then release cell.Xtr/cell.Xq. The first run of this stage died holding
+            # both (evidence/history/wormfilter_screen_oom_partial_2026-10-03).
             model = HistGradientBoostingClassifier(random_state=draw, **HGB_PARAMS)
             t_fit = time.time()
             model.fit(cell.Xtr, cell.y)
             fit_s = time.time() - t_fit
             t_pred = time.time()
-            p = model.predict_proba(np.ascontiguousarray(cell.Xq))[:, 1].astype(np.float32)
+            p = model.predict_proba(cell.Xq)[:, 1].astype(np.float32)
             predict_s = time.time() - t_pred
             auc_base = cell.auc(np.nan_to_num(p, nan=0.0))
+            del model
 
             score_crop, candidates = cell.candidates(p, k)
+            del p
             # Recompute the ridge mask so the refill arms see exactly the C1 candidate rule minus the veto.
             ridge = ridge_nms(score_crop, cell.dom_c, 1.0)
             veto_shallow = shallow_veto(candidates, shallow_crop.astype(np.float32))
@@ -219,21 +224,25 @@ def run_cells(ctx, vectors: np.ndarray, grids: dict[str, np.ndarray], surv_grid:
                 shallow_fraction_in_domain=float(np.mean(shallow_crop[cell.dom_c])),
                 mean_surv_joint_in_domain=float(np.mean(surv_grid[sl][cell.dom_c])),
             )
+            del score_crop, candidates, ridge, veto_shallow, veto_az, veto_union
 
             # --- fit 2: the feature-role comparator (same emission as C0, 8 extra columns) ---
+            n_all = base_n + len(WF_NAMES)
             Xtr_w = np.concatenate([cell.Xtr] + [vectors[i][cell.train_idx][:, None] for i in range(len(WF_NAMES))], axis=1)
             Xq_w = np.concatenate([cell.Xq] + [vectors[i][cell.q][:, None] for i in range(len(WF_NAMES))], axis=1)
-            all_cols = list(range(base_n + len(WF_NAMES)))
+            del cell.Xtr, cell.Xq
             model_w = HistGradientBoostingClassifier(random_state=draw, **HGB_PARAMS)
             t_fit = time.time()
-            model_w.fit(np.ascontiguousarray(Xtr_w[:, all_cols]), cell.y)
+            model_w.fit(Xtr_w, cell.y)
             fit_w = time.time() - t_fit
             t_pred = time.time()
-            p_w = model_w.predict_proba(np.ascontiguousarray(Xq_w[:, all_cols]))[:, 1].astype(np.float32)
+            p_w = model_w.predict_proba(Xq_w)[:, 1].astype(np.float32)
             predict_w = time.time() - t_pred
-            del Xtr_w, Xq_w
+            auc_wf = cell.auc(np.nan_to_num(p_w, nan=0.0))
             score_w, cand_w = cell.candidates(p_w, k)
+            del p_w, Xq_w
             emissions["W5_surv_features"] = score_ordered_dots(score_w, cand_w, MIN_DIST_PX)
+            del score_w, cand_w
             # Split accounting on the WF block (gate G6): only feature indices >= base_n count.
             # Leaves carry feature_idx = -2, so they can never be counted as WF splits.
             wf_splits = 0
@@ -241,7 +250,8 @@ def run_cells(ctx, vectors: np.ndarray, grids: dict[str, np.ndarray], surv_grid:
                 for predictor in tree:
                     feats = np.asarray(predictor.nodes["feature_idx"], dtype=np.int64)
                     wf_splits += int((feats >= base_n).sum())
-            feature_diag = dict(wf_splits=int(wf_splits), n_features=len(all_cols), auc=cell.auc(np.nan_to_num(p_w, nan=0.0)))
+            feature_diag = dict(wf_splits=int(wf_splits), n_features=int(n_all), auc=auc_wf)
+            del model_w, Xtr_w
 
             timing = dict(fit_s=fit_s, predict_s=predict_s)
             for arm in ARMS:
