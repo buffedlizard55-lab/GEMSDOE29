@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, "arena/01a10075-gemsdoe29", "arena/01a10240-gemsdoe29"]
+    branches: [main, "arena/01a10075-gemsdoe29", "arena/01a10240-gemsdoe29", "arena/01a10342-gemsdoe29"]
   pull_request:
 
 permissions:

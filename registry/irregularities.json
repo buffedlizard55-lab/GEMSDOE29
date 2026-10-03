@@ -448,6 +448,161 @@
         "scripts/analyze_h41_screen.py",
         "evidence/h41_screen/summary_confirm.json"
       ]
+    },
+    {
+      "id": "IR-29-SPACING-QUANTISATION",
+      "severity": "medium",
+      "status": "open; measured",
+      "date": "2026-10-03",
+      "summary": "The dot-thinning spacing parameter is a threshold on an integer disc, so nominal distances far apart can be the same transform.",
+      "detail": "src/gemsdoe/thinning.py blocks offsets with dy^2 + dx^2 < d^2, so distinct transforms exist only at integer radius-squared thresholds. Measured in evidence/emission_sweep: dot_thin(.,2.0) is pixel-identical to the pinned d=1.5 file (60,069 px) and dot_thin(.,2.4) is pixel-identical to the pinned d=2.8 file (44,090 px, 0.00000 paired delta on all 8 proxy cells); thin_3.2 and thin_3.6 are also identical to each other. This closes IR-29-D28-NAMING as a naming question: 'd2.4' and 'd2.8' describe the same transform in this implementation.",
+      "subject": "Emission spacing is quantised by an integer disc",
+      "impact": "A reader comparing nominal spacings may attribute a difference to a spacing change that never happened, or vice versa; the D2.8 file name is a threshold label, not a measured distance.",
+      "mitigation": "Report the emitted pixel count (the disc class) alongside any nominal spacing; identify historical artifacts by content id and pixel count (knowledge/28 sections 3 and 5).",
+      "affected_artifacts": [
+        "src/gemsdoe/thinning.py",
+        "evidence/emission_sweep/summary.json",
+        "knowledge/28_emission_density_sweep_results_2026-10-03.md"
+      ]
+    },
+    {
+      "id": "IR-29-H43-AREA-UNIT",
+      "severity": "low",
+      "status": "open; disclosed in the frozen preregistration",
+      "date": "2026-10-03",
+      "summary": "The H43 candidate slate described a 25-pixel channel threshold as 2.5 km^2; 25 cells at 100 m are 0.25 km^2.",
+      "detail": "knowledge/25 candidate H43 wrote '25 cells (2.5 km^2)'. Each cell is 100 m x 100 m = 0.01 km^2, so the correct area is 0.25 km^2 - a factor-10 error in the prose, not in the frozen number. knowledge/29 section 3 keeps CHANNEL_MIN_CELLS = 25 as written and corrects the area statement.",
+      "subject": "Area-unit error in the H43 slate prose",
+      "impact": "None on the screen arithmetic (the threshold is applied in cells); only a prose mis-statement of the channel area.",
+      "mitigation": "knowledge/29 section 3 carries the corrected area and this register entry; future candidate slates state cell counts and km^2 together.",
+      "affected_artifacts": [
+        "knowledge/25_candidates_v4_2026-10-03.md",
+        "knowledge/29_preregistered_h43_screen_2026-10-03.md"
+      ]
+    },
+    {
+      "id": "IR-29-H43-FIT-SIMPLIFICATION",
+      "severity": "low",
+      "status": "open; disclosed before the fit",
+      "date": "2026-10-03",
+      "summary": "H43 uses one global binned-median log-log fit instead of the per-basin fits sketched in the candidate slate.",
+      "detail": "knowledge/25 proposed per-basin concavity fits. The frozen knowledge/29 protocol uses one global binned-median fit of log10 S on log10 A (20 quantile bins, >=25 positive members per bin) because per-basin attribution on a detrended surface with unknown datum would add a second uncontrolled modelling choice inside a single screen. The deviation is declared in knowledge/29 section 3 before any fit, so the screen tests the residuals of the declared simpler model.",
+      "subject": "Declared simplification of the H43 concavity fit",
+      "impact": "Per-basin structure (which could differ between neotectonic domains) is not resolved; a global fit can mis-rank knickpoints if basins differ strongly.",
+      "mitigation": "The preregistration records the simplification and the reason; a future screen may test per-basin fits as its own frozen hypothesis.",
+      "affected_artifacts": [
+        "knowledge/29_preregistered_h43_screen_2026-10-03.md",
+        "src/gemsdoe/h43.py"
+      ]
+    },
+    {
+      "id": "IR-29-H43-SLOPE-KERNEL",
+      "severity": "low",
+      "status": "open; disclosed in the frozen preregistration",
+      "date": "2026-10-03",
+      "summary": "The slate's '3-pixel Gaussian' slope pre-smoothing is implemented as a sigma = 1 px kernel, not a 3 px sigma.",
+      "detail": "knowledge/25 wrote '3-pixel Gaussian'. A sigma = 3 px kernel would smooth channel slopes away at 100 m spacing; knowledge/29 section 3 reads it as a +/-1 px support (sigma = 1) and states the reading before the fit. SLOPE_SIGMA_PX = 1.0 in src/gemsdoe/h43.py.",
+      "subject": "Slope pre-smoothing kernel interpretation",
+      "impact": "A wider kernel would lower residual variance and change knickpoint ranks; the declared reading is the sharper one and is frozen.",
+      "mitigation": "Recorded in knowledge/29 section 3 and this register entry; any change requires a new preregistration.",
+      "affected_artifacts": [
+        "knowledge/25_candidates_v4_2026-10-03.md",
+        "knowledge/29_preregistered_h43_screen_2026-10-03.md",
+        "src/gemsdoe/h43.py"
+      ]
+    },
+    {
+      "id": "IR-29-H43-KNICK-NORMALISER",
+      "severity": "low",
+      "status": "open; disclosed in the frozen preregistration",
+      "date": "2026-10-03",
+      "summary": "Knickpoint residuals are normalised by the 95th percentile of positive residuals, not of all channel pixels as the slate's wording implies.",
+      "detail": "knowledge/25 said the residual is 'clipped at its 95th percentile'. The synthetic tests in tests/test_h43_features.py showed that a plain q95 over all channel pixels collapses to 0 whenever fewer than 5 % of channel pixels have a positive residual, which would make H43_KNICK identically zero. knowledge/29 section 3 freezes the normaliser as the 95th percentile of the positive residuals and discloses the refinement.",
+      "subject": "Knickpoint normaliser refined after a synthetic failure",
+      "impact": "The column's scale is defined by positive residuals only; a distribution with very few positives would otherwise produce an all-zero column (H31's failure mode).",
+      "mitigation": "Declared in knowledge/29 before the screen; the measured positive-residual share on the real band is 50.3 %, so the degenerate case does not arise here.",
+      "affected_artifacts": [
+        "knowledge/29_preregistered_h43_screen_2026-10-03.md",
+        "src/gemsdoe/h43.py",
+        "tests/test_h43_features.py"
+      ]
+    },
+    {
+      "id": "IR-29-H43-OOM",
+      "severity": "medium",
+      "status": "closed; partial stage quarantined",
+      "date": "2026-10-03",
+      "summary": "The first H43 screen process was killed by the kernel OOM killer after 23 of 40 rows under a 3.9 GB container limit.",
+      "detail": "dmesg shows 'Out of memory: Killed process 9762 (python3) total-vm:5463148kB, anon-rss:3661016kB' during cell SW:32, arm A3_knick. Cells NW:32, NW:33, NE:32, NE:33 were complete (5 arms each); SW:32 had C0_base, A1_off and A2_network. No summary was written, so no gate was evaluated on those rows. The rows, the design file and the stale log were quarantined under evidence/history/h43_screen_oom_partial_2026-10-03/ and are never used for gates.",
+      "subject": "Out-of-memory kill of the first H43 screen attempt",
+      "impact": "The screen could not be summarised from that process; a naive append would have mixed execution states.",
+      "mitigation": "Partial evidence quarantined with a README; the screen re-run from scratch in staged processes; the runner gained --resume/--cell/--max-cells with full hash re-verification.",
+      "affected_artifacts": [
+        "evidence/history/h43_screen_oom_partial_2026-10-03/README.md",
+        "scripts/run_h43_screen.py"
+      ]
+    },
+    {
+      "id": "IR-29-H43-INPUT-DRIFT",
+      "severity": "high",
+      "status": "open; quarantined, root cause not reconstructed",
+      "date": "2026-10-03",
+      "summary": "The cached det_elev array used by the killed H43 screen does not reproduce from the pinned GeoTIFF under the pinned code.",
+      "detail": "The quarantined design_screen.json pinned work/bands/12_det_elev.npy at sha256 caa50bf75e99d58a.... Re-checking after the kill gave 739d6373125abf16.... The present file is byte-reproducible from the pinned data/training_features.tif band 12 through src/gemsdoe/prepare.py (band re-read and compared: 0 differing values, identical NaN mask, 7,113,308 NaN cells), and every other input pinned in the design file (footprint, labels, sample_submission, SGMC, static_ABCD, addons) still matches its recorded hash. The provenance of the recorded array could not be reconstructed; no script in this repository writes band arrays other than prepare_inputs. The 23 rows computed on it are quarantined and cannot be extended.",
+      "subject": "Unreproducible cached input behind the quarantined H43 rows",
+      "impact": "Any gate computed from those rows would rest on an input whose bytes are not reproducible; appending rows on the current array would mix two elevations inside one design.",
+      "mitigation": "Quarantine with the recorded hash table; every screen now records input hashes in its design file and the resume path refuses on any mismatch - the guard that caught this.",
+      "affected_artifacts": [
+        "evidence/history/h43_screen_oom_partial_2026-10-03/",
+        "scripts/run_h43_screen.py",
+        "knowledge/31_session5_data_and_emission_2026-10-03.md"
+      ]
+    },
+    {
+      "id": "IR-29-H43-STAGED-EXECUTION",
+      "severity": "medium",
+      "status": "open; disclosed",
+      "date": "2026-10-03",
+      "summary": "The re-run H43 screen is executed as several two-cell processes instead of one, to stay under the container memory limit.",
+      "detail": "After the OOM kill the screen was re-run with the same frozen preregistration (knowledge/29, unchanged sha256), the same draws (32/33), folds, arms, seeds and gates, but split into processes of at most two cells via --max-cells; each continuation runs --resume, which re-verifies the preregistration, module and input hashes recorded in design_screen.json before appending a row, and the summary is written only when all 40 (fold, draw, arm) rows exist. The process count is recorded in the summary's execution block.",
+      "subject": "Staged multi-process execution of one frozen screen",
+      "impact": "A reader could mistake the staged run for two experiments; the split is an environment workaround and changes no fit, gate or draw.",
+      "mitigation": "Disclosed in knowledge/30 and in this register entry; the summary carries execution.resumed and rows_this_process.",
+      "affected_artifacts": [
+        "scripts/run_h43_screen.py",
+        "evidence/h43_screen/summary_screen.json",
+        "knowledge/30_h43_drainage_results_2026-10-03.md"
+      ]
+    },
+    {
+      "id": "IR-29-ANCHOR-CHAIN",
+      "severity": "high",
+      "status": "open",
+      "date": "2026-10-03",
+      "summary": "Every historical score this project calibrates against is an owner-reported claim with no receipt in this repository.",
+      "detail": "The 0.2600 / 0.2477 / 0.1922 / 0.3195 figures used in knowledge/07, knowledge/17 and the README descends from owner/user reports and sibling READMEs. No leaderboard receipt, page copy or account association is stored; the 2026-10-03 leaderboard page was fetched once by the owner and only its rank-1 value was reported, with no table content kept.",
+      "subject": "Unverifiable score chain behind the calibration claims",
+      "impact": "If a score-to-file mapping is wrong, proxy calibration statements lose their anchor; local geometry results survive, the live calibration does not.",
+      "mitigation": "registry/score_claims.json keeps every score as a claim; only the owner can confirm a mapping; no slot decision rests on a claim alone (the slot rule uses the local H34 holdout).",
+      "affected_artifacts": [
+        "registry/score_claims.json",
+        "knowledge/07_metric_emission_analysis_2026-10-03.md"
+      ]
+    },
+    {
+      "id": "IR-29-MASKING-SECONDHAND",
+      "severity": "high",
+      "status": "open; needs owner confirmation",
+      "date": "2026-10-03",
+      "summary": "The rule that catalogue pixels are masked in the official metric is second-hand, not fetched from an official page.",
+      "detail": "knowledge/07 section 6 records that the 'catalogue pixels are masked' behaviour is reported by peers quoting staff. This repository has not fetched a page stating it, and the official metric description available to it does not settle the point. The hide-and-recover proxy assumes it.",
+      "subject": "Second-hand masking rule",
+      "impact": "If catalogue pixels are not excluded, catalogue-hugging emissions become valuable and the proxy's ranking logic (and the sibling's 'hug the halo is not supported' result) must be re-read.",
+      "mitigation": "Confirm in the official forum/FAQ with the account owner before any submission decision that depends on it; the proxy pages state the assumption.",
+      "affected_artifacts": [
+        "knowledge/07_metric_emission_analysis_2026-10-03.md",
+        "docs/irregularities.html"
+      ]
     }
   ],
   "updated": "2026-10-03"
