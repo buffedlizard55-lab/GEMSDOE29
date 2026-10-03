@@ -19,15 +19,49 @@ def test_hypothesis_slate_has_frozen_ranked_statuses() -> None:
     registry = json.loads((ROOT / "registry" / "hypotheses.json").read_text())
     items = registry["items"]
     ids = [item["id"] for item in items]
-    assert ids == ["H32", "H31", "H33", "H34", "H35", "H36", "H37", "H38", "H39"]
+    assert ids == ["H32", "H31", "H33", "H34", "H35", "H36", "H37", "H38", "H39", "H40", "H41", "H42"]
     by_id = {item["id"]: item for item in items}
-    assert "first candidate" in by_id["H32"]["status"]
+    assert "priority superseded" in by_id["H32"]["status"]
     assert "screen ran and failed" in by_id["H31"]["status"]
     assert "no confirmation" in by_id["H31"]["status"]
     assert "blocked" in by_id["H33"]["status"]
     assert "FAIL" in by_id["H34"]["status"]
+    assert by_id["H35"]["rank"] == "screened" and "G1 FAIL" in by_id["H35"]["status"]
+    assert by_id["H40"]["rank"] == "screened" and "G1 FAIL" in by_id["H40"]["status"]
     assert all(item["planning_delta_dti"] for item in items)
-    assert [by_id[f"H{i}"]["rank"] for i in (35, 36, 37, 38, 39)] == [1, 2, 3, 4, 5]
+    assert [by_id[k]["rank"] for k in ("H41", "H36", "H37", "H42", "H38", "H39")] == [1, 2, 3, 4, 5, 5]
+
+
+def test_h35_h40_screen_evidence_is_internally_consistent() -> None:
+    base = ROOT / "evidence" / "h35_h40_screen"
+    summary = json.loads((base / "summary_screen.json").read_text())
+    design = json.loads((base / "design_screen.json").read_text())
+    analyzer = json.loads((base / "analyzer_report.json").read_text())
+    assert analyzer["integrity_problems"] == []
+    assert analyzer["design_gate_match"] is True
+    # every frozen gate from the preregistration is echoed unchanged in the design
+    assert design["gates"] == summary["gates"]
+    assert summary["gates"]["mean_gain"] == 0.005 and summary["gates"]["min_positive_folds"] == 3
+    assert summary["gates"]["max_fold_loss"] == -0.01 and tuple(summary["gates"]["budget_ratio_band"]) == (0.75, 1.25)
+    assert summary["gates"]["holdout_best"] == 0.14479018210246675
+    # the frozen decision: all four arms failed G1; no confirmation exists
+    arms = summary["arms"]
+    assert all(arms[a]["G1_SCREEN_PASS"] is False for a in ("A1_h35_struct", "A2_h35_corrob", "A3_h40_persist", "A4_union"))
+    assert all(arms[a]["cells_present"] == 8 and arms[a]["budget_ok"] for a in arms if a != "C0_base")
+    assert not (base / "summary_confirm.json").exists()
+    # gains match the analyzer recomputation to the bit
+    for arm in ("A1_h35_struct", "A2_h35_corrob", "A3_h40_persist", "A4_union"):
+        assert arms[arm]["mean_gain"] == analyzer["report"]["screen"]["arms"][arm]["mean_gain"]
+    # no arm degenerated to the control emission in any cell (the H31 pathology)
+    rows = [json.loads(line) for line in (base / "cells_screen.jsonl").read_text().splitlines()]
+    from collections import defaultdict
+    cell = defaultdict(dict)
+    for r in rows:
+        cell[(r["fold"], r["draw"])][r["arm"]] = r
+    assert len(cell) == 8 and len(rows) == 40
+    for d in cell.values():
+        for arm in ("A1_h35_struct", "A2_h35_corrob", "A3_h40_persist", "A4_union"):
+            assert d[arm]["emitted"] != d["C0_base"]["emitted"]
 
 
 def test_historical_download_is_not_slot_approved() -> None:

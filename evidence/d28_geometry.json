@@ -1,0 +1,59 @@
+{
+  "generated_by": "scripts/audit_d28_geometry.py",
+  "date": "2026-10-03",
+  "kernel": "triangular k(d) = max(1 - d/3 px, 0) at 100 m",
+  "note": "Deterministic geometry of the owner-mirrored dotted H19-5 family against the SUPPLIED catalogue and each other. This is not, and must never be presented as, a competition score; owner-reported scores remain unverified claims in registry/score_claims.json.",
+  "files": {
+    "h19_5_parent": {
+      "file": "data/h19_5_nan.tif",
+      "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d",
+      "emitted_px": 121131,
+      "share_of_parent": 1.0,
+      "catalogue_overlap_px": 0,
+      "mean_neighbour8": 2.1924,
+      "isolated_share": 0.102723,
+      "dist_to_catalogue_px": {
+        "median": 14.56,
+        "p10": 1.414,
+        "p90": 64.938,
+        "max": 219.272
+      }
+    },
+    "d1_5": {
+      "file": "data/dotted_h19_5_d1_5_nan.tif",
+      "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
+      "emitted_px": 60069,
+      "share_of_parent": 0.4959,
+      "catalogue_overlap_px": 0,
+      "mean_neighbour8": 0.0,
+      "isolated_share": 1.0,
+      "dist_to_catalogue_px": {
+        "median": 14.866,
+        "p10": 1.414,
+        "p90": 64.479,
+        "max": 219.272
+      },
+      "parent_kernel_captured_mass": 99509.368,
+      "parent_kernel_captured_share": 0.8215,
+      "credit_per_emitted_px": 1.6566
+    },
+    "d2_8": {
+      "file": "data/dotted_h19_5_d2_8_nan.tif",
+      "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+      "emitted_px": 44090,
+      "share_of_parent": 0.36399,
+      "catalogue_overlap_px": 0,
+      "mean_neighbour8": 0.0,
+      "isolated_share": 1.0,
+      "dist_to_catalogue_px": {
+        "median": 15.0,
+        "p10": 1.414,
+        "p90": 64.475,
+        "max": 219.272
+      },
+      "parent_kernel_captured_mass": 88569.474,
+      "parent_kernel_captured_share": 0.73119,
+      "credit_per_emitted_px": 2.0088
+    }
+  }
+}

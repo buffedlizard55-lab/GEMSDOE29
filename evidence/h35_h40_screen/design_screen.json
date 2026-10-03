@@ -1,0 +1,236 @@
+{
+  "stage": "screen",
+  "experiment": "H35/H40 interaction-zone & dense-persistence screen",
+  "preregistration": {
+    "path": "knowledge/19_preregistered_h35_h40_screen_2026-10-03.md",
+    "sha256": "5432b42ae044d44aedd4cd6663a18a96a0f91ded6aa34ea8a164f8ce6080fa62"
+  },
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "draws": [
+    24,
+    25
+  ],
+  "arms": [
+    "C0_base",
+    "A1_h35_struct",
+    "A2_h35_corrob",
+    "A3_h40_persist",
+    "A4_union"
+  ],
+  "gates": {
+    "mean_gain": 0.005,
+    "min_positive_folds": 3,
+    "max_fold_loss": -0.01,
+    "budget_ratio_band": [
+      0.75,
+      1.25
+    ],
+    "sgmc_min_positive_folds": 3,
+    "holdout_best": 0.14479018210246675
+  },
+  "constants": {
+    "k_frac": 0.0245,
+    "min_dist_px": 2.4,
+    "emit": "frozen H34 C0 (ridge NMS -> drop visible -> topK -> score-ordered Poisson 2.4)"
+  },
+  "draw_seed_inventory": {
+    "used_before": "0-13 main/H31/H29, 14-15 factorial, 20-21 H34/C0, 24-25 this screen, 26-27 this confirmation",
+    "this_stage": [
+      24,
+      25
+    ]
+  },
+  "git": {
+    "revision": "1442d1bf27956aaf88adb00f9a9ae940e103ebc3",
+    "branch": "arena/01a102a1-gemsdoe29",
+    "dirty_worktree": false
+  },
+  "environment": {
+    "python": "3.11.2",
+    "numpy": "2.4.6",
+    "packages": {
+      "scipy": "1.17.1",
+      "scikit-learn": "1.9.1",
+      "rasterio": "1.4.4"
+    }
+  },
+  "inputs": {
+    "labels.tif": {
+      "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093",
+      "bytes": 425830
+    },
+    "sample_submission.tif": {
+      "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc",
+      "bytes": 1599597
+    },
+    "training_features.tif": {
+      "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5",
+      "bytes": 418912844
+    },
+    "external/derived_sgmc_faults_100m_u8.tif": {
+      "sha256": "643cbe992ef4ba37588fb469163ed8291e3ceb23d6c1f78a3cfaa462430c2da0",
+      "bytes": 198602
+    }
+  },
+  "modules": {
+    "gemsdoe/h35.py": "0e107954e8282c6c6c277664ad050996172bbf1ac3ed6a362721104e8d095389",
+    "gemsdoe/dense_persist.py": "8b0193b453d6b60c3d8ca9df52f8ed47fd7f77bfdff7f97a24c8d09bd217352c",
+    "gemsdoe/experiment.py": "1a1fcd306bc5014491fa6b6ef1c0ae0b48fb2a1b122e75da73d0381a0d331622"
+  },
+  "h40_cache": {
+    "sha256": "444cc851e203f41e57ea79c9126c89a790430808ffb36423b5bb43a3ecb22fa1",
+    "names": [
+      "HP_MAG",
+      "HP_GRAV",
+      "HP_MIN",
+      "HP_DEEP"
+    ],
+    "metadata": {
+      "generated_utc": "2026-10-03T17:00:17+00:00",
+      "git_revision": "1442d1bf27956aaf88adb00f9a9ae940e103ebc3",
+      "elapsed_s": 25.6,
+      "config": {
+        "heights_m": [
+          0,
+          100,
+          200,
+          400,
+          800,
+          1200
+        ],
+        "tol_px": 2.0,
+        "smooth_px": 1.0,
+        "edge_percentile": 90.0,
+        "boundary_guard_px": 16
+      },
+      "inputs": {
+        "rtp": "032b1f28be6adb74f8fc9a7af00538b669bac86fafc6bb3e28d8d04c86a6fb32",
+        "iso_grav_anom": "a4de05be78cb6e03be15f976e9f7ad31dd7b290c3fdca29c20d2c4d6f88a215f",
+        "footprint": "c446094771775c00802862e9ec58846fd1b278b4e608303e68811a2404dfd246"
+      },
+      "preregistration": {
+        "path": "knowledge/19_preregistered_h35_h40_screen_2026-10-03.md",
+        "sha256": "5432b42ae044d44aedd4cd6663a18a96a0f91ded6aa34ea8a164f8ce6080fa62"
+      },
+      "module": {
+        "gemsdoe.dense_persist": "8b0193b453d6b60c3d8ca9df52f8ed47fd7f77bfdff7f97a24c8d09bd217352c",
+        "gemsdoe.worms": "7921fc228ad3d3006567df5df478b5e4aaba212455a8e8116d0bdd39c14e9839"
+      },
+      "packages": {
+        "python": "3.11.2",
+        "numpy": "2.4.6",
+        "scipy": "1.17.1",
+        "scikit-learn": "1.9.1",
+        "rasterio": "1.4.4"
+      },
+      "diagnostics": {
+        "heights_m": [
+          0,
+          100,
+          200,
+          400,
+          800,
+          1200
+        ],
+        "edge_percentile": 90.0,
+        "boundary_guard_px": 16,
+        "tolerance_px": 2.0,
+        "smooth_sigma_px": 1.0,
+        "deep_first_height_m": 400,
+        "magnetic": {
+          "input_shape": [
+            3730,
+            3292
+          ],
+          "cell_size_m": 100.0,
+          "input_valid_pixels": 5164312,
+          "safe_edge_pixels": 4926402,
+          "boundary_guard_removed_pixels": 237910,
+          "input_nonfinite_inside_footprint": 3061,
+          "mean_removed": -119.52895077834977,
+          "taper_px": 64,
+          "padding_px": 128,
+          "low_wavenumber_floor_rad_per_m": 1.908622471091803e-05,
+          "vertical_integration_proxy": false,
+          "edge_counts": [
+            20217,
+            11177,
+            7233,
+            3779,
+            1623,
+            843
+          ],
+          "thresholds": [
+            0.3430372476577759,
+            0.24069850146770477,
+            0.1838337779045105,
+            0.12279130518436432,
+            0.07210900634527206,
+            0.05019752308726311
+          ],
+          "tolerance_px": 2.0,
+          "persistence_mean_inside_safe": 0.019225049763917923
+        },
+        "gravity": {
+          "input_shape": [
+            3730,
+            3292
+          ],
+          "cell_size_m": 100.0,
+          "input_valid_pixels": 5164312,
+          "safe_edge_pixels": 4926402,
+          "boundary_guard_removed_pixels": 237910,
+          "input_nonfinite_inside_footprint": 3061,
+          "mean_removed": -8.204608594923656,
+          "taper_px": 64,
+          "padding_px": 128,
+          "low_wavenumber_floor_rad_per_m": 1.908622471091803e-05,
+          "vertical_integration_proxy": false,
+          "edge_counts": [
+            2520,
+            1105,
+            754,
+            493,
+            325,
+            243
+          ],
+          "thresholds": [
+            0.004252225160598755,
+            0.004005309659987688,
+            0.003798231016844511,
+            0.0034439675509929657,
+            0.0028913230635225773,
+            0.002476312918588519
+          ],
+          "tolerance_px": 2.0,
+          "persistence_mean_inside_safe": 0.0023594298399984837
+        },
+        "nonzero_fraction": {
+          "HP_MAG": 0.2702926612806933,
+          "HP_GRAV": 0.0701689233581551,
+          "HP_MIN": 0.01292997428287062,
+          "HP_DEEP": 0.11108584574792646
+        },
+        "mean": {
+          "HP_MAG": 0.018328525125980377,
+          "HP_GRAV": 0.0022494022268801928,
+          "HP_MIN": 0.00012825145677197725,
+          "HP_DEEP": 0.005196257494390011
+        },
+        "max": {
+          "HP_MAG": 0.8549307584762573,
+          "HP_GRAV": 0.7791637778282166,
+          "HP_MIN": 0.45886117219924927,
+          "HP_DEEP": 0.93121737241745
+        }
+      },
+      "output_sha256": "444cc851e203f41e57ea79c9126c89a790430808ffb36423b5bb43a3ecb22fa1",
+      "note": "Owner-mirror-derived physics cache. Not organizer-authenticated. No labels used."
+    }
+  }
+}
