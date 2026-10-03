@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "updated_local_date": "2026-10-03",
-  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits. 2026-10-03 (session 4): +IR-29-CHECK-TEMPLATE-ROOT, +IR-29-QFAULTS-RECENCY-BIN, +IR-29-H41-SMOKE-OVERLAP; IR-29-SANDBOX-NET re-probed; IR-CHECK-SUBMISSION-TEMPLATE-PATH superseded. 2026-10-03 (session 4): +IR-29-UNVERIFIED-HOSTS (self-reported, corrected same day). 2026-10-03: +IR-29-H41-PREREG-STAT-CORRECTIONS. 2026-10-03: +IR-29-H41-DANGLING-CANDIDATE-SCORE-RULE (self-reported fabrication of a citation/formula). 2026-10-03: +IR-29-H41-ANALYZER-GUARD-BUG (post-result, non-gating); IR-29-DOWNLOAD-RESOLVER (resolved before data restore claim).",
+  "note": "This register records material provenance, interpretation, and evaluation limitations. Owner-mirror hashes establish byte identity to an owner repository revision only; they do not authenticate organizer files or official scores. H29-era findings are retained as historical records; status text distinguishes resolved branch-point issues from open data/evaluation limits. 2026-10-03 (session 4): +IR-29-CHECK-TEMPLATE-ROOT, +IR-29-QFAULTS-RECENCY-BIN, +IR-29-H41-SMOKE-OVERLAP; IR-29-SANDBOX-NET re-probed; IR-CHECK-SUBMISSION-TEMPLATE-PATH superseded. 2026-10-03 (session 4): +IR-29-UNVERIFIED-HOSTS (self-reported, corrected same day). 2026-10-03: +IR-29-H41-PREREG-STAT-CORRECTIONS. 2026-10-03: +IR-29-H41-DANGLING-CANDIDATE-SCORE-RULE (self-reported fabrication of a citation/formula). 2026-10-03: +IR-29-H41-ANALYZER-GUARD-BUG (post-result, non-gating); IR-29-DOWNLOAD-RESOLVER (resolved before data restore claim). 2026-10-03 (session 5 merge): +IR-29-H43-DESIGN-REWRITE, +IR-29-KNOWLEDGE-NUMBER-COLLISION, IR-29-H43-STAGED-EXECUTION extended (the runner's process counter is a lower bound); PR #13 brought IR-29-BAR-PROTOCOL-DRAW-REUSE, IR-29-REGISTER-STALE-SCRIPT and IR-29-VERIFY-DOWNLOADS-COVERAGE and corrected the IR-29-PREV-SUBMIT-ERROR-CLASS mitigation.",
   "items": [
     {
       "id": "IR-DATA-01",
@@ -190,7 +190,7 @@
       "subject": "Earlier range rejection has no verified root cause",
       "detail": "The owner saw 'Predicted values must be in range [0, 1]' on a past upload. Public docs do not define the validator; sibling forensics show NaN *inside* the footprint fails the range test (NaN fails every comparison).",
       "impact": "This is a carried-forward finding from the earlier main-branch H29 work; review the cited evidence or action before using affected data or interpretations.",
-      "mitigation": "submission.py + scripts/verify_submission.py: profile copied from the pinned template, all in-footprint pixels finite and in [0,1], NaN only outside; both -nan and -zeros conventions shipped; read-back verified independently. Format checks on every shipped file are in docs/downloads/checks-*.json."
+      "mitigation": "src/gemsdoe/submission.py + scripts/check_submission.py + scripts/verify_downloads.py: profile copied from the pinned template, all in-footprint pixels finite and in [0,1], NaN only outside; both -nan and -zeros conventions shipped; read-back verified independently. Format checks on every shipped file are in docs/downloads/checks-*.json. (Corrected 2026-10-03: the entry previously named scripts/verify_submission.py, which does not exist in this repository.)"
     },
     {
       "id": "IR-29-RULES-URL",
@@ -462,6 +462,48 @@
       ]
     },
     {
+      "id": "IR-29-VERIFY-DOWNLOADS-COVERAGE",
+      "severity": "medium",
+      "status": "resolved",
+      "date": "2026-10-03",
+      "subject": "The documented download verifier covered only 2 of the 5 registered artifacts",
+      "detail": "scripts/verify_downloads.py re-checked the two H29 builds against their immutable build-time receipts (ledger keys WORMRANK and REFD28, which correspond to the registry entries wormrank-current and refd28-rebuild), while README.md and the executive-summary page described it as re-verifying 'every registered download'. Three of the five registry entries - historical-d28, repo-c0-habitat and sgmc-inventory - were therefore not covered by the command the site tells the owner to run.",
+      "impact": "A published artifact could have been replaced or corrupted without the documented command failing; the gap was invisible because the two covered builds kept passing.",
+      "mitigation": "Session 5 extended the script with a registry scope: every entry in registry/submissions.json is re-checked with the strict gemsdoe.submission.check_file against the resolved template, each .zip companion is compared byte-for-byte with its GeoTIFF, and the outcome is written to evidence/format_checks/registered_downloads_recheck.json in a separate file so no build-time baseline is ever rewritten. Result on the current checkout: 5/5 registered artifacts ok, plus the two H29 builds at 28 checks each with 0 failures. A missing .zip companion is recorded as not-applicable, not as a failure, because the portal accepts a bare GeoTIFF.",
+      "affected_artifacts": [
+        "scripts/verify_downloads.py",
+        "evidence/format_checks/registered_downloads_recheck.json"
+      ]
+    },
+    {
+      "id": "IR-29-REGISTER-STALE-SCRIPT",
+      "severity": "low",
+      "status": "resolved",
+      "date": "2026-10-03",
+      "subject": "IR-29-PREV-SUBMIT-ERROR-CLASS mitigation named a script that does not exist here",
+      "detail": "The entry's mitigation text referenced scripts/verify_submission.py, which is not present in this repository (the active tools are src/gemsdoe/submission.py, scripts/check_submission.py and scripts/verify_downloads.py). The stale name was surfaced to the site when the session-5 executive-summary card began rendering the register verbatim.",
+      "impact": "A reader following the register could look for a tool that does not exist; no artifact was affected.",
+      "mitigation": "The mitigation text now names the three real tools and records the correction inline.",
+      "affected_artifacts": [
+        "registry/irregularities.json",
+        "docs/executive-summary.html"
+      ]
+    },
+    {
+      "id": "IR-29-BAR-PROTOCOL-DRAW-REUSE",
+      "severity": "low",
+      "status": "disclosed",
+      "date": "2026-10-03",
+      "subject": "Draws 20/21 were reused for the H41-A4 bar-protocol re-score",
+      "detail": "The slot bar (0.14479018210246675) was measured on folds NW/NE/SW/SE x draws 20/21 in the H34 screen. The only fair comparison is on the same cells, so the session-5 stage re-fitted those draws with the H41 columns appended. No new randomness was spent and registry/draw_ledger.json still reports next_free_draw = 32, but the H41 columns have now been seen on these cells and they can never again serve as a fresh test for this family.",
+      "impact": "The stage is a paired re-measurement, not a fresh screen: it can falsify a claim (it did) but a positive result on these cells alone would not have been sufficient evidence for a slot.",
+      "mitigation": "Disclosed in knowledge/27 section 2, knowledge/28 sections 2 and 5, and in the design record's draw_seed_inventory; the frozen interpretation rule required fresh confirmation elsewhere before any promotion.",
+      "affected_artifacts": [
+        "evidence/h41a4_h34protocol/design.json",
+        "knowledge/27_preregistered_h41a4_h34protocol_2026-10-03.md"
+      ]
+    },
+    {
       "id": "IR-29-SPACING-QUANTISATION",
       "severity": "medium",
       "status": "open; measured",
@@ -624,6 +666,15 @@
       "detail": "scripts/run_h43_screen.py originally wrote the design file on every launch. The first continuation therefore re-labelled the stage with the merge revision ca271bae48... and build_seconds 32.04, replacing the launch-time c89e0e27.../35.12 recorded after the first ten rows. The rewrite is visible in commit 910dffd's diff. Per-row git revisions are not recorded anywhere, so which revision fitted rows 11-20 cannot be proven from the evidence.",
       "impact": "Affects provenance labelling only: the module hashes pinned in the design are byte-identical across the two revisions (the merge did not touch src/gemsdoe), every continuation re-verified them, and the analyzer re-checks the preregistration hash, so no gate or cell value is affected. It does mean the design file's revision field describes the stage's close, not its launch.",
       "mitigation": "The runner now keeps an existing design on --resume (910dffd) so future staged stages cannot re-label themselves; the defect and its exact evidence are recorded in knowledge/30 section 1."
+    },
+    {
+      "id": "IR-29-KNOWLEDGE-NUMBER-COLLISION",
+      "severity": "low",
+      "status": "open, mitigated by naming",
+      "subject": "Two parallel session branches numbered knowledge documents 27-31 in overlapping ranges.",
+      "detail": "Session 5 (arena/01a10342) added knowledge/27_preregistered_emission_density_sweep, 28_emission_density_sweep_results, 29_preregistered_h43_screen, 30_h43_drainage_results and 31_session5_data_and_emission; the parallel session merged as PR #13 added 27_preregistered_h41a4_h34protocol, 28_h41a4_results and 29_remaining_work_and_limitations. After the merge, 27, 28 and 29 each name two different documents, and there is no session-level reservation of numbers.",
+      "impact": "Citations by number alone ('knowledge/28') are ambiguous. No content is lost: the descriptive part of every filename is unique and every design file pins the full path plus its SHA-256.",
+      "mitigation": "Register entries, design receipts and cross-references must use full filenames; the wording in this merge was checked so that 'knowledge/28' alone is never used as a citation."
     }
   ],
   "updated": "2026-10-03"
