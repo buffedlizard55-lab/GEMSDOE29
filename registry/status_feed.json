@@ -148,6 +148,5 @@
       "title": "D2.8 thinning-family emission geometry re-derived from the mirrored rasters",
       "detail": "scripts/audit_d28_geometry.py reproduces every figure in knowledge/07 section 3: parent 121,131 px (2.19 mean 8-neighbours, 10.3% isolated, median 14.56 px to catalogue, zero catalogue overlap), d1.5 60,069 px (82.15% parent-mass capture, 1.6566 credit/px), d2.8 44,090 px (36.399% of parent, 73.119% capture, 2.0088 credit/px, fully isolated). SHA-256s match the registry pins. Owner-reported competition scores remain unverified claims excluded from this receipt."
     }
-  ],
-  "draw_inventory": "draws 0-1: H29 corrected screen; 10-11: H31 screen; 14-15: factorial; 20-21: H34; 24-25: H35/H40 screen (draws 26/27 reserved then released, never fit)"
+  ]
 }
