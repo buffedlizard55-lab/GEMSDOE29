@@ -36,7 +36,7 @@
       "id": "H35",
       "rank": 3,
       "title": "Structural interaction zones with a stress/dilation filter",
-      "status": "registered (also v2 slate rank 1); not implemented; external shapefile pending owner-side fetch",
+      "status": "registered (also v2 slate rank 1); SCREENED by the parallel workstream as part of the H35/H40 screen (draws 24/25) - FAIL (A1_h35_struct +0.00181, 1/4 folds positive on draw 24; knowledge/21_h35_h40_results_2026-10-03.md). The shapefile-augmented variant (Siler 2022 stress directions, pending owner-side fetch) would need a new preregistration.",
       "layers": ["catalogue vector geometry (tips, junctions, relay pairs, strike coherence)", "regional stress orientation + Siler 2022 fault-slip/dilation data (DOI 10.5066/P9YL58W6)", "tmi_hg", "tmi_vg", "iso_grav_anom_hg", "geod_dilaterate"],
       "signature": "Density-weighted interaction fields: tip-junction density, relay-geometry score, strike coherence with the regional sigma-1 direction, dilation-tendency proxy from the strain-rate tensor, rasterised at 100 m.",
       "why_unmapped": "Newly expert-labelled faults are disproportionately found inside fault systems (relay ramps, tips, junctions) where interaction geometry predicts locations even where the trace was never mapped; a stress/dilation filter says which system members should be active. Highest-ceiling candidate: it targets the discovery mechanism itself.",

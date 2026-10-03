@@ -5,7 +5,7 @@
 > Workstream A slate, kept as a parallel register. The two slates overlap heavily (this file's H31b
 > dense worming is the same idea as their H40 dense-persistence ladder, screened independently:
 > H31b FAIL on draws 22/23 per `knowledge/21_h31b_screen_results_2026-10-03.md`; H40 FAIL on draws
-> 24/25 per `knowledge/21_h35_h40_results_2026-10-03.md`); H36/H37/H38 appear in both.
+> 24/25 per `knowledge/21_h35_h40_results_2026-10-03.md`); H36/H37/H38 appear in both; H35 was screened (FAIL) in both workstreams' screens.
 > `registry/hypotheses_v3_2026-10-03.json` is this workstream's machine-readable register.
 
 
