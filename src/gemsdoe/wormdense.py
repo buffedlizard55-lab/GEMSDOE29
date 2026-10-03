@@ -98,7 +98,6 @@ def build_branch(
     margin = cfg.taper_px + 4
     finite = foot & np.isfinite(field)
     interior = finite & (edge_distance >= margin)  # statistics domain: observed data only
-    out_dom = foot & (edge_distance >= margin)  # output domain (value/NaN); margin band -> 0
     if int(interior.sum()) < 100:
         raise ValueError(f"too few observed interior pixels after the {margin}-px margin-zero band")
     p = cfg.pad_px
@@ -125,9 +124,11 @@ def build_branch(
         del e_h, sig
 
     def place(v: np.ndarray) -> np.ndarray:
-        """Value on the output domain; NaN where the input band is nodata; exactly 0 in the
-        margin band and outside the footprint (A-family re-masking convention, HGB-native NaN)."""
-        out = np.where(out_dom, np.asarray(v, np.float32), np.nan).astype(np.float32)
+        """Frozen mask convention: exactly 0 outside the footprint and in the margin band;
+        NaN where the input band is nodata (A-family re-masking, HGB-native missing values);
+        the value elsewhere in the interior."""
+        arr = np.asarray(v, np.float32)
+        out = np.where(foot, np.where(finite, arr, np.nan), 0.0).astype(np.float32)
         out = np.where(foot & (edge_distance < margin), 0.0, out)
         return out
 
