@@ -41,6 +41,13 @@ def test_h41_used_the_fresh_pairs_the_preregistration_froze() -> None:
     assert d["stages"]["h35_h40_screen"]["draws_fitted"] == [24, 25]
 
 
+def test_h53_claimed_the_fresh_pair_36_37() -> None:
+    d = json.loads(LEDGER.read_text())
+    assert d["stages"]["h53_screen"]["draws_fitted"] == [36, 37]
+    assert d["stages"]["h43_confirmation"]["draws_fitted"] == [34, 35]
+    assert d["next_free_draw"] == 38
+
+
 def test_h43_spent_32_33_and_reserved_34_35_for_its_confirmation() -> None:
     d = json.loads(LEDGER.read_text())
     assert d["stages"]["h43_screen"]["draws_fitted"] == [32, 33]
@@ -49,4 +56,3 @@ def test_h43_spent_32_33_and_reserved_34_35_for_its_confirmation() -> None:
     # to it); the draws and the status note referencing them are the invariants that must hold either way
     assert d["stages"]["h43_confirmation"]["draws_fitted"] == [34, 35]
     assert "34/35" in str(d["stages"]["h43_confirmation"].get("status_note", ""))
-    assert d["next_free_draw"] == 36

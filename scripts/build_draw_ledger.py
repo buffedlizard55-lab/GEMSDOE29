@@ -41,6 +41,9 @@ STAGE_SOURCES = {
                              status_note="COMPLETE: 40 cells on draws 30/31. A4_h41_union passed G2 and was refused promotion at G3 (SGMC 1/4 folds in both stages); no candidate, no slot. See knowledge/26 section 5 and evidence/h41_screen/promotion_gate.json."),
     "h43_screen": dict(files=["evidence/h43_screen/design_screen.json"], fitted_key="draws",
                        status_note="COMPLETE: 40 cells on draws 32/33 (staged into two-cell processes after the OOM kill). A3_knick +0.01419 and A4_union +0.01287 passed G1, A1_off +0.00401 and A2_network -0.00136 failed, SGMC second proxy negative on both passing arms (proxy conflict). See knowledge/30; no candidate, no slot."),
+    "h53_screen": dict(files=["evidence/h53_screen/design.json", "evidence/h53_screen/cells.jsonl",
+                              "evidence/h53_screen/analyzer_report.json"], fitted_key="screen_draws",
+                       status_note="COMPLETE, NO PROMOTION: 40 fresh-draw cells on 36/37 (plus 16 spent-draw control rows: max |delta| 0.0 vs the stored H34 cells). Frozen gates G1 false, G3 false, G2/G4/G5/G6 true. Primary arm A1_h53_persist mean gain +0.001557 against the +0.005 bar (1/4 and 3/4 positive folds, worst -0.008668); A2_h53_off +0.008457 was the best arm on the primary proxy and is SGMC-negative on 0/4 folds (third instance of IR-29-PROXY-VETO-PATTERN). No artifact, no slot; the stage was closed out in two processes after an OOM kill (IR-29-H53-OOM-RESUME). See knowledge/42."),
     "h43_confirmation": dict(files=["evidence/h43_screen/design_confirm.json"], fitted_key="draws",
                              status_note="COMPLETE: 40 cells on draws 34/35. A3_knick +0.01674 and A4_union +0.01568 replicated the primary proxy result (3/4 positive folds per draw, worst folds 0.0/-0.000533) but the SGMC second proxy is negative in both stages, so the inherited G3 requirement withheld promotion for every arm: no candidate, no slot. See knowledge/30 section 5 and evidence/h43_screen/analyzer_report.json (integrity_problems 0)."),
 
@@ -69,6 +72,7 @@ def cell_count(stage: str) -> int | None:
         "h41_confirmation": "evidence/h41_screen/cells_confirm.jsonl",
         "h43_screen": "evidence/h43_screen/cells_screen.jsonl",
         "h43_confirmation": "evidence/h43_screen/cells_confirm.jsonl",
+        "h53_screen": "evidence/h53_screen/cells.jsonl",
     }
     rel = files.get(stage)
     if not rel:
@@ -90,9 +94,14 @@ def derive() -> dict:
             if not p.is_file():
                 files[rel] = {"present": False}
                 continue
-            data = json.loads(p.read_text(encoding="utf-8"))
             files[rel] = {"present": True,
-                         "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
+                          "sha256": hashlib.sha256(p.read_bytes()).hexdigest()}
+            if p.suffix != ".json":
+                # Append-only cell logs are pinned by hash and row count, never parsed as JSON.
+                files[rel]["lines"] = sum(1 for line in p.read_text(encoding="utf-8").splitlines()
+                                          if line.strip())
+                continue
+            data = json.loads(p.read_text(encoding="utf-8"))
             got = data.get(spec["fitted_key"]) or []
             draws.extend(int(x) for x in got)
             if spec.get("reserved_key"):

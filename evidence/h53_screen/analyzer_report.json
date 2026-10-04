@@ -1,0 +1,279 @@
+{
+  "controls": {
+    "C0_base": 0.1427255919212651,
+    "C1_geodesic_dots": 0.14451552922752686
+  },
+  "design": {
+    "arms": [
+      "C0_base",
+      "C1_geodesic_dots",
+      "A1_h53_persist",
+      "A2_h53_off",
+      "A3_h53_scarp"
+    ],
+    "draws": [
+      36,
+      37
+    ],
+    "h53_config": {
+      "coherence_min": 0.15,
+      "elev_band": "12_det_elev.npy",
+      "min_contrast_fraction": 0.001,
+      "scales_px": [
+        3.0,
+        7.0,
+        15.0
+      ],
+      "tensor_sigma_factor": 1.0,
+      "tol_deg": 15.0
+    },
+    "preregistration_sha256": "3d3c21ca2f2bbd341c2e6bb2c5f11341c8357155c56913252b68aaf9d8556ffe",
+    "primary_arm": "A1_h53_persist"
+  },
+  "gates": {
+    "G1": false,
+    "G2": true,
+    "G3": false,
+    "G4": true,
+    "G5": true,
+    "G6": true,
+    "bar": 0.14479018210246675,
+    "h53_nonzero_fraction": {
+      "H53_AGREE": 0.9570406471528182,
+      "H53_COH_MIN": 0.9570406471528182,
+      "H53_NSCALES": 0.9254843805546842,
+      "H53_PERSIST": 0.9570406471528182
+    },
+    "identical_to_c1_cells": 0,
+    "split_cells": 8,
+    "viability_problems": []
+  },
+  "integrity_problems": [],
+  "primary": {
+    "G1_SCREEN_PASS": false,
+    "arm": "A1_h53_persist",
+    "budget_ok": true,
+    "budget_ratio_max": 0.9156498159984505,
+    "budget_ratio_min": 0.8782357626443648,
+    "cells_present": 8,
+    "fold_gains": [
+      -0.0025394182632536844,
+      0.0007964605300380401,
+      -0.00344478689135759,
+      -0.008667922720369564,
+      0.013024263188228358,
+      -0.006893275615762612,
+      0.009039984197328307,
+      0.0111385340463305
+    ],
+    "mean_auc": 0.795824944934477,
+    "mean_dti": 0.1462618820246549,
+    "mean_gain": 0.0015567298088977194,
+    "positive_folds_per_draw": [
+      1,
+      3
+    ],
+    "sgmc_fold_gains": [
+      -0.010097130740721064,
+      -0.007838669262523343,
+      0.0017823528770391922,
+      -0.0023538102065378333,
+      -0.0015306603707734845,
+      -0.0062013952330991495,
+      -0.010044535874991864,
+      -0.0013691289313089577
+    ],
+    "sgmc_mean_gain": -0.004706622217864563,
+    "sgmc_positive_folds": 1,
+    "worst_fold_gain": -0.008667922720369564
+  },
+  "reproduction": {
+    "cells": 16,
+    "comparisons": [
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "NW",
+        "rebuilt": 0.15844282402158233,
+        "stored": 0.15844282402158233
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "NW",
+        "rebuilt": 0.16455969355029598,
+        "stored": 0.16455969355029598
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "NW",
+        "rebuilt": 0.16125053923319685,
+        "stored": 0.16125053923319685
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "NW",
+        "rebuilt": 0.16347531131507162,
+        "stored": 0.16347531131507162
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "NE",
+        "rebuilt": 0.13825190508512086,
+        "stored": 0.13825190508512086
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "NE",
+        "rebuilt": 0.14239209212555312,
+        "stored": 0.14239209212555312
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "NE",
+        "rebuilt": 0.12368306461664387,
+        "stored": 0.12368306461664387
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "NE",
+        "rebuilt": 0.1274069910735933,
+        "stored": 0.1274069910735933
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "SW",
+        "rebuilt": 0.1443070201100771,
+        "stored": 0.1443070201100771
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "SW",
+        "rebuilt": 0.14749487859680374,
+        "stored": 0.14749487859680374
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "SW",
+        "rebuilt": 0.10509291121527896,
+        "stored": 0.10509291121527896
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "SW",
+        "rebuilt": 0.10799506209929942,
+        "stored": 0.10799506209929942
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "SE",
+        "rebuilt": 0.1605483474838944,
+        "stored": 0.1605483474838944
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 20,
+        "fold_name": "SE",
+        "rebuilt": 0.16832143487289203,
+        "stored": 0.16832143487289203
+      },
+      {
+        "arm": "C0_base",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "SE",
+        "rebuilt": 0.13531011510747643,
+        "stored": 0.13531011510747643
+      },
+      {
+        "arm": "C1_geodesic_dots",
+        "delta": 0.0,
+        "draw": 21,
+        "fold_name": "SE",
+        "rebuilt": 0.13667599318622475,
+        "stored": 0.13667599318622475
+      }
+    ],
+    "expected": 16,
+    "max_abs_delta": 0.0
+  },
+  "schema_version": 1,
+  "screen": {
+    "arms": [
+      "C0_base",
+      "C1_geodesic_dots",
+      "A1_h53_persist",
+      "A2_h53_off",
+      "A3_h53_scarp"
+    ],
+    "arms_summary": {
+      "A1_h53_persist": {
+        "budget_ratio_max": 0.9156498159984505,
+        "budget_ratio_min": 0.8782357626443648,
+        "mean_auc": 0.795824944934477,
+        "mean_dti": 0.1462618820246549,
+        "mean_gain": 0.0015567298088977194,
+        "positive_folds_per_draw": [
+          1,
+          3
+        ],
+        "worst_fold_gain": -0.008667922720369564
+      },
+      "A2_h53_off": {
+        "budget_ratio_max": 0.9095487119891535,
+        "budget_ratio_min": 0.8837116686579052,
+        "mean_auc": 0.7948456309271953,
+        "mean_dti": 0.15316241335031777,
+        "mean_gain": 0.008457261134560586,
+        "positive_folds_per_draw": [
+          2,
+          4
+        ],
+        "worst_fold_gain": -0.003144906656427582
+      },
+      "A3_h53_scarp": {
+        "budget_ratio_max": 0.9164194373401534,
+        "budget_ratio_min": 0.8772437055776412,
+        "mean_auc": 0.792712302430084,
+        "mean_dti": 0.1453778362838563,
+        "mean_gain": 0.0006726840680991355,
+        "positive_folds_per_draw": [
+          2,
+          2
+        ],
+        "worst_fold_gain": -0.010299545379518826
+      }
+    },
+    "draws": [
+      36,
+      37
+    ],
+    "n_cells": 40
+  },
+  "verdict": "NO PROMOTION: the H53 arms do not clear the frozen gates on fresh draws 36/37."
+}

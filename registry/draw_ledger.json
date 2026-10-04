@@ -138,6 +138,32 @@
       },
       "status_note": "COMPLETE: 40 cells on draws 32/33 (staged into two-cell processes after the OOM kill). A3_knick +0.01419 and A4_union +0.01287 passed G1, A1_off +0.00401 and A2_network -0.00136 failed, SGMC second proxy negative on both passing arms (proxy conflict). See knowledge/30; no candidate, no slot."
     },
+    "h53_screen": {
+      "draws_fitted": [
+        36,
+        37
+      ],
+      "draws_reserved_not_fitted": [],
+      "raw_cells": 56,
+      "evidence": {
+        "evidence/h53_screen/design.json": {
+          "present": true,
+          "sha256": "08639aaaf651d798585afad2ab6846c27c489594b7d3ab8c5ccc36bf81ada0e4",
+          "prereg_sha256": "3d3c21ca2f2bbd341c2e6bb2c5f11341c8357155c56913252b68aaf9d8556ffe",
+          "git_revision": "48e200eed7d38f36709a0c2a1b6116849da01ec6"
+        },
+        "evidence/h53_screen/cells.jsonl": {
+          "present": true,
+          "sha256": "866d055a09bd440fd8f3469cffcfffdc187a3d02c14e084dc65e079310465b90",
+          "lines": 56
+        },
+        "evidence/h53_screen/analyzer_report.json": {
+          "present": true,
+          "sha256": "5abc64adb03d0bc589b0e1fa88f2ac09af36da9ec72132abd156e8e300c9c37f"
+        }
+      },
+      "status_note": "COMPLETE, NO PROMOTION: 40 fresh-draw cells on 36/37 (plus 16 spent-draw control rows: max |delta| 0.0 vs the stored H34 cells). Frozen gates G1 false, G3 false, G2/G4/G5/G6 true. Primary arm A1_h53_persist mean gain +0.001557 against the +0.005 bar (1/4 and 3/4 positive folds, worst -0.008668); A2_h53_off +0.008457 was the best arm on the primary proxy and is SGMC-negative on 0/4 folds (third instance of IR-29-PROXY-VETO-PATTERN). No artifact, no slot; the stage was closed out in two processes after an OOM kill (IR-29-H53-OOM-RESUME). See knowledge/42."
+    },
     "h43_confirmation": {
       "draws_fitted": [
         34,
@@ -218,13 +244,15 @@
     32,
     33,
     34,
-    35
+    35,
+    36,
+    37
   ],
   "released_unused": [
     26,
     27
   ],
-  "next_free_draw": 36,
+  "next_free_draw": 38,
   "rule": "A frozen screen must use draws >= next_free_draw, or a documented released-unused pair that was never fitted. Reusing a draw that any fit has touched silently un-blinds a stage.",
   "note": "Derived from committed evidence only; draw provenance for stages whose raw cells were never archived is inherited from knowledge/18 and knowledge/22 and is recorded under prose_claimed."
 }
