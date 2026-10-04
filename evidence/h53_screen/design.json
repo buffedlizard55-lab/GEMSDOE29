@@ -1,0 +1,189 @@
+{
+  "arms": [
+    "C0_base",
+    "C1_geodesic_dots",
+    "A1_h53_persist",
+    "A2_h53_off",
+    "A3_h53_scarp"
+  ],
+  "constants": {
+    "arm_columns": {
+      "A1_h53_persist": [
+        "H53_COH_MIN",
+        "H53_AGREE",
+        "H53_NSCALES",
+        "H53_PERSIST"
+      ],
+      "A2_h53_off": [
+        "H53_COH_MIN_OFF",
+        "H53_AGREE_OFF",
+        "H53_NSCALES_OFF",
+        "H53_PERSIST_OFF"
+      ],
+      "A3_h53_scarp": [
+        "H53_PERSIST",
+        "H53_SCARP_X"
+      ]
+    },
+    "emit_C0": "score_ordered_dots(score_crop, candidates, 2.4)",
+    "emit_C1": "dot_thin(candidates, 2.4)",
+    "k_frac": 0.0245,
+    "min_dist_px": 2.4,
+    "off_catalogue_min_px": 5.0
+  },
+  "draw_seed_inventory": {
+    "note": "screen draws 36/37 are claimed by this stage; draws 20/21 are reused only for the G4 control-reproduction check",
+    "reproduction": [
+      20,
+      21
+    ],
+    "screen": [
+      36,
+      37
+    ],
+    "used_before": "0-15, 20-35 (registry/draw_ledger.json)"
+  },
+  "drivendata_contacted": false,
+  "environment": {
+    "numpy": "2.4.6",
+    "platform": "Linux-6.1.158+-x86_64-with-glibc2.36",
+    "python": "3.11.2",
+    "rasterio": "1.4.4",
+    "scikit_learn": "1.9.1",
+    "scipy": "1.17.1"
+  },
+  "experiment": "H53 cross-scale topographic fabric coherence, on the frozen H34 bar protocol",
+  "folds": [
+    "NW",
+    "NE",
+    "SW",
+    "SE"
+  ],
+  "gates": {
+    "budget_ratio_band": [
+      0.75,
+      1.25
+    ],
+    "holdout_best": 0.14479018210246675,
+    "max_fold_loss": -0.01,
+    "mean_gain": 0.005,
+    "min_nonzero_fraction": 0.002,
+    "min_positive_folds": 3,
+    "min_split_cells_for_feature_arm": 3,
+    "primary_arm": "A1_h53_persist",
+    "reproduction_tolerance": 1e-06,
+    "sgmc_min_mean_gain": 0.0,
+    "sgmc_min_positive_folds": 3
+  },
+  "git": {
+    "branch": "arena/01a1040a-gemsdoe29",
+    "dirty_worktree": false,
+    "revision": "48e200eed7d38f36709a0c2a1b6116849da01ec6"
+  },
+  "h53_fields": {
+    "cache_sha256": {
+      "h53_fields.json": "ab66c7a966d58a5549519064e43782523c0b02e296a70e03d9153ba6180a909a",
+      "h53_fields.npy": "bdf67f9f12a57d0475b98e372ee66831d627fc484cabce67aeb144c8e1e42ff2"
+    },
+    "config": {
+      "coherence_min": 0.15,
+      "elev_band": "12_det_elev.npy",
+      "min_contrast_fraction": 0.001,
+      "scales_px": [
+        3.0,
+        7.0,
+        15.0
+      ],
+      "tensor_sigma_factor": 1.0,
+      "tol_deg": 15.0
+    },
+    "diagnostics": {
+      "agreement_rule": "axial resultant length of the per-scale strikes, coherence-weighted, mod 180 degrees",
+      "coherence_min_band": "defined or undefined per scale; the floor is absolute, never a percentile of the field",
+      "defined_rule": "coherence >= 0.15 AND gradient modulus >= 0.001 x that scale's own p99",
+      "label_free": true,
+      "level_detector": "structure-tensor coherence and gradient azimuth at three window scales",
+      "max_value": {
+        "H53_AGREE": 1.0000001192092896,
+        "H53_COH_MIN": 0.999660849571228,
+        "H53_NSCALES": 1.0,
+        "H53_PERSIST": 0.9996568560600281
+      },
+      "mean": {
+        "H53_AGREE": 0.8812146782875061,
+        "H53_COH_MIN": 0.3828348219394684,
+        "H53_NSCALES": 0.7774303555488586,
+        "H53_PERSIST": 0.35917744040489197
+      },
+      "n_footprint": 5167373,
+      "nonzero_fraction": {
+        "H53_AGREE": 0.9570406471528182,
+        "H53_COH_MIN": 0.9570406471528182,
+        "H53_NSCALES": 0.9254843805546842,
+        "H53_PERSIST": 0.9570406471528182
+      },
+      "per_scale": [
+        {
+          "coherence_defined_fraction": 0.9724763433953771,
+          "coherence_mean_defined": 0.6866350769996643,
+          "contrast_floor": 0.046036251068115236,
+          "scale_px": 3.0
+        },
+        {
+          "coherence_defined_fraction": 0.9304546043028054,
+          "coherence_mean_defined": 0.5544908046722412,
+          "contrast_floor": 0.046036251068115236,
+          "scale_px": 7.0
+        },
+        {
+          "coherence_defined_fraction": 0.8668911650078289,
+          "coherence_mean_defined": 0.42847925424575806,
+          "contrast_floor": 0.046036251068115236,
+          "scale_px": 15.0
+        }
+      ],
+      "scales_px": [
+        3.0,
+        7.0,
+        15.0
+      ],
+      "surrogate_note": "R ~ 0.5 is the expected value of three unrelated strikes; R = 1 is one strike"
+    },
+    "scarp_normalisation": {
+      "p01": 0.0,
+      "p99": 1.0
+    }
+  },
+  "modules": {
+    "scripts/run_h53_screen.py": "28720fd1cf8163ddbdd43c65491b11aa73dd8e9684fb977bf700e8059a02810c",
+    "src/gemsdoe/experiment.py": "1a1fcd306bc5014491fa6b6ef1c0ae0b48fb2a1b122e75da73d0381a0d331622",
+    "src/gemsdoe/h53.py": "68774dddfcbe8d5f5c3a163bc0e3d7d7a4e485d5b4586474eaa7ef5609fd2af6",
+    "src/gemsdoe/metric.py": "c0be2a023b413309561138c9eee64a81e07bb0df6ab4841c9f0c55d37ea2afd3",
+    "src/gemsdoe/thinning.py": "63bdfd1c11455e18446f0e1be0fbf7c93ae94c49f98624d3f4ef4ef76f79c55e"
+  },
+  "preregistration": {
+    "path": "knowledge/41_preregistered_h53_screen_2026-10-03.md",
+    "sha256": "3d3c21ca2f2bbd341c2e6bb2c5f11341c8357155c56913252b68aaf9d8556ffe"
+  },
+  "primary_arm": "A1_h53_persist",
+  "reproduction_arms": [
+    "C0_base",
+    "C1_geodesic_dots"
+  ],
+  "reproduction_draws": [
+    20,
+    21
+  ],
+  "screen_draws": [
+    36,
+    37
+  ],
+  "sgmc": {
+    "off_catalogue": 62703,
+    "on_catalogue": 3978,
+    "sgmc_positive": 83593,
+    "within_300m": 16912
+  },
+  "stage": "h53_screen",
+  "started_utc": "2026-10-03T23:42:19Z"
+}

@@ -1,0 +1,211 @@
+{
+  "anchors": [
+    {
+      "bytes": 1712322,
+      "catalogue_hidden_mean": 0.06970271881957218,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.07552572955208453,
+        "draw21": 0.06387970808705985
+      },
+      "emitted_pixels": 121131,
+      "hug_share": 0.19047147303332757,
+      "label": "H19-5",
+      "on_catalogue_pixels": 0,
+      "provenance": "owner mirror pinned in this repository (hash-verified)",
+      "reported_score": 0.1922,
+      "score_seconds": 11.3,
+      "sgmc_off_catalogue": 0.10060349914218616,
+      "sha256": "ec1f9b56b83ce33cad781ceb9f104b18fb4f2ff785263a4e89616af4aabdee8d",
+      "source": "19GEMSDOE/h19-5-powerlaw-budget-multiline-corroborated"
+    },
+    {
+      "bytes": 1632732,
+      "catalogue_hidden_mean": 0.09449039902070369,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.10156551960322138,
+        "draw21": 0.08741527843818599
+      },
+      "emitted_pixels": 60069,
+      "hug_share": 0.1900314638166109,
+      "label": "D1.5",
+      "on_catalogue_pixels": 0,
+      "provenance": "owner mirror pinned in this repository (hash-verified)",
+      "reported_score": 0.2477,
+      "score_seconds": 10.8,
+      "sgmc_off_catalogue": 0.10111756213904417,
+      "sha256": "68d0e2e4fcc594f9a23f56c44b885fee733d026d39be55e18ad2a07289525310",
+      "source": "24GEMSDOE/h25-1-dotted-h19-5-d1-5"
+    },
+    {
+      "bytes": 1603424,
+      "catalogue_hidden_mean": 0.09832378835029429,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.1056920987446421,
+        "draw21": 0.09095547795594647
+      },
+      "emitted_pixels": 44090,
+      "hug_share": 0.18748015422998413,
+      "label": "D2.8",
+      "on_catalogue_pixels": 0,
+      "provenance": "owner mirror pinned in this repository (hash-verified)",
+      "reported_score": 0.26,
+      "score_seconds": 10.5,
+      "sgmc_off_catalogue": 0.09528236525789707,
+      "sha256": "91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8",
+      "source": "25GEMSDOE/dotted-h19-5-d2-8"
+    },
+    {
+      "bytes": 1635084,
+      "catalogue_hidden_mean": 0.09411710858312139,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.10107755223816234,
+        "draw21": 0.08715666492808044
+      },
+      "commit": "bf48cba3f1a7977b146d4d9c5a669bfcb9654732",
+      "emitted_pixels": 61328,
+      "hug_share": 0.18984803026350117,
+      "label": "tgc-t-v2-on-d1-5",
+      "on_catalogue_pixels": 0,
+      "provenance": "buffedlizard55-lab/GEMSDOE27@main:docs/downloads/gems27-topo-gap-closure-t-v2-on-d1-5-20261002-5512495c6bd1-nan.tif",
+      "readme_line": null,
+      "reported_score": 0.2449,
+      "score_seconds": 10.8,
+      "sgmc_off_catalogue": 0.10242171571058382,
+      "sha256": "33003374335d84bf885f2d8f5e9dd4c57044c8ec58fa6a0d7fa581e8bc41c11d",
+      "source": "GEMSDOE27/topo-gap-closure-t-v2-on-d1-5"
+    },
+    {
+      "bytes": 1692444,
+      "catalogue_hidden_mean": 0.09257922726051462,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.09061247117672769,
+        "draw21": 0.09454598334430157
+      },
+      "commit": "baee332f861836575877e47f6b76095da0ba03f0",
+      "emitted_pixels": 91533,
+      "hug_share": 0.12379141948805349,
+      "label": "h30-arrangement",
+      "on_catalogue_pixels": 0,
+      "provenance": "buffedlizard55-lab/GEMSDOE23@main:docs/downloads/gemsdoe23-h30-arrangement-matched-habitat-20261002-0d4e02e8-nan.tif",
+      "readme_line": null,
+      "reported_score": 0.1352,
+      "score_seconds": 10.4,
+      "sgmc_off_catalogue": 0.2009507740147033,
+      "sha256": "38539dc647d5ede0d8fa90123810d18130ee15e524097f55e83b6b8a57976ea9",
+      "source": "GEMSDOE23/h30-arrangement-matched-habitat"
+    },
+    {
+      "bytes": 475760,
+      "catalogue_hidden_mean": 0.07174610430691467,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.08109322233146762,
+        "draw21": 0.0623989862823617
+      },
+      "commit": "ba071a372c970531fca4d024b7fc06631d9ce604",
+      "emitted_pixels": 60068,
+      "hug_share": 0.1400246387427582,
+      "label": "dilcond-oof-v1",
+      "on_catalogue_pixels": 1398,
+      "provenance": "buffedlizard55-lab/GEMSDOE26@main:docs/downloads/gems26-dilcond-oof-v1-20261003-47629f496133-nan.tif",
+      "readme_line": "| **Primary SSL + error** | **0.122164** | **0.069039 \u2014 REJECT** |",
+      "reported_score": 0.1223,
+      "score_seconds": 10.5,
+      "sgmc_off_catalogue": 0.10719248096401054,
+      "sha256": "d54cf7edc6ec57c29b88dec81fe3fb101efa4fe31fc9c1088664a0c2e5190887",
+      "source": "GEMSDOE26/dilcond-oof-v1"
+    },
+    {
+      "bytes": 969784,
+      "catalogue_hidden_mean": 0.08571057788215819,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.08609147906423983,
+        "draw21": 0.08532967670007655
+      },
+      "commit": "92ee6f074323f161eed837b80ec3ee5b662e26f5",
+      "emitted_pixels": 206895,
+      "hug_share": 0.08139394378791175,
+      "label": "r13-lattice-s5-v2",
+      "on_catalogue_pixels": 2391,
+      "provenance": "buffedlizard55-lab/13GEMSDOE@main:docs/downloads/13gems_20261001_r13-lattice-s5_v2_zerofill.tif",
+      "readme_line": null,
+      "reported_score": 0.0904,
+      "score_seconds": 9.6,
+      "sgmc_off_catalogue": 0.25091628071917416,
+      "sha256": "c12533bb980234c3a706af641d4f1d514bbbe482714b2ebcac3b10f3e72a7a3f",
+      "source": "13GEMSDOE/r13-lattice-s5_v2"
+    },
+    {
+      "bytes": 313478,
+      "catalogue_hidden_mean": 0.06965643085640592,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.06790289864993643,
+        "draw21": 0.07140996306287542
+      },
+      "commit": "8c94b0f83f22999032ba8a29c523af7ae6cf5e76",
+      "emitted_pixels": 99999,
+      "hug_share": 0.08474084740847408,
+      "label": "conj-alteration-mag",
+      "on_catalogue_pixels": 1263,
+      "provenance": "buffedlizard55-lab/15GEMSDOE@main:docs/downloads/gems-tso1-20260929T005627Z-conj_alteration_mag.tif",
+      "readme_line": null,
+      "reported_score": 0.0782,
+      "score_seconds": 10.5,
+      "sgmc_off_catalogue": 0.18019547982749154,
+      "sha256": "b437efcec17fb4582a3ff2f5f6ce6a179545c1e21fcd51e0c4b828cfd185d631",
+      "source": "15GEMSDOE/tso1-conj_alteration_mag"
+    },
+    {
+      "bytes": 777822,
+      "catalogue_hidden_mean": 0.07884461719761841,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.07929172425255997,
+        "draw21": 0.07839751014267686
+      },
+      "commit": "512371de5d30162813803cdccbd4931ceeb065c7",
+      "emitted_pixels": 155021,
+      "hug_share": 0.08450468001109528,
+      "label": "pindrop-v4-nodes",
+      "on_catalogue_pixels": 0,
+      "provenance": "buffedlizard55-lab/GEMSDOE3@main:docs/downloads/pindrop-v4-nodes-20260925T152420Z-f347b70daa.tif",
+      "readme_line": "- Audit fold, holdout-trained models, identical emitted-pixel budgets: **spaced nodes gap 0.2202 / all 0.2405 / known 0.2086 / far 0.1999** versus the **dense ridge control 0.1278 / 0.1634 / 0.1192 / 0.0997**. Paired block bootstrap of the difference: gap **+0.0924** CI95 [+0.0209, +0.1465], all **+",
+      "reported_score": 0.1193,
+      "score_seconds": 10.5,
+      "sgmc_off_catalogue": 0.2359085061815867,
+      "sha256": "f347b70daa95170bfc967b1c0b6bbf951496c2b74764a7102848ad6178829aca",
+      "source": "GEMSDOE3/pindrop-v4-nodes"
+    },
+    {
+      "bytes": 548401,
+      "catalogue_hidden_mean": 0.08463528634484696,
+      "catalogue_hidden_per_draw": {
+        "draw20": 0.09199758513178789,
+        "draw21": 0.07727298755790601
+      },
+      "commit": "9d8b5d55b674629f7b0e0e486269917c0fa2dade",
+      "emitted_pixels": 76859,
+      "hug_share": 0.21875121976606512,
+      "label": "lidarscarp-ridge-top2pct",
+      "on_catalogue_pixels": 0,
+      "provenance": "buffedlizard55-lab/7GEMSDOE@main:downloads/gems7-lidarscarp-ridge-top2pct-36c3a3f341c8.tif",
+      "readme_line": null,
+      "reported_score": 0.1461,
+      "score_seconds": 10.9,
+      "sgmc_off_catalogue": 0.06577868136939023,
+      "sha256": "36c3a3f341c8306dfb5610f61acfec635a7cb8a3ef6ef00380ca083d2f9745fe",
+      "source": "7GEMSDOE/lidarscarp-ridge-top2pct"
+    }
+  ],
+  "caveat": "Every reported score is an unverified owner/sibling-README claim; the sibling files are public GitHub artifacts fetched with the authenticated gh CLI, never from DrivenData. A high rank correlation supports the proxy as a *ranking* device on these files only; it does not make any proxy value a competition score.",
+  "correlation": {
+    "kendall": 0.5555555555555555,
+    "n": 10,
+    "pearson": 0.6374364195402056,
+    "spearman": 0.709090909090909
+  },
+  "drivendata_contacted": false,
+  "generated_utc": "2026-10-03T23:57:16Z",
+  "proxy_definition": "hide-and-recover catalogue-gap proxy, 4 quadrant folds x draws 20/21, hiding 20 % of catalogue components (gemsdoe.proxies.paired_catalogue_hidden)",
+  "purpose": "calibrate the catalogue-hidden proxy against owner-reported live scores (no fitting)",
+  "schema_version": 1,
+  "usable_anchors": 10
+}

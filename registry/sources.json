@@ -1,21 +1,20 @@
 {
-  "schema_version": 1,
-  "generated_local_date": "2026-10-03",
   "access_policy": {
     "drivendata_automated_access": false,
     "leaderboard_polling": false,
-    "terms_review": "knowledge/03_drivendata_terms_access_policy.md",
-    "reason": "DrivenData Terms of Use prohibit robots/automatic access for any purpose, including monitoring, and manual monitoring/copying without prior written consent. No written consent is present."
+    "reason": "DrivenData Terms of Use prohibit robots/automatic access for any purpose, including monitoring, and manual monitoring/copying without prior written consent. No written consent is present.",
+    "terms_review": "knowledge/03_drivendata_terms_access_policy.md"
   },
+  "generated_local_date": "2026-10-03",
+  "schema_version": 1,
   "sources": [
     {
+      "caveat": "Direct page content was fetched in two chunks on 2026-10-03 and the submission/metric sections were read. No leaderboard or data endpoint was accessed.",
       "id": "dd-problem",
+      "kind": "official competition documentation",
+      "publisher": "DrivenData / U.S. DOE GEMS Prize",
       "title": "GEMS Prize problem description \u2014 metric, data and submission format",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/page/967/",
-      "publisher": "DrivenData / U.S. DOE GEMS Prize",
-      "kind": "official competition documentation",
-      "verified": true,
-      "verified_date": "2026-10-03 (direct page fetch; two chunks)",
       "used_for": [
         "distance-weighted Tversky metric",
         "300-m triangular kernel",
@@ -23,30 +22,30 @@
         "single-band float32 GeoTIFF, EPSG:32611, 100-m resolution, template bounds, values in [0,1], null/NaN outside bounds",
         "one selected prediction is used for both prize rounds"
       ],
-      "caveat": "Direct page content was fetched in two chunks on 2026-10-03 and the submission/metric sections were read. No leaderboard or data endpoint was accessed."
+      "verified": true,
+      "verified_date": "2026-10-03 (direct page fetch; two chunks)"
     },
     {
+      "caveat": "The page displayed Last Modified: August 7, 2014. Relevant quoted language and project decisions are recorded in knowledge/03_drivendata_terms_access_policy.md.",
       "id": "dd-terms",
+      "kind": "official Terms of Use",
+      "publisher": "DrivenData, LLC",
       "title": "DrivenData Terms of Use",
       "url": "https://www.drivendata.org/termsofuse/",
-      "publisher": "DrivenData, LLC",
-      "kind": "official Terms of Use",
-      "verified": true,
-      "verified_date": "2026-10-03",
       "used_for": [
         "no automated polling/scraping",
         "no manual monitoring/copying without prior written consent"
       ],
-      "caveat": "The page displayed Last Modified: August 7, 2014. Relevant quoted language and project decisions are recorded in knowledge/03_drivendata_terms_access_policy.md."
+      "verified": true,
+      "verified_date": "2026-10-03"
     },
     {
+      "caveat": "Sections 3.2\u20133.5 were fetched and read in this continuation; consult the linked full PDF for all eligibility, deadline, award, and compliance details before entry.",
       "id": "dd-rules",
+      "kind": "official competition rules PDF",
+      "publisher": "National Laboratory of the Rockies for U.S. DOE",
       "title": "Official GEMS Prize rules (NLR 96647)",
       "url": "https://docs.nlr.gov/docs/fy26osti/96647.pdf",
-      "publisher": "National Laboratory of the Rockies for U.S. DOE",
-      "kind": "official competition rules PDF",
-      "verified": true,
-      "verified_date": "2026-10-03 (official PDF fetched through sections 3.2\u20133.5)",
       "used_for": [
         "up to three submissions per week",
         "single GeoTIFF requirement",
@@ -54,385 +53,413 @@
         "only one submission selected for both prize rounds",
         "required generative-AI narrative disclosure when applicable"
       ],
-      "caveat": "Sections 3.2\u20133.5 were fetched and read in this continuation; consult the linked full PDF for all eligibility, deadline, award, and compliance details before entry."
+      "verified": true,
+      "verified_date": "2026-10-03 (official PDF fetched through sections 3.2\u20133.5)"
     },
     {
+      "caveat": "The H31 feature is not a replication of the full method.",
       "id": "hornby1999",
+      "kind": "primary peer-reviewed article",
+      "publisher": "Geophysical Journal International",
       "title": "Analysis of potential field data in the wavelet domain",
       "url": "https://doi.org/10.1046/j.1365-246x.1999.00788.x",
-      "publisher": "Geophysical Journal International",
-      "kind": "primary peer-reviewed article",
-      "verified": true,
-      "verified_date": "2026-10-02 (article page fetched in research session)",
       "used_for": [
         "primary basis for Poisson-wavelet multiscale edge analysis",
         "multiscale upward-continuation edge detection ('worming')",
         "H52 survival-with-height emission filter (knowledge/37, src/gemsdoe/wormfilter.py)"
       ],
-      "caveat": "The H31 feature is not a replication of the full method."
+      "verified": true,
+      "verified_date": "2026-10-02 (article page fetched in research session)"
     },
     {
+      "caveat": "This is a review/conference paper, not proof of performance on GEMS hidden labels.",
       "id": "horowitz2018",
+      "kind": "technical review",
+      "publisher": "Stanford-hosted conference review by F. G. Horowitz",
       "title": "Potential Field Poisson Wavelet Multiscale Edge Analysis (Worms) for Geothermal; A Review",
       "url": "https://pangea.stanford.edu/ERE/pdf/IGAstandard/SGW/2018/Horowitz.pdf",
-      "publisher": "Stanford-hosted conference review by F. G. Horowitz",
-      "kind": "technical review",
-      "verified": true,
-      "verified_date": "2026-10-03",
       "used_for": [
         "gravity and pseudogravity grids upward-continued to multiple heights",
         "horizontal-gradient-modulus maxima",
         "nonuniqueness, source shadowing, and depth-localization caveats"
       ],
-      "caveat": "This is a review/conference paper, not proof of performance on GEMS hidden labels."
+      "verified": true,
+      "verified_date": "2026-10-03"
     },
     {
+      "caveat": "Abstract only; no formula implementation was taken from a full paper. H31 explicitly calls its transform a proxy.",
       "id": "seg-pseudogravity2014",
+      "kind": "conference abstract",
+      "publisher": "Society of Exploration Geophysicists",
       "title": "Using the pseudo-gravity functional transform to enhance deep-magnetic sources and enrich regional gravity data",
       "url": "https://library.seg.org/doi/10.1190/segam2014-1323.1",
-      "publisher": "Society of Exploration Geophysicists",
-      "kind": "conference abstract",
-      "verified": true,
-      "verified_date": "2026-10-03 (official search-result abstract read)",
       "used_for": [
         "describes pseudogravity as vertical integration of magnetic data using FFT"
       ],
-      "caveat": "Abstract only; no formula implementation was taken from a full paper. H31 explicitly calls its transform a proxy."
+      "verified": true,
+      "verified_date": "2026-10-03 (official search-result abstract read)"
     },
     {
+      "caveat": "The page's equation is an image that the text fetch did not parse. H31 is not claimed to reproduce this vendor filter.",
       "id": "seequent-pseudogravity",
+      "kind": "software documentation",
+      "publisher": "Seequent / Bentley",
       "title": "Pseudo-Gravity (GPSD) filter documentation",
       "url": "https://help.seequent.com/Oasismontaj/2023.2/Content/gxhelp/fft2con/fft2con_gpsd.htm",
-      "publisher": "Seequent / Bentley",
-      "kind": "software documentation",
-      "verified": true,
-      "verified_date": "2026-10-03",
       "used_for": [
         "says a pole-reduced grid may be used as input with inclination set to 90 degrees and declination to 0"
       ],
-      "caveat": "The page's equation is an image that the text fetch did not parse. H31 is not claimed to reproduce this vendor filter."
+      "verified": true,
+      "verified_date": "2026-10-03"
     },
     {
+      "caveat": "Direct page fetch returned 504 earlier; do not claim that any specific competition-area tile or coverage was checked.",
       "id": "usgs-3dep",
+      "kind": "official program page",
+      "publisher": "U.S. Geological Survey",
       "title": "About 3DEP Products & Services",
       "url": "https://www.usgs.gov/3d-elevation-program/about-3dep-products-services",
-      "publisher": "U.S. Geological Survey",
-      "kind": "official program page",
-      "verified": true,
-      "verified_date": "2026-10-03 (official search-result text)",
       "used_for": [
         "3DEP product access/rights context"
       ],
-      "caveat": "Direct page fetch returned 504 earlier; do not claim that any specific competition-area tile or coverage was checked."
+      "verified": true,
+      "verified_date": "2026-10-03 (official search-result text)"
     },
     {
+      "caveat": "Direct page fetch failed. This is a methods precedent outside the GEMS footprint, not evidence of predictor utility in this project.",
+      "doi": "10.5066/P13NFGLT",
       "id": "usgs-scarp-2024",
+      "kind": "official data release",
+      "publisher": "U.S. Geological Survey",
       "title": "Quaternary fault mapping, Zapata and Blanca sections, Sangre de Cristo fault zone, Colorado",
       "url": "https://www.usgs.gov/data/quaternary-fault-mapping-zapata-and-blanca-sections-sangre-de-cristo-fault-zone-high",
-      "publisher": "U.S. Geological Survey",
-      "kind": "official data release",
-      "doi": "10.5066/P13NFGLT",
-      "verified": false,
-      "verified_date": "2026-10-03 (search metadata only)",
       "used_for": [
         "external example of fault-scarp mapping from 1-m 3DEP topography"
       ],
-      "caveat": "Direct page fetch failed. This is a methods precedent outside the GEMS footprint, not evidence of predictor utility in this project."
+      "verified": false,
+      "verified_date": "2026-10-03 (search metadata only)"
     },
     {
+      "caveat": "The flight-path ZIPs are only catalog-listed; their bytes, schema, CRS, area coverage and licence have not been validated. H33 is blocked and is not being implemented.",
+      "doi": "10.5066/P93LGLVQ",
       "id": "usgs-geodawn",
+      "kind": "official catalog record",
+      "publisher": "U.S. Geological Survey ScienceBase",
       "title": "GeoDAWN airborne geophysical survey release",
       "url": "https://www.sciencebase.gov/catalog/item/657e1d85d34e23d3533209f7",
-      "publisher": "U.S. Geological Survey ScienceBase",
-      "kind": "official catalog record",
-      "doi": "10.5066/P93LGLVQ",
-      "verified": true,
-      "verified_date": "2026-10-02 (catalog listing inspected)",
       "used_for": [
         "source listing for GeoDAWN flight-path ZIPs and radiometric products"
       ],
-      "caveat": "The flight-path ZIPs are only catalog-listed; their bytes, schema, CRS, area coverage and licence have not been validated. H33 is blocked and is not being implemented."
+      "verified": true,
+      "verified_date": "2026-10-02 (catalog listing inspected)"
     },
     {
+      "caveat": "The local input bytes are owner-derived mirrors, not organizer-authenticated competition files; do not use label-derived distance columns. 2026-10-03 (session 4): gdr.openei.org is not fetchable from this sandbox (TLS closed by the egress proxy), so the submission page itself was not re-read; the local qfaults/well-spring mirrors were instead re-verified byte-for-byte against their SHA-256 pins (11/11 present).",
+      "doi": "10.15121/1881483",
       "id": "gdr1391",
+      "kind": "official research-data catalog",
+      "publisher": "Geothermal Data Repository / NLR",
       "title": "GDR 1391 \u2014 INGENIOUS supporting datasets",
       "url": "https://gdr.openei.org/submissions/1391",
-      "publisher": "Geothermal Data Repository / NLR",
-      "kind": "official research-data catalog",
-      "doi": "10.15121/1881483",
-      "verified": true,
-      "verified_date": "2026-10-02 (predecessor source registry)",
       "used_for": [
         "source context for owner-mirrored well/spring, fault-trace and volcanic-vent tables"
       ],
-      "caveat": "The local input bytes are owner-derived mirrors, not organizer-authenticated competition files; do not use label-derived distance columns. 2026-10-03 (session 4): gdr.openei.org is not fetchable from this sandbox (TLS closed by the egress proxy), so the submission page itself was not re-read; the local qfaults/well-spring mirrors were instead re-verified byte-for-byte against their SHA-256 pins (11/11 present)."
+      "verified": true,
+      "verified_date": "2026-10-02 (predecessor source registry)"
     },
     {
+      "caveat": "A repository README or owner-mirrored artifact does not authenticate any DrivenData score, identity, rank, or score-to-file relationship. See knowledge/04_prior_work_audit.md.",
       "id": "prior-repository",
+      "kind": "owner repository, historical code and local evidence only",
+      "publisher": "buffedlizard55-lab",
       "title": "GEMSDOE25 reviewed predecessor at fixed commit",
       "url": "https://github.com/buffedlizard55-lab/GEMSDOE25/tree/efc4be7bb3cfdf2def12a7fb83284d3311ac9220",
-      "publisher": "buffedlizard55-lab",
-      "kind": "owner repository, historical code and local evidence only",
-      "verified": true,
-      "verified_date": "2026-10-03 (local checkout inspected)",
       "used_for": [
         "novelty review",
         "prior experiment status",
         "historical artifact provenance"
       ],
-      "caveat": "A repository README or owner-mirrored artifact does not authenticate any DrivenData score, identity, rank, or score-to-file relationship. See knowledge/04_prior_work_audit.md."
+      "verified": true,
+      "verified_date": "2026-10-03 (local checkout inspected)"
     },
     {
+      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance.",
       "id": "prior-intrepid-worme",
+      "kind": "software documentation",
+      "publisher": "Intrepid Geophysics",
       "title": "Intrepid multiscale worm-edge documentation",
       "url": "https://docs.intrepid-geophysics.com/intrepid/topics/edge-detection-worme.html",
-      "publisher": "Intrepid Geophysics",
-      "kind": "software documentation",
-      "verified": true,
-      "verified_date": "2026-10-03",
       "used_for": [
         "Technical documentation describes an upward-continuation multiscale edge workflow; contextual method reference only."
       ],
-      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance."
+      "verified": true,
+      "verified_date": "2026-10-03"
     },
     {
+      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance.",
       "id": "prior-siler-faulds",
+      "kind": "peer-reviewed research",
+      "publisher": "U.S. Department of Energy OSTI",
       "title": "Geothermal play logic and heat-permeability co-location",
       "url": "https://www.osti.gov/servlets/purl/1110515",
-      "publisher": "U.S. Department of Energy OSTI",
-      "kind": "peer-reviewed research",
-      "verified": true,
-      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review",
       "used_for": [
         "Geothermal play literature discusses the joint role of heat and permeability; this is context, not validation of a GEMS predictor."
       ],
-      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance."
+      "verified": true,
+      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review"
     },
     {
+      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance.",
       "id": "prior-blm-sgmc",
+      "kind": "official geologic-map catalog",
+      "publisher": "U.S. Geological Survey",
       "title": "State Geologic Map Compilation",
       "url": "https://mrdata.usgs.gov/geology/state/",
-      "publisher": "U.S. Geological Survey",
-      "kind": "official geologic-map catalog",
-      "verified": true,
-      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review",
       "used_for": [
         "Official state geologic-map compilation catalog; its existence does not establish that a catalogue gap is a fault."
       ],
-      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance."
+      "verified": true,
+      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review"
     },
     {
+      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance.",
       "id": "prior-usgs-faults",
+      "kind": "official fault database",
+      "publisher": "U.S. Geological Survey",
       "title": "Quaternary Fault and Fold Database",
       "url": "https://usgs.github.io/faults/",
-      "publisher": "U.S. Geological Survey",
-      "kind": "official fault database",
-      "verified": true,
-      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review",
       "used_for": [
         "Official Quaternary fault and fold database; cited as a catalogue context, not an independent hidden-label source."
       ],
-      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance."
+      "verified": true,
+      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review"
     },
     {
+      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance.",
       "id": "prior-reference-solution",
+      "kind": "official reference implementation",
+      "publisher": "DrivenData",
       "title": "GEMS Prize reference solution",
       "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
-      "publisher": "DrivenData",
-      "kind": "official reference implementation",
-      "verified": true,
-      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review",
       "used_for": [
         "Official competition reference implementation; code is linked for review, not automatically executed or copied into competition access."
       ],
-      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance."
+      "verified": true,
+      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review"
     },
     {
+      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance.",
       "id": "prior-epsg32611",
+      "kind": "coordinate reference system registry",
+      "publisher": "EPSG Geodetic Parameter Dataset",
       "title": "WGS 84 / UTM zone 11N (EPSG:32611)",
       "url": "https://epsg.io/32611",
-      "publisher": "EPSG Geodetic Parameter Dataset",
-      "kind": "coordinate reference system registry",
-      "verified": true,
-      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review",
       "used_for": [
         "Coordinate reference system identifier for the local template-grid format check."
       ],
-      "caveat": "Carried forward from the pre-existing main-branch source register. It records prior project context, not a new fetch or independent validation of model performance."
+      "verified": true,
+      "verified_date": "Carried from the pre-existing main-branch register; not re-fetched in this review"
     },
     {
+      "caveat": "The page is login-walled in prior project records. This code uses hash-pinned owner mirrors only; no organizer-authenticated data are included here.",
       "id": "dd-data-page",
+      "kind": "official data-download page",
+      "publisher": "DrivenData / U.S. DOE GEMS Prize",
       "title": "GEMS Prize official competition data page",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/data/",
-      "publisher": "DrivenData / U.S. DOE GEMS Prize",
-      "kind": "official data-download page",
-      "verified": false,
-      "verified_date": "Not fetched or downloaded during this review",
       "used_for": [
         "Reference link for an authorized participant to obtain organizer data through the official interface"
       ],
-      "caveat": "The page is login-walled in prior project records. This code uses hash-pinned owner mirrors only; no organizer-authenticated data are included here."
+      "verified": false,
+      "verified_date": "Not fetched or downloaded during this review"
     },
     {
+      "caveat": "Re-fetched 2026-10-03: the notebook sets alpha = 0.2, beta = 0.8 and TverskyLoss(alpha, beta, mode='binary'); U-Net MC-CV baseline, no model or score published. A reference implementation, not a leaderboard model.",
       "id": "refsol",
+      "kind": "official organizer reference implementation",
+      "publisher": "DrivenData / University of Portland (J. Lipor)",
       "title": "GEMS Prize reference solution (U-Net Monte-Carlo CV)",
       "url": "https://github.com/drivendataorg/gems-prize-reference-solution",
-      "publisher": "DrivenData / University of Portland (J. Lipor)",
-      "kind": "official organizer reference implementation",
-      "verified": true,
-      "verified_date": "2026-10-03 (re-fetched: notebook source read directly)",
       "used_for": [
         "corroborates alpha=0.2/beta=0.8 Tversky loss and the label raster as patch target",
         "shows the organizers' own emission convention (y>0.1 float GeoTIFF on the label grid)",
         "confirms no model/score is published, so no organizer model or score is published to copy"
       ],
-      "caveat": "Re-fetched 2026-10-03: the notebook sets alpha = 0.2, beta = 0.8 and TverskyLoss(alpha, beta, mode='binary'); U-Net MC-CV baseline, no model or score published. A reference implementation, not a leaderboard model."
+      "verified": true,
+      "verified_date": "2026-10-03 (re-fetched: notebook source read directly)"
     },
     {
+      "caveat": "Second-hand: quotes transcribed from sibling project records and search snippets; the thread itself was not opened in this session. Verify before relying on it.",
       "id": "forum-11516",
+      "kind": "official staff statement (relayed, thread not fetched in this session)",
+      "publisher": "DrivenData community (staff chrisk-dd)",
       "title": "DrivenData forum topic 11516 (known-fault masking ruling)",
       "url": "https://community.drivendata.org/t/known-faults-in-training-data/11516",
-      "publisher": "DrivenData community (staff chrisk-dd)",
-      "kind": "official staff statement (relayed, thread not fetched in this session)",
-      "verified": false,
-      "verified_date": "2026-10-03",
       "used_for": [
         "catalogue pixels are masked / excluded from evaluation in both rounds",
         "whether known faults are included in predictions does not change the score",
         "300 m kernel applies to new-fault ground truth, not a known-fault buffer"
       ],
-      "caveat": "Second-hand: quotes transcribed from sibling project records and search snippets; the thread itself was not opened in this session. Verify before relying on it."
+      "verified": false,
+      "verified_date": "2026-10-03"
     },
     {
+      "caveat": "Metadata verified through an independent index; sciencebase.gov is unreachable from the sandbox, so the file must be fetched on an unrestricted machine.",
+      "doi": "10.5066/P9YL58W6",
       "id": "siler-2022",
+      "kind": "USGS data release (DOI 10.5066/P9YL58W6, doi:10.5066/P9YL58W6)",
+      "publisher": "U.S. Geological Survey",
       "title": "Slip and dilation tendency for Quaternary faults, Great Basin (Siler 2022)",
       "url": "https://www.sciencebase.gov/catalog/item/6296974dd34ec53d276bb33d",
-      "publisher": "U.S. Geological Survey",
-      "kind": "USGS data release (DOI 10.5066/P9YL58W6, doi:10.5066/P9YL58W6)",
-      "doi": "10.5066/P9YL58W6",
-      "verified": true,
-      "verified_date": "2026-10-03",
       "used_for": [
         "H35 dilation-tendency weighting input (per-segment stress favourability)",
         "confirms normal vs strike-slip dilation tendency is nearly identical in this region"
       ],
-      "caveat": "Metadata verified through an independent index; sciencebase.gov is unreachable from the sandbox, so the file must be fetched on an unrestricted machine."
+      "verified": true,
+      "verified_date": "2026-10-03"
     },
     {
+      "caveat": "Library access not available from the sandbox; the structural-index table was read from the authors' public summary documents.",
+      "doi": "10.1190/1.1442774",
       "id": "reid-1990",
+      "kind": "peer-reviewed method paper",
+      "publisher": "Geophysics 55, 80-91 (SEG)",
       "title": "Magnetic interpretation in three dimensions using Euler deconvolution (Reid et al. 1990)",
       "url": "https://doi.org/10.1190/1.1442774",
-      "publisher": "Geophysics 55, 80-91 (SEG)",
-      "kind": "peer-reviewed method paper",
-      "doi": "10.1190/1.1442774",
-      "verified": true,
-      "verified_date": "2026-10-03",
       "used_for": [
         "H39 structural-index table (point 3/2, line/fault 2/1, dyke 1/0, contact 0)",
         "depth-estimation caveats carried into the H39 design"
       ],
-      "caveat": "Library access not available from the sandbox; the structural-index table was read from the authors' public summary documents."
+      "verified": true,
+      "verified_date": "2026-10-03"
     },
     {
+      "caveat": "Free, public, no-registration API in the provider\u2019s own documentation, but obtainability was NOT verified from this environment; a manual fetch is required before H45 can be screened. Do not state that coverage or completeness inside the footprint has been checked.",
       "id": "usgs-comcat",
+      "kind": "official public data API",
+      "publisher": "U.S. Geological Survey",
       "title": "USGS Earthquake Catalog (ComCat) web services API",
       "url": "https://earthquake.usgs.gov/fdsnws/event/1/",
-      "publisher": "U.S. Geological Survey",
-      "kind": "official public data API",
-      "verified": false,
-      "verified_date": "2026-10-03 (not fetchable from this sandbox; TLS closed by the egress proxy)",
       "used_for": [
         "intended external source for hypothesis H45 (seismicity strand fitting)"
       ],
-      "caveat": "Free, public, no-registration API in the provider\u2019s own documentation, but obtainability was NOT verified from this environment; a manual fetch is required before H45 can be screened. Do not state that coverage or completeness inside the footprint has been checked."
+      "verified": false,
+      "verified_date": "2026-10-03 (not fetchable from this sandbox; TLS closed by the egress proxy)"
     },
     {
+      "caveat": "Free and public in the provider\u2019s documentation; obtainability NOT verified from this environment. Site metadata for the specific gauging stations inside the GEMS footprint has not been checked.",
       "id": "usgs-nwis",
+      "kind": "official public data service",
+      "publisher": "U.S. Geological Survey",
       "title": "USGS Water Data / NWIS daily-discharge services",
       "url": "https://waterdata.usgs.gov/nwis/dv",
-      "publisher": "U.S. Geological Survey",
-      "kind": "official public data service",
-      "verified": false,
-      "verified_date": "2026-10-03 (not fetchable from this sandbox; TLS closed by the egress proxy)",
       "used_for": [
         "intended external source for hypothesis H44 (spring-to-gauge discharge chain)"
       ],
-      "caveat": "Free and public in the provider\u2019s documentation; obtainability NOT verified from this environment. Site metadata for the specific gauging stations inside the GEMS footprint has not been checked."
+      "verified": false,
+      "verified_date": "2026-10-03 (not fetchable from this sandbox; TLS closed by the egress proxy)"
     },
     {
+      "caveat": "Obtainability is NOT established. What was verified from the sandbox, which can reach only api.github.com: the UGS-GIO/ugs-map-viewer and UGS-GIS organizations exist (real U.S. Utah Geological Survey GIS repositories), while a GitHub user/org lookup for the Nevada Division of Geological Survey returns 404 and a repository search for 'geologic map Nevada survey' returns 0 hits. An earlier draft of this entry named a Nevada 'NV-DGGS' organization; that organization does not exist and the claim was removed the same day it was written. Neither the 1:250k unit polygons themselves nor any download endpoint was fetched or verified; H47 must be treated as blocked until the owner checks the state surveys' own portals.",
       "id": "state-geologic-maps",
+      "kind": "official open-GIS distribution, partially verified",
+      "publisher": "Utah Geological Survey (public GIS organization); Nevada equivalent not found",
       "title": "State geological-survey map GIS for the GEMS footprint (Nevada / Utah)",
       "url": "https://github.com/UGS-GIO/ugs-map-viewer",
-      "publisher": "Utah Geological Survey (public GIS organization); Nevada equivalent not found",
-      "kind": "official open-GIS distribution, partially verified",
-      "verified": false,
-      "verified_date": "2026-10-03 (GitHub API checks from the sandbox only)",
       "used_for": [
         "intended external source for hypothesis H47 (map-unit boundary adjacency)"
       ],
-      "caveat": "Obtainability is NOT established. What was verified from the sandbox, which can reach only api.github.com: the UGS-GIO/ugs-map-viewer and UGS-GIS organizations exist (real U.S. Utah Geological Survey GIS repositories), while a GitHub user/org lookup for the Nevada Division of Geological Survey returns 404 and a repository search for 'geologic map Nevada survey' returns 0 hits. An earlier draft of this entry named a Nevada 'NV-DGGS' organization; that organization does not exist and the claim was removed the same day it was written. Neither the 1:250k unit polygons themselves nor any download endpoint was fetched or verified; H47 must be treated as blocked until the owner checks the state surveys' own portals."
+      "verified": false,
+      "verified_date": "2026-10-03 (GitHub API checks from the sandbox only)"
     },
     {
+      "caveat": "One-off human-equivalent fetch at the owner's explicit request (the standing brief supplies the 0.3195 figure and asks for line-by-line verification with links for manual review). Per the Terms-of-Use policy (knowledge/03) there is no polling, no scheduled reads, and no leaderboard table content stored in this repository; the single confirmed value is kept in registry/score_claims.json as an audit record. Open the linked page yourself for the current board.",
       "id": "dd-leaderboard-verify-2026-10-03",
+      "kind": "public competition leaderboard (single fetch, not monitoring)",
+      "note_for_site": "Audit-only: full entry in registry/sources.json; not rendered on the Pages site (no-claim/no-leaderboard-link rule).",
+      "publisher": "DrivenData",
+      "site_hidden": true,
       "title": "Public leaderboard - single verification fetch (owner-requested)",
       "url": "https://www.drivendata.org/competitions/306/competition-doe-gems/leaderboard/",
-      "publisher": "DrivenData",
-      "kind": "public competition leaderboard (single fetch, not monitoring)",
-      "verified": true,
-      "verified_date": "2026-10-03 (single manual fetch to verify the owner-supplied 0.3195 claim; not polled, not repeated)",
       "used_for": [
         "confirms the owner-supplied then-current top score 0.3195 was displayed as rank #1 at fetch time (12 submissions)",
         "confirms the 0.2600 and 0.2449 values that are already recorded as owner-reported historical claims also appear on the page; account identities and score-to-file mappings are NOT verified",
         "context: a multi-team plateau near 0.26 and a frontier cluster near 0.29-0.32 exist at fetch time (no table stored in the repository)"
       ],
-      "caveat": "One-off human-equivalent fetch at the owner's explicit request (the standing brief supplies the 0.3195 figure and asks for line-by-line verification with links for manual review). Per the Terms-of-Use policy (knowledge/03) there is no polling, no scheduled reads, and no leaderboard table content stored in this repository; the single confirmed value is kept in registry/score_claims.json as an audit record. Open the linked page yourself for the current board.",
-      "site_hidden": true,
-      "note_for_site": "Audit-only: full entry in registry/sources.json; not rendered on the Pages site (no-claim/no-leaderboard-link rule)."
+      "verified": true,
+      "verified_date": "2026-10-03 (single manual fetch to verify the owner-supplied 0.3195 claim; not polled, not repeated)"
     },
     {
+      "caveat": "All scores there are owner-reported and unverified; the site itself states the file is not slot-approved. Local bit-for-bit reproduction of dot_thin(H19-5, 1.5) -> d1.5 and dot_thin(H19-5, 2.8) -> D2.8 (44,090 px) is verified by tests/test_sibling_reproduction.py.",
       "id": "gemsdoe25-site-2026-10-03",
+      "kind": "owner's prior-project site (verified for file identity)",
+      "publisher": "owner (buffedlizard55-lab), prior session site",
       "title": "GEMSDOE25 research site (highest-scoring historical artifact, D2.8)",
       "url": "https://buffedlizard55-lab.github.io/GEMSDOE25/",
-      "publisher": "owner (buffedlizard55-lab), prior session site",
-      "kind": "owner's prior-project site (verified for file identity)",
-      "verified": true,
-      "verified_date": "2026-10-03 (site index fetched; file hashes compared locally)",
       "used_for": [
         "the site's D2.8 download is byte-identical to this repository's pinned mirror: sha256 91eae1ca42ec845eaa8c2ba32da49806e24751743459b8a10017c479bbe639b8, 1,603,424 bytes (docs/downloads/gemsdoe29-historical-d28-20261002-e56ea318af89-nan.tif)",
         "H28 conditional metric model context (model-implied N ~ 12,691 hidden truth pixels; dot sweep peaks at d=2.4 px -> the D2.8 file)",
         "paste-ready Note convention for DrivenData's optional comment field"
       ],
-      "caveat": "All scores there are owner-reported and unverified; the site itself states the file is not slot-approved. Local bit-for-bit reproduction of dot_thin(H19-5, 1.5) -> d1.5 and dot_thin(H19-5, 2.8) -> D2.8 (44,090 px) is verified by tests/test_sibling_reproduction.py."
+      "verified": true,
+      "verified_date": "2026-10-03 (site index fetched; file hashes compared locally)"
     },
     {
+      "caveat": "Abstract-level verification only. The index is attributed there to Bull and McFadden (1977); the 1977 original was not fetched.",
       "id": "silva2003-smf",
+      "kind": "peer-reviewed literature (abstract page)",
+      "publisher": "Elsevier / Geomorphology",
       "title": "Fault-generated mountain fronts in southeast Spain: geomorphologic assessment of tectonic and seismic activity (Silva, Goy, Zazo & Bardaji 2003, Geomorphology)",
       "url": "https://www.sciencedirect.com/science/article/abs/pii/S0169555X02002155",
-      "publisher": "Elsevier / Geomorphology",
-      "kind": "peer-reviewed literature (abstract page)",
-      "verified": true,
-      "verified_date": "2026-10-03 (search-result abstract text; full text not fetched)",
       "used_for": [
         "mountain-front sinuosity definition Smf = Lmf/Ls (Bull and McFadden 1977)",
         "Smf/Vf activity classes; Smf <= ~1.4-1.6 = tectonically active front",
         "H50 range-front segmentation candidate (knowledge/38)"
       ],
-      "caveat": "Abstract-level verification only. The index is attributed there to Bull and McFadden (1977); the 1977 original was not fetched."
+      "verified": true,
+      "verified_date": "2026-10-03 (search-result abstract text; full text not fetched)"
     },
     {
+      "caveat": "The 1977 chapter itself was not retrieved; treat the numeric classes as quoted, not primary-verified.",
       "id": "bull-mcfadden-1977",
+      "kind": "secondary citation of a grey-literature original",
+      "publisher": "secondary quotation (Bull & McFadden 1977; Bull 2007; Keller 1986)",
       "title": "Mountain-front sinuosity index (Smf) as introduced by Bull and McFadden (1977), as quoted in secondary sources",
       "url": "https://www.researchgate.net/publication/285368808_Mountain_Fronts",
-      "publisher": "secondary quotation (Bull & McFadden 1977; Bull 2007; Keller 1986)",
-      "kind": "secondary citation of a grey-literature original",
-      "verified": true,
-      "verified_date": "2026-10-03 (search-result text only; the 1977 original was not fetched)",
       "used_for": [
         "Smf < 1.4 indicates tectonically active fronts (Keller 1986, as quoted)",
         "Smf > 3 typical of inactive fronts (Bull and McFadden 1977, as quoted)",
         "H50 frozen threshold selection (knowledge/38)"
       ],
-      "caveat": "The 1977 chapter itself was not retrieved; treat the numeric classes as quoted, not primary-verified."
+      "verified": true,
+      "verified_date": "2026-10-03 (search-result text only; the 1977 original was not fetched)"
+    },
+    {
+      "caveat": "No DOI exists for this 1987 conference paper; the URL is a search link, not a landing page.",
+      "id": "bigun1987",
+      "kind": "primary peer-reviewed conference paper (no DOI issued)",
+      "publisher": "Proceedings of the IEEE First International Conference on Computer Vision (ICCV), London, 433-438",
+      "title": "Optimal orientation detection of linear symmetry",
+      "url": "https://www.semanticscholar.org/search?q=Optimal%20orientation%20detection%20of%20linear%20symmetry",
+      "used_for": [
+        "structure tensor / orientation tensor definition used by H53 (src/gemsdoe/h53.py)"
+      ],
+      "verified": true,
+      "verified_date": "2026-10-03 (citation string cross-checked against two independent referencing articles: Springer Exp. Fluids 10.1007/s00348-007-0435-7 and Springer LNCS 10.1007/978-3-540-45243-0_19)"
+    },
+    {
+      "caveat": "Used for the statistic, not for any geothermal claim.",
+      "id": "weickert1999",
+      "kind": "primary peer-reviewed article",
+      "publisher": "International Journal of Computer Vision 31(2-3), 111-127 (Springer)",
+      "title": "Coherence-enhancing diffusion filtering",
+      "url": "https://doi.org/10.1023/A:1008009714131",
+      "used_for": [
+        "structure-tensor coherence / eigen-decomposition formalism behind the H53 columns",
+        "confirmation that the second-moment matrix is the standard orientation statistic in this literature"
+      ],
+      "verified": true,
+      "verified_date": "2026-10-03 (Springer landing page fetched: volume 31, pages 111-127, DOI 10.1023/A:1008009714131)"
     }
   ]
 }

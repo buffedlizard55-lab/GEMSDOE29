@@ -153,7 +153,7 @@
     }
   },
   "independent_verification": "scripts/verify_downloads.py",
-  "independent_verification_utc": "2026-10-03T23:08:33Z",
+  "independent_verification_utc": "2026-10-04T01:33:20Z",
   "independent_verification_files": {
     "gems29-refd28-repro-20261003-1cc7dc534d51-nan.tif": {
       "bytes": 1573188,

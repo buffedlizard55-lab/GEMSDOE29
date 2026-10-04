@@ -2,6 +2,19 @@
 
 **Mission:** develop and document a defensible fault-prediction workflow for the U.S. DOE Geologic Enhanced Mapping System (GEMS) Prize. The objective is to maximize the probability of winning through real, independently checkable scientific leverage—not leaderboard theater—and to **own the outcome** by reporting blockers, negative results, uncertainty, data provenance and exact file checks.
 
+> **Current state — session 8 (2026-10-03): the sixth candidate family is closed negative, and the proxy
+> every promotion decision depends on is now calibrated.** H53 (cross-scale topographic fabric coherence,
+> the rank-1 slate-v6 hypothesis) was preregistered before any fit (sha256 `3d3c21ca…`), screened on fresh
+> draws 36/37 and failed its frozen gates: **NO PROMOTION**, primary arm `A1_h53_persist` at **+0.001557**
+> against the **+0.005** bar, with the one G1-passing arm `A2_h53_off` SGMC-negative on 0/4 folds. No file
+> was built, no download changed, **no weekly slot was used**, draws 36/37 are claimed (next free 38).
+> Separately, the catalogue-hidden proxy was scored against **ten** stored artifacts with owner-reported
+> scores with no fitting (**Spearman +0.709**), and the SGMC secondary proxy was shown to rank the three
+> *worst* of them highest — so its veto is now recorded as conservative, not authoritative. Details:
+> [`knowledge/42`](knowledge/42_h53_results_2026-10-03.md), [`knowledge/43`](knowledge/43_proxy_calibration_2026-10-03.md),
+> and the session-8 section below. All process irregularities are disclosed in
+> [`registry/irregularities.json`](registry/irregularities.json).
+>
 > **Session 5 (2026-10-03): the standing data blocker is cleared, and its first experiment is a decisive
 > negative.** `bash scripts/download_competition_data.sh --group all` restored and hash-verified **22/22 manifest
 > entries** (11 in `data/manifest.json` + 11 in `registry/data_manifest.json` — 14 distinct files, six of
@@ -454,7 +467,61 @@ and the session-3 block). Session 7's deliverables:
   and the first artifact's portal note was truncated mid-word by `make_note` (`--repackage` added).
 * One process defect self-reported: `knowledge/39` was frozen after only 4 of 8 screen cells and names an
   arm that then failed its own screen, so the confirmation stage was **cancelled rather than run**
-  (`IR-29-PREREG-PARTIAL-DATA`, now `AGENTS.md` rule 10). Draws 36/37 remain unspent.
+  (`IR-29-PREREG-PARTIAL-DATA`, now `AGENTS.md` rule 10). Draws 36/37 were still unspent when session 7 closed; they were claimed by the H53 screen in session 8 (see the session-8 section above).
+
+## Session 8 intake — H53 screened and negative; the promotion proxy calibrated (2026-10-03)
+
+Session 8's brief repeated the standing charter and was executed autonomously: implement the top-ranked
+slate-v6 hypothesis, screen it on fresh draws **before** any slot is considered, and then attack the
+weakest link the previous sessions had left open — the fact that every promotion decision rests on a proxy
+whose only external anchor was three owner-reported scores.
+
+* **[knowledge/41](knowledge/41_preregistered_h53_screen_2026-10-03.md) — H53 frozen before any fit.**
+  `src/gemsdoe/h53.py` computes label-free multi-scale DEM orientation columns from `12_det_elev.npy`
+  (structure tensor at 3 / 7 / 15 px = 300 / 700 / 1500 m; σ_grad 1.0 px; σ_tensor = 1.0·scale; τ = 15°;
+  coherence ≥ 0.15; 30 px high-pass): `H53_COH_MIN`, `H53_AGREE` (coherence-weighted axial resultant,
+  mod 180°), `H53_NSCALES`, `H53_PERSIST = COH_MIN × AGREE`. The protocol fixed five arms (two controls,
+  three H53 arms, declared primary `A1_h53_persist`), fresh draws 36/37, a spent-draw control-reproduction
+  phase, and gates G1–G6 — all recorded in `evidence/h53_screen/design.json` with the preregistration,
+  module and input-cache SHA-256 pins (prereg sha256 `3d3c21ca…`).
+* **[knowledge/42](knowledge/42_h53_results_2026-10-03.md) — the screen is negative: NO PROMOTION.**
+  56 rows (16 control + 40 screen), analyzer `integrity_problems: []`, gates `G1 false, G3 false, G2/G4/G5/G6
+  true`. `A1_h53_persist` measured **+0.001557** mean paired gain against the frozen **+0.005** bar (1/4 and
+  3/4 positive folds per draw, worst −0.008668, SGMC second proxy −0.004707 on 1/4); `A3_h53_scarp` +0.000673
+  failed the same way. The one arm that cleared G1, **`A2_h53_off` (+0.008457**, 2/4 and 4/4 folds, worst
+  −0.003145), is negative on the SGMC off-catalogue proxy on **0/4** folds — the third instance of the
+  H41/H43 proxy-veto pattern. Both controls reproduced the stored H34 cells at **max |Δ| = 0.0**; the H53
+  columns are 92.5–95.7 % non-zero and were used in 74–116 splits per cell, so the failure is "the ranking
+  does not convert into emission credit", not "the columns are inert". **No candidate artifact was built,
+  no download changed, and no weekly slot was used.** Draws 36/37 are claimed; next free draw 38.
+* **[knowledge/43](knowledge/43_proxy_calibration_2026-10-03.md) — the catalogue-hidden proxy calibrated
+  against ten stored artifacts with owner-reported scores.** `scripts/calibrate_proxy_against_reported_scores.py`
+  fetches public sibling rasters from the owner's own GitHub repositories (never DrivenData, nothing scraped)
+  and scores them with **no fitting**: reported score vs primary proxy **Spearman +0.709 / Kendall +0.556 /
+  Pearson +0.637** (n = 10, every anchor pinned by repo, commit, path, SHA-256 and the README line that states
+  its score). The SGMC off-catalogue proxy ranks the three **lowest**-scoring artifacts highest, so the
+  secondary proxy is now recorded as a *conservative filter with known false vetoes* rather than an authority —
+  the H41/H43/H53 vetoes stand as conservative (nothing was lost), but a primary-pass-only candidate must now
+  be escalated instead of silently closed. The two best artifacts in the family emit 44 k–60 k dots with
+  ≈0.19 catalogue-hugging and **zero** on-catalogue pixels while the low scorers emit 92 k–207 k, which is
+  quantitative support for `knowledge/34`'s credit-density reading.
+* **Process facts disclosed rather than smoothed over** (`registry/irregularities.json`): the launch was
+  **OOM-killed after 11 of 56 cells** and closed out with `--phase screen --resume` (`IR-29-H53-OOM-RESUME`);
+  a mid-run `cells.jsonl` rode inside a commit whose message did not mention it, so the resume ran under a
+  later revision than `design.json` records (`IR-29-H53-COMMIT-PASSENGER`); the same numbers had been seen
+  once in a scratch run outside `evidence/` before the official run finished (`IR-29-H53-SCRATCH-PREVIEW`);
+  and this close-out followed a **sandbox re-clone that dropped the session's unpushed commits**, after which
+  every artifact was re-verified by hash before being re-committed (`IR-29-SANDBOX-GIT-RESET`).
+* **A checker defect found and fixed in pass 2** (`IR-29-H53-SIDECAR-HASH`): the analyzer hashed
+  `data/work/h53_fields.json`, which stores `generated_utc`/`elapsed_s`, so rebuilding identical field data
+  produced a false integrity flag. The `.npy` rebuilt **byte-identical** (`bdf67f9f12a57d04…`); the analyzer
+  now compares the array byte-for-byte and the sidecar on its substantive fields, and the re-derived report
+  is **object-identical** to the launch-time report. The equivalent `--resume` hardening of the runner was
+  deliberately **not** applied, because `scripts/run_h53_screen.py` carries a byte-for-byte hash pin inside
+  the frozen design; it is recorded as follow-up for the next frozen stage.
+* **What this leaves:** H53 was slate-v6 rank 1; with it closed, rank 2 **H50** (mountain-front sinuosity
+  `Smf`, zero downloads, ~0.5 day) becomes the live candidate and still needs its own frozen preregistration
+  and fresh-draw screen. The slot bar is unchanged (`holdout_best` 0.14479) and **nothing is slot-approved**.
 
 ## Session 3 brief — preserved verbatim (2026-10-03)
 
