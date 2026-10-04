@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_utc": "2026-10-03T23:08:36Z",
+  "checked_utc": "2026-10-04T01:33:23Z",
   "checker": "scripts/verify_downloads.py::verify_registered",
   "template": "data/bridge/sample_submission.tif",
   "n_registered": 8,
